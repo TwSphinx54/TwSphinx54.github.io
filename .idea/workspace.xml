@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="103a9546-bbc7-4e1b-9e3b-71df1c75e95b" name="Changes" comment="deploy debug">
+    <list default="true" id="103a9546-bbc7-4e1b-9e3b-71df1c75e95b" name="Changes" comment="image repair">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/layout/Header.astro" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/layout/Header.astro" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/index.astro" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.astro" afterDir="false" />
     </list>
@@ -75,7 +76,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1729785490594</updated>
-      <workItem from="1729785492460" duration="592000" />
+      <workItem from="1729785492460" duration="832000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -93,7 +94,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729785957860</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="image repair">
+      <option name="closed" value="true" />
+      <created>1729786116069</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1729786116069</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -102,6 +111,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="deploy debug" />
-    <option name="LAST_COMMIT_MESSAGE" value="deploy debug" />
+    <MESSAGE value="image repair" />
+    <option name="LAST_COMMIT_MESSAGE" value="image repair" />
   </component>
 </project>
