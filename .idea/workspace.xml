@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="103a9546-bbc7-4e1b-9e3b-71df1c75e95b" name="Changes" comment="init">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/astro.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/astro.config.ts" afterDir="false" />
+    <list default="true" id="103a9546-bbc7-4e1b-9e3b-71df1c75e95b" name="Changes" comment="deploy debug">
+      <change beforePath="$PROJECT_DIR$/src/components/layout/Header.astro" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/layout/Header.astro" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/index.astro" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.astro" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,7 +75,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1729785490594</updated>
-      <workItem from="1729785492460" duration="442000" />
+      <workItem from="1729785492460" duration="592000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -86,7 +85,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729785747361</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="deploy debug">
+      <option name="closed" value="true" />
+      <created>1729785957860</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1729785957860</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -94,6 +101,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
-    <option name="LAST_COMMIT_MESSAGE" value="init" />
+    <MESSAGE value="deploy debug" />
+    <option name="LAST_COMMIT_MESSAGE" value="deploy debug" />
   </component>
 </project>
