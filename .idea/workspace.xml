@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="103a9546-bbc7-4e1b-9e3b-71df1c75e95b" name="Changes" comment="image repair">
-      <change afterPath="$PROJECT_DIR$/public/Resume.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/about.astro" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/cv.astro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/index.astro" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.astro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/site.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/site.config.ts" afterDir="false" />
+    <list default="true" id="103a9546-bbc7-4e1b-9e3b-71df1c75e95b" name="Changes" comment="update cv">
+      <change beforePath="$PROJECT_DIR$/src/pages/cv.astro" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/cv.astro" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +87,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1729785490594</updated>
-      <workItem from="1729785492460" duration="8938000" />
+      <workItem from="1729785492460" duration="9281000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -133,7 +129,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729848518229</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="update cv">
+      <option name="closed" value="true" />
+      <created>1729856838124</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1729856838124</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -143,6 +147,7 @@
     <MESSAGE value="init" />
     <MESSAGE value="deploy debug" />
     <MESSAGE value="image repair" />
-    <option name="LAST_COMMIT_MESSAGE" value="image repair" />
+    <MESSAGE value="update cv" />
+    <option name="LAST_COMMIT_MESSAGE" value="update cv" />
   </component>
 </project>
