@@ -1,8 +1,10 @@
 ---
 import SocialList from "@/components/SocialList.astro";
 import PostPreview from "@/components/blog/PostPreview.astro";
+import { Image } from 'astro:assets';
 import { getAllPosts, sortMDByDate } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
+import pub1Image from '../assets/pub1.png';
 
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
@@ -28,7 +30,7 @@ const cactusTech: {
 		doi: "",
     paper: "",
     code: "",
-    image: "src/assets/pub1.png",
+    image: pub1Image.src,
 	},
 	// {
 	// 	desc: "Build fast websites, faster.",
@@ -125,7 +127,7 @@ const cactusTech: {
                   {paper && <a class="cactus-link" href={paper}>PAPER</a>}
                   {code && <a class="cactus-link" href={code}>CODE</a>}
                   <br>
-                  <img src={image} />
+                  <img src={image} alt="publication bacbone illustrater"/>
 								</span>
 							</span>
 						</dt>
