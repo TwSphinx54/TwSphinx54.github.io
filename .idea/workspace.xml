@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="103a9546-bbc7-4e1b-9e3b-71df1c75e95b" name="Changes" comment="repair cv download">
+    <list default="true" id="103a9546-bbc7-4e1b-9e3b-71df1c75e95b" name="Changes" comment="update CV">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/cv.astro" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/cv.astro" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +87,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1729785490594</updated>
-      <workItem from="1729785492460" duration="9840000" />
+      <workItem from="1729785492460" duration="10845000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -146,7 +145,23 @@
       <option name="project" value="LOCAL" />
       <updated>1729857291618</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="repair cv download">
+      <option name="closed" value="true" />
+      <created>1729857732505</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1729857732505</updated>
+    </task>
+    <task id="LOCAL-00009" summary="update CV">
+      <option name="closed" value="true" />
+      <created>1729857962356</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1729857962356</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -158,6 +173,7 @@
     <MESSAGE value="image repair" />
     <MESSAGE value="update cv" />
     <MESSAGE value="repair cv download" />
-    <option name="LAST_COMMIT_MESSAGE" value="repair cv download" />
+    <MESSAGE value="update CV" />
+    <option name="LAST_COMMIT_MESSAGE" value="update CV" />
   </component>
 </project>
