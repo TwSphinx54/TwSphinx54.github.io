@@ -5,6 +5,7 @@ import { Image } from 'astro:assets';
 import { getAllPosts, sortMDByDate } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 import pub1Image from '../assets/pub1.png';
+import pub2Image from '../assets/pub2.png';
 
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
@@ -25,12 +26,23 @@ const cactusTech: {
     author: ["Xu Pan*", "Zimin Xia*", "Xianwei Zheng**"],
     note: "(* Equal contribution, ** Corresponding author)",
 		title: "Scale-aware Co-visible Region Detection for Hierarchical Correspondence Establishment",
-		booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing",
+		booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing (Submitted)",
 		time: "2025",
 		doi: "",
     paper: "",
     code: "",
     image: pub1Image.src,
+	},
+  	{
+    author: ["Xu Pan", "Jintao Zhang", "Mingyue Dong", "Zimin Xia", "Xianwei Zheng*"],
+    note: "(* Corresponding author)",
+		title: "CoSAM: Segment Anything Co-Visible for Robust Feature Matching",
+		booktitle: "The IEEE/CVF Conference on Computer Vision and Pattern Recognition (Submitted)",
+		time: "2025",
+		doi: "",
+    paper: "",
+    code: "",
+    image: pub2Image.src,
 	},
 	// {
 	// 	desc: "Build fast websites, faster.",
@@ -119,7 +131,7 @@ const cactusTech: {
 									))}
                   {note && note}
                   <br>
-                  <em>{booktitle} (Submitted)</em>
+                  <em>{booktitle}</em>
                   <br>
                   {time}
                   <br>
