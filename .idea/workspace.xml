@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="103a9546-bbc7-4e1b-9e3b-71df1c75e95b" name="Changes" comment="update SCoDe code">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/Resume.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/Resume.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/Resume_zh_CN.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/public/Resume_zh_CN.pdf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +34,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "<unknown>",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "D:/Projects/Coding/TwSphinx54",
     "node.js.detected.package.eslint": "true",
@@ -41,7 +44,7 @@
     "nodejs_package_manager_path": "pnpm",
     "npm.dev.executor": "Run",
     "prettierjs.PrettierConfiguration.Package": "D:\\Projects\\Coding\\TwSphinx54\\node_modules\\prettier",
-    "settings.editor.selected.configurable": "settings.sync",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
     "ts.external.directory.path": "D:\\Apps\\JetBrains\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
@@ -55,7 +58,7 @@
       <recent name="D:\Projects\Coding\TwSphinx54\src\assets" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.dev">
+  <component name="RunManager" selected="JavaScript Debug.JavaScript Debug">
     <configuration name="JavaScript Debug" type="JavascriptDebugType" uri="http://localhost:4321/">
       <method v="2" />
     </configuration>
@@ -82,7 +85,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-WS-243.21565.180" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-WS-243.26053.12" />
       </set>
     </attachedChunks>
   </component>
@@ -105,6 +108,11 @@
       <workItem from="1732501042054" duration="33000" />
       <workItem from="1733379749073" duration="1055000" />
       <workItem from="1733380824061" duration="758000" />
+      <workItem from="1733396814848" duration="80000" />
+      <workItem from="1733468696043" duration="1006000" />
+      <workItem from="1734687411088" duration="119000" />
+      <workItem from="1743150294093" duration="117000" />
+      <workItem from="1743150422622" duration="1040000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -218,7 +226,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732500992548</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="update SCoDe code">
+      <option name="closed" value="true" />
+      <created>1733396869877</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1733396869877</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
