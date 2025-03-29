@@ -22,10 +22,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Install pnpm
         run: npm install -g pnpm@latest
-      - name: Approve all build scripts
-        run: yes | pnpm approve-builds
-      - name: Install dependencies
-        run: pnpm install --ignore-scripts=false
+      - name: Install dependencies and approve builds
+        run: pnpm install --config.auto-install-peers=true --config.ignore-scripts=false --approve-build
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
