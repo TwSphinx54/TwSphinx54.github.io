@@ -20,10 +20,6 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
-      - name: Install pnpm
-        run: npm install -g pnpm@latest
-      - name: Install dependencies and approve builds
-        run: pnpm install --config.auto-install-peers=true --config.ignore-scripts=false
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
