@@ -45,9 +45,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Approve build scripts
-        run: pnpm allow-build @biomejs/biome esbuild sharp
-
         # use astro check for issues
       - name: Run check
         run: pnpm astro check
