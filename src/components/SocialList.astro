@@ -17,20 +17,30 @@ const socialLinks: {
 		link: "mailto:panxurs@whu.edu.cn",
 		name: "mdi:email",
 	},
-	{
+  {
+		friendlyName: "X",
+		link: "https://x.com/xupan_whu",
+		name: "simple-icons:x",
+	},
+  {
 		friendlyName: "Github",
 		link: "https://github.com/TwSphinx54",
-		name: "mdi:github",
+		name: "simple-icons:github",
 	},
   {
 		friendlyName: "Linkedin",
 		link: "https://linkedin.com/in/xupanwhu",
-		name: "mdi:linkedin",
+		name: "simple-icons:linkedin",
+	},
+  {
+		friendlyName: "ResearchGate",
+		link: "https://www.researchgate.net/profile/Xu-Pan-10",
+		name: "simple-icons:researchgate",
 	},
   {
 		friendlyName: "ORCiD",
 		link: "https://orcid.org/0009-0007-3297-0385",
-		name: "mdi:account-circle",
+		name: "simple-icons:orcid",
 	},
 ];
 ---
@@ -47,7 +57,7 @@ const socialLinks: {
 						rel={`noreferrer ${isWebmention ? "me authn" : ""}`}
 						target="_blank"
 					>
-						<Icon aria-hidden="true" class="h-6 w-6" focusable="false" name={name} />
+						<Icon aria-hidden="true" class="h-5 w-5" focusable="false" name={name} />
 						<span class="sr-only">{friendlyName}</span>
 					</a>
 				</li>

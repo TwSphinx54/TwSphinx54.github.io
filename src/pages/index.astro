@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-icon/components";
 import SocialList from "@/components/SocialList.astro";
 import PostPreview from "@/components/blog/PostPreview.astro";
 import { Image } from 'astro:assets';
@@ -23,15 +24,26 @@ const cactusTech: {
   image: string;
 }[] = [
 	{
-    author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"],
-    note: "(* Corresponding author)",
-		title: "Scale-aware Co-visible Region Detection for Hierarchical Image Matching",
-		booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing (Submitted)",
-		time: "2025",
-		doi: "",
-    paper: "",
-    code: "https://github.com/Geo-Tell/SCoDe",
-    image: pub1Image.src,
+		author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"],
+		note: "(* Corresponding author)",
+			title: "Scale-aware Co-visible Region Detection for Hierarchical Image Matching",
+			booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing (Under Review)",
+			time: "2025",
+			doi: "",
+		paper: "",
+		code: "https://github.com/Geo-Tell/SCoDe",
+		image: pub1Image.src,
+	},
+	{
+		author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng*"],
+		note: "(* Corresponding author)",
+			title: "Scale-aware Co-visible Region Detection for Hierarchical Image Matching",
+			booktitle: "The IEEE/CVF Conference on Computer Vision and Pattern Recognition (In Preparation)",
+			time: "2026",
+			doi: "",
+		paper: "",
+		code: "",
+		image: "",
 	},
   // {
   //   author: ["Xu Pan", "Jintao Zhang", "Mingyue Dong", "Zimin Xia", "Xianwei Zheng*"],
@@ -57,7 +69,8 @@ const cactusTech: {
 			<a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.
 			I received my B.Eng. in Remote Sensing Science and Technology from Wuhan University in 2023.
 			I have previously researched GenAI applications in image and video generation during my internship at
-			<a class="cactus-link" href="https://www.baidu.com/">Baidu (International Tech R&D Dept.)</a>.
+			<a class="cactus-link" href="https://www.baidu.com/">
+			<Icon aria-hidden="true" class="h-4 w-4 inline align-text-bottom mr-1" focusable="false" name="simple-icons:baidu" />Baidu (International Tech R&D Dept.)</a>.
 			My research interests lie in <em>computer vision</em> and <em>generative AI</em>, 
 			with a focus on unifying 2D and 3D representations through image correspondence, cross-view understanding, and structure-aware generation. 
 			I aim to develop general spatial intelligence models that bridge perception, geometry, and trustworthy generation at scale, 
@@ -103,7 +116,7 @@ const cactusTech: {
                   {paper && <a class="cactus-link" href={paper}>PAPER</a>}
                   {code && <a class="cactus-link" href={code}>CODE</a>}
                   <br>
-                  <img src={image} alt="publication bacbone illustrater"/>
+                  <img src={image} alt="[Image Preparing]"/>
 								</span>
 							</span>
 						</dt>
