@@ -22,6 +22,7 @@ const cactusTech: {
   paper: string;
   code: string;
   image: string;
+  abs: string;
 }[] = [
 	{
 		author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"],
@@ -33,6 +34,7 @@ const cactusTech: {
 		paper: "https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/SCoDe.pdf",
 		code: "https://github.com/Geo-Tell/SCoDe",
 		image: pub1Image.src,
+		abs: "Matching images with significant scale differences remains a persistent challenge in photogrammetry and remote sensing. The scale discrepancy often degrades appearance consistency and introduces uncertainty in keypoint localization. While existing methods address scale variation through scale pyramids or scale-aware training, matching under significant scale differences remains an open challenge. To overcome this, we address the scale difference issue by detecting co-visible regions between image pairs and propose SCoDe (Scale-aware Co-visible region Detector), which both identifies co-visible regions and aligns their scales for highly robust, hierarchical point correspondence matching. Specifically, SCoDe employs a novel Scale Head Attention mechanism to map and correlate features across multiple scale subspaces, and uses a learnable query to aggregate scale-aware information of both images for co-visible region detection. In this way, correspondences can be established in a coarse-to-fine hierarchy, thereby mitigating semantic and localization uncertainties. Extensive experiments on three challenging datasets demonstrate that SCoDe outperforms state-of-the-art methods, improving the precision of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images with drastic scale variations.",
 	},
 	{
 		author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng*"],
@@ -44,6 +46,7 @@ const cactusTech: {
 		paper: "",
 		code: "",
 		image: "",
+		abs: ""
 	},
   // {
   //   author: ["Xu Pan", "Jintao Zhang", "Mingyue Dong", "Zimin Xia", "Xianwei Zheng*"],
@@ -102,34 +105,114 @@ const cactusTech: {
 		<h2 class="title mb-4 text-xl">Publications</h2>
 		<dl class="space-y-4">
 			{
-				cactusTech.map(({ author, note, title, booktitle, time, doi, paper, code, image }) => (
-					<div class="flex flex-col gap-2 sm:flex-row">
-						<dt>
-							<span class="flex">
-								<span>
+				cactusTech.map((pub) => {
+          const { author, note, title, booktitle, time, doi, paper, code, image, abs } = pub;
+          const slug = title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g,"");
+          return (
+                    <div class="flex flex-col gap-2 sm:flex-row">
+                        <dt>
+                            <span class="flex">
+                                <span>
                   <span class="text-accent"><strong>{title}</strong></span><br>
-									{author.map((name: string, index: number) => (
-										<span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
-											{name}{index < author.length - 1 ? ", " : ""}
-										</span>
-									))}
+                                    {author.map((name: string, index: number) => (
+                                        <span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
+                                            {name}{index < author.length - 1 ? ", " : ""}
+                                        </span>
+                                    ))}
                   {note && note}
-                  <br>
+                  <br />
                   <em>{booktitle}</em>
-                  <br>
+                  <br />
                   {time}
-                  <br>
+                  <br />
                   {doi && <a class="cactus-link" href={doi}>DOI</a>}
-                  {paper && <a class="cactus-link" href={paper}>PAPER</a>}
-                  {code && <a class="cactus-link" href={code}>CODE</a>}
-                  <br>
-                  <img src={image} alt="[Image Preparing]"/>
-								</span>
-							</span>
-						</dt>
-					</div>
-				))
-			}
-		</dl>
-	</section>
+                  {paper && <a class="cactus-link" href={paper} target="_blank" rel="noopener">PAPER</a>}
+                  {code && <a class="cactus-link" href={code} target="_blank" rel="noopener">CODE</a>}
+                  {abs && (
+                    <>
+                      {" "}
+                      <button
+                        type="button"
+                        class="cactus-link abstract-btn"
+                        data-abs-id={`abs-${slug}`}
+                        aria-haspopup="dialog"
+                        aria-controls="abstract-modal"
+                      >
+                        ABSTRACT
+                      </button>
+                      <template id={`abs-${slug}`}>{abs}</template>
+                    </>
+                  )}
+                  <br />
+                  <img src={image} alt="[Image Preparing]" />
+                                </span>
+                            </span>
+                        </dt>
+                    </div>
+          );
+        })
+            }
+        </dl>
+    </section>
+  {/* Abstract Modal */}
+  <div
+    id="abstract-modal"
+    class="fixed inset-0 z-50 hidden items-start justify-center overflow-y-auto
+           bg-black/60 dark:bg-black/70 backdrop-blur-sm p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="abstract-modal-title"
+  >
+    <div class="relative mx-auto my-10 w-full max-w-2xl rounded-lg bg-white dark:bg-gray-900 p-6 shadow-xl border border-gray-200 dark:border-gray-700">
+      <h3 id="abstract-modal-title" class="text-lg font-semibold mb-4">Abstract</h3>
+      <div id="abstract-modal-content" class="text-sm leading-relaxed whitespace-pre-line"></div>
+      <div class="mt-6 flex justify-end">
+        <button
+          id="abstract-modal-close"
+          type="button"
+          class="px-4 py-2 rounded bg-accent text-white hover:opacity-90 transition"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById("abstract-modal");
+      const contentEl = document.getElementById("abstract-modal-content");
+      const closeBtn = document.getElementById("abstract-modal-close");
+
+      function openModal(text) {
+        contentEl.textContent = text;
+        modal.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+        closeBtn.focus();
+      }
+
+      function closeModal() {
+        modal.classList.add("hidden");
+        document.body.style.overflow = "";
+      }
+
+      document.querySelectorAll(".abstract-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-abs-id");
+          const tpl = id && document.getElementById(id);
+          if (tpl) openModal(tpl.innerHTML.trim());
+        });
+      });
+
+      closeBtn.addEventListener("click", closeModal);
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
+      });
+    });
+  </script>
 </PageLayout>
