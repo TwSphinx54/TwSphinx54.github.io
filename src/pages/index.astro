@@ -1,64 +1,42 @@
 ---
-import { Icon } from "astro-icon/components";
 import SocialList from "@/components/SocialList.astro";
-import PostPreview from "@/components/blog/PostPreview.astro";
-import { Image } from 'astro:assets';
-import { getAllPosts, sortMDByDate } from "@/data/post";
+// import PostPreview from "@/components/blog/PostPreview.astro";
+// import { Icon } from "astro-icon/components";
+// import { Image } from 'astro:assets';
 import PageLayout from "@/layouts/Base.astro";
 import pub1Image from '../assets/pub1.png';
-import pub2Image from '../assets/pub2.png';
+// import pub2Image from '../assets/pub2.png';
 
+import { getAllPosts, sortMDByDate } from "@/data/post";
 const MAX_POSTS = 10;
 const allPosts = await getAllPosts();
-const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
+// const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 
-const cactusTech: {
-	author: string[];
-  note: string;
-	title: string;
-	booktitle: string;
-	time: string;
-	doi: string;
-  paper: string;
-  code: string;
-  image: string;
-  abs: string;
-}[] = [
-	{
-		author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"],
-		note: "(* Corresponding author)",
-			title: "Scale-aware Co-visible Region Detection for Image Matching",
-			booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing",
-			time: "2025",
-			doi: "",
-		paper: "https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/SCoDe.pdf",
-		code: "https://github.com/Geo-Tell/SCoDe",
-		image: pub1Image.src,
-		abs: "Matching images with significant scale differences remains a persistent challenge in photogrammetry and remote sensing. The scale discrepancy often degrades appearance consistency and introduces uncertainty in keypoint localization. While existing methods address scale variation through scale pyramids or scale-aware training, matching under significant scale differences remains an open challenge. To overcome this, we address the scale difference issue by detecting co-visible regions between image pairs and propose SCoDe (Scale-aware Co-visible region Detector), which both identifies co-visible regions and aligns their scales for highly robust, hierarchical point correspondence matching. Specifically, SCoDe employs a novel Scale Head Attention mechanism to map and correlate features across multiple scale subspaces, and uses a learnable query to aggregate scale-aware information of both images for co-visible region detection. In this way, correspondences can be established in a coarse-to-fine hierarchy, thereby mitigating semantic and localization uncertainties. Extensive experiments on three challenging datasets demonstrate that SCoDe outperforms state-of-the-art methods, improving the precision of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images with drastic scale variations.",
-	},
-	{
-		author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng*"],
-		note: "(* Corresponding author)",
-			title: "SAMatcher: Segment Anything Co-visible for Robust Feature Matching",
-			booktitle: "(In Preparation)",
-			time: "2026",
-			doi: "",
-		paper: "",
-		code: "",
-		image: "",
-		abs: ""
-	},
-  // {
-  //   author: ["Xu Pan", "Jintao Zhang", "Mingyue Dong", "Zimin Xia", "Xianwei Zheng*"],
-  //   note: "(* Corresponding author)",
-	// 	title: "CoSAM: Segment Anything Co-Visible for Robust Feature Matching",
-	// 	booktitle: "The IEEE/CVF Conference on Computer Vision and Pattern Recognition (Submitted)",
-	// 	time: "2025",
-	// 	doi: "",
-  //   paper: "",
-  //   code: "",
-  //   image: pub2Image.src,
-	// },
+const cactusTech = [
+  {
+    author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"],
+    note: "(* Corresponding author)",
+    title: "Scale-aware Co-visible Region Detection for Image Matching",
+    booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing",
+    time: "2025",
+    doi: "",
+    paper: "https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/SCoDe.pdf",
+    code: "https://github.com/Geo-Tell/SCoDe",
+    image: pub1Image.src,
+    abs: "Matching images with significant scale differences remains a persistent challenge in photogrammetry and remote sensing. The scale discrepancy often degrades appearance consistency and introduces uncertainty in keypoint localization. While existing methods address scale variation through scale pyramids or scale-aware training, matching under significant scale differences remains an open challenge. To overcome this, we address the scale difference issue by detecting co-visible regions between image pairs and propose SCoDe (Scale-aware Co-visible region Detector), which both identifies co-visible regions and aligns their scales for highly robust, hierarchical point correspondence matching. Specifically, SCoDe employs a novel Scale Head Attention mechanism to map and correlate features across multiple scale subspaces, and uses a learnable query to aggregate scale-aware information of both images for co-visible region detection. In this way, correspondences can be established in a coarse-to-fine hierarchy, thereby mitigating semantic and localization uncertainties. Extensive experiments on three challenging datasets demonstrate that SCoDe outperforms state-of-the-art methods, improving the precision of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images with drastic scale variations.",
+  },
+  {
+    author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng*"],
+    note: "(* Corresponding author)",
+    title: "SAMatcher: Segment Anything Co-visible for Robust Feature Matching",
+    booktitle: "(In Preparation)",
+    time: "2026",
+    doi: "",
+    paper: "",
+    code: "",
+    image: "",
+    abs: ""
+  },
 ];
 ---
 
@@ -114,11 +92,11 @@ const cactusTech: {
                             <span class="flex">
                                 <span>
                   <span class="text-accent"><strong>{title}</strong></span><br>
-                                    {author.map((name: string, index: number) => (
-                                        <span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
-                                            {name}{index < author.length - 1 ? ", " : ""}
-                                        </span>
-                                    ))}
+                                    {author.map((name, index) => (
+  <span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
+    {name}{index < author.length - 1 ? ", " : ""}
+  </span>
+))}
                   {note && note}
                   <br />
                   <em>{booktitle}</em>
@@ -179,40 +157,45 @@ const cactusTech: {
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const modal = document.getElementById("abstract-modal");
-      const contentEl = document.getElementById("abstract-modal-content");
-      const closeBtn = document.getElementById("abstract-modal-close");
+  document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("abstract-modal");
+    const contentEl = document.getElementById("abstract-modal-content");
+    const closeBtn = document.getElementById("abstract-modal-close");
 
-      function openModal(text) {
-        contentEl.textContent = text;
-        modal.classList.remove("hidden");
-        document.body.style.overflow = "hidden";
-        closeBtn.focus();
-      }
+    if (!modal || !contentEl || !closeBtn) return;
 
-      function closeModal() {
-        modal.classList.add("hidden");
-        document.body.style.overflow = "";
-      }
+    const dlg = modal;
+    const content = contentEl;
+    const close = closeBtn;
 
-      document.querySelectorAll(".abstract-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-abs-id");
-          const tpl = id && document.getElementById(id);
-          if (tpl) openModal(tpl.innerHTML.trim());
-        });
-      });
+    function openModal(text: string | null) {
+      content.textContent = text;
+      dlg.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      close.focus();
+    }
 
-      closeBtn.addEventListener("click", closeModal);
+    function closeModal() {
+      dlg.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
 
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) closeModal();
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
+    document.querySelectorAll(".abstract-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-abs-id");
+        const tpl = id ? document.getElementById(id) : null;
+        if (tpl && tpl.innerHTML) openModal(tpl.innerHTML.trim());
       });
     });
+
+    close.addEventListener("click", closeModal);
+    dlg.addEventListener("click", (e) => {
+      if (e.target === dlg) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !dlg.classList.contains("hidden")) closeModal();
+    });
+  });
   </script>
 </PageLayout>
