@@ -44,8 +44,8 @@ const cactusTech = [
 	<section>
 		<h1 class="title mb-6">Hello World!</h1>
 		<p class="mb-4">
-			Hi, I’m currently a Master's student in
-			<a class="cactus-link" href="https://liesmars.whu.edu.cn/">The State Key Lab. LIESMARS</a>
+			Hi, I’m currently a Master's student in the 
+			<a class="cactus-link" href="https://liesmars.whu.edu.cn/">State Key Lab. LIESMARS</a>
 			at <a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, under the guidance of
 			<a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.
 			I received my B.Eng. in Remote Sensing Science and Technology from Wuhan University in 2023.
@@ -103,9 +103,7 @@ const cactusTech = [
                   <br />
                   {time}
                   <br />
-                  {doi && <a class="cactus-link" href={doi}>DOI</a>}
-                  {paper && <a class="cactus-link" href={paper} target="_blank" rel="noopener">PAPER</a>}
-                  {code && <a class="cactus-link" href={code} target="_blank" rel="noopener">CODE</a>}
+                  {/* Reordered buttons/links: ABSTRACT, CODE, DOI, PAPER */}
                   {abs && (
                     <>
                       {" "}
@@ -121,6 +119,9 @@ const cactusTech = [
                       <template id={`abs-${slug}`}>{abs}</template>
                     </>
                   )}
+                  {code && <a class="cactus-link" href={code} target="_blank" rel="noopener">CODE</a>}
+                  {doi && <a class="cactus-link" href={doi}>DOI</a>}
+                  {paper && <a class="cactus-link" href={paper} target="_blank" rel="noopener">PAPER</a>}
                   <br />
                   <img src={image} alt="[Image Preparing]" />
                                 </span>
