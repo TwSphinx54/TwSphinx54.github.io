@@ -4,7 +4,7 @@ import SocialList from "@/components/SocialList.astro";
 // import { Icon } from "astro-icon/components";
 // import { Image } from 'astro:assets';
 import PageLayout from "@/layouts/Base.astro";
-import pub1Image from '../assets/pub1.png';
+import pub1Image from "../assets/pub1.png";
 // import pub2Image from '../assets/pub2.png';
 
 // import { getAllPosts, sortMDByDate } from "@/data/post";
@@ -13,60 +13,152 @@ import pub1Image from '../assets/pub1.png';
 // const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 
 const cactusTech = [
-  {
-    author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"],
-    note: "(*Corresponding author)",
-    title: "Scale-aware Co-visible Region Detection for Image Matching",
-    booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing",
-    time: "2025",
-    doi: "https://doi.org/10.1016/j.isprsjprs.2025.08.015",
-    paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260",
-    code: "https://github.com/Geo-Tell/SCoDe",
-    image: pub1Image.src,
-    abs: "Matching images with significant scale differences remains a persistent challenge in photogrammetry and remote sensing. The scale discrepancy often degrades appearance consistency and introduces uncertainty in keypoint localization. While existing methods address scale variation through scale pyramids or scale-aware training, matching under significant scale differences remains an open challenge. To overcome this, we address the scale difference issue by detecting co-visible regions between image pairs and propose SCoDe (Scale-aware Co-visible region Detector), which both identifies co-visible regions and aligns their scales for highly robust, hierarchical point correspondence matching. Specifically, SCoDe employs a novel Scale Head Attention mechanism to map and correlate features across multiple scale subspaces, and uses a learnable query to aggregate scale-aware information of both images for co-visible region detection. In this way, correspondences can be established in a coarse-to-fine hierarchy, thereby mitigating semantic and localization uncertainties. Extensive experiments on three challenging datasets demonstrate that SCoDe outperforms state-of-the-art methods, improving the precision of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images with drastic scale variations.",
-  },
-  {
-    author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng*"],
-    note: "(*Corresponding author)",
-    title: "SAMatcher: Segment Anything Co-visible for Robust Feature Matching",
-    booktitle: "(In Preparation)",
-    time: "2026",
-    doi: "",
-    paper: "",
-    code: "",
-    image: "",
-    abs: ""
-  },
+	{
+		author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"],
+		note: "(*Corresponding author)",
+		title: "Scale-aware Co-visible Region Detection for Image Matching",
+		booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing",
+		time: "2025",
+		doi: "https://doi.org/10.1016/j.isprsjprs.2025.08.015",
+		paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260",
+		code: "https://github.com/Geo-Tell/SCoDe",
+		image: pub1Image.src,
+		abs: "Matching images with significant scale differences remains a persistent challenge in photogrammetry and remote sensing. The scale discrepancy often degrades appearance consistency and introduces uncertainty in keypoint localization. While existing methods address scale variation through scale pyramids or scale-aware training, matching under significant scale differences remains an open challenge. To overcome this, we address the scale difference issue by detecting co-visible regions between image pairs and propose SCoDe (Scale-aware Co-visible region Detector), which both identifies co-visible regions and aligns their scales for highly robust, hierarchical point correspondence matching. Specifically, SCoDe employs a novel Scale Head Attention mechanism to map and correlate features across multiple scale subspaces, and uses a learnable query to aggregate scale-aware information of both images for co-visible region detection. In this way, correspondences can be established in a coarse-to-fine hierarchy, thereby mitigating semantic and localization uncertainties. Extensive experiments on three challenging datasets demonstrate that SCoDe outperforms state-of-the-art methods, improving the precision of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images with drastic scale variations.",
+	},
+	{
+		author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng*"],
+		note: "(*Corresponding author)",
+		title: "SAMatcher: Segment Anything Co-visible for Robust Feature Matching",
+		booktitle: "(In Preparation)",
+		time: "2026",
+		doi: "",
+		paper: "",
+		code: "",
+		image: "",
+		abs: "",
+	},
 ];
+/* Dynamically gather experience logos */
+const experienceMeta: Record<string, { name: string; link: string }> = {
+	"exp1.png": {
+		name: "Wuhan University",
+		link: "https://en.whu.edu.cn/",
+	},
+	"exp2.png": {
+		name: "State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)",
+		link: "https://liesmars.whu.edu.cn/",
+	},
+	"exp3.png": {
+		name: "Baidu, Inc. (International Technology R&D Department)",
+		link: "https://www.baidu.com/",
+	},
+	"exp4.png": {
+		name: "Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)",
+		link: "https://www.a-star.edu.sg/cfar",
+	},
+};
+
+const expImages = import.meta.glob("../assets/exps/*.{png,jpg,jpeg,svg,webp}", {
+	eager: true,
+	import: "default",
+});
+
+// Preserve intended display order (fallback to filename order if new files are added)
+const order = ["exp1.png", "exp2.png", "exp3.png", "exp4.png"];
+
+const experiences = Object.entries(expImages)
+	.map(([path, mod]: [string, any]) => {
+		const file = path.split("/").pop() || "";
+		const meta = experienceMeta[file] || { name: file, link: "#" };
+		return {
+			file,
+			src: (mod as any).src,
+			name: meta.name,
+			link: meta.link,
+		};
+	})
+	.sort((a, b) => {
+		const ai = order.indexOf(a.file);
+		const bi = order.indexOf(b.file);
+		if (ai === -1 && bi === -1) return a.file.localeCompare(b.file);
+		if (ai === -1) return 1;
+		if (bi === -1) return -1;
+		return ai - bi;
+	});
 ---
 
 <PageLayout meta={{ title: "Home" }}>
 	<section>
 		<h1 class="title mb-6">Hello World!</h1>
 		<p class="mb-4">
-			Hi, I’m currently a Master's student in the 
-			<a class="cactus-link" href="https://liesmars.whu.edu.cn/">State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)</a>
-			at <a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, under the guidance of
-			<a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.
-			I received my B.Eng. in Remote Sensing Science and Technology from Wuhan University in 2023.
-			I have previously researched GenAI applications in image and video generation under the supervision of 
-			<a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>
+			Hi, I’m currently a Master's student in the
+			<a class="cactus-link" href="https://liesmars.whu.edu.cn/"
+				>State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing
+				(LIESMARS)</a
+			>
+			at <a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, under the
+			guidance of
+			<a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm"
+				>Prof. Xianwei Zheng</a
+			>. I received my B.Eng. in Remote Sensing Science and Technology from Wuhan University in
+			2023. I have previously researched GenAI applications in image and video generation under the
+			supervision of
+			<a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ"
+				>Dr. Yan Zhang</a
+			>
 			during my internship at
-			<a class="cactus-link" href="https://www.baidu.com/">Baidu, Inc. (International Technology R&D Department)</a>
-			Currently, I am also a remote research intern at 
-			<a class="cactus-link" href="https://www.a-star.edu.sg/cfar">Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)</a>, supervised by 
-			<a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>, 
-			where I work on reinforcement learning and embodied intelligence, with a focus on generalizable, agent-centric policy learning.
+			<a class="cactus-link" href="https://www.baidu.com/"
+				>Baidu, Inc. (International Technology R&D Department)</a
+			>
+			Currently, I am also a remote research intern at
+			<a class="cactus-link" href="https://www.a-star.edu.sg/cfar"
+				>Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research
+				(A*STAR)</a
+			>, supervised by
+			<a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>, where I work on
+			reinforcement learning and embodied intelligence, with a focus on generalizable, agent-centric
+			policy learning.
 		</p>
 		<p class="mb-4">
-      My research interests lie in <em class="highlight">computer vision</em> and <em class="highlight">generative AI</em>, 
-      with a focus on unifying 2D and 3D representations through image correspondence, cross-view understanding, and structure-aware generation. 
-      I aim to develop general spatial intelligence models that bridge perception, geometry, and trustworthy generation at scale, 
-      advancing <em class="highlight">the next generation of spatially grounded, intelligent visual systems</em>. 
-      Beyond foundational research, I am particularly interested in enabling <em class="highlight">embodied intelligence</em> and <em class="highlight">autonomous agents</em>, 
-      where spatial reasoning and generative modeling empower real-world interaction, decision-making, and large-scale multi-agent collaboration.
-    </p>
+			My research interests lie in <em class="highlight">computer vision</em> and <em
+				class="highlight">generative AI</em
+			>, with a focus on unifying 2D and 3D representations through image correspondence, cross-view
+			understanding, and structure-aware generation. I aim to develop general spatial intelligence
+			models that bridge perception, geometry, and trustworthy generation at scale, advancing <em
+				class="highlight">the next generation of spatially grounded, intelligent visual systems</em
+			>. Beyond foundational research, I am particularly interested in enabling <em
+				class="highlight">embodied intelligence</em
+			> and <em class="highlight">autonomous agents</em>, where spatial reasoning and generative
+			modeling empower real-world interaction, decision-making, and large-scale multi-agent
+			collaboration.
+		</p>
 		<SocialList />
+	</section>
+	<section class="mt-12" aria-label="Experiences">
+		<h2 class="title mb-4 text-xl">Experiences</h2>
+		<div class="flex flex-wrap items-center gap-6">
+			{
+				experiences.map((exp) => (
+					<a
+						href={exp.link}
+						target="_blank"
+						rel="noopener"
+						class="group relative flex items-center justify-center p-1"
+					>
+						<img
+							src={exp.src}
+							alt={exp.name}
+							title={exp.name}
+							class="h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+							loading="lazy"
+						/>
+						<span class="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-0.5 text-[10px] font-medium tracking-wide text-white opacity-0 shadow transition-opacity group-hover:opacity-100">
+							{exp.name}
+						</span>
+					</a>
+				))
+			}
+		</div>
 	</section>
 	<!--<section aria-label="Blog post list" class="mt-16">-->
 	<!--	<h2 class="title mb-4 text-xl">Posts</h2>-->
@@ -86,119 +178,146 @@ const cactusTech = [
 		<dl class="space-y-4">
 			{
 				cactusTech.map((pub) => {
-          const { author, note, title, booktitle, time, doi, paper, code, image, abs } = pub;
-          const slug = title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g,"");
-          return (
-                    <div class="flex flex-col gap-2 sm:flex-row">
-                        <dt>
-                            <span class="flex">
-                                <span>
-                  <span class="text-accent"><strong>{title}</strong></span><br>
-                                    {author.map((name, index) => (
-  <span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
-    {name}{index < author.length - 1 ? ", " : ""}
-  </span>
-))}
-                  {note && note}
-                  <br />
-                  <em>{booktitle}</em>
-                  <br />
-                  {time}
-                  <br />
-                  {/* Reordered buttons/links: ABSTRACT, CODE, DOI, PAPER */}
-                  {abs && (
-                    <>
-                      {" "}
-                      <button
-                        type="button"
-                        class="cactus-link abstract-btn"
-                        data-abs-id={`abs-${slug}`}
-                        aria-haspopup="dialog"
-                        aria-controls="abstract-modal"
-                      >
-                        ABSTRACT
-                      </button>
-                      <template id={`abs-${slug}`}>{abs}</template>
-                    </>
-                  )}
-                  {code && <a class="cactus-link" href={code} target="_blank" rel="noopener">CODE</a>}
-                  {doi && <a class="cactus-link" href={doi}>DOI</a>}
-                  {paper && <a class="cactus-link" href={paper} target="_blank" rel="noopener">PAPER</a>}
-                  <br />
-                  <img src={image} alt="[Image Preparing]" />
-                                </span>
-                            </span>
-                        </dt>
-                    </div>
-          );
-        })
-            }
-        </dl>
-    </section>
-  {/* Abstract Modal */}
-  <div
-    id="abstract-modal"
-    class="fixed inset-0 z-50 hidden items-start justify-center overflow-y-auto
-           bg-black/60 dark:bg-black/70 backdrop-blur-sm p-4"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="abstract-modal-title"
-  >
-    <div class="relative mx-auto my-10 w-full max-w-2xl rounded-lg bg-white dark:bg-gray-900 p-6 shadow-xl border border-gray-200 dark:border-gray-700">
-      <h3 id="abstract-modal-title" class="text-lg font-semibold mb-4">Abstract</h3>
-      <div id="abstract-modal-content" class="text-sm leading-relaxed whitespace-pre-line"></div>
-      <div class="mt-6 flex justify-end">
-        <button
-          id="abstract-modal-close"
-          type="button"
-          class="px-4 py-2 rounded bg-accent text-white hover:opacity-90 transition"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
+					const { author, note, title, booktitle, time, doi, paper, code, image, abs } = pub;
+					const slug = title
+						.toLowerCase()
+						.replace(/\s+/g, "-")
+						.replace(/[^a-z0-9\-]/g, "");
+					return (
+						<div class="flex flex-col gap-2 sm:flex-row">
+							<dt>
+								<span class="flex">
+									<span>
+										<>
+											<span class="text-accent">
+												<strong>{title}</strong>
+											</span>
+											<br />
+										</>
+										{author.map((name, index) => (
+											<span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
+												{name}
+												{index < author.length - 1 ? ", " : ""}
+											</span>
+										))}
+										{note && note}
+										<br />
+										<em>{booktitle}</em>
+										<br />
+										{time}
+										<br />
+										{/* Reordered buttons/links: ABSTRACT, CODE, DOI, PAPER */}
+										{abs && (
+											<>
+												{" "}
+												<button
+													type="button"
+													class="abstract-btn cactus-link"
+													data-abs-id={`abs-${slug}`}
+													aria-haspopup="dialog"
+													aria-controls="abstract-modal"
+												>
+													ABSTRACT
+												</button>
+												<template id={`abs-${slug}`}>{abs}</template>
+											</>
+										)}
+										{code && (
+											<a
+												class="cactus-link inline-block"
+												href={code}
+												target="_blank"
+												rel="noopener"
+											>
+												CODE
+											</a>
+										)}
+										{doi && (
+											<a class="cactus-link inline-block" href={doi}>
+												DOI
+											</a>
+										)}
+										{paper && (
+											<a class="cactus-link" href={paper} target="_blank" rel="noopener">
+												PAPER
+											</a>
+										)}
+										<br />
+										<img src={image} alt="[Image Preparing]" />
+									</span>
+								</span>
+							</dt>
+						</div>
+					);
+				})
+			}
+		</dl>
+	</section>
+	{/* Abstract Modal */}
+	<div
+		id="abstract-modal"
+		class="fixed inset-0 z-50 hidden items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm dark:bg-black/70"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="abstract-modal-title"
+	>
+		<div
+			class="relative mx-auto my-10 w-full max-w-2xl rounded-lg border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-700 dark:bg-gray-900"
+		>
+			<h3 id="abstract-modal-title" class="mb-4 text-lg font-semibold">Abstract</h3>
+			<div id="abstract-modal-content" class="whitespace-pre-line text-sm leading-relaxed"></div>
+			<div class="mt-6 flex justify-end">
+				<button
+					id="abstract-modal-close"
+					type="button"
+					class="rounded bg-accent px-4 py-2 text-white transition hover:opacity-90"
+				>
+					Close
+				</button>
+			</div>
+		</div>
+	</div>
 
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const modal = document.getElementById("abstract-modal");
-    const contentEl = document.getElementById("abstract-modal-content");
-    const closeBtn = document.getElementById("abstract-modal-close");
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const modal = document.getElementById("abstract-modal");
+			const contentEl = document.getElementById("abstract-modal-content");
+			const closeBtn = document.getElementById("abstract-modal-close");
 
-    if (!modal || !contentEl || !closeBtn) return;
+			if (!modal || !contentEl || !closeBtn) return;
 
-    const dlg = modal;
-    const content = contentEl;
-    const close = closeBtn;
+			const dlg = modal;
+			const content = contentEl;
+			const close = closeBtn;
 
-    function openModal(text: string | null) {
-      content.textContent = text;
-      dlg.classList.remove("hidden");
-      document.body.style.overflow = "hidden";
-      close.focus();
-    }
+			function openModal(text: string | null) {
+				content.textContent = text;
+				dlg.classList.remove("hidden");
+				document.body.style.overflow = "hidden";
+				close.focus();
+			}
 
-    function closeModal() {
-      dlg.classList.add("hidden");
-      document.body.style.overflow = "";
-    }
+			function closeModal() {
+				dlg.classList.add("hidden");
+				document.body.style.overflow = "";
+			}
 
-    document.querySelectorAll(".abstract-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-abs-id");
-        const tpl = id ? document.getElementById(id) : null;
-        if (tpl && tpl.innerHTML) openModal(tpl.innerHTML.trim());
-      });
-    });
+			document.querySelectorAll(".abstract-btn").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					const id = btn.getAttribute("data-abs-id");
+					const tpl = id ? document.getElementById(id) : null;
+					if (tpl && tpl.innerHTML) openModal(tpl.innerHTML.trim());
+				});
+			});
 
-    close.addEventListener("click", closeModal);
-    dlg.addEventListener("click", (e) => {
-      if (e.target === dlg) closeModal();
-    });
+			close.addEventListener("click", closeModal);
+			dlg.addEventListener("click", (e) => {
+				if (e.target === dlg) closeModal();
+			});
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !dlg.classList.contains("hidden")) closeModal();
-    });
-  });
-  </script>
+			document.addEventListener("keydown", (e) => {
+				if (e.key === "Escape" && !dlg.classList.contains("hidden")) closeModal();
+			});
+		});
+	</script>
 </PageLayout>
