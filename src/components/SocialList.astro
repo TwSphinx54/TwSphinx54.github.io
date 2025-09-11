@@ -1,72 +1,97 @@
 ---
 import { Icon } from "astro-icon/components";
 
-/**
-	Uses https://www.astroicon.dev/getting-started/
-	Find icons via guide: https://www.astroicon.dev/guides/customization/#open-source-icon-sets
-	Only installed pack is: @iconify-json/mdi
-*/
-const socialLinks: {
+type IconName =
+	| "mdi:email"
+	| "simple-icons:x"
+	| "simple-icons:github"
+	| "simple-icons:linkedin"
+	| "simple-icons:googlescholar"
+	| "simple-icons:researchgate"
+	| "simple-icons:orcid";
+
+interface SocialLink {
 	friendlyName: string;
-	isWebmention?: boolean;
 	link: string;
-	name: string;
-}[] = [
-  {
-		friendlyName: "Email",
-		link: "mailto:panxurs@whu.edu.cn",
-		name: "mdi:email",
-	},
-  {
-		friendlyName: "X",
-		link: "https://x.com/xupan_whu",
-		name: "simple-icons:x",
-	},
-  {
-		friendlyName: "Github",
-		link: "https://github.com/TwSphinx54",
-		name: "simple-icons:github",
-	},
-  {
+	name: IconName;
+	isWebmention?: boolean;
+}
+
+const socialLinks: SocialLink[] = [
+	{ friendlyName: "Email", link: "mailto:panxurs@whu.edu.cn", name: "mdi:email" },
+	{ friendlyName: "X", link: "https://x.com/xupan_whu", name: "simple-icons:x" },
+	{ friendlyName: "Github", link: "https://github.com/TwSphinx54", name: "simple-icons:github" },
+	{
 		friendlyName: "Linkedin",
 		link: "https://linkedin.com/in/xupanwhu",
 		name: "simple-icons:linkedin",
 	},
-  {
+	{
 		friendlyName: "Google Scholar",
 		link: "https://scholar.google.com/citations?user=IuCPqLcAAAAJ&hl=en",
 		name: "simple-icons:googlescholar",
 	},
-  {
+	{
 		friendlyName: "ResearchGate",
 		link: "https://www.researchgate.net/profile/Xu-Pan-10",
 		name: "simple-icons:researchgate",
 	},
-  {
+	{
 		friendlyName: "ORCiD",
 		link: "https://orcid.org/0009-0007-3297-0385",
 		name: "simple-icons:orcid",
 	},
 ];
+
+const SCALE: Record<IconName, number> = {
+	"simple-icons:x": 1.05,
+	"simple-icons:github": 1.0,
+	"simple-icons:linkedin": 1.02,
+	"simple-icons:googlescholar": 1.07,
+	"simple-icons:researchgate": 1.0,
+	"simple-icons:orcid": 1.0,
+	"mdi:email": 1.3,
+};
 ---
 
-<div class="flex flex-wrap items-end gap-x-2">
-	<p>Find me on</p>
-	<ul class="flex flex-1 items-center gap-x-2 sm:flex-initial">
+<style>
+	.social-icon-wrapper {
+		@apply grid h-8 w-8 place-items-center rounded-md bg-gray-100 text-gray-700 transition-colors dark:bg-gray-800 dark:text-gray-200;
+	}
+	.social-icon-wrapper:hover {
+		@apply bg-accent text-white;
+	}
+	.social-icon-wrapper svg {
+		width: 1.25rem;
+		height: 1.25rem;
+		display: block;
+		transform-origin: 50% 50%;
+	}
+</style>
+
+<div class="flex flex-wrap items-center gap-3">
+	<p class="text-sm text-gray-500 dark:text-gray-400">Find me on</p>
+	<ul class="flex flex-wrap items-center gap-2">
 		{
-			socialLinks.map(({ friendlyName, isWebmention, link, name }) => (
-				<li class="flex">
-					<a
-						class="inline-block sm:hover:text-link"
-						href={link}
-						rel={`noreferrer ${isWebmention ? "me authn" : ""}`}
-						target="_blank"
-					>
-						<Icon aria-hidden="true" class="h-5 w-5" focusable="false" name={name} />
-						<span class="sr-only">{friendlyName}</span>
-					</a>
-				</li>
-			))
+			socialLinks.map((link) => {
+				const s = SCALE[link.name] ?? 1;
+				return (
+					<li>
+						<a
+							href={link.link}
+							aria-label={link.friendlyName}
+							title={link.friendlyName}
+							target="_blank"
+							rel="noreferrer"
+							class="block"
+						>
+							<span class="social-icon-wrapper" data-icon={link.name}>
+								<Icon name={link.name} style={`transform:scale(${s})`} />
+							</span>
+						</a>
+					</li>
+				);
+			})
 		}
 	</ul>
 </div>
