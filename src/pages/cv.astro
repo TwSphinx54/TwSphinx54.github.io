@@ -2,62 +2,52 @@
 // import { Image } from "astro:assets";
 // import aboutImg from "@/assets/about-astro.png";
 import PageLayout from "@/layouts/Base.astro";
+import SocialList from "@/components/SocialList.astro";
 
 const meta = {
-	description: "I'm a starter theme for Astro.build",
+	description: "CV — seeking Ph.D. opportunities in computer vision, deep learning, and generative AI.",
 	title: "CV",
 };
 ---
 
 <PageLayout meta={meta}>
-	<div class="space-y-6">
+	<section class="max-w-3xl">
 		<h1 class="title">CV</h1>
-		<p>
-			You can check out my basic info in <a class="cactus-link" href="https://linkedin.com/in/xupanwhu">Linkedin</a>,
-			or download the CV from <a class="cactus-link" href="https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/Resume.pdf" download>here</a>
-			or <a class="cactus-link" href="https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/Resume_zh_CN.pdf" download>zh_CN version</a>.
+
+		<p class="mb-4 text-gray-700 dark:text-gray-300">
+			I am currently seeking a <strong class="text-accent">Ph.D.</strong> opportunity in
+			<em class="highlight">computer vision</em>, <em class="highlight">deep learning</em>, and
+			<em class="highlight">generative AI</em>, with a particular interest in unifying 2D/3D
+			representations for trustworthy spatial reasoning and embodied intelligence.
 		</p>
-		<p>
-			I am currently seeking a <span class="text-accent"><strong>Ph.D.</strong></span> opportunity in 
-			<em><strong>computer vision</strong></em>, 
-			<em><strong>deep learning</strong></em>, and 
-			<em><strong>generative AI</strong></em>, 
-			with a focus on the intersection of <em><strong>3D vision</strong></em> and 
-			<em><strong>generative models</strong></em>. 
-			My research aims to develop <em><strong>trustworthy 3D representations</strong></em> by integrating generative techniques for advanced reconstruction and scene synthesis, 
-			while also extending toward <em><strong>embodied intelligence</strong></em> and 
-			<em><strong>autonomous agents</strong></em>, where reliable spatial reasoning enables real-world interaction and decision-making.  
-			I’m eager to expand my expertise and welcome collaborative discussions or connections.
-		</p>
-		<p>
-		For questions or to connect, feel free to reach out via <a class="cactus-link" href="mailto:panxurs@whu.edu.cn">Email</a>.
-		</p>
-		<!--<div class="flex justify-center">-->
-		<!--	<Image-->
-		<!--		alt="A cartoon cactus looking at the 'Astro.build' logo"-->
-		<!--		fetchpriority="high"-->
-		<!--		loading="eager"-->
-		<!--		src={aboutImg}-->
-		<!--	/>-->
-		<!--</div>-->
-		<!--<p>Here are my some of my awesome built in features:</p>-->
-		<!--<ul class="list-inside list-disc">-->
-		<!--	<li>I'm ultra fast as I'm a static site</li>-->
-		<!--	<li>I'm fully responsive</li>-->
-		<!--	<li>I come with a light and dark mode</li>-->
-		<!--	<li>I'm easy to customise and add additional content</li>-->
-		<!--	<li>I have Tailwind CSS styling</li>-->
-		<!--	<li>Shiki code syntax highlighting</li>-->
-		<!--	<li>Satori for auto generating OG images for blog posts</li>-->
-		<!--</ul>-->
-		<!--<p>-->
-		<!--	Clone or fork my <a-->
-		<!--		aria-label="github repository"-->
-		<!--		class="cactus-link inline-block"-->
-		<!--		href="https://github.com/chrismwilliams/astro-cactus"-->
-		<!--		rel="noreferrer"-->
-		<!--		target="_blank">repo</a-->
-		<!--	> if you like me!-->
-		<!--</p>-->
-	</div>
+
+		<div class="flex flex-wrap gap-3 mb-6">
+			<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10" href="https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/Resume.pdf" target="_blank" rel="noopener" aria-label="Download Resume English">
+				Download CV (EN)
+			</a>
+			<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10" href="https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/Resume_zh_CN.pdf" target="_blank" rel="noopener" aria-label="Download Resume Chinese">
+				Download CV (ZH)
+			</a>
+			<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10" href="https://linkedin.com/in/xupanwhu" target="_blank" rel="noopener" aria-label="LinkedIn profile">
+				LinkedIn
+			</a>
+		</div>
+
+		<section class="mb-6">
+			<h2 class="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2">Research interests</h2>
+			<p class="text-gray-700 dark:text-gray-300 text-sm">
+				3D vision · image correspondence · structure-aware generative models · embodied intelligence ·
+				trustworthy spatial representations
+			</p>
+		</section>
+
+		<section class="mb-6">
+			<h2 class="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2">Contact</h2>
+			<p class="text-gray-700 dark:text-gray-300 text-sm mb-2">For inquiries or collaborations, email: <a class="cactus-link" href="mailto:panxurs@whu.edu.cn">panxurs@whu.edu.cn</a></p>
+			<p class="text-gray-700 dark:text-gray-300 text-sm">Open to remote and on-site Ph.D. positions. Happy to share references and detailed materials on request.</p>
+		</section>
+
+		<!-- minimal social links, consistent with home page -->
+		<SocialList />
+	</section>
 </PageLayout>

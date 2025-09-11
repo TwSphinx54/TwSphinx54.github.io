@@ -5,7 +5,7 @@ import SocialList from "@/components/SocialList.astro";
 // import { Image } from 'astro:assets';
 import PageLayout from "@/layouts/Base.astro";
 import pub1Image from "../assets/pub1.png";
-// import pub2Image from '../assets/pub2.png';
+import { Icon } from "astro-icon/components";
 
 // import { getAllPosts, sortMDByDate } from "@/data/post";
 // const MAX_POSTS = 10;
@@ -14,8 +14,7 @@ import pub1Image from "../assets/pub1.png";
 
 const cactusTech = [
 	{
-		author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"],
-		note: "(*Corresponding author)",
+		author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng"],
 		title: "Scale-aware Co-visible Region Detection for Image Matching",
 		booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing",
 		time: "2025",
@@ -23,11 +22,12 @@ const cactusTech = [
 		paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260",
 		code: "https://github.com/Geo-Tell/SCoDe",
 		image: pub1Image.src,
-		abs: "Matching images with significant scale differences remains a persistent challenge in photogrammetry and remote sensing. The scale discrepancy often degrades appearance consistency and introduces uncertainty in keypoint localization. While existing methods address scale variation through scale pyramids or scale-aware training, matching under significant scale differences remains an open challenge. To overcome this, we address the scale difference issue by detecting co-visible regions between image pairs and propose SCoDe (Scale-aware Co-visible region Detector), which both identifies co-visible regions and aligns their scales for highly robust, hierarchical point correspondence matching. Specifically, SCoDe employs a novel Scale Head Attention mechanism to map and correlate features across multiple scale subspaces, and uses a learnable query to aggregate scale-aware information of both images for co-visible region detection. In this way, correspondences can be established in a coarse-to-fine hierarchy, thereby mitigating semantic and localization uncertainties. Extensive experiments on three challenging datasets demonstrate that SCoDe outperforms state-of-the-art methods, improving the precision of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images with drastic scale variations.",
+		venueIcon: "simple-icons:elsevier",
+		venueColor: "#FF6C00",
+		abstract: "Matching images with significant scale differences remains a persistent challenge in photogrammetry and remote sensing. The scale discrepancy often degrades appearance consistency and introduces uncertainty in keypoint localization. While existing methods address scale variation through scale pyramids or scale-aware training, matching under significant scale differences remains an open challenge. To overcome this, we address the scale difference issue by detecting co-visible regions between image pairs and propose SCoDe (Scale-aware Co-visible region Detector), which both identifies co-visible regions and aligns their scales for highly robust, hierarchical point correspondence matching. Specifically, SCoDe employs a novel Scale Head Attention mechanism to map and correlate features across multiple scale subspaces, and uses a learnable query to aggregate scale-aware information of both images for co-visible region detection. In this way, correspondences can be established in a coarse-to-fine hierarchy, thereby mitigating semantic and localization uncertainties. Extensive experiments on three challenging datasets demonstrate that SCoDe outperforms state-of-the-art methods, improving the precision of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images with drastic scale variations.",
 	},
 	{
-		author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng*"],
-		note: "(*Corresponding author)",
+		author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng"],
 		title: "SAMatcher: Segment Anything Co-visible for Robust Feature Matching",
 		booktitle: "(In Preparation)",
 		time: "2026",
@@ -35,7 +35,9 @@ const cactusTech = [
 		paper: "",
 		code: "",
 		image: "",
-		abs: "",
+		venueIcon: "",
+		venueColor: "",
+		abstract: "",
 	},
 ];
 /* Dynamically gather experience logos */
@@ -160,163 +162,165 @@ const experiences = Object.entries(expImages)
 			}
 		</div>
 	</section>
-	<!--<section aria-label="Blog post list" class="mt-16">-->
-	<!--	<h2 class="title mb-4 text-xl">Posts</h2>-->
-	<!--	<ul class="space-y-4">-->
-	<!--		{-->
-	<!--			allPostsByDate.map((p) => (-->
-	<!--				<li class="grid gap-2 sm:grid-cols-[auto_1fr] sm:[&_q]:col-start-2">-->
-	<!--					{/* @ts-ignore-next-line - issue with -> @astrojs/check@0.9.3 */}-->
-	<!--					<PostPreview post={p} />-->
-	<!--				</li>-->
-	<!--			))-->
-	<!--		}-->
-	<!--	</ul>-->
-	<!--</section>-->
 	<section class="mt-16">
 		<h2 class="title mb-4 text-xl">Publications</h2>
 		<dl class="space-y-4">
 			{
 				cactusTech.map((pub) => {
-					const { author, note, title, booktitle, time, doi, paper, code, image, abs } = pub;
+					const { author, title, booktitle, time, doi, paper, code, abstract, venueIcon, venueColor, image } = pub;
 					const slug = title
 						.toLowerCase()
 						.replace(/\s+/g, "-")
 						.replace(/[^a-z0-9\-]/g, "");
 					return (
-						<div class="flex flex-col gap-2 sm:flex-row">
-							<dt>
-								<span class="flex">
-									<span>
-										<>
-											<span class="text-accent">
-												<strong>{title}</strong>
-											</span>
-											<br />
-										</>
+						<article class="pub-article group relative w-full overflow-hidden rounded-xl border border-zinc-200/70 bg-white/80 p-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/70 transition hover:shadow-md dark:border-zinc-800/80 dark:bg-zinc-900/80 -ml-2">
+							<div class="grid grid-cols-1 gap-4">
+								<div class="min-w-0">
+									<h3 class="text-base font-semibold leading-snug tracking-tight">
+										<span class="text-accent"><strong>{title}</strong></span>
+									</h3>
+									<p class="mt-1 text-sm text-gray-700 dark:text-gray-300">
 										{author.map((name, index) => (
 											<span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
-												{name}
-												{index < author.length - 1 ? ", " : ""}
+												{name}{index < author.length - 1 ? ", " : ""}
 											</span>
 										))}
-										{note && note}
-										<br />
-										<em>{booktitle}</em>
-										<br />
-										{time}
-										<br />
-										{/* Reordered buttons/links: ABSTRACT, CODE, DOI, PAPER */}
-										{abs && (
-											<>
-												{" "}
-												<button
-													type="button"
-													class="abstract-btn cactus-link"
-													data-abs-id={`abs-${slug}`}
-													aria-haspopup="dialog"
-													aria-controls="abstract-modal"
-												>
-													ABSTRACT
-												</button>
-												<template id={`abs-${slug}`}>{abs}</template>
-											</>
+									</p>
+									<div class="mt-2 flex flex-wrap gap-2">
+										<span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+											{ /* render venue icon if available */ }
+											{venueIcon && (
+												<Icon name={venueIcon} width="14" height="14" class="mr-1 inline-block align-[-0.2em]" style={`color: ${venueColor}`} aria-hidden="true" />
+											)}
+											{booktitle}
+										</span>
+										{time && (
+											<span class="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">{time}</span>
 										)}
-										{code && (
-											<a
-												class="cactus-link inline-block"
-												href={code}
-												target="_blank"
-												rel="noopener"
+									</div>
+									<div class="mt-3 flex flex-wrap gap-2" aria-label="Publication actions">
+										{abstract && (
+											<button
+												type="button"
+												class="abstract-btn cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700"
+												data-abstract-id={`abstract-${slug}`}
+												aria-expanded="false"
 											>
-												CODE
-											</a>
+												ABSTRACT
+												<svg class="chev transform ml-2 h-3 w-3 transition-transform duration-200" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+													<path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+												</svg>
+											</button>
 										)}
-										{doi && (
-											<a class="cactus-link inline-block" href={doi}>
-												DOI
-											</a>
-										)}
-										{paper && (
-											<a class="cactus-link" href={paper} target="_blank" rel="noopener">
-												PAPER
-											</a>
-										)}
-										<br />
-										<img src={image} alt="[Image Preparing]" />
-									</span>
-								</span>
-							</dt>
-						</div>
+										{code && (<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700" href={code} target="_blank" rel="noopener">CODE</a>)}
+										{doi && (<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700" href={doi} target="_blank" rel="noopener">DOI</a>)}
+										{paper && (<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700" href={paper} target="_blank" rel="noopener">PAPER</a>)}
+									</div>
+									{abstract && (
+										<div class="abstract-collapse mt-3 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out text-sm text-gray-700 dark:text-gray-300 w-full pr-0" id={`abstract-content-${slug}`} style="max-height: 0; opacity: 0;" data-collapsed="true">
+											{abstract}
+										</div>
+									)}
+								</div>
+							</div>
+							{/* Static thumbnail: fixed-size, independent from abstract expansion (lg+) */}
+							{image && (
+								<div class="pub-thumb hidden lg:block absolute top-6 right-5">
+									<button type="button" class="pub-thumb-btn group block cursor-zoom-in" aria-label="Open image">
+										<img src={image} alt="[Thumbnail]" class="pub-thumb-img h-[108px] w-[108px] rounded-xl object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:shadow-lg border-2 border-transparent group-hover:border-accent group-hover:border-dashed" loading="lazy" decoding="async" />
+									</button>
+								</div>
+							)}
+						</article>
 					);
 				})
 			}
 		</dl>
 	</section>
-	{/* Abstract Modal */}
-	<div
-		id="abstract-modal"
-		class="fixed inset-0 z-50 hidden items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm dark:bg-black/70"
-		role="dialog"
-		aria-modal="true"
-		aria-labelledby="abstract-modal-title"
-	>
-		<div
-			class="relative mx-auto my-10 w-full max-w-2xl rounded-lg border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-700 dark:bg-gray-900"
-		>
-			<h3 id="abstract-modal-title" class="mb-4 text-lg font-semibold">Abstract</h3>
-			<div id="abstract-modal-content" class="whitespace-pre-line text-sm leading-relaxed"></div>
-			<div class="mt-6 flex justify-end">
-				<button
-					id="abstract-modal-close"
-					type="button"
-					class="rounded bg-accent px-4 py-2 text-white transition hover:opacity-90"
-				>
-					Close
-				</button>
-			</div>
+
+	{/* Image modal (reused) */}
+	<div id="img-modal" class="fixed inset-0 z-70 hidden flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+		<div class="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center">
+			<button id="img-modal-close" class="absolute right-3 top-3 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 hover:bg-white text-accent shadow-md" aria-label="Close image modal">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<line x1="18" y1="6" x2="6" y2="18"></line>
+					<line x1="6" y1="6" x2="18" y2="18"></line>
+				</svg>
+			</button>
+			<img id="img-modal-img" src="" alt="Large image" class="max-w-full max-h-[90vh] rounded-lg shadow-xl object-contain" />
 		</div>
 	</div>
 
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
-			const modal = document.getElementById("abstract-modal");
-			const contentEl = document.getElementById("abstract-modal-content");
-			const closeBtn = document.getElementById("abstract-modal-close");
-
-			if (!modal || !contentEl || !closeBtn) return;
-
-			const dlg = modal;
-			const content = contentEl;
-			const close = closeBtn;
-
-			function openModal(text: string | null) {
-				content.textContent = text;
-				dlg.classList.remove("hidden");
-				document.body.style.overflow = "hidden";
-				close.focus();
-			}
-
-			function closeModal() {
-				dlg.classList.add("hidden");
-				document.body.style.overflow = "";
-			}
-
-			document.querySelectorAll(".abstract-btn").forEach((btn) => {
-				btn.addEventListener("click", () => {
-					const id = btn.getAttribute("data-abs-id");
-					const tpl = id ? document.getElementById(id) : null;
-					if (tpl && tpl.innerHTML) openModal(tpl.innerHTML.trim());
+			// toggle abstracts: smooth max-height + opacity, no image panel logic
+			document.querySelectorAll('.abstract-btn').forEach(btn => {
+				const id = btn.getAttribute('data-abstract-id');
+				const slug = id ? id.replace('abstract-', '') : null;
+				const content = slug ? document.getElementById(`abstract-content-${slug}`) : null;
+				const chev = btn.querySelector('.chev');
+				if (chev && content) {
+					const collapsed = content.getAttribute('data-collapsed');
+					if (collapsed === 'false') chev.classList.add('rotate-180'); else chev.classList.remove('rotate-180');
+				}
+				btn.addEventListener('click', () => {
+					if (!content) return;
+					const collapsed = content.getAttribute('data-collapsed') !== 'false';
+					if (collapsed) {
+						content.style.maxHeight = content.scrollHeight + 'px';
+						content.style.opacity = '1';
+						content.setAttribute('data-collapsed', 'false');
+						btn.setAttribute('aria-expanded', 'true');
+						if (chev) chev.classList.add('rotate-180');
+						setTimeout(() => { if (content.getAttribute('data-collapsed') === 'false') content.style.maxHeight = 'none'; }, 310);
+					} else {
+						content.style.maxHeight = content.scrollHeight + 'px';
+						content.getBoundingClientRect();
+						content.style.maxHeight = '0';
+						content.style.opacity = '0';
+						content.setAttribute('data-collapsed', 'true');
+						btn.setAttribute('aria-expanded', 'false');
+						if (chev) chev.classList.remove('rotate-180');
+					}
 				});
 			});
 
-			close.addEventListener("click", closeModal);
-			dlg.addEventListener("click", (e) => {
-				if (e.target === dlg) closeModal();
-			});
+			// Image modal handlers: thumbnails open modal
+			const imgModal = document.getElementById('img-modal') as HTMLDivElement | null;
+			const imgModalImg = document.getElementById('img-modal-img') as HTMLImageElement | null;
+			const imgModalClose = document.getElementById('img-modal-close') as HTMLButtonElement | null;
+			function openImgModal(src: string): void {
+				if (!imgModal || !imgModalImg) return;
+				imgModalImg.src = src;
+				imgModal.classList.remove('hidden');
+				document.body.style.overflow = 'hidden';
+				imgModalClose?.focus();
+			}
+			function closeImgModal(): void {
+				if (!imgModal) return;
+				imgModal.classList.add('hidden');
+				if (imgModalImg) imgModalImg.src = '';
+				document.body.style.overflow = '';
+			}
+			imgModalClose?.addEventListener('click', closeImgModal);
+			imgModal?.addEventListener('click', (e) => { if (e.target === imgModal) closeImgModal(); });
+			document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeImgModal(); });
 
-			document.addEventListener("keydown", (e) => {
-				if (e.key === "Escape" && !dlg.classList.contains("hidden")) closeModal();
+			// thumbnail click -> open modal
+			document.addEventListener('click', (e) => {
+				const target = e.target as EventTarget | null;
+				if (!target) return;
+				if (target instanceof HTMLImageElement) {
+					// thumbnail image
+					if (target.classList.contains('pub-thumb-img')) {
+						openImgModal(target.src);
+						return;
+					}
+					// inline images (if any) still open modal
+					if (target.dataset && target.dataset.inline === 'true') {
+						openImgModal(target.src);
+					}
+				}
 			});
 		});
 	</script>
