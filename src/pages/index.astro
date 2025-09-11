@@ -7,9 +7,9 @@ import PageLayout from "@/layouts/Base.astro";
 import pub1Image from '../assets/pub1.png';
 // import pub2Image from '../assets/pub2.png';
 
-import { getAllPosts, sortMDByDate } from "@/data/post";
-const MAX_POSTS = 10;
-const allPosts = await getAllPosts();
+// import { getAllPosts, sortMDByDate } from "@/data/post";
+// const MAX_POSTS = 10;
+// const allPosts = await getAllPosts();
 // const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 
 const cactusTech = [
@@ -45,25 +45,27 @@ const cactusTech = [
 		<h1 class="title mb-6">Hello World!</h1>
 		<p class="mb-4">
 			Hi, I’m currently a Master's student in the 
-			<a class="cactus-link" href="https://liesmars.whu.edu.cn/">State Key Lab. LIESMARS</a>
+			<a class="cactus-link" href="https://liesmars.whu.edu.cn/">State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)</a>
 			at <a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, under the guidance of
 			<a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.
 			I received my B.Eng. in Remote Sensing Science and Technology from Wuhan University in 2023.
 			I have previously researched GenAI applications in image and video generation under the supervision of 
 			<a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>
 			during my internship at
-			<a class="cactus-link" href="https://www.baidu.com/">Baidu (International Tech R&D Dept.)</a>.
+			<a class="cactus-link" href="https://www.baidu.com/">Baidu, Inc. (International Technology R&D Department)</a>
 			Currently, I am also a remote research intern at 
 			<a class="cactus-link" href="https://www.a-star.edu.sg/cfar">Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)</a>, supervised by 
 			<a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>, 
 			where I work on reinforcement learning and embodied intelligence, with a focus on generalizable, agent-centric policy learning.
 		</p>
 		<p class="mb-4">
-			My research interests lie in <em>computer vision</em> and <em>generative AI</em>, 
-			with a focus on unifying 2D and 3D representations through image correspondence, cross-view understanding, and structure-aware generation. 
-			I aim to develop general spatial intelligence models that bridge perception, geometry, and trustworthy generation at scale, 
-			and to contribute to <em>the next generation of spatially grounded, intelligent visual systems</em>.
-		</p>
+      My research interests lie in <em class="highlight">computer vision</em> and <em class="highlight">generative AI</em>, 
+      with a focus on unifying 2D and 3D representations through image correspondence, cross-view understanding, and structure-aware generation. 
+      I aim to develop general spatial intelligence models that bridge perception, geometry, and trustworthy generation at scale, 
+      advancing <em class="highlight">the next generation of spatially grounded, intelligent visual systems</em>. 
+      Beyond foundational research, I am particularly interested in enabling <em class="highlight">embodied intelligence</em> and <em class="highlight">autonomous agents</em>, 
+      where spatial reasoning and generative modeling empower real-world interaction, decision-making, and large-scale multi-agent collaboration.
+    </p>
 		<SocialList />
 	</section>
 	<!--<section aria-label="Blog post list" class="mt-16">-->

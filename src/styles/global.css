@@ -13,6 +13,9 @@
 		--theme-accent: 351deg 66% 48%;
 		--theme-accent-2: 0deg 0% 7%;
 		--theme-quote: 351deg 66% 48%;
+		/* highlight underline (light) */
+		--em-underline-color: #fdf3c4;
+		--em-underline-height: 0.42em;
 	}
 
 	:root[data-theme="dark"] {
@@ -23,5 +26,23 @@
 		--theme-accent: 159deg 64% 45%;
 		--theme-accent-2: 0deg 0% 93%;
 		--theme-quote: 102deg 100% 86%;
+		/* highlight underline (dark) */
+		--em-underline-color: #155e75; /* teal-800-ish for subtle; adjust if too low contrast */
+		--em-underline-height: 0.42em;
+	}
+
+	.highlight,
+	em.highlight {
+		font-weight: 600;
+		font-style: italic;
+		padding: 0 2px;
+		border-radius: 2px;
+		background-image: linear-gradient(
+			transparent calc(100% - var(--em-underline-height)),
+			var(--em-underline-color) 0
+		);
+		background-repeat: no-repeat;
+		background-size: 100% var(--em-underline-height);
+		background-position: 0 100%;
 	}
 }
