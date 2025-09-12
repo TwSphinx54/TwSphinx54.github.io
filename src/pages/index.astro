@@ -5,6 +5,7 @@ import SocialList from "@/components/SocialList.astro";
 // import { Image } from 'astro:assets';
 import PageLayout from "@/layouts/Base.astro";
 import pub1Image from "../assets/pub1.png";
+import pub3Image from "../assets/pub3.gif";
 import { Icon } from "astro-icon/components";
 
 // import { getAllPosts, sortMDByDate } from "@/data/post";
@@ -35,8 +36,21 @@ const cactusTech = [
 		paper: "",
 		code: "",
 		image: "",
-		venueIcon: "",
-		venueColor: "",
+		venueIcon: "simple-icons:latex",
+		venueColor: "#008080",
+		abstract: "",
+	},
+	{
+		author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu"],
+		title: "Flow-Matching RL with Streaming Spatial Perception for Dynamic Manipulation",
+		booktitle: "(In Preparation)",
+		time: "2026",
+		doi: "",
+		paper: "",
+		code: "",
+		image: pub3Image.src,
+		venueIcon: "simple-icons:latex",
+		venueColor: "#008080",
 		abstract: "",
 	},
 ];
@@ -174,69 +188,73 @@ const experiences = Object.entries(expImages)
 						.replace(/[^a-z0-9\-]/g, "");
 					return (
 						<article class="pub-article group relative w-full overflow-hidden rounded-xl border border-zinc-200/70 bg-white/80 p-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/70 transition hover:shadow-md dark:border-zinc-800/80 dark:bg-zinc-900/80 -ml-2">
-							<div class="grid grid-cols-1 gap-4">
-								<div class="min-w-0">
-									<h3 class="text-base font-semibold leading-snug tracking-tight">
-										<span class="text-accent"><strong>{title}</strong></span>
-									</h3>
-									<p class="mt-1 text-sm text-gray-700 dark:text-gray-300">
-										{author.map((name, index) => (
-											<span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
-												{name}{index < author.length - 1 ? ", " : ""}
-											</span>
-										))}
-									</p>
-									<div class="mt-2 flex flex-wrap gap-2">
-										<span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
-											{ /* render venue icon if available */ }
-											{venueIcon && (
-												<Icon name={venueIcon} width="14" height="14" class="mr-1 inline-block align-[-0.2em]" style={`color: ${venueColor}`} aria-hidden="true" />
-											)}
-											{booktitle}
-										</span>
-										{time && (
-											<span class="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">{time}</span>
-										)}
-									</div>
-									<div class="mt-3 flex flex-wrap gap-2" aria-label="Publication actions">
-										{abstract && (
-											<button
-												type="button"
-												class="abstract-btn cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700"
-												data-abstract-id={`abstract-${slug}`}
-												aria-expanded="false"
-											>
-												ABSTRACT
-												<svg class="chev transform ml-2 h-3 w-3 transition-transform duration-200" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-													<path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-												</svg>
-											</button>
-										)}
-										{code && (<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700" href={code} target="_blank" rel="noopener">CODE</a>)}
-										{doi && (<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700" href={doi} target="_blank" rel="noopener">DOI</a>)}
-										{paper && (<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700" href={paper} target="_blank" rel="noopener">PAPER</a>)}
-									</div>
-									{abstract && (
-										<div class="abstract-collapse mt-3 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out text-sm text-gray-700 dark:text-gray-300 w-full pr-0" id={`abstract-content-${slug}`} style="max-height: 0; opacity: 0;" data-collapsed="true">
-											{abstract}
-										</div>
-									)}
-								</div>
-							</div>
-							{/* Static thumbnail: fixed-size, independent from abstract expansion (lg+) */}
-							{image && (
-								<div class="pub-thumb hidden lg:block absolute top-6 right-5">
-									<button type="button" class="pub-thumb-btn group block cursor-zoom-in" aria-label="Open image">
-										<img src={image} alt="[Thumbnail]" class="pub-thumb-img h-[108px] w-[108px] rounded-xl object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:shadow-lg border-2 border-transparent group-hover:border-accent group-hover:border-dashed" loading="lazy" decoding="async" />
-									</button>
+							{/* Use flow layout on large screens: text column grows, thumbnail has fixed size.
+							   Small screens keep a single-column grid and the thumbnail remains hidden. */}
+							<div class="grid grid-cols-1 gap-4 lg:flex lg:items-start lg:gap-6">
+								{/* text column: allow shrinking/truncation */}
+								<div class="min-w-0 lg:flex-1">
+ 									<h3 class="text-base font-semibold leading-snug tracking-tight">
+ 										<span class="text-accent"><strong>{title}</strong></span>
+ 									</h3>
+ 									<p class="mt-1 text-sm text-gray-700 dark:text-gray-300">
+ 										{author.map((name, index) => (
+ 											<span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
+ 												{name}{index < author.length - 1 ? ", " : ""}
+ 											</span>
+ 										))}
+ 									</p>
+ 									<div class="mt-2 flex flex-wrap gap-2">
+ 										<span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+ 											{ /* render venue icon if available */ }
+ 											{venueIcon && (
+ 												<Icon name={venueIcon} width="14" height="14" class="mr-1 inline-block align-[-0.2em]" style={`color: ${venueColor}`} aria-hidden="true" />
+ 											)}
+ 											{booktitle}
+ 										</span>
+ 										{time && (
+ 											<span class="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">{time}</span>
+ 										)}
+ 									</div>
+ 									<div class="mt-3 flex flex-wrap gap-2" aria-label="Publication actions">
+ 										{abstract && (
+ 											<button
+ 												type="button"
+ 												class="abstract-btn cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700"
+ 												data-abstract-id={`abstract-${slug}`}
+ 												aria-expanded="false"
+ 											>
+ 												ABSTRACT
+ 												<svg class="chev transform ml-2 h-3 w-3 transition-transform duration-200" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+ 													<path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+ 												</svg>
+ 											</button>
+ 										)}
+ 										{code && (<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700" href={code} target="_blank" rel="noopener">CODE</a>)}
+ 										{doi && (<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700" href={doi} target="_blank" rel="noopener">DOI</a>)}
+ 										{paper && (<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10 dark:border-zinc-700" href={paper} target="_blank" rel="noopener">PAPER</a>)}
+ 									</div>
+ 								</div>
+ 								{/* thumbnail column (part of flow on large screens). Keep hidden on small screens. */}
+ 								{image && (
+ 									<div class="pub-thumb hidden lg:block lg:ml-2">
+ 										<button type="button" class="pub-thumb-btn group block cursor-zoom-in" aria-label="Open image">
+ 											<img src={image} alt="[Thumbnail]" class="pub-thumb-img h-[96px] w-[96px] rounded-xl object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:shadow-lg border-2 border-transparent group-hover:border-accent group-hover:border-dashed" loading="lazy" decoding="async" />
+ 										</button>
+ 									</div>
+ 								)}
+ 							</div>
+							{/* 抽出的摘要区域：宽度为整个卡片（在小/大屏均为 full width） */}
+							{abstract && (
+								<div class="abstract-collapse mt-3 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out text-sm text-gray-700 dark:text-gray-300 w-full" id={`abstract-content-${slug}`} style="max-height: 0; opacity: 0;" data-collapsed="true">
+									{abstract}
 								</div>
 							)}
-						</article>
-					);
-				})
-			}
-		</dl>
-	</section>
+ 						</article>
+ 					);
+ 				})
+ 			}
+ 		</dl>
+ 	</section>
 
 	{/* Image modal (reused) */}
 	<div id="img-modal" class="fixed inset-0 z-70 hidden flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
