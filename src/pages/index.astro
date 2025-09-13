@@ -5,6 +5,7 @@ import SocialList from "@/components/SocialList.astro";
 // import { Image } from 'astro:assets';
 import PageLayout from "@/layouts/Base.astro";
 import pub1Image from "../assets/pub1.png";
+import pub2Image from "../assets/pub2.png";
 import pub3Image from "../assets/pub3.gif";
 import { Icon } from "astro-icon/components";
 
@@ -35,7 +36,7 @@ const cactusTech = [
 		doi: "",
 		paper: "",
 		code: "",
-		image: "",
+		image: pub2Image.src,
 		venueIcon: "simple-icons:latex",
 		venueColor: "#008080",
 		abstract: "",
@@ -138,7 +139,7 @@ const logoLiesmarsSrc = findLogo("liesmars") || findLogo("liesmars"); // fallbac
 			>
 			at
 			{logoWhuSrc && (
-				<img src={logoWhuSrc} alt="Wuhan University logo" class="inline h-4 w-auto object-contain mr-1 align-top" />
+				<img src={logoWhuSrc} alt="Wuhan University logo" class="inline h-5 w-auto object-contain mr-1 align-top" />
 			)}
 			<a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, under the
 			guidance of
