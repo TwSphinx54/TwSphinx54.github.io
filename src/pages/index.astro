@@ -8,6 +8,7 @@ import pub1Image from "../assets/pub1.png";
 import pub2Image from "../assets/pub2.png";
 import pub3Image from "../assets/pub3.gif";
 import pub4Image from "../assets/pub4.png";
+import pub5Image from "../assets/pub5.png";
 import { Icon } from "astro-icon/components";
 
 // import { getAllPosts, sortMDByDate } from "@/data/post";
@@ -67,6 +68,20 @@ const cactusTech = [
 		image: pub4Image.src,
 		venueIcon: "simple-icons:wikiversity",
 		venueColor: "#00649A",
+		abstract:"",
+	},
+	{
+		author: ["Jiashen Huang", "Xu Pan"],
+		title: "The Institutional Filter: How Trust Shapes Inequalities Between Domestic and Global AI Models",
+		booktitle: "(Under Review)",
+		// booktitle: "Annual International Communication Association (ICA) Conference",
+		time: "2026",
+		doi: "",
+		paper: "",
+		code: "",
+		image: pub5Image.src,
+		venueIcon: "simple-icons:acm",
+		venueColor: "#0085CA",
 		abstract:"",
 	},
 ];
@@ -287,8 +302,7 @@ const logoLiesmarsSrc = findLogo("liesmars") || findLogo("liesmars"); // fallbac
 									<p class="mt-1 text-sm text-gray-700 dark:text-gray-300">
 										{author.map((name, index) => (
 											<span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
-												{name}
-												{index < author.length - 1 ? ", " : ""}
+												{name}{index < author.length - 1 && ","}
 											</span>
 										))}
 									</p>
