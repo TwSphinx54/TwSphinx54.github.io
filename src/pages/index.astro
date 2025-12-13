@@ -82,7 +82,7 @@ const cactusTech = [
 		image: pub5Image.src,
 		venueIcon: "simple-icons:acm",
 		venueColor: "#0085CA",
-		abstract:"",
+		abstract:"Artificial intelligence is increasingly woven into the way people communicate, think, and make decisions. Yet trust in AI does not grow evenly across contexts; it carries traces of national identity, institutional credibility, and emotional attachment. This study examines how institutional trust shapes user trust in domestic (DeepSeek) and global (ChatGPT) large language models (LLMs) in China. Specifically, it distinguishes between cognitive and affective dimensions of trust. Using survey data from 405 participants, we found that higher institutional trust strengthens emotional confidence in domestic AI models, while at low levels of institutional trust, this domestic advantage in perceived competence disappears. By examining the relationship between institutional trust and AI adoption, this study deepens theoretical insights into global communication inequalities in the digital era. The findings suggest that institutional trust operates as a social resource, channeling legitimacy into technological trust, thus contributing to the uneven distribution of trust in AI technologies across different societal groups. The findings offer policy insights for inclusive AI governance and the promotion of global technological equity.",
 	},
 ];
 /* Dynamically gather experience logos */
@@ -153,6 +153,51 @@ const logoAstarSrc = findLogo("astar");
 const logoBaiduSrc = findLogo("baidu");
 const logoWhuSrc = findLogo("whu") || findLogo("wuhan");
 const logoLiesmarsSrc = findLogo("liesmars") || findLogo("liesmars"); // fallback kept for clarity
+
+// add: (optional) escape helper for plain-text fallback
+function escapeHtml(s: string) {
+	return s
+		.replaceAll("&", "&amp;")
+		.replaceAll("<", "&lt;")
+		.replaceAll(">", "&gt;")
+		.replaceAll('"', "&quot;")
+		.replaceAll("'", "&#039;");
+}
+
+// update: News items now support html for flexible content
+const newsItems: Array<{
+	date: string;
+	html?: string;
+	text?: string;
+	href?: string;
+	label?: string;
+}> = [
+	{
+		date: "Nov 2025",
+		text: "Completed the proposal defense for my Master’s thesis.",
+	},
+	{
+		date: "Aug 2025",
+		html: `First paper accepted by <em>ISPRS Journal of Photogrammetry and Remote Sensing</em>.
+		      <a class="cactus-link" href="https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260" target="_blank" rel="noopener">Paper</a>`,
+	},
+	{
+		date: "Aug 2025",
+		html: `Started a remote research internship at <strong>CFAR, A*STAR</strong>, supervised by
+		      <a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>,
+		      in collaboration with <a class="cactus-link" href="https://vanzll.github.io/">Zhenglin Wan</a>.`,
+	},
+	{
+		date: "Jul 2025",
+		text: "Attended the 2025 Annual Academic Conference on Photogrammetry and Remote Sensing, CSGPC in Kunming.",
+	},
+	{
+		date: "Dec 2024",
+		html: `Started a research internship at <strong>Baidu</strong> in Shenzhen, 
+			  supervised by <a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>, 
+			  exploring SOTA text-to-image and text-to-video generation.`,
+	},
+];
 ---
 
 <PageLayout meta={{ title: "Home" }}>
@@ -230,6 +275,40 @@ const logoLiesmarsSrc = findLogo("liesmars") || findLogo("liesmars"); // fallbac
 		</p>
 		<SocialList />
 	</section>
+
+	{/* add: News (inserted before Experiences) */}
+	<section class="mt-12" aria-label="News">
+		<h2 class="title mb-4 text-xl">News</h2>
+		<ul class="space-y-3">
+			{newsItems.map((item) => (
+				<li class="flex gap-3">
+					<span class="w-[5.5rem] shrink-0 text-sm font-medium text-gray-600 dark:text-gray-400">
+						{item.date}
+					</span>
+
+					<div class="min-w-0 text-sm text-gray-700 dark:text-gray-300">
+						{item.html ? (
+							// NOTE: html is rendered as-is; only put trusted content here
+							<span set:html={item.html} />
+						) : (
+							<>
+								{item.text && <span set:html={escapeHtml(item.text)} />}
+								{item.href && (
+									<>
+										{" "}
+										<a class="cactus-link" href={item.href} target="_blank" rel="noopener">
+											{item.label ?? "More"}
+										</a>
+									</>
+								)}
+							</>
+						)}
+					</div>
+				</li>
+			))}
+		</ul>
+	</section>
+
 	<section class="mt-12" aria-label="Experiences">
 		<h2 class="title mb-4 text-xl">Experiences</h2>
 		<div class="flex flex-wrap items-center gap-6">
@@ -387,7 +466,7 @@ const logoLiesmarsSrc = findLogo("liesmars") || findLogo("liesmars"); // fallbac
 											<img
 												src={image}
 												alt="[Thumbnail]"
-												class="pub-thumb-img h-[96px] w-[96px] rounded-xl border-2 border-transparent object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:border-dashed group-hover:border-accent group-hover:shadow-lg"
+												class="pub-thumb-img h-[96px] w-[176px] rounded-xl border-2 border-transparent object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:border-dashed group-hover:border-accent group-hover:shadow-lg"
 												loading="lazy"
 												decoding="async"
 											/>
