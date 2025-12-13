@@ -96,7 +96,7 @@ const experienceMeta: Record<string, { name: string; link: string }> = {
 		link: "https://liesmars.whu.edu.cn/",
 	},
 	"exp3.png": {
-		name: "Baidu, Inc. (International Technology R&D Department)",
+		name: "International Technology R&D Department, Baidu, Inc.",
 		link: "https://www.baidu.com/",
 	},
 	"exp4.png": {
@@ -159,7 +159,17 @@ const logoLiesmarsSrc = findLogo("liesmars") || findLogo("liesmars"); // fallbac
 	<section>
 		<h1 class="title mb-6">Hello World!</h1>
 		<p class="mb-4">
-			Hi, I’m currently a Master's student in the
+			Hi, I am a M.Sc. student at 
+			{
+				logoWhuSrc && (
+					<img
+						src={logoWhuSrc}
+						alt="Wuhan University logo"
+						class="mr-1 inline h-5 w-auto object-contain align-top"
+					/>
+				)
+			}
+			<a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, working at the 
 			{
 				logoLiesmarsSrc && (
 					<img
@@ -172,28 +182,20 @@ const logoLiesmarsSrc = findLogo("liesmars") || findLogo("liesmars"); // fallbac
 			<a class="cactus-link" href="https://liesmars.whu.edu.cn/"
 				>State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing
 				(LIESMARS)</a
-			>
-			at
-			{
-				logoWhuSrc && (
-					<img
-						src={logoWhuSrc}
-						alt="Wuhan University logo"
-						class="mr-1 inline h-5 w-auto object-contain align-top"
-					/>
-				)
-			}
-			<a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, under the guidance
-			of
+			>, under the guidance of
 			<a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm"
 				>Prof. Xianwei Zheng</a
-			>. I received my B.Eng. in Remote Sensing Science and Technology from Wuhan University in
-			2023. I have previously researched GenAI applications in image and video generation under the
-			supervision of
-			<a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ"
-				>Dr. Yan Zhang</a
-			>
-			during my internship at
+			>.
+			My research focuses on <em class="highlight">embodied intelligence</em> and <em class="highlight">3D visual perception</em>, 
+			with an emphasis on how spatial representations support generalizable decision-making and agent-centric policy learning.
+		</p>
+		<p class="mb-4">
+			My current work lies at the intersection of <em class="highlight">computer vision</em>, <em class="highlight">reinforcement learning</em>, and <em class="highlight">generative modeling</em>, 
+			where I study how 2D and 3D representations can be unified to enable robust perception–action coupling. 
+			I am particularly interested in <em class="highlight">structure-aware visual representations</em> that support cross-view understanding, generalization across environments, and interaction-driven learning in embodied settings.
+		</p>
+		<p class="mb-4">
+			Previously, I explored generative AI for image and video synthesis during my internship at 
 			{
 				logoBaiduSrc && (
 					<img
@@ -204,10 +206,9 @@ const logoLiesmarsSrc = findLogo("liesmars") || findLogo("liesmars"); // fallbac
 				)
 			}
 			<a class="cactus-link" href="https://www.baidu.com/"
-				>Baidu, Inc. (International Technology R&D Department)</a
-			>
-			Currently, I am also a remote research intern at
-			{
+				>Baidu</a
+			>. 
+			I am currently a remote research intern at the {
 				logoAstarSrc && (
 					<img
 						src={logoAstarSrc}
@@ -220,22 +221,12 @@ const logoLiesmarsSrc = findLogo("liesmars") || findLogo("liesmars"); // fallbac
 				>Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research
 				(A*STAR)</a
 			>, supervised by
-			<a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>, where I work on
-			reinforcement learning and embodied intelligence, with a focus on generalizable, agent-centric
-			policy learning.
+			<a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>, 
+			where I work on <em class="highlight">generalizable reinforcement learning for embodied agents</em>, with a focus on agent-centric formulations and transferable policies grounded in implicit spatial representations that support generalization across tasks and scenes.
 		</p>
 		<p class="mb-4">
-			My research interests lie in <em class="highlight">computer vision</em> and <em
-				class="highlight">generative AI</em
-			>, with a focus on unifying 2D and 3D representations through image correspondence, cross-view
-			understanding, and structure-aware generation. I aim to develop general spatial intelligence
-			models that bridge perception, geometry, and trustworthy generation at scale, advancing <em
-				class="highlight">the next generation of spatially grounded, intelligent visual systems</em
-			>. Beyond foundational research, I am particularly interested in enabling <em
-				class="highlight">embodied intelligence</em
-			> and <em class="highlight">autonomous agents</em>, where spatial reasoning and generative
-			modeling empower real-world interaction, decision-making, and large-scale multi-agent
-			collaboration.
+			More broadly, my goal is to develop spatially grounded learning frameworks that bridge perception, geometry, and control, 
+			advancing the next generation of embodied systems that can reason about and act within complex real-world environments.
 		</p>
 		<SocialList />
 	</section>
