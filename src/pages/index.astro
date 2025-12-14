@@ -92,14 +92,18 @@ const experienceMeta: Record<string, { name: string; link: string }> = {
 		link: "https://en.whu.edu.cn/",
 	},
 	"exp2.png": {
+		name: "School of Remote Sensing and Information Engineering",
+		link: "https://rsgis.whu.edu.cn/English/Home.htm",
+	},
+	"exp3.png": {
 		name: "State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)",
 		link: "https://liesmars.whu.edu.cn/",
 	},
-	"exp3.png": {
+	"exp4.png": {
 		name: "International Technology R&D Department, Baidu, Inc.",
 		link: "https://www.baidu.com/",
 	},
-	"exp4.png": {
+	"exp5.png": {
 		name: "Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)",
 		link: "https://www.a-star.edu.sg/cfar",
 	},
@@ -111,7 +115,7 @@ const expImages = import.meta.glob("../assets/exps/*.{png,jpg,jpeg,svg,webp}", {
 });
 
 // Preserve intended display order (fallback to filename order if new files are added)
-const order = ["exp1.png", "exp2.png", "exp3.png", "exp4.png"];
+const order = ["exp1.png", "exp2.png", "exp3.png", "exp4.png", "exp5.png"];
 
 const experiences = Object.entries(expImages)
 	.map(([path, mod]: [string, any]) => {
@@ -213,8 +217,7 @@ const newsItems: Array<{
 						class="mr-1 inline h-5 w-auto object-contain align-top"
 					/>
 				)
-			}
-			<a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, working at the 
+			}<a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, working at the 
 			{
 				logoLiesmarsSrc && (
 					<img
@@ -223,8 +226,7 @@ const newsItems: Array<{
 						class="mr-1 inline h-4 w-auto object-contain align-top"
 					/>
 				)
-			}
-			<a class="cactus-link" href="https://liesmars.whu.edu.cn/"
+			}<a class="cactus-link" href="https://liesmars.whu.edu.cn/"
 				>State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing
 				(LIESMARS)</a
 			>, under the guidance of
@@ -249,8 +251,7 @@ const newsItems: Array<{
 						class="mr-1 inline h-4 w-auto object-contain align-top"
 					/>
 				)
-			}
-			<a class="cactus-link" href="https://www.baidu.com/"
+			}<a class="cactus-link" href="https://www.baidu.com/"
 				>Baidu</a
 			>. 
 			I am currently a remote research intern at the {
@@ -261,8 +262,7 @@ const newsItems: Array<{
 						class="mr-1 inline h-4 w-auto object-contain align-top"
 					/>
 				)
-			}
-			<a class="cactus-link" href="https://www.a-star.edu.sg/cfar"
+			}<a class="cactus-link" href="https://www.a-star.edu.sg/cfar"
 				>Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research
 				(A*STAR)</a
 			>, supervised by
@@ -278,7 +278,7 @@ const newsItems: Array<{
 
 	<section class="mt-12" aria-label="News">
 		<h2 class="title mb-4 text-xl">News</h2>
-		<ul class="space-y-3">
+		<ul class="space-y-3 h-48 overflow-y-auto pr-2">
 			{newsItems.map((item) => (
 				<li class="flex gap-3">
 					<span class="w-[5.5rem] shrink-0 text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -323,7 +323,7 @@ const newsItems: Array<{
 							src={exp.src}
 							alt={exp.name}
 							title={exp.name}
-							class="h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+							class="h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
 							loading="lazy"
 						/>
 						<span class="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-0.5 text-[10px] font-medium tracking-wide text-white opacity-0 shadow transition-opacity group-hover:opacity-100">
