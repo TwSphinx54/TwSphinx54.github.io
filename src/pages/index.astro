@@ -104,7 +104,7 @@ const experienceMeta: Record<string, { name: string; link: string }> = {
 		link: "https://www.baidu.com/",
 	},
 	"exp5.png": {
-		name: "Centre for Frontier AI Research (CFAR), Institute of High Performance Computing (IHPC), Agency for Science, Technology and Research (A*STAR)",
+		name: "Centre for Frontier AI Research (CFAR), \nInstitute of High Performance Computing (IHPC), Agency for Science, Technology and Research (A*STAR)",
 		link: "https://www.a-star.edu.sg/cfar",
 	},
 };
@@ -121,10 +121,16 @@ const experiences = Object.entries(expImages)
 	.map(([path, mod]: [string, any]) => {
 		const file = path.split("/").pop() || "";
 		const meta = experienceMeta[file] || { name: file, link: "#" };
+
+		const altTitleName = meta.name.replace(/\s*\n\s*/g, " ");
+		const tooltipHtml = escapeHtml(meta.name).replaceAll("\n", "<br/>");
+
 		return {
 			file,
 			src: (mod as any).src,
 			name: meta.name,
+			altTitleName,
+			tooltipHtml,
 			link: meta.link,
 		};
 	})
@@ -321,13 +327,13 @@ const newsItems: Array<{
 					>
 						<img
 							src={exp.src}
-							alt={exp.name}
-							title={exp.name}
+							alt={exp.altTitleName}
+							title={exp.altTitleName}
 							class="h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
 							loading="lazy"
 						/>
-						<span class="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-0.5 text-[10px] font-medium tracking-wide text-white opacity-0 shadow transition-opacity group-hover:opacity-100">
-							{exp.name}
+						<span class="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-0.5 text-[10px] font-medium leading-snug tracking-wide text-white opacity-0 shadow transition-opacity group-hover:opacity-100 text-center">
+							<span set:html={exp.tooltipHtml} />
 						</span>
 					</a>
 				))
