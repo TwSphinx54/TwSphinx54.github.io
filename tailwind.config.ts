@@ -46,7 +46,8 @@ export default {
 			},
 			fontFamily: {
 				// Add any custom fonts here
-				sans: [...fontFamily.sans],
+				sans: ['"Google Sans Flex"', ...fontFamily.sans],
+				mono: ['"Google Sans Code"', ...fontFamily.mono],
 				serif: [...fontFamily.serif],
 			},
 			transitionProperty: {

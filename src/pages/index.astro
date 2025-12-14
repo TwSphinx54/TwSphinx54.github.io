@@ -189,7 +189,7 @@ const newsItems: Array<{
 	{
 		date: "Aug 2025",
 		html: `First paper accepted by <em>ISPRS Journal of Photogrammetry and Remote Sensing</em>.
-		      <a class="cactus-link" href="https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260" target="_blank" rel="noopener">Paper</a>`,
+		      <a class="cactus-link" href="https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260" target="_blank" rel="noopener">[Paper]</a>`,
 	},
 	{
 		date: "Aug 2025",
@@ -213,7 +213,7 @@ const newsItems: Array<{
 <PageLayout meta={{ title: "Home" }}>
 	<section>
 		<h1 class="title mb-6">Hello World!</h1>
-		<p class="mb-4">
+		<p class="mb-3">
 			Hi, I am a M.Sc. student at 
 			{
 				logoWhuSrc && (
@@ -242,12 +242,12 @@ const newsItems: Array<{
 			My research focuses on <em class="highlight">embodied intelligence</em> and <em class="highlight">3D visual perception</em>, 
 			with an emphasis on how spatial representations support generalizable decision-making and agent-centric policy learning.
 		</p>
-		<p class="mb-4">
+		<p class="mb-3">
 			My current work lies at the intersection of <em class="highlight">computer vision</em>, <em class="highlight">reinforcement learning</em>, and <em class="highlight">generative modeling</em>, 
 			where I study how 2D and 3D representations can be unified to enable robust perception–action coupling. 
 			I am particularly interested in <em class="highlight">structure-aware visual representations</em> that support cross-view understanding, generalization across environments, and interaction-driven learning in embodied settings.
 		</p>
-		<p class="mb-4">
+		<p class="mb-3">
 			Previously, I explored generative AI for image and video synthesis during my internship at 
 			{
 				logoBaiduSrc && (
@@ -284,14 +284,14 @@ const newsItems: Array<{
 
 	<section class="mt-12" aria-label="News">
 		<h2 class="title mb-4 text-xl">News</h2>
-		<ul class="space-y-3 h-48 overflow-y-auto pr-2">
+		<ul class="space-y-3 h-54 overflow-y-auto pr-2">
 			{newsItems.map((item) => (
 				<li class="flex gap-3">
-					<span class="w-[5.5rem] shrink-0 text-sm font-medium text-gray-600 dark:text-gray-400">
+					<span class="w-[5.5rem] shrink-0 font-medium font-mono text-gray-600 dark:text-gray-400">
 						{item.date}
 					</span>
 
-					<div class="min-w-0 text-sm text-gray-700 dark:text-gray-300">
+					<div class="min-w-0 text-gray-700 dark:text-gray-300">
 						{item.html ? (
 							// NOTE: html is rendered as-is; only put trusted content here
 							<span set:html={item.html} />
@@ -343,7 +343,7 @@ const newsItems: Array<{
 		<br>
 		<p class="mb-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
 			<b>Acknowledgements:</b><br>
-			I’m grateful to my collaborators and mentors for their guidance and support, especially
+			I’m grateful to my collaborators and mentors for their guidance and support, especially<br>
 			<a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">
 				Prof. Xianwei Zheng</a>,
 			<a class="cactus-link" href="https://jszy.whu.edu.cn/xionghanjiang/zh_CN/index/526145/list/">
@@ -354,7 +354,7 @@ const newsItems: Array<{
 				Dr. Zimin Xia (EPFL)</a>,
 			<a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">
 				Dr. Yan Zhang (Baidu)</a>,
-			and my colleagues/peers including
+			<br>and my colleagues/peers including<br>
 			<a class="cactus-link" href="https://vanzll.github.io/">
 				Zhenglin Wan (NUS)</a>, 
 			<a class="cactus-link" href="https://jiashenhuang.github.io/">
@@ -362,7 +362,7 @@ const newsItems: Array<{
 			Qiyuan Ma, Jintao Zhang, 
 			<a class="cactus-link" href="https://zhaocy-ai.github.io/">
 				Chenyu Zhao</a>, 
-			and others I’ve had the pleasure to work with.
+			<br>and others I’ve had the pleasure to work with.
 		</p>
 	</section>
 	<section class="mt-16">
@@ -394,20 +394,20 @@ const newsItems: Array<{
 							<div class="grid grid-cols-1 gap-4 lg:flex lg:items-start lg:gap-6">
 								{/* text column: allow shrinking/truncation */}
 								<div class="min-w-0 lg:flex-1">
-									<h3 class="text-base font-semibold leading-snug tracking-tight">
+									<h3 class="text-lg font-semibold leading-snug tracking-tight">
 										<span class="text-accent">
-											<strong>{title}</strong>
+											{title}
 										</span>
 									</h3>
-									<p class="mt-1 text-sm text-gray-700 dark:text-gray-300">
+									<p class="mt-1 text-gray-700 dark:text-gray-300">
 										{author.map((name, index) => (
-											<span style={{ fontWeight: name === "Xu Pan" ? "bold" : "normal" }}>
+											<span style={{ fontWeight: name === "Xu Pan" ? "600" : "normal" }}>
 												{name}{index < author.length - 1 && ","}
 											</span>
 										))}
 									</p>
 									<div class="mt-2 flex flex-wrap gap-2">
-										<span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+										<span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 font-medium text-sm text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
 											{/* render venue icon if available */}
 											{venueIcon && (
 												<Icon
@@ -422,7 +422,7 @@ const newsItems: Array<{
 											{booktitle}
 										</span>
 										{time && (
-											<span class="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+											<span class="rounded-full bg-gray-100 px-2 py-0.5 font-medium text-sm text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
 												{time}
 											</span>
 										)}
@@ -507,7 +507,7 @@ const newsItems: Array<{
 							{/* 抽出的摘要区域：宽度为整个卡片（在小/大屏均为 full width） */}
 							{abstract && (
 								<div
-									class="abstract-collapse mt-3 w-full overflow-hidden text-sm text-gray-700 transition-[max-height,opacity] duration-300 ease-in-out dark:text-gray-300"
+									class="abstract-collapse mt-3 w-full overflow-hidden text-gray-700 transition-[max-height,opacity] duration-300 ease-in-out dark:text-gray-300"
 									id={`abstract-content-${slug}`}
 									style="max-height: 0; opacity: 0;"
 									data-collapsed="true"
@@ -532,7 +532,7 @@ const newsItems: Array<{
 				“Thou sufferest this justly: for thou choosest rather to become good to-morrow than to be
 				good to-day.”
 			</blockquote>
-			<figcaption class="mt-2 text-right text-sm text-gray-600 dark:text-gray-400">
+			<figcaption class="mt-2 text-right text-gray-600 dark:text-gray-400">
 				— Marcus Aurelius, Meditations 8.22
 			</figcaption>
 		</figure>
