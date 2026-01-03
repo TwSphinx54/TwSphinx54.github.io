@@ -1,23 +1,42 @@
 ---
 import SocialList from "@/components/SocialList.astro";
-// import PostPreview from "@/components/blog/PostPreview.astro";
-// import { Icon } from "astro-icon/components";
-// import { Image } from 'astro:assets';
 import PageLayout from "@/layouts/Base.astro";
-import pub1Image from "../assets/pub1.png";
-import pub2Image from "../assets/pub2.png";
-import pub3Image from "../assets/pub3.gif";
-import pub4Image from "../assets/pub4.png";
-import pub5Image from "../assets/pub5.png";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 
-// import { getAllPosts, sortMDByDate } from "@/data/post";
-// const MAX_POSTS = 10;
-// const allPosts = await getAllPosts();
-// const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
+// =========================
+// EDITABLE CONTENT (edit here)
+// =========================
 
-const cactusTech = [
+type PublicationEditable = {
+	author: string[];
+	title: string;
+	booktitle: string;
+	time?: string;
+	doi?: string;
+	paper?: string;
+	code?: string;
+	image?: string; // filename or relative path under ../assets
+	venueIcon?: string;
+	venueColor?: string;
+	abstract?: string;
+};
+
+type PublicationResolved = Omit<PublicationEditable, "image"> & {
+	image: any | null; // Astro image import result (or null)
+	fullSrc: string; // resolved URL string for modal
+};
+
+type NewsItem = {
+	date: string;
+	html?: string;
+	text?: string;
+	href?: string;
+	label?: string;
+};
+
+// Publications: you can now set `image` as a filename or relative path under ../assets
+const publicationsEditable = [
 	{
 		author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"],
 		title: "Scale-aware Co-visible Region Detection for Image Matching",
@@ -26,7 +45,7 @@ const cactusTech = [
 		doi: "https://doi.org/10.1016/j.isprsjprs.2025.08.015",
 		paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260",
 		code: "https://github.com/Geo-Tell/SCoDe",
-		image: pub1Image,
+		image: "pub1.png",
 		venueIcon: "simple-icons:elsevier",
 		venueColor: "#FF6C00",
 		abstract:
@@ -40,7 +59,7 @@ const cactusTech = [
 		doi: "",
 		paper: "",
 		code: "",
-		image: pub2Image,
+		image: "pub2.png",
 		venueIcon: "simple-icons:ieee",
 		venueColor: "#00629B",
 		abstract: "",
@@ -53,7 +72,7 @@ const cactusTech = [
 		doi: "",
 		paper: "",
 		code: "",
-		image: pub3Image,
+		image: "pub3.gif",
 		venueIcon: "simple-icons:latex",
 		venueColor: "#008080",
 		abstract: "",
@@ -66,50 +85,116 @@ const cactusTech = [
 		doi: "",
 		paper: "",
 		code: "",
-		image: pub4Image,
+		image: "pub4.png",
 		venueIcon: "simple-icons:wikiversity",
 		venueColor: "#00649A",
-		abstract:"",
+		abstract: "",
 	},
 	{
 		author: ["Jiashen Huang", "Xu Pan"],
 		title: "The Institutional Filter: How Trust Shapes Inequalities Between Domestic and Global AI Models",
 		booktitle: "(Under Review)",
-		// booktitle: "Annual International Communication Association (ICA) Conference",
 		time: "2026",
 		doi: "",
 		paper: "",
 		code: "",
-		image: pub5Image,
+		image: "pub5.png",
 		venueIcon: "simple-icons:acm",
 		venueColor: "#0085CA",
-		abstract:"Artificial intelligence is increasingly woven into the way people communicate, think, and make decisions. Yet trust in AI does not grow evenly across contexts; it carries traces of national identity, institutional credibility, and emotional attachment. This study examines how institutional trust shapes user trust in domestic (DeepSeek) and global (ChatGPT) large language models (LLMs) in China. Specifically, it distinguishes between cognitive and affective dimensions of trust. Using survey data from 405 participants, we found that higher institutional trust strengthens emotional confidence in domestic AI models, while at low levels of institutional trust, this domestic advantage in perceived competence disappears. By examining the relationship between institutional trust and AI adoption, this study deepens theoretical insights into global communication inequalities in the digital era. The findings suggest that institutional trust operates as a social resource, channeling legitimacy into technological trust, thus contributing to the uneven distribution of trust in AI technologies across different societal groups. The findings offer policy insights for inclusive AI governance and the promotion of global technological equity.",
+		abstract:
+			"Artificial intelligence is increasingly woven into the way people communicate, think, and make decisions. Yet trust in AI does not grow evenly across contexts; it carries traces of national identity, institutional credibility, and emotional attachment. This study examines how institutional trust shapes user trust in domestic (DeepSeek) and global (ChatGPT) large language models (LLMs) in China. Specifically, it distinguishes between cognitive and affective dimensions of trust. Using survey data from 405 participants, we found that higher institutional trust strengthens emotional confidence in domestic AI models, while at low levels of institutional trust, this domestic advantage in perceived competence disappears. By examining the relationship between institutional trust and AI adoption, this study deepens theoretical insights into global communication inequalities in the digital era. The findings suggest that institutional trust operates as a social resource, channeling legitimacy into technological trust, thus contributing to the uneven distribution of trust in AI technologies across different societal groups. The findings offer policy insights for inclusive AI governance and the promotion of global technological equity.",
+	},
+] satisfies PublicationEditable[];
+
+// update: News items now support html for flexible content
+const newsItems: NewsItem[] = [
+	{ date: "Nov 2025", text: "Completed the proposal defense for my Master’s thesis." },
+	{
+		date: "Aug 2025",
+		html: `First paper accepted by <em>ISPRS Journal of Photogrammetry and Remote Sensing</em>.
+		      <a class="cactus-link" href="https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260" target="_blank" rel="noopener">[Paper]</a>`,
+	},
+	{
+		date: "Aug 2025",
+		html: `Started a remote research internship at <strong>CFAR, A*STAR</strong>, supervised by
+		      <a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>,
+		      in collaboration with <a class="cactus-link" href="https://vanzll.github.io/">Zhenglin Wan</a>.`,
+	},
+	{ date: "Jul 2025", html: `Attended the <em>2025 Annual Academic Conference on Photogrammetry and Remote Sensing, CSGPC</em> in Kunming.` },
+	{
+		date: "Dec 2024",
+		html: `Started a research internship at <strong>Baidu</strong> in Shenzhen, 
+			  supervised by <a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>, 
+			  exploring SOTA text-to-image and text-to-video generation.`,
 	},
 ];
-/* Dynamically gather experience logos */
+
+/* Experiences meta: edit names/links here */
 const experienceMeta: Record<string, { name: string; link: string }> = {
-	"exp1.png": {
-		name: "Wuhan University",
-		link: "https://en.whu.edu.cn/",
-	},
-	"exp2.png": {
-		name: "School of Remote Sensing and Information Engineering",
-		link: "https://rsgis.whu.edu.cn/English/Home.htm",
-	},
+	"exp1.png": { name: "Wuhan University", link: "https://en.whu.edu.cn/" },
+	"exp2.png": { name: "School of Remote Sensing and Information Engineering", link: "https://rsgis.whu.edu.cn/English/Home.htm" },
 	"exp3.png": {
 		name: "State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)",
 		link: "https://liesmars.whu.edu.cn/",
 	},
-	"exp4.png": {
-		name: "International Technology R&D Department, Baidu, Inc.",
-		link: "https://www.baidu.com/",
-	},
+	"exp4.png": { name: "International Technology R&D Department, Baidu, Inc.", link: "https://www.baidu.com/" },
 	"exp5.png": {
 		name: "Centre for Frontier AI Research (CFAR), \nInstitute of High Performance Computing (IHPC), Agency for Science, Technology and Research (A*STAR)",
 		link: "https://www.a-star.edu.sg/cfar",
 	},
 };
 
+// =========================
+// Helpers / derived data (usually no edits)
+// =========================
+
+// add: (optional) escape helper for plain-text fallback
+function escapeHtml(s: string) {
+	return s
+		.replaceAll("&", "&amp;")
+		.replaceAll("<", "&lt;")
+		.replaceAll(">", "&gt;")
+		.replaceAll('"', "&quot;")
+		.replaceAll("'", "&#039;");
+}
+
+// One-time asset index (lets you reference images by filename/path in data)
+const assetImages = import.meta.glob("../assets/**/*.{png,jpg,jpeg,svg,gif,webp}", {
+	eager: true,
+	import: "default",
+});
+
+// Normalize a user-provided asset string into a key in `assetImages`
+function normalizeAssetKey(p: string): string {
+	const s = p.trim();
+	if (s.startsWith("../assets/")) return s;
+	if (s.startsWith("/src/assets/")) return ".." + s.replace("/src", "");
+	if (s.startsWith("/assets/")) return "../assets" + s.replace("/assets", "");
+	// default: treat as filename under ../assets/
+	return `../assets/${s}`;
+}
+
+function resolveAsset(p?: string): any | null {
+	if (!p) return null;
+	const key = normalizeAssetKey(p);
+	return (assetImages as any)[key] ?? null;
+}
+
+function assetToSrc(a: any): string {
+	if (!a) return "";
+	return typeof a === "string" ? a : a.src;
+}
+
+const cactusTech: PublicationResolved[] = publicationsEditable.map((pub) => {
+	const img = resolveAsset(pub.image);
+	return {
+		...pub,
+		image: img,
+		fullSrc: assetToSrc(img),
+	};
+});
+
+/* Dynamically gather experience logos */
 const expImages = import.meta.glob("../assets/exps/*.{png,jpg,jpeg,svg,webp}", {
 	eager: true,
 	import: "default",
@@ -128,7 +213,7 @@ const experiences = Object.entries(expImages)
 
 		return {
 			file,
-			image: mod as any, // was: src: (mod as any).src
+			image: mod as any,
 			name: meta.name,
 			altTitleName,
 			tooltipHtml,
@@ -143,6 +228,7 @@ const experiences = Object.entries(expImages)
 		if (bi === -1) return -1;
 		return ai - bi;
 	});
+
 /* add: import all logos from assets/logos */
 const logoImages = import.meta.glob("../assets/logos/*.{png,svg,jpg,jpeg,webp}", {
 	eager: true,
@@ -154,7 +240,7 @@ function findLogo(sub: string) {
 	for (const path of Object.keys(logoImages)) {
 		if (path.toLowerCase().includes(sub)) {
 			const mod: any = (logoImages as any)[path];
-			return mod || null; // was: mod?.src || null
+			return mod || null;
 		}
 	}
 	return null;
@@ -165,50 +251,6 @@ const logoBaidu = findLogo("baidu");
 const logoWhu = findLogo("whu") || findLogo("wuhan");
 const logoLiesmars = findLogo("liesmars") || findLogo("liesmars"); // fallback kept for clarity
 
-// add: (optional) escape helper for plain-text fallback
-function escapeHtml(s: string) {
-	return s
-		.replaceAll("&", "&amp;")
-		.replaceAll("<", "&lt;")
-		.replaceAll(">", "&gt;")
-		.replaceAll('"', "&quot;")
-		.replaceAll("'", "&#039;");
-}
-
-// update: News items now support html for flexible content
-const newsItems: Array<{
-	date: string;
-	html?: string;
-	text?: string;
-	href?: string;
-	label?: string;
-}> = [
-	{
-		date: "Nov 2025",
-		text: "Completed the proposal defense for my Master’s thesis.",
-	},
-	{
-		date: "Aug 2025",
-		html: `First paper accepted by <em>ISPRS Journal of Photogrammetry and Remote Sensing</em>.
-		      <a class="cactus-link" href="https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260" target="_blank" rel="noopener">[Paper]</a>`,
-	},
-	{
-		date: "Aug 2025",
-		html: `Started a remote research internship at <strong>CFAR, A*STAR</strong>, supervised by
-		      <a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>,
-		      in collaboration with <a class="cactus-link" href="https://vanzll.github.io/">Zhenglin Wan</a>.`,
-	},
-	{
-		date: "Jul 2025",
-		html: `Attended the <em>2025 Annual Academic Conference on Photogrammetry and Remote Sensing, CSGPC</em> in Kunming.`,
-	},
-	{
-		date: "Dec 2024",
-		html: `Started a research internship at <strong>Baidu</strong> in Shenzhen, 
-			  supervised by <a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>, 
-			  exploring SOTA text-to-image and text-to-video generation.`,
-	},
-];
 ---
 
 <PageLayout meta={{ title: "Home" }}>
@@ -388,17 +430,17 @@ const newsItems: Array<{
 						venueIcon,
 						venueColor,
 						image,
+						fullSrc,
 					} = pub;
+
 					const slug = title
 						.toLowerCase()
 						.replace(/\s+/g, "-")
 						.replace(/[^a-z0-9\-]/g, "");
+
 					return (
 						<article class="pub-article group relative -ml-2 w-full overflow-hidden rounded-xl border border-zinc-200/70 bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:border-zinc-800/80 dark:bg-zinc-900/80">
-							{/* Use flow layout on large screens: text column grows, thumbnail has fixed size.
-							   Small screens keep a single-column grid and the thumbnail remains hidden. */}
 							<div class="grid grid-cols-1 gap-4 lg:flex lg:items-start lg:gap-6">
-								{/* text column: allow shrinking/truncation */}
 								<div class="min-w-0 lg:flex-1">
 									<h3 class="text-lg font-semibold leading-snug tracking-tight">
 										<span class="text-accent">
@@ -406,7 +448,7 @@ const newsItems: Array<{
 										</span>
 									</h3>
 									<p class="mt-1 text-gray-700 dark:text-gray-300">
-										{author.map((name, index) => (
+										{author.map((name: string, index: number) => (
 											<span style={{ fontWeight: name === "Xu Pan" ? "700" : "normal" }}>
 												{name}{index < author.length - 1 && ","}
 											</span>
@@ -491,6 +533,7 @@ const newsItems: Array<{
 										)}
 									</div>
 								</div>
+
 								{/* thumbnail column (part of flow on large screens). Keep hidden on small screens. */}
 								{image && (
 									<div class="pub-thumb hidden lg:ml-2 lg:block">
@@ -505,7 +548,7 @@ const newsItems: Array<{
 												width={176}
 												height={96}
 												densities={[1, 2]}
-												data-fullsrc={image.src}
+												data-fullsrc={fullSrc}
 												class="pub-thumb-img h-[96px] w-[176px] rounded-xl border-2 border-transparent object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:border-dashed group-hover:border-accent group-hover:shadow-lg"
 												loading="lazy"
 												decoding="async"
@@ -514,6 +557,7 @@ const newsItems: Array<{
 									</div>
 								)}
 							</div>
+
 							{/* 抽出的摘要区域：宽度为整个卡片（在小/大屏均为 full width） */}
 							{abstract && (
 								<div
