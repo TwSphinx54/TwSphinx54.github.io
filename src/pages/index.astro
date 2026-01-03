@@ -10,6 +10,7 @@ import pub3Image from "../assets/pub3.gif";
 import pub4Image from "../assets/pub4.png";
 import pub5Image from "../assets/pub5.png";
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 
 // import { getAllPosts, sortMDByDate } from "@/data/post";
 // const MAX_POSTS = 10;
@@ -25,7 +26,7 @@ const cactusTech = [
 		doi: "https://doi.org/10.1016/j.isprsjprs.2025.08.015",
 		paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260",
 		code: "https://github.com/Geo-Tell/SCoDe",
-		image: pub1Image.src,
+		image: pub1Image,
 		venueIcon: "simple-icons:elsevier",
 		venueColor: "#FF6C00",
 		abstract:
@@ -33,15 +34,15 @@ const cactusTech = [
 	},
 	{
 		author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng*"],
-		title: "SAMatcher: Segment Anything Co-visible for Robust Feature Matching",
+		title: "SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching",
 		booktitle: "(In Preparation)",
 		time: "2026",
 		doi: "",
 		paper: "",
 		code: "",
-		image: pub2Image.src,
-		venueIcon: "simple-icons:latex",
-		venueColor: "#008080",
+		image: pub2Image,
+		venueIcon: "simple-icons:ieee",
+		venueColor: "#00629B",
 		abstract: "",
 	},
 	{
@@ -52,7 +53,7 @@ const cactusTech = [
 		doi: "",
 		paper: "",
 		code: "",
-		image: pub3Image.src,
+		image: pub3Image,
 		venueIcon: "simple-icons:latex",
 		venueColor: "#008080",
 		abstract: "",
@@ -65,7 +66,7 @@ const cactusTech = [
 		doi: "",
 		paper: "",
 		code: "",
-		image: pub4Image.src,
+		image: pub4Image,
 		venueIcon: "simple-icons:wikiversity",
 		venueColor: "#00649A",
 		abstract:"",
@@ -79,7 +80,7 @@ const cactusTech = [
 		doi: "",
 		paper: "",
 		code: "",
-		image: pub5Image.src,
+		image: pub5Image,
 		venueIcon: "simple-icons:acm",
 		venueColor: "#0085CA",
 		abstract:"Artificial intelligence is increasingly woven into the way people communicate, think, and make decisions. Yet trust in AI does not grow evenly across contexts; it carries traces of national identity, institutional credibility, and emotional attachment. This study examines how institutional trust shapes user trust in domestic (DeepSeek) and global (ChatGPT) large language models (LLMs) in China. Specifically, it distinguishes between cognitive and affective dimensions of trust. Using survey data from 405 participants, we found that higher institutional trust strengthens emotional confidence in domestic AI models, while at low levels of institutional trust, this domestic advantage in perceived competence disappears. By examining the relationship between institutional trust and AI adoption, this study deepens theoretical insights into global communication inequalities in the digital era. The findings suggest that institutional trust operates as a social resource, channeling legitimacy into technological trust, thus contributing to the uneven distribution of trust in AI technologies across different societal groups. The findings offer policy insights for inclusive AI governance and the promotion of global technological equity.",
@@ -127,7 +128,7 @@ const experiences = Object.entries(expImages)
 
 		return {
 			file,
-			src: (mod as any).src,
+			image: mod as any, // was: src: (mod as any).src
 			name: meta.name,
 			altTitleName,
 			tooltipHtml,
@@ -153,16 +154,16 @@ function findLogo(sub: string) {
 	for (const path of Object.keys(logoImages)) {
 		if (path.toLowerCase().includes(sub)) {
 			const mod: any = (logoImages as any)[path];
-			return mod?.src || null;
+			return mod || null; // was: mod?.src || null
 		}
 	}
 	return null;
 }
 
-const logoAstarSrc = findLogo("astar");
-const logoBaiduSrc = findLogo("baidu");
-const logoWhuSrc = findLogo("whu") || findLogo("wuhan");
-const logoLiesmarsSrc = findLogo("liesmars") || findLogo("liesmars"); // fallback kept for clarity
+const logoAstar = findLogo("astar");
+const logoBaidu = findLogo("baidu");
+const logoWhu = findLogo("whu") || findLogo("wuhan");
+const logoLiesmars = findLogo("liesmars") || findLogo("liesmars"); // fallback kept for clarity
 
 // add: (optional) escape helper for plain-text fallback
 function escapeHtml(s: string) {
@@ -215,17 +216,27 @@ const newsItems: Array<{
 		<h1 class="title mb-6">Hello World!</h1>
 		<p class="mb-3">
 			Hi, I am a M.Sc. student at 
-			{logoWhuSrc && (<img
-				src={logoWhuSrc}
-				alt="Wuhan University logo"
-				class="mr-0.5 ml-0.5 mb-1 inline h-5 w-auto object-contain"
-			/>)}<a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, 
+			{logoWhu && (
+				<Image
+					src={logoWhu}
+					alt="Wuhan University logo"
+					width={24}
+					densities={[1, 2]}
+					loading="eager"
+					class="mr-0.5 ml-0.5 mb-1 inline h-5 w-auto object-contain"
+				/>
+			)}<a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, 
 			working at the 
-			{logoLiesmarsSrc && (<img
-				src={logoLiesmarsSrc}
-				alt="LIESMARS logo"
-				class="mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
-			/>)}<a class="cactus-link" href="https://liesmars.whu.edu.cn/">State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)</a>, 
+			{logoLiesmars && (
+				<Image
+					src={logoLiesmars}
+					alt="LIESMARS logo"
+					width={20}
+					densities={[1, 2]}
+					loading="eager"
+					class="mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
+				/>
+			)}<a class="cactus-link" href="https://liesmars.whu.edu.cn/">State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)</a>, 
 			under the guidance of
 			<a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.
 			My research focuses on <em class="highlight">embodied intelligence</em> and <em class="highlight">3D visual perception</em>, 
@@ -238,17 +249,27 @@ const newsItems: Array<{
 		</p>
 		<p class="mb-3">
 			Previously, I explored generative AI for image and video synthesis during my internship at 
-			{logoBaiduSrc && (<img
-				src={logoBaiduSrc}
-				alt="Baidu logo"
-				class="mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
-			/>)}<a class="cactus-link" href="https://www.baidu.com/">Baidu</a>. 
+			{logoBaidu && (
+				<Image
+					src={logoBaidu}
+					alt="Baidu logo"
+					width={20}
+					densities={[1, 2]}
+					loading="eager"
+					class="mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
+				/>
+			)}<a class="cactus-link" href="https://www.baidu.com/">Baidu</a>. 
 			I am currently a remote research intern at the 
-			{logoAstarSrc && (<img
-				src={logoAstarSrc}
-				alt="A*STAR logo"
-				class="mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
-			/>)}<a class="cactus-link" href="https://www.a-star.edu.sg/cfar">Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)</a>, 
+			{logoAstar && (
+				<Image
+					src={logoAstar}
+					alt="A*STAR logo"
+					width={20}
+					densities={[1, 2]}
+					loading="eager"
+					class="mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
+				/>
+			)}<a class="cactus-link" href="https://www.a-star.edu.sg/cfar">Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)</a>, 
 			supervised by
 			<a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>, 
 			where I work on <em class="highlight">generalizable reinforcement learning for embodied agents</em>, with a focus on agent-centric formulations and transferable policies grounded in implicit spatial representations that support generalization across tasks and scenes.
@@ -303,10 +324,12 @@ const newsItems: Array<{
 						rel="noopener"
 						class="group relative flex items-center justify-center p-1"
 					>
-						<img
-							src={exp.src}
+						<Image
+							src={exp.image}
 							alt={exp.altTitleName}
 							title={exp.altTitleName}
+							width={256}
+							densities={[1, 2]}
 							class="h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
 							loading="lazy"
 						/>
@@ -384,7 +407,7 @@ const newsItems: Array<{
 									</h3>
 									<p class="mt-1 text-gray-700 dark:text-gray-300">
 										{author.map((name, index) => (
-											<span style={{ fontWeight: name === "Xu Pan" ? "600" : "normal" }}>
+											<span style={{ fontWeight: name === "Xu Pan" ? "700" : "normal" }}>
 												{name}{index < author.length - 1 && ","}
 											</span>
 										))}
@@ -476,9 +499,13 @@ const newsItems: Array<{
 											class="pub-thumb-btn group block cursor-zoom-in"
 											aria-label="Open image"
 										>
-											<img
+											<Image
 												src={image}
 												alt="[Thumbnail]"
+												width={176}
+												height={96}
+												densities={[1, 2]}
+												data-fullsrc={image.src}
 												class="pub-thumb-img h-[96px] w-[176px] rounded-xl border-2 border-transparent object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:border-dashed group-hover:border-accent group-hover:shadow-lg"
 												loading="lazy"
 												decoding="async"
@@ -637,14 +664,15 @@ const newsItems: Array<{
 				const target = e.target as EventTarget | null;
 				if (!target) return;
 				if (target instanceof HTMLImageElement) {
-					// thumbnail image
+					const fullSrc = target.dataset?.fullsrc;
+					const src = fullSrc || target.currentSrc || target.src;
+
 					if (target.classList.contains("pub-thumb-img")) {
-						openImgModal(target.src);
+						openImgModal(src);
 						return;
 					}
-					// inline images (if any) still open modal
 					if (target.dataset && target.dataset.inline === "true") {
-						openImgModal(target.src);
+						openImgModal(src);
 					}
 				}
 			});

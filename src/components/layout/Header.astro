@@ -18,6 +18,12 @@ const url = new URL(Astro.request.url);
 			<Image
 				src={figureImage}
 				alt="figure"
+				width={112}
+				height={160}
+				sizes="(min-width: 640px) 112px, 64px"
+				densities={[1, 2]}
+				loading="eager"
+				fetchpriority="high"
 				class="me-6 h-24 w-16 rounded-md object-cover sm:absolute sm:start-[-6.5rem] sm:me-0 sm:h-40 sm:w-28"
 			/>
 			<div class="ms-0 leading-tight sm:ms-8">
@@ -25,12 +31,15 @@ const url = new URL(Astro.request.url);
 					<span>Xu</span><span class="-ms-1">&nbsp;&nbsp;Pan</span>
 				</span>
 				<span class="block text-lg font-semibold sm:text-3xl">潘旭</span>
-				<span class="block text-normal font-base sm:text-base mt-2">M.Sc. Student at Wuhan University</span>
+				<span class="block text-normal font-base sm:text-base mt-2">
+                    RA at Agency for Science, Technology and Research (A*STAR)<br>
+                    M.Sc. Student at Wuhan University
+                </span>
 			</div>
 		</a>
 		<nav
 			aria-label="Main menu"
-			class="absolute -inset-x-4 top-14 hidden flex-col items-end gap-y-4 rounded-md bg-bgColor/[.85] py-4 text-accent shadow backdrop-blur group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:ms-4 sm:mt-4 sm:flex sm:flex-row sm:items-center sm:rounded-none sm:bg-transparent sm:py-0 sm:shadow-none sm:backdrop-blur-none"
+			class="absolute -inset-x-4 top-14 hidden flex-col items-end gap-y-4 rounded-md bg-bgColor/[.85] py-4 text-accent shadow backdrop-blur group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:ms-4 sm:flex sm:flex-row sm:items-center sm:rounded-none sm:bg-transparent sm:py-0 sm:shadow-none sm:backdrop-blur-none"
 			id="navigation-menu"
 		>
 			{
@@ -112,13 +121,19 @@ const url = new URL(Astro.request.url);
 
 <style>
 	@media (min-width: 0px) {
-	#navigation-menu a + a::before {
-		content: "•";
-		display: inline-block;
-		margin: 0 0;
-		color: currentColor;
-		opacity: 0.6;
-		transform: translateX(-15px);
-	}
+		#navigation-menu a + a {
+			position: relative;
+		}
+
+		#navigation-menu a + a::before {
+			content: "•";
+			position: absolute;
+			inset-inline-start: 0;
+			top: 50%;
+			transform: translate(-0.2rem, -50%);
+			opacity: 0.6;
+			color: currentColor;
+			pointer-events: none;
+		}
 	}
 </style>
