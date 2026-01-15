@@ -90,40 +90,32 @@ const publicationsEditable = [
 		venueColor: "#00649A",
 		abstract: "",
 	},
-	{
-		author: ["Jiashen Huang", "Xu Pan"],
-		title: "The Institutional Filter: How Trust Shapes Inequalities Between Domestic and Global AI Models",
-		booktitle: "(Under Review)",
-		time: "2026",
-		doi: "",
-		paper: "",
-		code: "",
-		image: "pub5.png",
-		venueIcon: "simple-icons:acm",
-		venueColor: "#0085CA",
-		abstract:
-			"Artificial intelligence is increasingly woven into the way people communicate, think, and make decisions. Yet trust in AI does not grow evenly across contexts; it carries traces of national identity, institutional credibility, and emotional attachment. This study examines how institutional trust shapes user trust in domestic (DeepSeek) and global (ChatGPT) large language models (LLMs) in China. Specifically, it distinguishes between cognitive and affective dimensions of trust. Using survey data from 405 participants, we found that higher institutional trust strengthens emotional confidence in domestic AI models, while at low levels of institutional trust, this domestic advantage in perceived competence disappears. By examining the relationship between institutional trust and AI adoption, this study deepens theoretical insights into global communication inequalities in the digital era. The findings suggest that institutional trust operates as a social resource, channeling legitimacy into technological trust, thus contributing to the uneven distribution of trust in AI technologies across different societal groups. The findings offer policy insights for inclusive AI governance and the promotion of global technological equity.",
-	},
 ] satisfies PublicationEditable[];
 
 // update: News items now support html for flexible content
 const newsItems: NewsItem[] = [
-	{ date: "Nov 2025", text: "Completed the proposal defense for my Master’s thesis." },
+	{ 
+        date: "Nov 2025", 
+        text: "Successfully defended my Master's thesis proposal." 
+    },
 	{
 		date: "Aug 2025",
-		html: `First paper accepted by <em>ISPRS Journal of Photogrammetry and Remote Sensing</em>.
+		html: `The first paper accepted by the <em>ISPRS Journal of Photogrammetry and Remote Sensing</em>.
 		      <a class="cactus-link" href="https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260" target="_blank" rel="noopener">[Paper]</a>`,
 	},
 	{
 		date: "Aug 2025",
-		html: `Started a remote research internship at <strong>CFAR, A*STAR</strong>, supervised by
-		      <a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>,
+		html: `Began a remote research internship at <strong>CFAR, A*STAR</strong>, supervised by
+		      <a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a> and 
 		      in collaboration with <a class="cactus-link" href="https://vanzll.github.io/">Zhenglin Wan</a>.`,
 	},
-	{ date: "Jul 2025", html: `Attended the <em>2025 Annual Academic Conference on Photogrammetry and Remote Sensing, CSGPC</em> in Kunming.` },
+	{ 
+        date: "Jul 2025", 
+        html: `Attended the <em>2025 Annual Academic Conference on Photogrammetry and Remote Sensing, CSGPC</em> in Kunming, China.` 
+    },
 	{
 		date: "Dec 2024",
-		html: `Started a research internship at <strong>Baidu</strong> in Shenzhen, 
+		html: `Began a research internship at <strong>Baidu</strong> in Shenzhen, 
 			  supervised by <a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>, 
 			  exploring SOTA text-to-image and text-to-video generation.`,
 	},
