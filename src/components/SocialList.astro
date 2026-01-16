@@ -8,6 +8,7 @@ type IconName =
 	| "simple-icons:linkedin"
 	| "simple-icons:googlescholar"
 	| "simple-icons:researchgate"
+	| "simple-icons:semanticscholar"
 	| "simple-icons:orcid";
 
 interface SocialLink {
@@ -18,9 +19,21 @@ interface SocialLink {
 }
 
 const socialLinks: SocialLink[] = [
-	{ friendlyName: "Email", link: "mailto:panxurs@whu.edu.cn", name: "mdi:email" },
-	{ friendlyName: "X", link: "https://x.com/xupan_whu", name: "simple-icons:x" },
-	{ friendlyName: "Github", link: "https://github.com/TwSphinx54", name: "simple-icons:github" },
+	{ 
+        friendlyName: "Email", 
+        link: "mailto:panxurs@whu.edu.cn", 
+        name: "mdi:email" 
+    },
+	{ 
+        friendlyName: "X", 
+        link: "https://x.com/xupan_whu", 
+        name: "simple-icons:x" 
+    },
+	{ 
+        friendlyName: "Github", 
+        link: "https://github.com/TwSphinx54", 
+        name: "simple-icons:github" 
+    },
 	{
 		friendlyName: "Linkedin",
 		link: "https://linkedin.com/in/xupanwhu",
@@ -28,13 +41,18 @@ const socialLinks: SocialLink[] = [
 	},
 	{
 		friendlyName: "Google Scholar",
-		link: "https://scholar.google.com/citations?user=IuCPqLcAAAAJ&hl=en",
+		link: "https://scholar.google.com/citations?user=IuCPqLcAAAAJ",
 		name: "simple-icons:googlescholar",
 	},
 	{
 		friendlyName: "ResearchGate",
 		link: "https://www.researchgate.net/profile/Xu-Pan-10",
 		name: "simple-icons:researchgate",
+	},
+	{
+		friendlyName: "Semantic Scholar",
+		link: "https://www.semanticscholar.org/author/Xu-Pan/2387896133",
+		name: "simple-icons:semanticscholar",
 	},
 	{
 		friendlyName: "ORCiD",
