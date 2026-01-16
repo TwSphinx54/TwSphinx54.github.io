@@ -44,6 +44,7 @@ type ProjectEditable = {
 	repo?: string;
 	demo?: string;
 	paper?: string;
+	orgLogos?: ("astar" | "baidu" | "whu" | "liesmars" | "ntu" | "epfl")[];
 };
 
 // Publications: you can now set `image` as a filename or relative path under ../assets
@@ -142,6 +143,7 @@ const projectsEditable: ProjectEditable[] = [
 			"A research project on robust RL adaptation of flow-matching–based VLA models for robotic manipulation, focusing on generalization under distribution shifts in challenging benchmarks.",
 		tags: ["Vision-Language-Action", "Reinforcement Learning", "Flow-Matching", "Robotic Manipulation", "Spatial Intelligence"],
 		time: "2026",
+		orgLogos: ["whu", "astar", "ntu"],
 	},
 	{
 		name: "Co-visibility Guided Image Matching",
@@ -151,14 +153,16 @@ const projectsEditable: ProjectEditable[] = [
 		time: "2025",
 		repo: "https://github.com/Geo-Tell/SCoDe",
         paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260",
+		orgLogos: ["whu", "epfl"],
 	},
 	{
 		name: "GNDAS",
 		description:
-			"The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system application designed for the analysis and assessment of natural disasters, distinguished by its strong humanitarian focus.",
+			"The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system application designed for the analysis and assessment of natural disasters.",
 		tags: ["Natural Disasters", "Geographic Information System (GIS)"],
 		time: "2022",
 		repo: "https://github.com/TwSphinx54/GNDAS",
+		orgLogos: ["whu"],
 	},
 	{
 		name: "I2RSI",
@@ -167,6 +171,7 @@ const projectsEditable: ProjectEditable[] = [
 		tags: ["Remote Sensing", "Interpretation", "Deep Learning"],
 		time: "2022",
 		repo: "https://github.com/TwSphinx54/I2RSI",
+		orgLogos: ["whu", "baidu"],
 	},
 ]; // remove: `satisfies ProjectEditable[];` (redundant with explicit annotation)
 
@@ -307,7 +312,19 @@ function findLogo(sub: string) {
 const logoAstar = findLogo("astar");
 const logoBaidu = findLogo("baidu");
 const logoWhu = findLogo("whu") || findLogo("wuhan");
-const logoLiesmars = findLogo("liesmars") || findLogo("liesmars"); // fallback kept for clarity
+const logoLiesmars = findLogo("liesmars") || findLogo("liesmars");
+const logoNtu = findLogo("ntu");
+const logoEpfl = findLogo("epfl");
+
+// add: map key -> imported logo
+const projectLogoByKey: Record<string, any | null> = {
+	astar: logoAstar,
+	baidu: logoBaidu,
+	whu: logoWhu,
+	liesmars: logoLiesmars,
+	ntu: logoNtu,
+	epfl: logoEpfl,
+};
 
 ---
 
@@ -670,50 +687,71 @@ const logoLiesmars = findLogo("liesmars") || findLogo("liesmars"); // fallback k
 							</div>
 						)}
 
-						<div class="mt-3 flex flex-wrap gap-2" aria-label="Project links">
-							{p.repo && (
-								<a
-									class="inline-flex items-center gap-1.5 rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300 dark:hover:bg-accent/15"
-									href={p.repo}
-									target="_blank"
-									rel="noopener"
-									aria-label={`GitHub repo: ${repoLabel(p.repo)}`}
-								>
-									<Icon
-										name="simple-icons:github"
-										width="14"
-										height="14"
-										class="inline-block"
-										aria-hidden="true"
-									/>
-									<span class="truncate">{repoLabel(p.repo)}</span>
-								</a>
-							)}
+						{/* buttons row + right-aligned org logos */}
+						<div class="mt-3 flex items-center justify-between gap-3" aria-label="Project links">
+							<div class="flex flex-wrap gap-2 min-w-0">
+								{p.repo && (
+									<a
+										class="inline-flex items-center gap-1.5 rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300 dark:hover:bg-accent/15"
+										href={p.repo}
+										target="_blank"
+										rel="noopener"
+										aria-label={`GitHub repo: ${repoLabel(p.repo)}`}
+									>
+										<Icon
+											name="simple-icons:github"
+											width="14"
+											height="14"
+											class="inline-block"
+											aria-hidden="true"
+										/>
+										<span class="truncate">{repoLabel(p.repo)}</span>
+									</a>
+								)}
 
-							{p.demo && (
-								<a
-									class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-									href={p.demo}
-									target="_blank"
-									rel="noopener"
-								>
-									DEMO
-								</a>
-							)}
-							{p.paper && (
-								<a
-									class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-									href={p.paper}
-									target="_blank"
-									rel="noopener"
-								>
-									PAPER
-								</a>
-							)}
+								{p.demo && (
+									<a
+										class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
+										href={p.demo}
+										target="_blank"
+										rel="noopener"
+									>
+										DEMO
+									</a>
+								)}
+								{p.paper && (
+									<a
+										class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
+										href={p.paper}
+										target="_blank"
+										rel="noopener"
+									>
+										PAPER
+									</a>
+								)}
+							</div>
+
+							{p.orgLogos?.length ? (
+								<div class="shrink-0 flex items-center">
+									{p.orgLogos.map((k) => {
+										const src = projectLogoByKey[k];
+										return (
+											src && (
+												<Image
+													src={src}
+													alt={`${k} logo`}
+													width={28}
+													densities={[1, 2]}
+													loading="lazy"
+													class="ml-1 inline h-6 w-auto object-contain opacity-90"
+												/>
+											)
+										);
+									})}
+								</div>
+							) : null}
 						</div>
 					</div>
-
-					{/* remove: project thumbnail overlay */}
 				</article>
 			))}
 		</div>
