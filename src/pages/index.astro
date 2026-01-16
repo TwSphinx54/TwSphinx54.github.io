@@ -36,6 +36,16 @@ type NewsItem = {
 	label?: string;
 };
 
+type ProjectEditable = {
+	name: string;
+	description: string;
+	tags?: string[];
+	time?: string;
+	repo?: string;
+	demo?: string;
+	paper?: string;
+};
+
 // Publications: you can now set `image` as a filename or relative path under ../assets
 const publicationsEditable = [
 	{
@@ -124,6 +134,42 @@ const newsItems: NewsItem[] = [
 	},
 ];
 
+// Projects: (no images)
+const projectsEditable: ProjectEditable[] = [
+	{
+		name: "SA-VLA",
+		description:
+			"A research project on robust RL adaptation of flow-matching–based VLA models for robotic manipulation, focusing on generalization under distribution shifts in challenging benchmarks.",
+		tags: ["Vision-Language-Action", "Reinforcement Learning", "Flow-Matching", "Robotic Manipulation", "Spatial Intelligence"],
+		time: "2026",
+	},
+	{
+		name: "Co-visibility Guided Image Matching",
+		description:
+			"A research project on robust image matching in robot vision, photogrammetry and remote sensing, using explicit co-visibility modeling to handle extreme scale and viewpoint variations.",
+		tags: ["Co-visibility", "Image Matching", "3D Vision", "Segmentation", "Photogrammetry", "SCoDe", "SAMatcher"],
+		time: "2025",
+		repo: "https://github.com/Geo-Tell/SCoDe",
+        paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260",
+	},
+	{
+		name: "GNDAS",
+		description:
+			"The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system application designed for the analysis and assessment of natural disasters, distinguished by its strong humanitarian focus.",
+		tags: ["Natural Disasters", "Geographic Information System (GIS)"],
+		time: "2022",
+		repo: "https://github.com/TwSphinx54/GNDAS",
+	},
+	{
+		name: "I2RSI",
+		description:
+			"The I2RSI System (Intelligent Interpretation of Remote Sensing Images) is a web-based application for remote sensing image interpretation, powered by the Baidu PaddlePaddle deep learning framework.",
+		tags: ["Remote Sensing", "Interpretation", "Deep Learning"],
+		time: "2022",
+		repo: "https://github.com/TwSphinx54/I2RSI",
+	},
+]; // remove: `satisfies ProjectEditable[];` (redundant with explicit annotation)
+
 /* Experiences meta: edit names/links here */
 const experienceMeta: Record<string, { name: string; link: string }> = {
 	"exp1.png": { name: "Wuhan University", link: "https://en.whu.edu.cn/" },
@@ -180,6 +226,20 @@ function assetToSrc(a: any): string {
 	return typeof a === "string" ? a : a.src;
 }
 
+// add: pretty label for GitHub repo links (fallback to full url)
+function repoLabel(url: string): string {
+	try {
+		const u = new URL(url);
+		const host = u.hostname.toLowerCase();
+		if (host === "github.com" || host.endsWith(".github.com")) {
+			return u.pathname.replace(/^\/+|\/+$/g, "");
+		}
+		return url;
+	} catch {
+		return url;
+	}
+}
+
 const cactusTech: PublicationResolved[] = publicationsEditable.map((pub) => {
 	const img = resolveAsset(pub.image);
 	return {
@@ -188,6 +248,9 @@ const cactusTech: PublicationResolved[] = publicationsEditable.map((pub) => {
 		fullSrc: assetToSrc(img),
 	};
 });
+
+// replace: projects mapping (no resolveAsset/fullSrc)
+const projects = projectsEditable;
 
 /* Dynamically gather experience logos */
 const expImages = import.meta.glob("../assets/exps/*.{png,jpg,jpeg,svg,webp}", {
@@ -408,7 +471,7 @@ const logoLiesmars = findLogo("liesmars") || findLogo("liesmars"); // fallback k
 			<br>and others I’ve had the pleasure to work with.
 		</p>
 	</section>
-	<section class="mt-16">
+	<section class="mt-16" aria-label="Publications">
 		<h2 class="title mb-4 text-xl">Publications</h2>
 		<dl class="space-y-4">
 			{
@@ -577,6 +640,85 @@ const logoLiesmars = findLogo("liesmars") || findLogo("liesmars"); // fallback k
 			}
 		</dl>
 	</section>
+	<section class="mt-16" aria-label="Projects">
+		<h2 class="title mb-4 text-xl">Projects</h2>
+
+		<div class="grid -ml-2 grid-cols-1 gap-4 md:grid-cols-2">
+			{projects.map((p) => (
+				<article class="group relative w-full overflow-hidden rounded-xl border border-zinc-200/70 bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:border-zinc-800/80 dark:bg-zinc-900/80">
+					<div class="min-w-0">
+						<div class="flex flex-wrap items-center gap-2">
+							<h3 class="text-lg font-semibold leading-snug tracking-tight text-accent">
+								{p.name}
+							</h3>
+							{p.time && (
+								<span class="rounded-full bg-gray-100 px-2 py-0.5 font-medium text-sm text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+									{p.time}
+								</span>
+							)}
+						</div>
+
+						<p class="mt-2 text-gray-700 dark:text-gray-300">{p.description}</p>
+
+						{p.tags && p.tags.length > 0 && (
+							<div class="mt-2 flex flex-wrap gap-2">
+								{p.tags.map((t) => (
+									<span class="rounded-full bg-accent/10 px-2 py-0.5 font-medium text-sm text-accent dark:bg-accent/15">
+										{t}
+									</span>
+								))}
+							</div>
+						)}
+
+						<div class="mt-3 flex flex-wrap gap-2" aria-label="Project links">
+							{p.repo && (
+								<a
+									class="inline-flex items-center gap-1.5 rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300 dark:hover:bg-accent/15"
+									href={p.repo}
+									target="_blank"
+									rel="noopener"
+									aria-label={`GitHub repo: ${repoLabel(p.repo)}`}
+								>
+									<Icon
+										name="simple-icons:github"
+										width="14"
+										height="14"
+										class="inline-block"
+										aria-hidden="true"
+									/>
+									<span class="truncate">{repoLabel(p.repo)}</span>
+								</a>
+							)}
+
+							{p.demo && (
+								<a
+									class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
+									href={p.demo}
+									target="_blank"
+									rel="noopener"
+								>
+									DEMO
+								</a>
+							)}
+							{p.paper && (
+								<a
+									class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
+									href={p.paper}
+									target="_blank"
+									rel="noopener"
+								>
+									PAPER
+								</a>
+							)}
+						</div>
+					</div>
+
+					{/* remove: project thumbnail overlay */}
+				</article>
+			))}
+		</div>
+	</section>
+
 	<section class="mt-12" aria-label="Personal Philosophy">
 		<h2 class="title mb-4 text-xl">Personal Philosophy</h2>
 		<p class="mb-4">
@@ -713,13 +855,13 @@ const logoLiesmars = findLogo("liesmars") || findLogo("liesmars"); // fallback k
 					const fullSrc = target.dataset?.fullsrc;
 					const src = fullSrc || target.currentSrc || target.src;
 
+					// keep publications only
 					if (target.classList.contains("pub-thumb-img")) {
 						openImgModal(src);
 						return;
 					}
-					if (target.dataset && target.dataset.inline === "true") {
-						openImgModal(src);
-					}
+
+					// ...existing code...
 				}
 			});
 		});
