@@ -133,6 +133,20 @@ const newsItems: NewsItem[] = [
 			  supervised by <a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>, 
 			  exploring SOTA text-to-image and text-to-video generation.`,
 	},
+	{
+		date: "Jul 2024",
+		html: `Began collaboration on the SCoDe project under the guidance of <a class="cactus-link" href="https://ziminxia.github.io/">Dr. Zimin Xia</a>.`,
+	},
+	{
+		date: "Sep 2023",
+		html: `Enrolled in the Master's program at the State Key Lab. LIESMARS, Wuhan University, 
+              as a recommended exemption student, 
+              under the supervision of <a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.`,
+	},
+    {
+		date: "",
+		text: `...`,
+	},
 ];
 
 // Projects: (no images)
@@ -400,7 +414,7 @@ const projectLogoByKey: Record<string, any | null> = {
 
 	<section class="mt-12" aria-label="News">
 		<h2 class="title mb-4 text-xl">News</h2>
-		<ul class="space-y-3 h-54 overflow-y-auto pr-2">
+		<ul class="news-fade space-y-3 h-56 overflow-y-auto pr-2">
 			{newsItems.map((item) => (
 				<li class="flex gap-3">
 					<span class="w-[5.5rem] shrink-0 font-medium font-mono text-gray-600 dark:text-gray-400">
@@ -904,4 +918,26 @@ const projectLogoByKey: Record<string, any | null> = {
 			});
 		});
 	</script>
+
+	<style>
+		:global(.news-fade) {
+			/* Bottom fade-out to hint more content (modern scroll affordance) */
+			-webkit-mask-image: linear-gradient(
+				to bottom,
+				#000 0%,
+				#000 calc(100% - 2.5rem),
+				transparent 100%
+			);
+			mask-image: linear-gradient(
+				to bottom,
+				#000 0%,
+				#000 calc(100% - 2.5rem),
+				transparent 100%
+			);
+			-webkit-mask-size: 100% 100%;
+			mask-size: 100% 100%;
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+		}
+	</style>
 </PageLayout>
