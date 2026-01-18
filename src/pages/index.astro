@@ -3,6 +3,7 @@ import SocialList from "@/components/SocialList.astro";
 import PageLayout from "@/layouts/Base.astro";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
+import { getEntry } from "astro:content";
 
 // =========================
 // EDITABLE CONTENT (edit here)
@@ -16,16 +17,18 @@ type PublicationEditable = {
 	doi?: string;
 	paper?: string;
 	code?: string;
-	image?: string; // filename or relative path under ../assets
+	image?: string;
 	venueIcon?: string;
 	venueColor?: string;
-	venueRank?: string; // NEW: venue level/rank, e.g., "JCR Q1 · 2/98 · IF 12.2"
+	venueRank?: string;
+	venueLogo?: string;
 	abstract?: string;
 };
 
-type PublicationResolved = Omit<PublicationEditable, "image"> & {
-	image: any | null; // Astro image import result (or null)
-	fullSrc: string; // resolved URL string for modal
+type PublicationResolved = Omit<PublicationEditable, "image" | "venueLogo"> & {
+	image: any | null;
+	fullSrc: string;
+	venueLogo: any | null;
 };
 
 type NewsItem = {
@@ -44,171 +47,56 @@ type ProjectEditable = {
 	repo?: string;
 	demo?: string;
 	paper?: string;
-	orgLogos?: ("astar" | "baidu" | "whu" | "liesmars" | "ntu" | "epfl")[];
+	orgLogos?: string[];
 };
 
-// Publications: you can now set `image` as a filename or relative path under ../assets
-const publicationsEditable = [
-	{
-		author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"],
-		title: "Scale-aware Co-visible Region Detection for Image Matching",
-		booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing",
-		time: "2025",
-		venueRank: "JCR Q1 · 2/98 · IF 12.2",
-		doi: "https://doi.org/10.1016/j.isprsjprs.2025.08.015",
-		paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260",
-		code: "https://github.com/Geo-Tell/SCoDe",
-		image: "pub1.png",
-		venueIcon: "simple-icons:elsevier",
-		venueColor: "#FF6C00",
-		abstract:
-			"Matching images with significant scale differences remains a persistent challenge in photogrammetry and remote sensing. The scale discrepancy often degrades appearance consistency and introduces uncertainty in keypoint localization. While existing methods address scale variation through scale pyramids or scale-aware training, matching under significant scale differences remains an open challenge. To overcome this, we address the scale difference issue by detecting co-visible regions between image pairs and propose SCoDe (Scale-aware Co-visible region Detector), which both identifies co-visible regions and aligns their scales for highly robust, hierarchical point correspondence matching. Specifically, SCoDe employs a novel Scale Head Attention mechanism to map and correlate features across multiple scale subspaces, and uses a learnable query to aggregate scale-aware information of both images for co-visible region detection. In this way, correspondences can be established in a coarse-to-fine hierarchy, thereby mitigating semantic and localization uncertainties. Extensive experiments on three challenging datasets demonstrate that SCoDe outperforms state-of-the-art methods, improving the precision of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images with drastic scale variations.",
-	},
-	{
-		author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng*"],
-		title: "SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching",
-		booktitle: "IEEE Transactions on Geoscience and Remote Sensing (In Preparation)",
-		time: "2026",
-        venueRank: "JCR Q1 · 7/198 · IF 8.6",
-		doi: "",
-		paper: "",
-		code: "",
-		image: "pub2.png",
-		venueIcon: "simple-icons:ieee",
-		venueColor: "#00629B",
-		abstract: "Reliable correspondence estimation is a long-standing problem in computer vision and a critical component of applications such as Structure from Motion, visual localization, and image registration. While recent learning-based approaches have substantially improved local feature descriptiveness, most methods still rely on implicit assumptions about shared visual content across views, leading to brittle behavior when spatial support, semantic context, or visibility patterns diverge between images. We propose SAMatcher, a novel feature matching framework that formulates correspondence estimation through explicit co-visibility modeling. Rather than directly establishing point-wise matching from local appearance, SAMatcher first predicts consistent region masks and bounding boxes within a shared cross-view semantic space, serve as structured priors to guide and regularize correspondence estimation. SAMatcher employs a symmetric cross-view interaction mechanism that treats paired images as interacting token sequences, enabling bidirectional semantic alignment and selective reinforcement of jointly supported regions. Based on this formulation, a reliability-aware supervision strategy jointly constrains region segmentation and geometric localization, enforcing cross-view consistency during training. Extensive experiments on challenging benchmarks demonstrate that SAMatcher significantly improves correspondence robustness under large-scale and viewpoint variations. Beyond quantitative gains, our results indicate that monocular visual foundation models can be systematically extended to multi-view correspondence estimation when co-visibility is explicitly modeled, offering new insights for fusion-based visual understanding.",
-	},
-	{
-		author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*"],
-		title: "Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models",
-		booktitle: "(In Preparation)",
-		time: "2026",
-		doi: "",
-		paper: "",
-		code: "",
-		image: "pub3.gif",
-		venueIcon: "simple-icons:latex",
-		venueColor: "#008080",
-		abstract: "",
-	},
-	{
-		author: ["Xu Pan", "Xianwei Zheng*"],
-		title: "Research on Large-Scale Disparity Image Matching Method Guided by Co-Visible Region",
-		booktitle: "Master's Thesis",
-		time: "2026",
-		doi: "",
-		paper: "",
-		code: "",
-		image: "pub4.png",
-		venueIcon: "simple-icons:wikiversity",
-		venueColor: "#00649A",
-		abstract: "",
-	},
-] satisfies PublicationEditable[];
+type HomeIntroSegment =
+	| { type: "text"; html: string }
+	| { type: "link"; name: string; href: string; class?: string }
+	| { type: "org"; key: string; name: string; href: string; alt?: string; width?: number; class?: string };
 
-// update: News items now support html for flexible content
-const newsItems: NewsItem[] = [
-	{ 
-        date: "Nov 2025", 
-        text: "Successfully defended my Master's thesis proposal." 
-    },
-	{
-		date: "Aug 2025",
-		html: `The first paper accepted by the <em>ISPRS Journal of Photogrammetry and Remote Sensing</em>.
-		      <a class="cactus-link" href="https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260" target="_blank" rel="noopener">[Paper]</a>`,
-	},
-	{
-		date: "Aug 2025",
-		html: `Began a remote research internship at <strong>CFAR, A*STAR</strong>, supervised by
-		      <a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a> and 
-		      in collaboration with <a class="cactus-link" href="https://vanzll.github.io/">Zhenglin Wan</a>.`,
-	},
-	{ 
-        date: "Jul 2025", 
-        html: `Attended the <em>2025 Annual Academic Conference on Photogrammetry and Remote Sensing, CSGPC</em> in Kunming, China.` 
-    },
-	{
-		date: "Dec 2024",
-		html: `Began a research internship at <strong>Baidu</strong> in Shenzhen, 
-			  supervised by <a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>, 
-			  exploring SOTA text-to-image and text-to-video generation.`,
-	},
-	{
-		date: "Jul 2024",
-		html: `Began collaboration on the SCoDe project under the guidance of <a class="cactus-link" href="https://ziminxia.github.io/">Dr. Zimin Xia</a>.`,
-	},
-	{
-		date: "Sep 2023",
-		html: `Enrolled in the Master's program at the State Key Lab. LIESMARS, Wuhan University, 
-              as a recommended exemption student, 
-              under the supervision of <a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.`,
-	},
-    {
-		date: "",
-		text: `...`,
-	},
-];
+type HomeIntro = { paragraphs: { segments: HomeIntroSegment[] }[] };
 
-// Projects: (no images)
-const projectsEditable: ProjectEditable[] = [
-	{
-		name: "SA-VLA",
-		description:
-			"A research project on robust RL adaptation of flow-matching–based VLA models for robotic manipulation, focusing on generalization under distribution shifts in challenging benchmarks.",
-		tags: ["Vision-Language-Action", "Reinforcement Learning", "Flow-Matching", "Robotic Manipulation", "Spatial Intelligence"],
-		time: "2026",
-		orgLogos: ["whu", "astar", "ntu"],
-	},
-	{
-		name: "Co-visibility Guided Image Matching",
-		description:
-			"A research project on robust image matching in robot vision, photogrammetry and remote sensing, using explicit co-visibility modeling to handle extreme scale and viewpoint variations.",
-		tags: ["Co-visibility", "Image Matching", "3D Vision", "Segmentation", "Photogrammetry", "SCoDe", "SAMatcher"],
-		time: "2025",
-		repo: "https://github.com/Geo-Tell/SCoDe",
-        paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260",
-		orgLogos: ["whu", "epfl"],
-	},
-	{
-		name: "GNDAS",
-		description:
-			"The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system application designed for the analysis and assessment of natural disasters.",
-		tags: ["Natural Disasters", "Geographic Information System (GIS)"],
-		time: "2022",
-		repo: "https://github.com/TwSphinx54/GNDAS",
-		orgLogos: ["whu"],
-	},
-	{
-		name: "I2RSI",
-		description:
-			"The I2RSI System (Intelligent Interpretation of Remote Sensing Images) is a web-based application for remote sensing image interpretation, powered by the Baidu PaddlePaddle deep learning framework.",
-		tags: ["Remote Sensing", "Interpretation", "Deep Learning"],
-		time: "2022",
-		repo: "https://github.com/TwSphinx54/I2RSI",
-		orgLogos: ["whu", "baidu"],
-	},
-]; // remove: `satisfies ProjectEditable[];` (redundant with explicit annotation)
+type AckPerson = { name: string; href: string };
+type Acknowledgements = {
+	title: string;
+	introLines?: string[];
+	mentors?: AckPerson[];
+	peersIntro?: string;
+	peers?: AckPerson[];
+	outro?: string;
+};
 
-/* Experiences meta: edit names/links here */
-const experienceMeta: Record<string, { name: string; link: string }> = {
-	"exp1.png": { name: "Wuhan University", link: "https://en.whu.edu.cn/" },
-	"exp2.png": { name: "School of Remote Sensing and Information Engineering", link: "https://rsgis.whu.edu.cn/English/Home.htm" },
-	"exp3.png": {
-		name: "State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)",
-		link: "https://liesmars.whu.edu.cn/",
-	},
-	"exp4.png": { name: "International Technology R&D Department, Baidu, Inc.", link: "https://www.baidu.com/" },
-	"exp5.png": {
-		name: "Centre for Frontier AI Research (CFAR), \nInstitute of High Performance Computing (IHPC), Agency for Science, Technology and Research (A*STAR)",
-		link: "https://www.a-star.edu.sg/cfar",
-	},
+type PersonalPhilosophy = {
+	intro: string;
+	quote: string;
+	cite: string;
+	slowScience: { text: string; href: string };
+	paragraphs?: string[];
 };
 
 // =========================
-// Helpers / derived data (usually no edits)
+// Content loading (YAML-driven data)
 // =========================
 
-// add: (optional) escape helper for plain-text fallback
+// Load editable content from YAML (src/content/home/index.yaml)
+const homeEntry = await getEntry("home", "index");
+if (!homeEntry) throw new Error("Missing content entry: src/content/home/index.yaml");
+
+const publicationsEditable = homeEntry.data.publicationsEditable as PublicationEditable[];
+const newsItems = homeEntry.data.newsItems as NewsItem[];
+const projectsEditable = homeEntry.data.projectsEditable as ProjectEditable[];
+const experienceMeta =
+	(homeEntry.data.experienceMeta ?? {}) as Record<string, { name: string; link: string }>;
+const orderFromYaml = homeEntry.data.order as string[] | undefined;
+const homeIntro = (homeEntry.data.homeIntro ?? null) as HomeIntro | null;
+const acknowledgements = (homeEntry.data.acknowledgements ?? null) as Acknowledgements | null;
+const personalPhilosophy = (homeEntry.data.personalPhilosophy ?? null) as PersonalPhilosophy | null;
+
+// =========================
+// Helpers (pure utilities)
+// =========================
+
 function escapeHtml(s: string) {
 	return s
 		.replaceAll("&", "&amp;")
@@ -218,19 +106,33 @@ function escapeHtml(s: string) {
 		.replaceAll("'", "&#039;");
 }
 
-// One-time asset index (lets you reference images by filename/path in data)
+function repoLabel(url: string): string {
+	try {
+		const u = new URL(url);
+		const host = u.hostname.toLowerCase();
+		if (host === "github.com" || host.endsWith(".github.com")) {
+			return u.pathname.replace(/^\/+|\/+$/g, "");
+		}
+		return url;
+	} catch {
+		return url;
+	}
+}
+
+// =========================
+// Asset resolution (images/logos)
+// =========================
+
 const assetImages = import.meta.glob("../assets/**/*.{png,jpg,jpeg,svg,gif,webp}", {
 	eager: true,
 	import: "default",
 });
 
-// Normalize a user-provided asset string into a key in `assetImages`
 function normalizeAssetKey(p: string): string {
 	const s = p.trim();
 	if (s.startsWith("../assets/")) return s;
 	if (s.startsWith("/src/assets/")) return ".." + s.replace("/src", "");
 	if (s.startsWith("/assets/")) return "../assets" + s.replace("/assets", "");
-	// default: treat as filename under ../assets/
 	return `../assets/${s}`;
 }
 
@@ -245,170 +147,130 @@ function assetToSrc(a: any): string {
 	return typeof a === "string" ? a : a.src;
 }
 
-// add: pretty label for GitHub repo links (fallback to full url)
-function repoLabel(url: string): string {
-	try {
-		const u = new URL(url);
-		const host = u.hostname.toLowerCase();
-		if (host === "github.com" || host.endsWith(".github.com")) {
-			return u.pathname.replace(/^\/+|\/+$/g, "");
-		}
-		return url;
-	} catch {
-		return url;
-	}
-}
+// =========================
+// Derived data (publications/projects/experiences/logos)
+// =========================
 
 const cactusTech: PublicationResolved[] = publicationsEditable.map((pub) => {
 	const img = resolveAsset(pub.image);
-	return {
-		...pub,
-		image: img,
-		fullSrc: assetToSrc(img),
-	};
+	const vlogo = resolveAsset(pub.venueLogo);
+	return { ...pub, image: img, fullSrc: assetToSrc(img), venueLogo: vlogo };
 });
 
-// replace: projects mapping (no resolveAsset/fullSrc)
 const projects = projectsEditable;
 
-/* Dynamically gather experience logos */
+// Experiences (auto logos from /assets/exps)
 const expImages = import.meta.glob("../assets/exps/*.{png,jpg,jpeg,svg,webp}", {
 	eager: true,
 	import: "default",
 });
 
-// Preserve intended display order (fallback to filename order if new files are added)
-const order = ["exp1.png", "exp2.png", "exp3.png", "exp4.png", "exp5.png"];
+function expNumericOrder(file: string): number | null {
+	const m = file.match(/^exp(\d+)\./i);
+	return m ? Number(m[1]) : null;
+}
 
 const experiences = Object.entries(expImages)
 	.map(([path, mod]: [string, any]) => {
 		const file = path.split("/").pop() || "";
 		const meta = experienceMeta[file] || { name: file, link: "#" };
-
 		const altTitleName = meta.name.replace(/\s*\n\s*/g, " ");
 		const tooltipHtml = escapeHtml(meta.name).replaceAll("\n", "<br/>");
-
-		return {
-			file,
-			image: mod as any,
-			name: meta.name,
-			altTitleName,
-			tooltipHtml,
-			link: meta.link,
-		};
+		return { file, image: mod as any, name: meta.name, altTitleName, tooltipHtml, link: meta.link };
 	})
 	.sort((a, b) => {
-		const ai = order.indexOf(a.file);
-		const bi = order.indexOf(b.file);
-		if (ai === -1 && bi === -1) return a.file.localeCompare(b.file);
-		if (ai === -1) return 1;
-		if (bi === -1) return -1;
-		return ai - bi;
+		if (orderFromYaml?.length) {
+			const ai = orderFromYaml.indexOf(a.file);
+			const bi = orderFromYaml.indexOf(b.file);
+			if (ai === -1 && bi === -1) return a.file.localeCompare(b.file);
+			if (ai === -1) return 1;
+			if (bi === -1) return -1;
+			return ai - bi;
+		}
+		const an = expNumericOrder(a.file);
+		const bn = expNumericOrder(b.file);
+		if (an != null && bn != null) return an - bn;
+		if (an != null) return -1;
+		if (bn != null) return 1;
+		return a.file.localeCompare(b.file);
 	});
 
-/* add: import all logos from assets/logos */
+// Logos from /assets/logos
 const logoImages = import.meta.glob("../assets/logos/*.{png,svg,jpg,jpeg,webp}", {
 	eager: true,
 	import: "default",
 });
 
-// helper: find logo by substring in filename
-function findLogo(sub: string) {
-	for (const path of Object.keys(logoImages)) {
-		if (path.toLowerCase().includes(sub)) {
-			const mod: any = (logoImages as any)[path];
-			return mod || null;
+const LOGO_ALIASES: Record<string, string[]> = {
+	whu: ["whu", "wuhan"],
+};
+
+function findLogoAny(keys: string | string[]) {
+	const ks = Array.isArray(keys) ? keys : [keys];
+	for (const sub of ks) {
+		for (const path of Object.keys(logoImages)) {
+			if (path.toLowerCase().includes(sub.toLowerCase())) {
+				const mod: any = (logoImages as any)[path];
+				return mod || null;
+			}
 		}
 	}
 	return null;
 }
 
-const logoAstar = findLogo("astar");
-const logoBaidu = findLogo("baidu");
-const logoWhu = findLogo("whu") || findLogo("wuhan");
-const logoLiesmars = findLogo("liesmars") || findLogo("liesmars");
-const logoNtu = findLogo("ntu");
-const logoEpfl = findLogo("epfl");
+const introLogoKeys = new Set<string>(
+	homeIntro?.paragraphs
+		.flatMap((p) => p.segments)
+		.filter((s): s is Extract<HomeIntroSegment, { type: "org" }> => s.type === "org")
+		.map((s) => s.key) ?? [],
+);
 
-// add: map key -> imported logo
-const projectLogoByKey: Record<string, any | null> = {
-	astar: logoAstar,
-	baidu: logoBaidu,
-	whu: logoWhu,
-	liesmars: logoLiesmars,
-	ntu: logoNtu,
-	epfl: logoEpfl,
-};
+const projectLogoKeys = new Set<string>(projectsEditable.flatMap((p) => p.orgLogos ?? []));
+const allLogoKeys = new Set<string>([...projectLogoKeys, ...introLogoKeys]);
 
+const logoByKey: Record<string, any | null> = {};
+for (const k of allLogoKeys) logoByKey[k] = findLogoAny(LOGO_ALIASES[k] ?? k);
+
+const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
+	[...projectLogoKeys].map((k) => [k, logoByKey[k] ?? null]),
+);
 ---
 
 <PageLayout meta={{ title: "Home" }}>
 	<section>
 		<h1 class="title mb-6">Hello World!</h1>
-		<p class="mb-3">
-			Hi, I am a M.Sc. student at 
-			{logoWhu && (
-				<Image
-					src={logoWhu}
-					alt="Wuhan University logo"
-					width={24}
-					densities={[1, 2]}
-					loading="eager"
-					class="mr-0.5 ml-0.5 mb-1 inline h-5 w-auto object-contain"
-				/>
-			)}<a class="cactus-link" href="https://en.whu.edu.cn/">Wuhan University</a>, 
-			working at the 
-			{logoLiesmars && (
-				<Image
-					src={logoLiesmars}
-					alt="LIESMARS logo"
-					width={20}
-					densities={[1, 2]}
-					loading="eager"
-					class="mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
-				/>
-			)}<a class="cactus-link" href="https://liesmars.whu.edu.cn/">State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)</a>, 
-			under the guidance of
-			<a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.
-			My research focuses on <em class="highlight">embodied intelligence</em> and <em class="highlight">3D visual perception</em>, 
-			with an emphasis on how spatial representations support generalizable decision-making and agent-centric policy learning.
-		</p>
-		<p class="mb-3">
-			My current work lies at the intersection of <em class="highlight">computer vision</em>, <em class="highlight">reinforcement learning</em>, and <em class="highlight">generative modeling</em>, 
-			where I study how 2D and 3D representations can be unified to enable robust perception–action coupling. 
-			I am particularly interested in <em class="highlight">structure-aware visual representations</em> that support cross-view understanding, generalization across environments, and interaction-driven learning in embodied settings.
-		</p>
-		<p class="mb-3">
-			Previously, I explored generative AI for image and video synthesis during my internship at 
-			{logoBaidu && (
-				<Image
-					src={logoBaidu}
-					alt="Baidu logo"
-					width={20}
-					densities={[1, 2]}
-					loading="eager"
-					class="mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
-				/>
-			)}<a class="cactus-link" href="https://www.baidu.com/">Baidu</a>. 
-			I am currently a remote research intern at the 
-			{logoAstar && (
-				<Image
-					src={logoAstar}
-					alt="A*STAR logo"
-					width={20}
-					densities={[1, 2]}
-					loading="eager"
-					class="mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
-				/>
-			)}<a class="cactus-link" href="https://www.a-star.edu.sg/cfar">Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)</a>, 
-			supervised by
-			<a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a>, 
-			where I work on <em class="highlight">generalizable reinforcement learning for embodied agents</em>, with a focus on agent-centric formulations and transferable policies grounded in implicit spatial representations that support generalization across tasks and scenes.
-		</p>
-		<p class="mb-4">
-			More broadly, my goal is to develop spatially grounded learning frameworks that bridge perception, geometry, and control, 
-			advancing the next generation of embodied systems that can reason about and act within complex real-world environments.
-		</p>
+
+		{/* Home description (YAML-driven via homeIntro) */}
+		{homeIntro?.paragraphs.map((para) => (
+			<p class="mb-3">
+				{para.segments.map((seg) => {
+					if (seg.type === "text") return <span set:html={seg.html} />;
+					if (seg.type === "link")
+						return (
+							<a class={seg.class ?? "cactus-link"} href={seg.href}>
+								{seg.name}
+							</a>
+						);
+					// org (IMPORTANT: keep logo and link text adjacent: no whitespace node)
+					const logo = logoByKey[seg.key];
+					return (
+						<>
+							{logo ? (
+								<Image
+									src={logo}
+									alt={seg.alt ?? `${seg.name} logo`}
+									width={seg.width ?? 20}
+									densities={[1, 2]}
+									loading="eager"
+									class={seg.class ?? "mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"}
+								/>
+							) : null}<a class="cactus-link" href={seg.href}>{seg.name}</a>
+						</>
+					);
+				})}
+			</p>
+		))}
+
 		<SocialList />
 	</section>
 
@@ -471,37 +333,49 @@ const projectLogoByKey: Record<string, any | null> = {
 				))
 			}
 		</div>
-		{/* add: collaborators / acknowledgements */}
-		<br>
-		<p class="mb-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-			<b>Acknowledgements:</b><br>
-			I’m grateful to my collaborators and mentors for their guidance and support, especially<br>
-			<a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">
-				Prof. Xianwei Zheng</a>,
-			<a class="cactus-link" href="https://jszy.whu.edu.cn/xionghanjiang/zh_CN/index/526145/list/">
-				Prof. Hanjiang Xiong</a>,
-			<a class="cactus-link" href="https://xingruiyu.github.io/">
-				Dr. Xingrui Yu (A*STAR)</a>, 
-			<a class="cactus-link" href="https://ziminxia.github.io/">
-				Dr. Zimin Xia (EPFL)</a>,
-			<a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">
-				Dr. Yan Zhang (Baidu)</a>,
-			<br>and my colleagues/peers including<br>
-			<a class="cactus-link" href="https://vanzll.github.io/">
-				Zhenglin Wan (NUS)</a>, 
-			<a class="cactus-link" href="https://jiashenhuang.github.io/">
-				Jiashen Huang (NTU)</a>, 
-			<a class="cactus-link" href="https://www.researchgate.net/profile/Qiyuan-Ma-2">
-				Qiyuan Ma</a>, 
-			<a class="cactus-link" href="https://github.com/EATMustard">
-				Jintao Zhang</a>, 
-			<a class="cactus-link" href="https://zhaocy-ai.github.io/">
-				Chenyu Zhao</a>, 
-			<a class="cactus-link" href="https://www.researchgate.net/profile/Ziqiong-Lu-2">
-				Ziqong Lu (HKU)</a>
-			<br>and others I’ve had the pleasure to work with.
-		</p>
+
+		<br />
+
+		{/* Acknowledgements (YAML-driven via acknowledgements) */}
+		{acknowledgements && (
+			<p class="mb-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+				<b>{acknowledgements.title}</b><br />
+
+				{acknowledgements.introLines?.map((l) => (
+					<>
+						{l}<br />
+					</>
+				))}
+
+				{acknowledgements.mentors?.map((p, i) => (
+					<>
+						<a class="cactus-link" href={p.href}>{p.name}</a>
+						{i < (acknowledgements.mentors?.length ?? 0) - 1 ? "," : ","}
+						{i === (acknowledgements.mentors?.length ?? 0) - 1 ? <br /> : " "}
+					</>
+				))}
+
+				{acknowledgements.peersIntro ? (
+					<>
+						{acknowledgements.peersIntro}<br />
+					</>
+				) : null}
+
+				{acknowledgements.peers?.map((p, i) => (
+					<>
+						<a class="cactus-link" href={p.href}>{p.name}</a>
+						{i < (acknowledgements.peers?.length ?? 0) - 1 ? "," : ""}
+						{i === (acknowledgements.peers?.length ?? 0) - 1 ? (
+							<>
+								<br />{acknowledgements.outro ?? ""}
+							</>
+						) : " "}
+					</>
+				))}
+			</p>
+		)}
 	</section>
+
 	<section class="mt-16" aria-label="Publications">
 		<h2 class="title mb-4 text-xl">Publications</h2>
 		<dl class="space-y-4">
@@ -518,7 +392,8 @@ const projectLogoByKey: Record<string, any | null> = {
 						abstract,
 						venueIcon,
 						venueColor,
-						venueRank, // NEW
+						venueRank,
+						venueLogo,
 						image,
 						fullSrc,
 					} = pub;
@@ -546,15 +421,27 @@ const projectLogoByKey: Record<string, any | null> = {
 									</p>
 									<div class="mt-2 flex flex-wrap gap-2">
 										<span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 font-medium text-sm text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
-											{venueIcon && (
-												<Icon
-													name={venueIcon}
+											{venueLogo ? (
+												<img
+													src={assetToSrc(venueLogo)}
+													alt="Venue logo"
 													width="14"
 													height="14"
-													class="mr-1 inline-block align-[-0.2em]"
-													style={`color: ${venueColor}`}
-													aria-hidden="true"
+													class="mr-1 inline-block h-[14px] w-[14px] object-contain align-[-0.2em]"
+													loading="lazy"
+													decoding="async"
 												/>
+											) : (
+												venueIcon && (
+													<Icon
+														name={venueIcon}
+														width="14"
+														height="14"
+														class="mr-1 inline-block align-[-0.2em]"
+														style={`color: ${venueColor}`}
+														aria-hidden="true"
+													/>
+												)
 											)}
 											{booktitle}
 										</span>
@@ -654,7 +541,6 @@ const projectLogoByKey: Record<string, any | null> = {
 								)}
 							</div>
 
-							{/* 抽出的摘要区域：宽度为整个卡片（在小/大屏均为 full width） */}
 							{abstract && (
 								<div
 									class="abstract-collapse mt-3 w-full overflow-hidden text-gray-700 transition-[max-height,opacity] duration-300 ease-in-out dark:text-gray-300"
@@ -701,7 +587,6 @@ const projectLogoByKey: Record<string, any | null> = {
 							</div>
 						)}
 
-						{/* buttons row + right-aligned org logos */}
 						<div class="mt-3 flex items-center justify-between gap-3" aria-label="Project links">
 							<div class="flex flex-wrap gap-2 min-w-0">
 								{p.repo && (
@@ -773,34 +658,38 @@ const projectLogoByKey: Record<string, any | null> = {
 
 	<section class="mt-12" aria-label="Personal Philosophy">
 		<h2 class="title mb-4 text-xl">Personal Philosophy</h2>
-		<p class="mb-4">
-			I follow Stoic philosophy. Life is a joyful ascent: a true mountaineer delights in the climb
-			itself, not just the summit.
-		</p>
-		<figure class="relative border-l-4 border-accent pl-4">
-			<blockquote class="italic">
-				“Thou sufferest this justly: for thou choosest rather to become good to-morrow than to be
-				good to-day.”
-			</blockquote>
-			<figcaption class="mt-2 text-right text-gray-600 dark:text-gray-400">
-				— Marcus Aurelius, Meditations 8.22
-			</figcaption>
-		</figure>
-		<p class="mt-4 mb-4">
-			I resonate with the spirit of
-			<a class="cactus-link" href="http://slow-science.org/" target="_blank" rel="noopener"
-				>Slow Science</a
-			>. 
-		</p>
-		<p class="mt-4 mb-4">
-			We live in an age tyrannized by efficiency, outcomes, and speed, to the point that nothing
-			lasts and nothing leaves a deep impression. In the midst of noisy bubbles and short-lived
-			hype, I hope to take time to think carefully, to doubt, to refine, and to do research that
-			is genuinely meaningful and worth remembering.
-		</p>
+
+		{personalPhilosophy && (
+			<>
+				<p class="mb-4">{personalPhilosophy.intro}</p>
+
+				<figure class="relative border-l-4 border-accent pl-4">
+					<blockquote class="italic">{personalPhilosophy.quote}</blockquote>
+					<figcaption class="mt-2 text-right text-gray-600 dark:text-gray-400">
+						{personalPhilosophy.cite}
+					</figcaption>
+				</figure>
+
+				<p class="mt-4 mb-4">
+					I resonate with the spirit of{" "}
+					<a
+						class="cactus-link"
+						href={personalPhilosophy.slowScience.href}
+						target="_blank"
+						rel="noopener"
+					>
+						{personalPhilosophy.slowScience.text}
+					</a>
+					.
+				</p>
+
+				{(personalPhilosophy.paragraphs ?? []).map((t) => (
+					<p class="mt-4 mb-4">{t}</p>
+				))}
+			</>
+		)}
 	</section>
 
-	{/* Image modal (reused) */}
 	<div
 		id="img-modal"
 		class="z-70 fixed inset-0 flex hidden items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
@@ -837,91 +726,100 @@ const projectLogoByKey: Record<string, any | null> = {
 	</div>
 
 	<script>
-		document.addEventListener("DOMContentLoaded", () => {
-			// toggle abstracts: smooth max-height + opacity, no image panel logic
-			document.querySelectorAll(".abstract-btn").forEach((btn) => {
+		// UI behaviors: abstract toggle + image modal
+		function onReady(fn) {
+			if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn, { once: true });
+			else fn();
+		}
+
+		function initAbstractToggles() {
+			const buttons = document.querySelectorAll(".abstract-btn");
+			buttons.forEach((btn) => {
 				const id = btn.getAttribute("data-abstract-id");
 				const slug = id ? id.replace("abstract-", "") : null;
 				const content = slug ? document.getElementById(`abstract-content-${slug}`) : null;
 				const chev = btn.querySelector(".chev");
-				if (chev && content) {
-					const collapsed = content.getAttribute("data-collapsed");
-					if (collapsed === "false") chev.classList.add("rotate-180");
-					else chev.classList.remove("rotate-180");
-				}
+
+				const syncChevron = () => {
+					if (!chev || !content) return;
+					const expanded = content.getAttribute("data-collapsed") === "false";
+					chev.classList.toggle("rotate-180", expanded);
+					btn.setAttribute("aria-expanded", expanded ? "true" : "false");
+				};
+
+				syncChevron();
+
 				btn.addEventListener("click", () => {
 					if (!content) return;
-					const collapsed = content.getAttribute("data-collapsed") !== "false";
-					if (collapsed) {
+
+					const isCollapsed = content.getAttribute("data-collapsed") !== "false";
+					if (isCollapsed) {
 						content.style.maxHeight = content.scrollHeight + "px";
 						content.style.opacity = "1";
 						content.setAttribute("data-collapsed", "false");
-						btn.setAttribute("aria-expanded", "true");
-						if (chev) chev.classList.add("rotate-180");
+
+						// allow transition to finish, then unlock height
 						setTimeout(() => {
-							if (content.getAttribute("data-collapsed") === "false")
-								content.style.maxHeight = "none";
+							if (content.getAttribute("data-collapsed") === "false") content.style.maxHeight = "none";
 						}, 310);
 					} else {
 						content.style.maxHeight = content.scrollHeight + "px";
-						content.getBoundingClientRect();
+						content.getBoundingClientRect(); // force reflow
 						content.style.maxHeight = "0";
 						content.style.opacity = "0";
 						content.setAttribute("data-collapsed", "true");
-						btn.setAttribute("aria-expanded", "false");
-						if (chev) chev.classList.remove("rotate-180");
 					}
+					syncChevron();
 				});
 			});
+		}
 
-			// Image modal handlers: thumbnails open modal
-			const imgModal = document.getElementById("img-modal") as HTMLDivElement | null;
-			const imgModalImg = document.getElementById("img-modal-img") as HTMLImageElement | null;
-			const imgModalClose = document.getElementById("img-modal-close") as HTMLButtonElement | null;
-			function openImgModal(src: string): void {
-				if (!imgModal || !imgModalImg) return;
+		function initImageModal() {
+			const imgModal = document.getElementById("img-modal");
+			const imgModalImg = document.getElementById("img-modal-img");
+			const imgModalClose = document.getElementById("img-modal-close");
+
+			if (!imgModal || !imgModalImg) return;
+
+			function open(src) {
 				imgModalImg.src = src;
 				imgModal.classList.remove("hidden");
 				document.body.style.overflow = "hidden";
-				imgModalClose?.focus();
+				imgModalClose?.focus?.();
 			}
-			function closeImgModal(): void {
-				if (!imgModal) return;
+
+			function close() {
 				imgModal.classList.add("hidden");
-				if (imgModalImg) imgModalImg.src = "";
+				imgModalImg.src = "";
 				document.body.style.overflow = "";
 			}
-			imgModalClose?.addEventListener("click", closeImgModal);
-			imgModal?.addEventListener("click", (e) => {
-				if (e.target === imgModal) closeImgModal();
+
+			imgModalClose?.addEventListener("click", close);
+			imgModal.addEventListener("click", (e) => {
+				if (e.target === imgModal) close();
 			});
 			document.addEventListener("keydown", (e) => {
-				if (e.key === "Escape") closeImgModal();
+				if (e.key === "Escape") close();
 			});
 
-			// thumbnail click -> open modal
+			// Delegate click from publication thumbnails only
 			document.addEventListener("click", (e) => {
-				const target = e.target as EventTarget | null;
-				if (!target) return;
-				if (target instanceof HTMLImageElement) {
-					const fullSrc = target.dataset?.fullsrc;
-					const src = fullSrc || target.currentSrc || target.src;
-
-					// keep publications only
-					if (target.classList.contains("pub-thumb-img")) {
-						openImgModal(src);
-						return;
-					}
-
-					// ...existing code...
-				}
+				const t = e.target;
+				if (!(t instanceof HTMLImageElement)) return;
+				if (!t.classList.contains("pub-thumb-img")) return;
+				const src = t.dataset?.fullsrc || t.currentSrc || t.src;
+				if (src) open(src);
 			});
+		}
+
+		onReady(() => {
+			initAbstractToggles();
+			initImageModal();
 		});
 	</script>
 
 	<style>
 		:global(.news-fade) {
-			/* Bottom fade-out to hint more content (modern scroll affordance) */
 			-webkit-mask-image: linear-gradient(
 				to bottom,
 				#000 0%,

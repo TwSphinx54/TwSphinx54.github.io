@@ -1,0 +1,288 @@
+# Logo usage:
+# 1) Put logo files under: src/assets/logos/
+# 2) In projectsEditable[*].orgLogos, add a key like "nus"
+# 3) Ensure the filename contains that key (case-insensitive), e.g. "nus.svg" or "logo-nus.png"
+
+publicationsEditable:
+  - author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"]
+    title: "Scale-aware Co-visible Region Detection for Image Matching"
+    booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing"
+    time: "2025"
+    venueRank: "JCR Q1 · 2/98 · IF 12.2"
+    doi: "https://doi.org/10.1016/j.isprsjprs.2025.08.015"
+    paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260"
+    code: "https://github.com/Geo-Tell/SCoDe"
+    image: "pubs/pub1.png"
+    venueIcon: "simple-icons:elsevier"
+    venueColor: "#FF6C00"
+    abstract: >-
+      Matching images with significant scale differences remains a persistent challenge in photogrammetry
+      and remote sensing. The scale discrepancy often degrades appearance consistency and introduces
+      uncertainty in keypoint localization. While existing methods address scale variation through scale
+      pyramids or scale-aware training, matching under significant scale differences remains an open
+      challenge. To overcome this, we address the scale difference issue by detecting co-visible regions
+      between image pairs and propose SCoDe (Scale-aware Co-visible region Detector), which both identifies
+      co-visible regions and aligns their scales for highly robust, hierarchical point correspondence matching.
+      Specifically, SCoDe employs a novel Scale Head Attention mechanism to map and correlate features across
+      multiple scale subspaces, and uses a learnable query to aggregate scale-aware information of both images
+      for co-visible region detection. In this way, correspondences can be established in a coarse-to-fine
+      hierarchy, thereby mitigating semantic and localization uncertainties. Extensive experiments on three
+      challenging datasets demonstrate that SCoDe outperforms state-of-the-art methods, improving the precision
+      of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images
+      with drastic scale variations.
+
+  - author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "Xianwei Zheng*"]
+    title: "SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching"
+    booktitle: "IEEE Transactions on Geoscience and Remote Sensing (In Preparation)"
+    time: "2026"
+    venueRank: "JCR Q1 · 7/198 · IF 8.6"
+    image: "pubs/pub2.png"
+    venueIcon: "simple-icons:ieee"
+    venueColor: "#00629B"
+    abstract: >-
+      Reliable correspondence estimation is a long-standing problem in computer vision and a critical component
+      of applications such as Structure from Motion, visual localization, and image registration. While recent
+      learning-based approaches have substantially improved local feature descriptiveness, most methods still
+      rely on implicit assumptions about shared visual content across views, leading to brittle behavior when
+      spatial support, semantic context, or visibility patterns diverge between images. We propose SAMatcher, a
+      novel feature matching framework that formulates correspondence estimation through explicit co-visibility
+      modeling. Rather than directly establishing point-wise matching from local appearance, SAMatcher first
+      predicts consistent region masks and bounding boxes within a shared cross-view semantic space, serve as
+      structured priors to guide and regularize correspondence estimation. SAMatcher employs a symmetric cross-view
+      interaction mechanism that treats paired images as interacting token sequences, enabling bidirectional
+      semantic alignment and selective reinforcement of jointly supported regions. Based on this formulation, a
+      reliability-aware supervision strategy jointly constrains region segmentation and geometric localization,
+      enforcing cross-view consistency during training. Extensive experiments on challenging benchmarks demonstrate
+      that SAMatcher significantly improves correspondence robustness under large-scale and viewpoint variations.
+      Beyond quantitative gains, our results indicate that monocular visual foundation models can be systematically
+      extended to multi-view correspondence estimation when co-visibility is explicitly modeled, offering new insights
+      for fusion-based visual understanding.
+
+  - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*"]
+    title: "SA-VLA: Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models"
+    # booktitle: "(Under Review at ICML 2026)"
+    booktitle: "(In Preparation)"
+    time: "2026"
+    # venueRank: "CCF A"
+    image: "pubs/pub3.gif"
+    venueLogo: "icons/icml.svg"
+    abstract: >-
+      Vision-Language-Action (VLA) models have shown strong performance in robotic manipulation, yet reinforcement
+      learning (RL) fine-tuning systematically degrades generalization under distribution shifts. In this work, we
+      study RL adaptation of flow-matching-based VLA policies and identify spatial inductive bias as a central factor
+      in preserving robust generalization. We propose SA-VLA, which incorporates implicit spatial representations to
+      explicitly ground flow-matching VLA policies in spatial structure. While this spatial bias substantially improves
+      zero-shot generalization to harder manipulation tasks, standard RL fine-tuning with sparse, episode-level rewards
+      leads to policy over-specialization. To address this, SA-VLA employs spatially-aware step-level dense rewards
+      together with SCAN, a spatially-conditioned exploration strategy tailored to flow-matching policies. Experiments
+      on challenging manipulation benchmarks demonstrate that jointly aligning implicit spatial representations, step-level
+      rewards, and spatially-conditioned exploration enables stable RL fine-tuning and robust performance.
+
+  # - author: ["Ming Sun", "Rui Wang", "Xingrui Yu", "Lihua Jing", "Du Hangyu", "Zhenglin Wan", "Xu Pan", "Ivor Tsang"]
+  #   title: "SleeperVLA: Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
+  #   booktitle: "(Under Review at ICML 2026)"
+  #   time: "2026"
+  #   venueRank: "CCF A"
+  #   venueLogo: "icons/icml.svg"
+  #   abstract: >-
+  #     Vision-Language-Action models (VLAs) support generalist robotic control by enabling end-to-end decision policies
+  #     directly from multi-modal inputs. As trained VLAs are increasingly shared and adapted, protecting model ownership
+  #     becomes essential for secure deployment and responsible open-source usage. In this paper, we present SleeperVLA, the
+  #     first backdoor-based ownership verification framework specifically designed for VLAs. SleeperVLA embeds a stealthy
+  #     and harmless backdoor watermark into the protected model during training by injecting secret messages into embodied
+  #     visual data. For post-release verification, we propose a swap-and-detect mechanism, in which a trigger-aware projector
+  #     and an external classifier head are used to activate and detect the embedded backdoor based on prediction probabilities.
+  #     Extensive experiments across multiple datasets, model architectures, and adaptation settings demonstrate that SleeperVLA
+  #     enables reliable and unique ownership verification while preserving benign task performance. Further results show that
+  #     the embedded watermark remains detectable under post-release model adaptation.
+
+  - author: ["Xu Pan", "Xianwei Zheng*"]
+    title: "Research on Large-Scale Disparity Image Matching Method Guided by Co-Visible Region"
+    booktitle: "Master's Thesis"
+    time: "2026"
+    image: "pubs/pub4.png"
+    venueIcon: "simple-icons:wikiversity"
+    venueColor: "#00649A"
+    abstract: ""
+
+newsItems:
+  - date: "Nov 2025"
+    text: "Successfully defended my Master's thesis proposal."
+  - date: "Aug 2025"
+    html: |
+      The first paper accepted by the <em>ISPRS Journal of Photogrammetry and Remote Sensing</em>.
+            <a class="cactus-link" href="https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260" target="_blank" rel="noopener">[Paper]</a>
+  - date: "Aug 2025"
+    html: |
+      Began a remote research internship at <strong>CFAR, A*STAR</strong>, supervised by
+            <a class="cactus-link" href="https://xingruiyu.github.io/">Dr. Xingrui Yu</a> and
+            in collaboration with <a class="cactus-link" href="https://vanzll.github.io/">Zhenglin Wan</a>.
+  - date: "Jul 2025"
+    html: "Attended the <em>2025 Annual Academic Conference on Photogrammetry and Remote Sensing, CSGPC</em> in Kunming, China."
+  - date: "Dec 2024"
+    html: |
+      Began a research internship at <strong>Baidu</strong> in Shenzhen,
+            supervised by <a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>,
+            exploring SOTA text-to-image and text-to-video generation.
+  - date: "Jul 2024"
+    html: "Began collaboration on the SCoDe project under the guidance of <a class=\"cactus-link\" href=\"https://ziminxia.github.io/\">Dr. Zimin Xia</a>."
+  - date: "Sep 2023"
+    html: |
+      Enrolled in the Master's program at the State Key Lab. LIESMARS, Wuhan University,
+            as a recommended exemption student,
+            under the supervision of <a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.
+  - date: ""
+    text: "..."
+
+projectsEditable:
+  - name: "SA-VLA"
+    description: "A research project on robust RL adaptation of flow-matching–based VLA models for robotic manipulation, focusing on generalization under distribution shifts in challenging benchmarks."
+    tags: ["Vision-Language-Action", "Reinforcement Learning", "Flow-Matching", "Robotic Manipulation", "Spatial Intelligence"]
+    time: "2026"
+    orgLogos: ["whu", "astar", "ntu"]
+
+  - name: "Co-visibility Guided Image Matching"
+    description: "A research project on robust image matching in robot vision, photogrammetry and remote sensing, using explicit co-visibility modeling to handle extreme scale and viewpoint variations."
+    tags: ["Co-visibility", "Image Matching", "3D Vision", "Segmentation", "Photogrammetry", "SCoDe", "SAMatcher"]
+    time: "2025"
+    repo: "https://github.com/Geo-Tell/SCoDe"
+    paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260"
+    orgLogos: ["whu", "epfl"]
+
+  - name: "GNDAS"
+    description: "The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system application designed for the analysis and assessment of natural disasters."
+    tags: ["Natural Disasters", "Geographic Information System (GIS)"]
+    time: "2022"
+    repo: "https://github.com/TwSphinx54/GNDAS"
+    orgLogos: ["whu"]
+
+  - name: "I2RSI"
+    description: "The I2RSI System (Intelligent Interpretation of Remote Sensing Images) is a web-based application for remote sensing image interpretation, powered by the Baidu PaddlePaddle deep learning framework."
+    tags: ["Remote Sensing", "Interpretation", "Deep Learning"]
+    time: "2022"
+    repo: "https://github.com/TwSphinx54/I2RSI"
+    orgLogos: ["whu", "baidu"]
+
+experienceMeta:
+  exp1.png:
+    name: "Wuhan University"
+    link: "https://en.whu.edu.cn/"
+  exp2.png:
+    name: "School of Remote Sensing and Information Engineering"
+    link: "https://rsgis.whu.edu.cn/English/Home.htm"
+  exp3.png:
+    name: "State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)"
+    link: "https://liesmars.whu.edu.cn/"
+  exp4.png:
+    name: "International Technology R&D Department, Baidu, Inc."
+    link: "https://www.baidu.com/"
+  exp5.png:
+    name: |
+      Centre for Frontier AI Research (CFAR),
+      Institute of High Performance Computing (IHPC), Agency for Science, Technology and Research (A*STAR)
+    link: "https://www.a-star.edu.sg/cfar"
+
+homeIntro:
+  paragraphs:
+    - segments:
+        - type: text
+          html: "Hi, I am a M.Sc. student at "
+        - type: org
+          key: whu
+          name: "Wuhan University"
+          href: "https://en.whu.edu.cn/"
+          alt: "Wuhan University logo"
+          width: 24
+          class: "mr-0.5 ml-0.5 mb-1 inline h-5 w-auto object-contain"
+        - type: text
+          html: ", working at the "
+        - type: org
+          key: liesmars
+          name: "State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)"
+          href: "https://liesmars.whu.edu.cn/"
+          alt: "LIESMARS logo"
+          width: 20
+          class: "mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
+        - type: text
+          html: ", under the guidance of "
+        - type: link
+          name: "Prof. Xianwei Zheng"
+          href: "https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm"
+        - type: text
+          html: ". My research focuses on <em class='highlight'>embodied intelligence</em> and <em class='highlight'>3D visual perception</em>, with an emphasis on how spatial representations support generalizable decision-making and agent-centric policy learning."
+
+    - segments:
+        - type: text
+          html: "My current work lies at the intersection of <em class='highlight'>computer vision</em>, <em class='highlight'>reinforcement learning</em>, and <em class='highlight'>generative modeling</em>, where I study how 2D and 3D representations can be unified to enable robust perception–action coupling. I am particularly interested in <em class='highlight'>structure-aware visual representations</em> that support cross-view understanding, generalization across environments, and interaction-driven learning in embodied settings."
+
+    - segments:
+        - type: text
+          html: "Previously, I explored generative AI for image and video synthesis during my internship at "
+        - type: org
+          key: baidu
+          name: "Baidu"
+          href: "https://www.baidu.com/"
+          alt: "Baidu logo"
+          width: 20
+          class: "mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
+        - type: text
+          html: ". I am currently a remote research intern at the "
+        - type: org
+          key: astar
+          name: "Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)"
+          href: "https://www.a-star.edu.sg/cfar"
+          alt: "A*STAR logo"
+          width: 20
+          class: "mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
+        - type: text
+          html: ", supervised by "
+        - type: link
+          name: "Dr. Xingrui Yu"
+          href: "https://xingruiyu.github.io/"
+        - type: text
+          html: ", where I work on <em class='highlight'>generalizable reinforcement learning for embodied agents</em>, with a focus on agent-centric formulations and transferable policies grounded in implicit spatial representations that support generalization across tasks and scenes."
+
+    - segments:
+        - type: text
+          html: "More broadly, my goal is to develop spatially grounded learning frameworks that bridge perception, geometry, and control, advancing the next generation of embodied systems that can reason about and act within complex real-world environments."
+
+acknowledgements:
+  title: "Acknowledgements:"
+  introLines:
+    - "I’m grateful to my collaborators and mentors for their guidance and support, especially"
+  mentors:
+    - name: "Prof. Xianwei Zheng"
+      href: "https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm"
+    - name: "Prof. Hanjiang Xiong"
+      href: "https://jszy.whu.edu.cn/xionghanjiang/zh_CN/index/526145/list/"
+    - name: "Dr. Xingrui Yu (A*STAR)"
+      href: "https://xingruiyu.github.io/"
+    - name: "Dr. Zimin Xia (EPFL)"
+      href: "https://ziminxia.github.io/"
+    - name: "Dr. Yan Zhang (Baidu)"
+      href: "https://scholar.google.com/citations?user=dcakOP4AAAAJ"
+  peersIntro: "and my colleagues/peers including"
+  peers:
+    - name: "Zhenglin Wan (NUS)"
+      href: "https://vanzll.github.io/"
+    - name: "Jiashen Huang (NTU)"
+      href: "https://jiashenhuang.github.io/"
+    - name: "Qiyuan Ma"
+      href: "https://www.researchgate.net/profile/Qiyuan-Ma-2"
+    - name: "Jintao Zhang"
+      href: "https://github.com/EATMustard"
+    - name: "Chenyu Zhao"
+      href: "https://zhaocy-ai.github.io/"
+    - name: "Ziqong Lu (HKU)"
+      href: "https://www.researchgate.net/profile/Ziqiong-Lu-2"
+  outro: "and others I’ve had the pleasure to work with."
+
+personalPhilosophy:
+  intro: "I follow Stoic philosophy. Life is a joyful ascent: a true mountaineer delights in the climb itself, not just the summit."
+  quote: "“Thou sufferest this justly: for thou choosest rather to become good to-morrow than to be good to-day.”"
+  cite: "— Marcus Aurelius, Meditations 8.22"
+  slowScience:
+    text: "Slow Science"
+    href: "http://slow-science.org/"
+  paragraphs:
+    - "We live in an age tyrannized by efficiency, outcomes, and speed, to the point that nothing lasts and nothing leaves a deep impression. In the midst of noisy bubbles and short-lived hype, I hope to take time to think carefully, to doubt, to refine, and to do research that is genuinely meaningful and worth remembering."
