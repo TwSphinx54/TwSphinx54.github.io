@@ -727,8 +727,9 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 
 	<script>
 		// UI behaviors: abstract toggle + image modal
-		function onReady(fn) {
-			if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn, { once: true });
+		function onReady(fn: () => void): void {
+			if (document.readyState === "loading")
+				document.addEventListener("DOMContentLoaded", fn, { once: true });
 			else fn();
 		}
 
@@ -774,36 +775,41 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 			});
 		}
 
-		function initImageModal() {
-			const imgModal = document.getElementById("img-modal");
-			const imgModalImg = document.getElementById("img-modal-img");
-			const imgModalClose = document.getElementById("img-modal-close");
+		function initImageModal(): void {
+			const imgModal = document.getElementById("img-modal") as HTMLDivElement | null;
+			const imgModalImg = document.getElementById("img-modal-img") as HTMLImageElement | null;
+			const imgModalClose = document.getElementById("img-modal-close") as HTMLButtonElement | null;
 
 			if (!imgModal || !imgModalImg) return;
 
-			function open(src) {
-				imgModalImg.src = src;
-				imgModal.classList.remove("hidden");
+			// Bind non-null references so TS is happy inside nested functions/handlers.
+			const modal = imgModal;
+			const modalImg = imgModalImg;
+			const modalClose = imgModalClose;
+
+			function open(src: string): void {
+				modalImg.src = src;
+				modal.classList.remove("hidden");
 				document.body.style.overflow = "hidden";
-				imgModalClose?.focus?.();
+				modalClose?.focus?.();
 			}
 
-			function close() {
-				imgModal.classList.add("hidden");
-				imgModalImg.src = "";
+			function close(): void {
+				modal.classList.add("hidden");
+				modalImg.src = "";
 				document.body.style.overflow = "";
 			}
 
-			imgModalClose?.addEventListener("click", close);
-			imgModal.addEventListener("click", (e) => {
-				if (e.target === imgModal) close();
+			modalClose?.addEventListener("click", close);
+			modal.addEventListener("click", (e: MouseEvent) => {
+				if (e.target === modal) close();
 			});
-			document.addEventListener("keydown", (e) => {
+			document.addEventListener("keydown", (e: KeyboardEvent) => {
 				if (e.key === "Escape") close();
 			});
 
 			// Delegate click from publication thumbnails only
-			document.addEventListener("click", (e) => {
+			document.addEventListener("click", (e: MouseEvent) => {
 				const t = e.target;
 				if (!(t instanceof HTMLImageElement)) return;
 				if (!t.classList.contains("pub-thumb-img")) return;
