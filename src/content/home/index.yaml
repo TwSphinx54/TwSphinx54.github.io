@@ -99,6 +99,25 @@ publicationsEditable:
       extended to multi-view correspondence estimation when co-visibility is explicitly modeled, offering new insights
       for fusion-based visual understanding.
 
+  - author: ["Jiashen Huang", "Xu Pan"]
+    title: "The Institutional Filter: How Trust Shapes Inequalities Between Domestic and Global AI Models"
+    booktitle: "Conference of the International Association for Media and Communication Research (Under Review)"
+    time: "2026"
+    image: "pubs/pub5_iamcr.png"
+    venueLogo: "icons/iamcr.svg"
+    abstract: >-
+      Artificial intelligence is increasingly woven into the way people communicate, think, and make decisions. Yet trust 
+      in AI does not grow evenly across contexts; it carries traces of national identity, institutional credibility, and 
+      emotional attachment. This study examines how institutional trust shapes user trust in domestic (DeepSeek) and 
+      global (ChatGPT) large language models (LLMs) in China. Specifically, it distinguishes between cognitive and affective 
+      dimensions of trust. Using survey data from 405 participants, we found that higher institutional trust strengthens 
+      emotional confidence in domestic AI models, while at low levels of institutional trust, this domestic advantage in 
+      perceived competence disappears. By examining the relationship between institutional trust and AI adoption, this study 
+      deepens theoretical insights into global communication inequalities in the digital era. The findings suggest that 
+      institutional trust operates as a social resource, channeling legitimacy into technological trust, thus contributing 
+      to the uneven distribution of trust in AI technologies across different societal groups. The findings offer policy 
+      insights for inclusive AI governance and the promotion of global technological equity.
+
   - author: ["Xu Pan", "Xianwei Zheng*"]
     title: "Research on Large-Scale Disparity Image Matching Method Guided by Co-Visible Region"
     booktitle: "Master's Thesis"
