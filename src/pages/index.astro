@@ -1,6 +1,7 @@
 ---
 import SocialList from "@/components/SocialList.astro";
 import PageLayout from "@/layouts/Base.astro";
+import ShaderGradientBg from "@/components/ShaderGradientBg.tsx";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import { getEntry } from "astro:content";
@@ -75,6 +76,13 @@ type PersonalPhilosophy = {
 	paragraphs?: string[];
 };
 
+type AcademicService = {
+	role: string;
+	venue: string;
+	venueLink?: string;
+	year: string;
+};
+
 // =========================
 // Content loading (YAML-driven data)
 // =========================
@@ -92,6 +100,7 @@ const orderFromYaml = homeEntry.data.order as string[] | undefined;
 const homeIntro = (homeEntry.data.homeIntro ?? null) as HomeIntro | null;
 const acknowledgements = (homeEntry.data.acknowledgements ?? null) as Acknowledgements | null;
 const personalPhilosophy = (homeEntry.data.personalPhilosophy ?? null) as PersonalPhilosophy | null;
+const academicServices = (homeEntry.data.academicServices ?? []) as AcademicService[];
 
 // =========================
 // Helpers (pure utilities)
@@ -116,6 +125,14 @@ function repoLabel(url: string): string {
 		return url;
 	} catch {
 		return url;
+	}
+}
+
+function isArxivLink(url: string): boolean {
+	try {
+		return new URL(url).hostname.includes("arxiv.org");
+	} catch {
+		return false;
 	}
 }
 
@@ -237,7 +254,8 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-	<section>
+    <ShaderGradientBg client:load />
+	<section class="glass rounded-2xl pr-6 pb-6">
 		<h1 class="title mb-6">Hello World!</h1>
 
 		{/* Home description (YAML-driven via homeIntro) */}
@@ -274,7 +292,7 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 		<SocialList />
 	</section>
 
-	<section class="mt-12" aria-label="News">
+	<section class="glass mt-6 rounded-2xl pr-6 pb-6" aria-label="News">
 		<h2 class="title mb-4 text-xl">News</h2>
 		<ul class="news-fade space-y-3 h-56 overflow-y-auto pr-2">
 			{newsItems.map((item) => (
@@ -306,7 +324,7 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 		</ul>
 	</section>
 
-	<section class="mt-12" aria-label="Experiences">
+	<section class="glass mt-6 rounded-2xl pr-6 pb-6" aria-label="Experiences">
 		<h2 class="title mb-4 text-xl">Experiences</h2>
 		<div class="flex flex-wrap items-center gap-6">
 			{
@@ -376,9 +394,10 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 		)}
 	</section>
 
-	<section class="mt-16" aria-label="Publications">
+	<section class="mt-4" aria-label="Publications">
 		<h2 class="title mb-4 text-xl">Publications</h2>
-		<dl class="space-y-4">
+		<div class="-mx-3 sm:-mx-4 md:-mx-6">
+			<dl class="space-y-4 px-3 sm:px-4 md:px-6">
 			{
 				cactusTech.map((pub) => {
 					const {
@@ -404,7 +423,7 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 						.replace(/[^a-z0-9\-]/g, "");
 
 					return (
-						<article class="pub-article group relative -ml-2 w-full overflow-hidden rounded-xl border border-zinc-200/70 bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:border-zinc-800/80 dark:bg-zinc-900/80">
+						<article class="pub-article group relative w-full overflow-hidden rounded-xl bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:bg-zinc-900/80">
 							<div class="grid grid-cols-1 gap-4 lg:flex lg:items-start lg:gap-6">
 								<div class="min-w-0 lg:flex-1">
 									<h3 class="text-lg font-semibold leading-snug tracking-tight">
@@ -511,7 +530,21 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 												target="_blank"
 												rel="noopener"
 											>
-												PAPER
+												{isArxivLink(paper) ? (
+													<>
+														<Icon
+															name="simple-icons:arxiv"
+															width="14"
+															height="14"
+															class="mr-1 inline-block"
+															style="color: #B31B1B"
+															aria-hidden="true"
+														/>
+														ARXIV
+													</>
+												) : (
+													"PAPER"
+												)}
 											</a>
 										)}
 									</div>
@@ -528,11 +561,11 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 											<Image
 												src={image}
 												alt="[Thumbnail]"
-												width={176}
-												height={96}
+												width={180}
+												height={120}
 												densities={[1, 2]}
 												data-fullsrc={fullSrc}
-												class="pub-thumb-img h-[96px] w-[176px] rounded-xl border-2 border-transparent object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:border-dashed group-hover:border-accent group-hover:shadow-lg"
+												class="pub-thumb-img h-[120px] w-[180px] rounded-xl border-2 border-transparent object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:border-dashed group-hover:border-accent group-hover:shadow-lg"
 												loading="lazy"
 												decoding="async"
 											/>
@@ -555,14 +588,16 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 					);
 				})
 			}
-		</dl>
+			</dl>
+		</div>
 	</section>
-	<section class="mt-16" aria-label="Projects">
+	<section class="mt-8" aria-label="Projects">
 		<h2 class="title mb-4 text-xl">Projects</h2>
 
-		<div class="grid -ml-2 grid-cols-1 gap-4 md:grid-cols-2">
+		<div class="-mx-3 sm:-mx-4 md:-mx-6">
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 px-3 sm:px-4 md:px-6">
 			{projects.map((p) => (
-				<article class="group relative w-full overflow-hidden rounded-xl border border-zinc-200/70 bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:border-zinc-800/80 dark:bg-zinc-900/80">
+				<article class="group relative w-full overflow-hidden rounded-xl bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:bg-zinc-900/80">
 					<div class="min-w-0">
 						<div class="flex flex-wrap items-center gap-2">
 							<h3 class="text-lg font-semibold leading-snug tracking-tight text-accent">
@@ -653,10 +688,46 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 					</div>
 				</article>
 			))}
+			</div>
 		</div>
-	</section>
+ 	</section>
 
-	<section class="mt-12" aria-label="Personal Philosophy">
+	<section class="glass mt-10 rounded-2xl pr-6 pb-6" aria-label="Academic Service">
+		<h2 class="title mb-4 text-xl">Academic Service</h2>
+
+		{academicServices.length > 0 ? (
+			<div class="overflow-x-auto">
+				<table class="w-full text-gray-700 dark:text-gray-300">
+ 					<tbody>
+ 						{academicServices.map((service) => (
+							<tr class="align-middle">
+								<td class="py-1 pr-2 align-middle w-6">
+									<span class="inline-block h-2 w-1 rounded-full bg-accent align-middle translate-y-[-1.5px]"></span>
+								</td>
+								<td class="py-1 pr-2 font-semibold align-middle">{service.role}</td>
+								<td class="py-1 px-2 align-middle">
+ 									{service.venueLink ? (
+ 										<a class="cactus-link" href={service.venueLink} target="_blank" rel="noopener">
+ 											{service.venue}
+ 										</a>
+ 									) : (
+ 										<span>{service.venue}</span>
+ 									)}
+ 								</td>
+								<td class="py-1 pl-2 align-middle whitespace-nowrap text-right">
+									<span class="rounded-full bg-gray-100 px-2 py-0.5 font-medium text-sm text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+										{service.year}
+									</span>
+								</td>
+ 							</tr>
+ 						))}
+ 					</tbody>
+ 				</table>
+ 			</div>
+ 		) : null}
+ 	</section>
+
+	<section class="glass mt-6 rounded-2xl pr-6 pb-6" aria-label="Personal Philosophy">
 		<h2 class="title mb-4 text-xl">Personal Philosophy</h2>
 
 		{personalPhilosophy && (
@@ -825,6 +896,12 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 	</script>
 
 	<style>
+		:global(.glass) {
+			backdrop-filter: blur(20px) saturate(120%);
+			-webkit-backdrop-filter: blur(20px) saturate(120%);
+			background: transparent;
+		}
+
 		:global(.news-fade) {
 			-webkit-mask-image: linear-gradient(
 				to bottom,
@@ -842,6 +919,10 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 			mask-size: 100% 100%;
 			-webkit-mask-repeat: no-repeat;
 			mask-repeat: no-repeat;
+		}
+
+		:global(.news-fade::-webkit-scrollbar) {
+			display: none;
 		}
 	</style>
 </PageLayout>

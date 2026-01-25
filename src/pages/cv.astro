@@ -1,6 +1,7 @@
 ---
 import PageLayout from "@/layouts/Base.astro";
 import SocialList from "@/components/SocialList.astro";
+import ShaderGradientBg from "@/components/ShaderGradientBg.tsx";
 
 const meta = {
 	description: "CV — seeking Ph.D. opportunities in embodied intelligence, reinforcement learning, and generative AI.",
@@ -9,7 +10,8 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-	<section class="max-w-5xl">
+	<ShaderGradientBg client:load />
+	<section class="glass relative z-10 max-w-5xl rounded-2xl pr-6 pb-6">
 		<h1 class="title  mb-6">Curriculum Vitae</h1>
 
 		<p class="mb-4 text-gray-700 dark:text-gray-300">
@@ -34,7 +36,8 @@ const meta = {
 		<section class="mb-6">
 			<h2 class="font-semibold text-gray-800 dark:text-gray-100 mb-2">Research interests</h2>
 			<p class="text-gray-700 dark:text-gray-300">
-				Embodied Intelligence · Reinforcement Learning · Vision-language Models ·
+				Embodied Intelligence · Reinforcement Learning · Vision-Language Models
+                <br />
 				3D Vision · Trustworthy Spatial Representations · Structure-aware Generative Models
 			</p>
 		</section>
@@ -49,3 +52,11 @@ const meta = {
 		<SocialList />
 	</section>
 </PageLayout>
+
+<style is:global>
+  .glass {
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    background: transparent;
+  }
+</style>

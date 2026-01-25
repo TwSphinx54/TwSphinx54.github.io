@@ -28,7 +28,9 @@ const ogOptions: SatoriOptions = {
 	width: 1200,
 };
 
-const markup = (title: string, pubDate: string) =>
+type SatoriNode = Parameters<typeof satori>[0];
+
+const markup = (title: string, pubDate: string): SatoriNode =>
 	html`<div tw="flex flex-col w-full h-full bg-[#1d1f21] text-[#c9cacc]">
 		<div tw="flex flex-col flex-1 w-full p-10 justify-center">
 			<p tw="text-2xl mb-6">${pubDate}</p>
@@ -46,7 +48,7 @@ const markup = (title: string, pubDate: string) =>
 			</div>
 			<p>by ${siteConfig.author}</p>
 		</div>
-	</div>`;
+	</div>` as unknown as SatoriNode;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 

@@ -126,6 +126,13 @@ const PersonalPhilosophy = z.object({
 	paragraphs: z.array(z.string()).default([]),
 });
 
+const AcademicService = z.object({
+	role: z.string(),
+	venue: z.string(),
+	venueLink: z.string().optional(),
+	year: z.string(),
+});
+
 const home = defineCollection({
 	type: "data",
 	schema: z.object({
@@ -140,6 +147,7 @@ const home = defineCollection({
 		homeIntro: HomeIntro.optional(),
 		acknowledgements: Acknowledgements.optional(),
 		personalPhilosophy: PersonalPhilosophy.optional(),
+		academicServices: z.array(AcademicService).optional(),
 	}),
 });
 

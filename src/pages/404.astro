@@ -1,5 +1,6 @@
 ---
 import PageLayout from "@/layouts/Base.astro";
+import ShaderGradient404 from "@/components/ShaderGradient404.tsx";
 
 const meta = {
 	description: "Oops! It looks like this page is lost in space!",
@@ -8,6 +9,10 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-	<h1 class="title mb-6">404 | Oops something went wrong</h1>
-	<p class="mb-8">Please use the navigation to find your way back</p>
+	<div style="position: relative; z-index: 2;">
+		<h1 class="title mb-6">404 | Oops! Something went wrong</h1>
+		<p class="mb-8">Please find your way back home.</p>
+		<a href="/" style="position: relative; z-index: 2; display: inline-block; margin-top: 1rem;">← Back to Home</a>
+	</div>
+    <ShaderGradient404 client:load />
 </PageLayout>
