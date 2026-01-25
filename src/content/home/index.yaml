@@ -105,6 +105,7 @@ publicationsEditable:
     time: "2026"
     image: "pubs/pub5_iamcr.png"
     venueLogo: "icons/iamcr.svg"
+    venueRank: "Communication"
     abstract: >-
       Artificial intelligence is increasingly woven into the way people communicate, think, and make decisions. Yet trust 
       in AI does not grow evenly across contexts; it carries traces of national identity, institutional credibility, and 
