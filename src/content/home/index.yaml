@@ -6,15 +6,18 @@
 publicationsEditable:
   - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Youkai Ke", "Ming Sun", "Rui Wang", "Ziwei Wang", "Ivor Tsang"]
     title: "SA-VLA: Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models"
-    booktitle: "International Conference on Machine Learning (Under Review)"
+    # booktitle: "International Conference on Machine Learning"
+    booktitle: "(Under Review)"
     time: "2026"
-    venueRank: "h5i 272 · CCF A"
+    # venueRank: "h5i 272 · CCF A"
     # doi: "https://doi.org/10.48550/arXiv.2510.25889"
     # paper: "https://arxiv.org/abs/2510.25889v1"
     code: "https://github.com/TwSphinx54/SA-VLA"
     demo: "https://xupan.top/Projects/savla"
     image: "pubs/pub1_savla.gif"
-    venueLogo: "icons/icml.svg"
+    # venueLogo: "icons/icml.svg"
+    venueIcon: "simple-icons:arxiv"
+    venueColor: "#B31B1B"
     abstract: >-
       Vision-Language-Action (VLA) models achieve strong performance in robotic manipulation, but reinforcement 
       learning (RL) fine-tuning often degrades generalization under spatial distribution shifts. We analyze 
@@ -55,11 +58,14 @@ publicationsEditable:
 
   - author: ["Ming Sun", "Rui Wang", "Xingrui Yu", "Lihua Jing", "Hangyu Du", "Zhenglin Wan", "Xu Pan", "Ivor Tsang"]
     title: "SleeperVLA: Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
-    booktitle: "International Conference on Machine Learning (Under Review)"
+    # booktitle: "International Conference on Machine Learning"
+    booktitle: "(Under Review)"
     time: "2026"
     image: "pubs/pub3_sleepervla.png"
-    venueRank: "h5i 272 · CCF A"
-    venueLogo: "icons/icml.svg"
+    # venueRank: "h5i 272 · CCF A"
+    # venueLogo: "icons/icml.svg"
+    venueIcon: "simple-icons:arxiv"
+    venueColor: "#B31B1B"
     abstract: >-
       Vision-Language-Action models (VLAs) support generalist robotic control by enabling end-to-end decision policies
       directly from multi-modal inputs. As trained VLAs are increasingly shared and adapted, protecting model ownership
