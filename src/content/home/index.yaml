@@ -11,7 +11,8 @@ publicationsEditable:
     venueRank: "h5i 272 · CCF A"
     # doi: "https://doi.org/10.48550/arXiv.2510.25889"
     # paper: "https://arxiv.org/abs/2510.25889v1"
-    # code: "https://github.com/Geo-Tell/SCoDe"
+    code: "https://github.com/TwSphinx54/SA-VLA"
+    demo: "https://xupan.top/Projects/savla"
     image: "pubs/pub1_savla.gif"
     venueLogo: "icons/icml.svg"
     abstract: >-
@@ -163,6 +164,8 @@ projectsEditable:
     description: "A research project on robust RL adaptation of flow-matching–based VLA models for robotic manipulation, focusing on generalization under distribution shifts in challenging benchmarks."
     tags: ["Vision-Language-Action Model", "Robotic Manipulation", "Flow-Matching", "Reinforcement Learning"]
     time: "2026"
+    repo: "https://github.com/TwSphinx54/SA-VLA"
+    demo: "https://xupan.top/Projects/savla"
     orgLogos: ["whu", "astar", "ntu", "nus", "cas"]
 
   - name: "Co-visibility Guided Image Matching"

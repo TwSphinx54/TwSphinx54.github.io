@@ -41,6 +41,7 @@ const PublicationEditable = z.object({
 	doi: z.string().optional(),
 	paper: z.string().optional(),
 	code: z.string().optional(),
+	demo: z.string().optional(),
 	image: z.string().optional(),
 	venueIcon: z.string().optional(),
 	venueColor: z.string().optional(),
