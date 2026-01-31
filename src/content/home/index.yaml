@@ -155,7 +155,7 @@ newsItems:
     html: |
       Began a research internship at <strong>Baidu</strong> in Shenzhen,
             supervised by <a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>,
-            exploring SOTA text-to-image and text-to-video generation.
+            exploring frontier text-to-image and text-to-video generation.
   - date: "Jul 2024"
     html: "Began collaboration on the SCoDe project under the guidance of <a class=\"cactus-link\" href=\"https://ziminxia.github.io/\">Dr. Zimin Xia</a>."
   - date: "Sep 2023"
