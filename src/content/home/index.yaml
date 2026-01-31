@@ -135,8 +135,9 @@ publicationsEditable:
     abstract: ""
 
 newsItems:
-  # - date: "Feb 2026"
-  #   html: "Our work <strong>SA-VLA</strong> is now available at arXiv and GitHub."
+  - date: "Jan 2026"
+    html: |
+      Our work <strong>SA-VLA</strong> is now available at <a class="cactus-link" href="https://github.com/TwSphinx54/SA-VLA" target="_blank" rel="noopener">GitHub</a>.
   - date: "Nov 2025"
     text: "Successfully defended my Master's thesis proposal."
   - date: "Aug 2025"
