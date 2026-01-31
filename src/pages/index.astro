@@ -936,5 +936,20 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 		:global(.news-fade::-webkit-scrollbar) {
 			display: none;
 		}
+
+		/* Shader gradient delayed fade-in */
+		:global(canvas) {
+			opacity: 0;
+			animation: shaderFadeIn 1s ease-in-out 0.2s forwards;
+		}
+
+		@keyframes shaderFadeIn {
+			from {
+				opacity: 0;
+			}
+			to {
+				opacity: 1;
+			}
+		}
 	</style>
 </PageLayout>
