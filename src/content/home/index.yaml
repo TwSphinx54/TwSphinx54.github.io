@@ -10,8 +10,8 @@ publicationsEditable:
     booktitle: "(Under Review)"
     time: "2026"
     # venueRank: "h5i 272 · CCF A"
-    # doi: "https://doi.org/10.48550/arXiv.2510.25889"
-    # paper: "https://arxiv.org/abs/2510.25889v1"
+    doi: "https://doi.org/10.48550/arXiv.2602.00743"
+    paper: "https://arxiv.org/abs/2602.00743"
     code: "https://github.com/TwSphinx54/SA-VLA"
     demo: "https://xupan.top/Projects/savla"
     image: "pubs/pub1_savla.gif"
@@ -138,6 +138,7 @@ newsItems:
   - date: "Jan 2026"
     html: |
       Our work <strong>SA-VLA</strong> is now available at <a class="cactus-link" href="https://github.com/TwSphinx54/SA-VLA" target="_blank" rel="noopener">GitHub</a>.
+            <a class="cactus-link" href="https://arxiv.org/abs/2602.00743" target="_blank" rel="noopener">[arXiv]</a>
   - date: "Nov 2025"
     text: "Successfully defended my Master's thesis proposal."
   - date: "Aug 2025"
@@ -173,6 +174,7 @@ projectsEditable:
     time: "2026"
     repo: "https://github.com/TwSphinx54/SA-VLA"
     demo: "https://xupan.top/Projects/savla"
+    paper: "https://arxiv.org/abs/2602.00743"
     orgLogos: ["whu", "astar", "ntu", "nus", "cas"]
 
   - name: "Co-visibility Guided Image Matching"
