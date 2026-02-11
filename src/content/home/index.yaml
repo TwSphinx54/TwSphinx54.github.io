@@ -324,10 +324,10 @@ personalPhilosophy:
     - "We live in an age tyrannized by efficiency, outcomes, and speed, to the point that nothing lasts and nothing leaves a deep impression. In the midst of noisy bubbles and short-lived hype, I hope to take time to think carefully, to doubt, to refine, and to do research that is genuinely meaningful and worth remembering."
 
 academicServices:
-  - role: "Reviewer"
-    venue: "43rd International Conference on Machine Learning (ICML'26)"
-    venueLink: "https://icml.cc/Conferences/2026"
-    year: "2026"
+  # - role: "Reviewer"
+  #   venue: "43rd International Conference on Machine Learning (ICML'26)"
+  #   venueLink: "https://icml.cc/Conferences/2026"
+  #   year: "2026"
   - role: "Member"
     venue: "ISPRS Student Consortium (ISPRS SC)"
     venueLink: "https://sc.isprs.org/"
