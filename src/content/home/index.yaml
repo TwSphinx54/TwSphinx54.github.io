@@ -4,7 +4,7 @@
 # 3) Ensure the filename contains that key (case-insensitive), e.g. "nus.svg" or "logo-nus.png"
 
 publicationsEditable:
-  - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Youkai Ke", "Ming Sun", "Rui Wang", "Ziwei Wang", "Ivor Tsang"]
+  - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu†", "Xianwei Zheng", "Youkai Ke", "Ming Sun", "Rui Wang", "Ziwei Wang", "Ivor Tsang"]
     title: "SA-VLA: Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models"
     # booktitle: "International Conference on Machine Learning"
     booktitle: "(Under Review)"
@@ -29,7 +29,7 @@ publicationsEditable:
       tasks. Experiments on challenging multi-object and cluttered benchmarks demonstrate that SA-VLA enables 
       stable RL fine-tuning and substantially more robust, transferable behaviors.
 
-  - author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"]
+  - author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng†"]
     title: "Scale-aware Co-visible Region Detection for Image Matching"
     booktitle: "ISPRS Journal of Photogrammetry and Remote Sensing"
     time: "2025"
@@ -56,7 +56,7 @@ publicationsEditable:
       of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images
       with drastic scale variations.
 
-  - author: ["Ming Sun", "Rui Wang", "Xingrui Yu", "Lihua Jing", "Hangyu Du", "Zhenglin Wan", "Xu Pan", "Ivor Tsang"]
+  - author: ["Ming Sun", "Rui Wang", "Xingrui Yu†", "Lihua Jing", "Hangyu Du", "Zhenglin Wan", "Xu Pan", "Ivor Tsang"]
     title: "SleeperVLA: Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
     # booktitle: "International Conference on Machine Learning"
     booktitle: "(Under Review)"
@@ -78,7 +78,7 @@ publicationsEditable:
       enables reliable and unique ownership verification while preserving benign task performance. Further results show that
       the embedded watermark remains detectable under post-release model adaptation.
 
-  - author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "He Chen*", "Xianwei Zheng*"]
+  - author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "He Chen†", "Xianwei Zheng†"]
     title: "SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching"
     booktitle: "IEEE Transactions on Geoscience and Remote Sensing (Under Review)"
     time: "2026"
@@ -106,7 +106,7 @@ publicationsEditable:
       for fusion-based visual understanding.
 
   - author: ["Jiashen Huang", "Xu Pan"]
-    title: "The Institutional Filter: How Trust Shapes Inequalities Between Domestic and Global AI Models"
+    title: "The Institutional Filter of AI Trust: How Domestic and Global Models Become Unequally Trusted"
     booktitle: "Conference of the International Association for Media and Communication Research (Under Review)"
     time: "2026"
     image: "pubs/pub5_iamcr.png"
@@ -125,7 +125,7 @@ publicationsEditable:
       to the uneven distribution of trust in AI technologies across different societal groups. The findings offer policy 
       insights for inclusive AI governance and the promotion of global technological equity.
 
-  - author: ["Xu Pan", "Xianwei Zheng*"]
+  - author: ["Xu Pan", "Xianwei Zheng†"]
     title: "Research on Large-Scale Disparity Image Matching Method Guided by Co-Visible Region"
     booktitle: "Master's Thesis"
     time: "2026"

@@ -443,14 +443,14 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 									<div class="mt-2 flex flex-wrap gap-2">
 										<span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 font-medium text-sm text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
 											{venueLogo ? (
-												<img
-													src={assetToSrc(venueLogo)}
+												<Image
+													src={venueLogo}
 													alt="Venue logo"
-													width="14"
-													height="14"
-													class="mr-1 inline-block h-[14px] w-[14px] object-contain align-[-0.2em]"
+													width={14}
+													height={14}
+													densities={[1, 2]}
 													loading="lazy"
-													decoding="async"
+													class="mr-1 inline-block h-[14px] w-[14px] object-contain align-[-0.2em]"
 												/>
 											) : (
 												venueIcon && (
@@ -689,7 +689,7 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 													width={28}
 													densities={[1, 2]}
 													loading="lazy"
-													class="ml-1 inline h-6 w-auto object-contain opacity-90"
+													class="ml-1 inline h-5 w-auto object-contain opacity-90"
 												/>
 											)
 										);
