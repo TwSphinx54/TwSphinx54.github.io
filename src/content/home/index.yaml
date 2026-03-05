@@ -4,9 +4,26 @@
 # 3) Ensure the filename contains that key (case-insensitive), e.g. "nus.svg" or "logo-nus.png"
 
 publicationsEditable:
+  # - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Ivor Tsang"]
+  #   title: "Ongoing Project"
+  #   booktitle: "Annual Conference on Neural Information Processing Systems (NeurIPS)"
+  #   # booktitle: "(Under Review)"
+  #   time: "2026"
+  #   # venueRank: "h5i 272 · CCF A"
+  #   # doi: "https://doi.org/10.48550/arXiv.2602.00743"
+  #   # paper: "https://arxiv.org/abs/2602.00743"
+  #   # code: "https://github.com/TwSphinx54/SA-VLA"
+  #   # demo: "https://xupan.top/Projects/savla"
+  #   # image: "pubs/pub1_savla.gif"
+  #   venueLogo: "icons/neurips.svg"
+  #   # venueIcon: "simple-icons:arxiv"
+  #   # venueColor: "#B31B1B"
+  #   abstract: >-
+  #     ...
+
   - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Youkai Ke", "Ming Sun", "Rui Wang", "Ziwei Wang", "Ivor Tsang"]
     title: "SA-VLA: Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models"
-    # booktitle: "International Conference on Machine Learning"
+    # booktitle: "International Conference on Machine Learning (ICML)"
     booktitle: "(Under Review)"
     time: "2026"
     # venueRank: "h5i 272 · CCF A"
@@ -58,7 +75,7 @@ publicationsEditable:
 
   - author: ["Ming Sun", "Rui Wang", "Xingrui Yu*", "Lihua Jing", "Hangyu Du", "Zhenglin Wan", "Xu Pan", "Ivor Tsang"]
     title: "SleeperVLA: Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
-    # booktitle: "International Conference on Machine Learning"
+    # booktitle: "International Conference on Machine Learning (ICML)"
     booktitle: "(Under Review)"
     time: "2026"
     image: "pubs/pub3_sleepervla.png"
@@ -135,6 +152,9 @@ publicationsEditable:
     abstract: ""
 
 newsItems:
+  # - date: "May 2026"
+  #   html: |
+  #     Attended the <em>Vision and Learning Seminar (VALSE) 2026</em> in Wuhan, China.
   - date: "Jan 2026"
     html: |
       Our work <strong>SA-VLA</strong> is now available at <a class="cactus-link" href="https://github.com/TwSphinx54/SA-VLA" target="_blank" rel="noopener">GitHub</a>.
@@ -315,7 +335,7 @@ acknowledgements:
 
 personalPhilosophy:
   intro: "I follow Stoic philosophy. Life is a joyful ascent: a true mountaineer delights in the climb itself, not just the summit."
-  quote: "“Thou sufferest this justly: for thou choosest rather to become good to-morrow than to be good to-day.”"
+  quote: "Thou sufferest this justly: for thou choosest rather to become good to-morrow than to be good to-day."
   cite: "— Marcus Aurelius, Meditations 8.22"
   slowScience:
     text: "Slow Science"
@@ -332,3 +352,11 @@ academicServices:
     venue: "ISPRS Student Consortium (ISPRS SC)"
     venueLink: "https://sc.isprs.org/"
     year: "2024"
+  - role: "Volunteer"
+    venue: "2024 International Graduate Workshop on Geo-Informatics (IGWG'24)"
+    venueLink: "https://irsgis.pku.edu.cn/tzgg/161276.htm"
+    year: "2024"
+  - role: "Volunteer"
+    venue: "2023 International Graduate Workshop on Geo-Informatics (IGWG'23)"
+    venueLink: "https://mp.weixin.qq.com/s/3pia44ES-6UbqnmMn3TGww"
+    year: "2023"
