@@ -154,7 +154,7 @@ publicationsEditable:
 newsItems:
   # - date: "May 2026"
   #   html: |
-  #     Attended the <em>Vision and Learning Seminar (VALSE) 2026</em> in Wuhan, China.
+  #     Attended the <em>2026 Vision and Learning Seminar (VALSE)</em> in Wuhan, China.
   - date: "Jan 2026"
     html: |
       Our work <strong>SA-VLA</strong> is now available at <a class="cactus-link" href="https://github.com/TwSphinx54/SA-VLA" target="_blank" rel="noopener">GitHub</a>.
@@ -353,10 +353,10 @@ academicServices:
     venueLink: "https://sc.isprs.org/"
     year: "2024"
   - role: "Volunteer"
-    venue: "2024 International Graduate Workshop on Geo-Informatics (IGWG'24)"
-    venueLink: "https://irsgis.pku.edu.cn/tzgg/161276.htm"
-    year: "2024"
-  - role: "Volunteer"
     venue: "2023 International Graduate Workshop on Geo-Informatics (IGWG'23)"
     venueLink: "https://mp.weixin.qq.com/s/3pia44ES-6UbqnmMn3TGww"
     year: "2023"
+  - role: "Volunteer"
+    venue: "2022 International Graduate Workshop on Geo-Informatics (IGWG'22)"
+    venueLink: "https://www.polyu.edu.hk/lsgi/news-and-events/news/2022/1212-international-graduate-workshop-on-geoinformatics-2022/?sc_lang=en"
+    year: "2022"
