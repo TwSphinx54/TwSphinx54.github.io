@@ -41,7 +41,7 @@ const PublicationEditable = z.object({
 	doi: z.string().optional(),
 	paper: z.string().optional(),
 	code: z.string().optional(),
-	demo: z.string().optional(),
+	site: z.string().optional(),
 	image: z.string().optional(),
 	venueIcon: z.string().optional(),
 	venueColor: z.string().optional(),
@@ -64,7 +64,7 @@ const ProjectEditable = z.object({
 	tags: z.array(z.string()).optional(),
 	time: z.string().optional(),
 	repo: z.string().optional(),
-	demo: z.string().optional(),
+	site: z.string().optional(),
 	paper: z.string().optional(),
 	orgLogos: z
 		.array(z.string())

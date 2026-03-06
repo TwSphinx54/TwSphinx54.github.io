@@ -18,7 +18,7 @@ type PublicationEditable = {
 	doi?: string;
 	paper?: string;
 	code?: string;
-	demo?: string;
+	site?: string;
 	image?: string;
 	venueIcon?: string;
 	venueColor?: string;
@@ -47,7 +47,7 @@ type ProjectEditable = {
 	tags?: string[];
 	time?: string;
 	repo?: string;
-	demo?: string;
+	site?: string;
 	paper?: string;
 	orgLogos?: string[];
 };
@@ -409,7 +409,7 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 						doi,
 						paper,
 						code,
-						demo,
+						site,
 						abstract,
 						venueIcon,
 						venueColor,
@@ -515,14 +515,14 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 												CODE
 											</a>
 										)}
-										{demo && (
+										{site && (
 											<a
 												class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-												href={demo}
+												href={site}
 												target="_blank"
 												rel="noopener"
 											>
-												DEMO
+												SITE
 											</a>
 										)}
 										{doi && (
@@ -655,14 +655,14 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 									</a>
 								)}
 
-								{p.demo && (
+								{p.site && (
 									<a
 										class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-										href={p.demo}
+										href={p.site}
 										target="_blank"
 										rel="noopener"
 									>
-										DEMO
+										SITE
 									</a>
 								)}
 								{p.paper && (

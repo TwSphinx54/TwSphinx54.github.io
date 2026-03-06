@@ -30,7 +30,7 @@ publicationsEditable:
     doi: "https://doi.org/10.48550/arXiv.2602.00743"
     paper: "https://arxiv.org/abs/2602.00743"
     code: "https://github.com/TwSphinx54/SA-VLA"
-    demo: "https://xupan.top/Projects/savla"
+    site: "https://xupan.top/Projects/savla"
     image: "pubs/pub1_savla.gif"
     # venueLogo: "icons/icml.svg"
     venueIcon: "simple-icons:arxiv"
@@ -54,7 +54,7 @@ publicationsEditable:
     doi: "https://doi.org/10.1016/j.isprsjprs.2025.08.015"
     paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260"
     code: "https://github.com/Geo-Tell/SCoDe"
-    demo: "https://xupan.top/Projects/scode"
+    site: "https://xupan.top/Projects/scode"
     image: "pubs/pub0_scode.png"
     venueIcon: "simple-icons:elsevier"
     venueColor: "#FF6C00"
@@ -102,7 +102,7 @@ publicationsEditable:
     time: "2026"
     venueRank: "h5i 156 · JCR Q1 · IF 8.6"
     code: "https://github.com/TwSphinx54/SAMatcher"
-    demo: "https://xupan.top/Projects/samatcher"
+    site: "https://xupan.top/Projects/samatcher"
     image: "pubs/pub4_samatcher.png"
     venueIcon: "simple-icons:ieee"
     venueColor: "#00629B"
@@ -196,7 +196,7 @@ projectsEditable:
     tags: ["Vision-Language-Action Model", "Robotic Manipulation", "Flow-Matching", "Reinforcement Learning"]
     time: "2026"
     repo: "https://github.com/TwSphinx54/SA-VLA"
-    demo: "https://xupan.top/Projects/savla"
+    site: "https://xupan.top/Projects/savla"
     paper: "https://arxiv.org/abs/2602.00743"
     orgLogos: ["whu", "astar", "ntu", "nus", "cas"]
 
@@ -205,6 +205,7 @@ projectsEditable:
     tags: ["Co-visibility", "Image Matching", "3D Vision", "Segmentation", "Photogrammetry", "SCoDe", "SAMatcher"]
     time: "2025"
     repo: "https://github.com/Geo-Tell/SCoDe"
+    site: "https://xupan.top/Projects/scode"
     paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260"
     orgLogos: ["whu", "epfl"]
 
