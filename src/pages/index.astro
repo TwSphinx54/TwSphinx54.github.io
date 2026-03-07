@@ -18,6 +18,7 @@ type PublicationEditable = {
 	doi?: string;
 	paper?: string;
 	code?: string;
+	huggingface?: string;
 	site?: string;
 	image?: string;
 	venueIcon?: string;
@@ -409,6 +410,7 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 						doi,
 						paper,
 						code,
+						huggingface,
 						site,
 						abstract,
 						venueIcon,
@@ -513,6 +515,16 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 												rel="noopener"
 											>
 												CODE
+											</a>
+										)}
+										{huggingface && (
+											<a
+												class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
+												href={huggingface}
+												target="_blank"
+												rel="noopener"
+											>
+												HF
 											</a>
 										)}
 										{site && (
