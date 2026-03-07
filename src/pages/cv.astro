@@ -4,48 +4,99 @@ import SocialList from "@/components/SocialList.astro";
 import ShaderGradientBg from "@/components/ShaderGradientBg.tsx";
 
 const meta = {
-	description: "CV — seeking Ph.D. opportunities in embodied intelligence, reinforcement learning, and generative AI.",
+	description:
+		"CV — seeking Ph.D. opportunities in embodied intelligence, reinforcement learning, and generative AI.",
 	title: "CV",
 };
 ---
 
 <PageLayout meta={meta}>
 	<ShaderGradientBg client:load />
-	<section class="glass relative z-10 max-w-5xl rounded-2xl pr-6 pb-6">
-		<h1 class="title  mb-6">Curriculum Vitae</h1>
+	<section class="glass relative z-10 mt-4 max-w-5xl rounded-2xl pb-6 pr-6">
+		<a
+			href="/"
+			class="group mb-6 inline-flex items-center gap-x-2 text-sm font-semibold text-zinc-500 transition-colors hover:text-accent"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-4 w-4 transition-transform group-hover:-translate-x-1"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2.5"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<line x1="19" y1="12" x2="5" y2="12"></line>
+				<polyline points="12 19 5 12 12 5"></polyline>
+			</svg>
+			Back to Home
+		</a>
+		<h1 class="title mb-6">Curriculum Vitae</h1>
 
 		<p class="mb-4 text-gray-700 dark:text-gray-300">
 			I am currently seeking a <strong class="text-accent">Ph.D.</strong> opportunity in
-			<em class="highlight">embodied intelligence</em>, <em class="highlight">reinforcement learning</em>, and 
-			<em class="highlight">3D vision</em>, with a focus on <em>spatially grounded learning for embodied agents</em>, 
-			particularly the integration of <em>implicit 2D/3D representations for generalizable policy learning and trustworthy spatial reasoning</em>.
+			<em class="highlight">embodied intelligence</em>, <em class="highlight"
+				>reinforcement learning</em
+			>, and
+			<em class="highlight">3D vision</em>, with a focus on <em
+				>spatially grounded learning for embodied agents</em
+			>, particularly the integration of <em
+				>implicit 2D/3D representations for generalizable policy learning and trustworthy spatial
+				reasoning</em
+			>.
 		</p>
 
-		<div class="flex flex-wrap gap-3 mb-6">
-			<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10" href="https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/Resume.pdf" target="_blank" rel="noopener" aria-label="Download Resume English">
+		<div class="mb-6 flex flex-wrap gap-3">
+			<a
+				class="cactus-link inline-flex items-center rounded border border-zinc-300 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-accent/10 dark:text-gray-300"
+				href="https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/Resume.pdf"
+				target="_blank"
+				rel="noopener"
+				aria-label="Download Resume English"
+			>
 				Download CV (EN)
 			</a>
-			<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10" href="https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/Resume_zh_CN.pdf" target="_blank" rel="noopener" aria-label="Download Resume Chinese">
+			<a
+				class="cactus-link inline-flex items-center rounded border border-zinc-300 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-accent/10 dark:text-gray-300"
+				href="https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/Resume_zh_CN.pdf"
+				target="_blank"
+				rel="noopener"
+				aria-label="Download Resume Chinese"
+			>
 				Download CV (ZH)
 			</a>
-			<a class="cactus-link inline-flex items-center rounded border border-zinc-300 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 transition hover:bg-accent/10" href="https://linkedin.com/in/xupanwhu" target="_blank" rel="noopener" aria-label="LinkedIn profile">
+			<a
+				class="cactus-link inline-flex items-center rounded border border-zinc-300 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-accent/10 dark:text-gray-300"
+				href="https://linkedin.com/in/xupanwhu"
+				target="_blank"
+				rel="noopener"
+				aria-label="LinkedIn profile"
+			>
 				LinkedIn
 			</a>
 		</div>
 
 		<section class="mb-6">
-			<h2 class="font-semibold text-gray-800 dark:text-gray-100 mb-2">Research interests</h2>
+			<h2 class="mb-2 font-semibold text-gray-800 dark:text-gray-100">Research interests</h2>
 			<p class="text-gray-700 dark:text-gray-300">
 				Embodied Intelligence · Reinforcement Learning · Vision-Language Models
-                <br />
+				<br />
 				3D Vision · Trustworthy Spatial Representations · Structure-aware Generative Models
 			</p>
 		</section>
 
 		<section class="mb-6">
-			<h2 class="font-semibold text-gray-800 dark:text-gray-100 mb-2">Contact</h2>
-			<p class="text-gray-700 dark:text-gray-300 mb-2">For inquiries or collaborations, email: <a class="cactus-link" href="mailto:panxurs@whu.edu.cn">panxurs@whu.edu.cn</a></p>
-			<p class="text-gray-700 dark:text-gray-300">Open to remote and on-site Ph.D. positions. Happy to share references and detailed materials on request.</p>
+			<h2 class="mb-2 font-semibold text-gray-800 dark:text-gray-100">Contact</h2>
+			<p class="mb-2 text-gray-700 dark:text-gray-300">
+				For inquiries or collaborations, email: <a
+					class="cactus-link"
+					href="mailto:panxurs@whu.edu.cn">panxurs@whu.edu.cn</a>
+			</p>
+			<p class="text-gray-700 dark:text-gray-300">
+				Open to remote and on-site Ph.D. positions. Happy to share references and detailed materials
+				on request.
+			</p>
 		</section>
 
 		<!-- minimal social links, consistent with home page -->
@@ -54,24 +105,24 @@ const meta = {
 </PageLayout>
 
 <style is:global>
-  .glass {
-    backdrop-filter: blur(20px) saturate(120%);
-    -webkit-backdrop-filter: blur(20px) saturate(120%);
-    background: transparent;
-  }
+	.glass {
+		backdrop-filter: blur(20px) saturate(120%);
+		-webkit-backdrop-filter: blur(20px) saturate(120%);
+		background: transparent;
+	}
 
-  /* Shader gradient delayed fade-in */
-  canvas {
-    opacity: 0;
-    animation: shaderFadeIn 1s ease-in-out 0.2s forwards;
-  }
+	/* Shader gradient delayed fade-in */
+	canvas {
+		opacity: 0;
+		animation: shaderFadeIn 1s ease-in-out 0.2s forwards;
+	}
 
-  @keyframes shaderFadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
+	@keyframes shaderFadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
 </style>

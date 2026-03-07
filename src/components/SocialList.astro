@@ -9,6 +9,7 @@ type IconName =
 	| "simple-icons:googlescholar"
 	| "simple-icons:researchgate"
 	| "simple-icons:semanticscholar"
+	| "simple-icons:huggingface"
 	| "simple-icons:orcid";
 
 interface SocialLink {
@@ -19,21 +20,21 @@ interface SocialLink {
 }
 
 const socialLinks: SocialLink[] = [
-	{ 
-        friendlyName: "Email", 
-        link: "mailto:panxurs@whu.edu.cn", 
-        name: "mdi:email" 
-    },
-	{ 
-        friendlyName: "X", 
-        link: "https://x.com/xupan_whu", 
-        name: "simple-icons:x" 
-    },
-	{ 
-        friendlyName: "Github", 
-        link: "https://github.com/TwSphinx54", 
-        name: "simple-icons:github" 
-    },
+	{
+		friendlyName: "Email",
+		link: "mailto:panxurs@whu.edu.cn",
+		name: "mdi:email",
+	},
+	{
+		friendlyName: "X",
+		link: "https://x.com/xupan_whu",
+		name: "simple-icons:x",
+	},
+	{
+		friendlyName: "Github",
+		link: "https://github.com/TwSphinx54",
+		name: "simple-icons:github",
+	},
 	{
 		friendlyName: "Linkedin",
 		link: "https://linkedin.com/in/xupanwhu",
@@ -59,6 +60,11 @@ const socialLinks: SocialLink[] = [
 		link: "https://orcid.org/0009-0007-3297-0385",
 		name: "simple-icons:orcid",
 	},
+	{
+		friendlyName: "Hugging Face",
+		link: "https://huggingface.co/SSSSphinx",
+		name: "simple-icons:huggingface",
+	},
 ];
 
 const SCALE: Record<IconName, number> = {
@@ -68,6 +74,7 @@ const SCALE: Record<IconName, number> = {
 	"simple-icons:googlescholar": 1.07,
 	"simple-icons:researchgate": 1.0,
 	"simple-icons:semanticscholar": 1.0,
+	"simple-icons:huggingface": 1.0,
 	"simple-icons:orcid": 1.0,
 	"mdi:email": 1.3,
 };

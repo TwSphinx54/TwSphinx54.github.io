@@ -1,0 +1,139 @@
+<!-- Abstract / Image Modal Common Elements and Scripts -->
+<div
+	id="img-modal"
+	class="pointer-events-none fixed inset-0 z-[110] flex hidden items-center justify-center bg-black/40 p-4 opacity-0 shadow-2xl backdrop-blur-sm transition-all duration-300"
+>
+	<div
+		class="pointer-events-auto relative mt-16 flex max-h-[90vh] max-w-[90vw] scale-95 items-center justify-center transition-transform duration-300"
+		id="img-modal-content"
+	>
+		<button
+			id="img-modal-close"
+			class="absolute right-3 top-3 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-accent shadow-md transition-colors hover:bg-white"
+			aria-label="Close image modal"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				width="16"
+				height="16"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<line x1="18" y1="6" x2="6" y2="18"></line>
+				<line x1="6" y1="6" x2="18" y2="18"></line>
+			</svg>
+		</button>
+		<img
+			id="img-modal-img"
+			src=""
+			alt="Large image"
+			class="max-h-[90vh] max-w-full rounded-2xl object-contain shadow-2xl ring-1 ring-white/20"
+		/>
+	</div>
+</div>
+
+<script>
+	function initAbstractToggles() {
+		const buttons = document.querySelectorAll(".abstract-btn");
+		buttons.forEach((btn) => {
+			btn.addEventListener("click", (e) => {
+				e.preventDefault();
+				const id = btn.getAttribute("data-abstract-id");
+				if (!id) return;
+
+				const contentId = id.replace("abstract-", "abstract-content-");
+				const content = document.getElementById(contentId);
+				const chev = btn.querySelector(".chev");
+				if (!content) return;
+
+				const isCollapsed = content.getAttribute("data-collapsed") === "true";
+
+				if (isCollapsed) {
+					content.style.maxHeight = content.scrollHeight + "px";
+					content.style.opacity = "1";
+					content.setAttribute("data-collapsed", "false");
+					btn.setAttribute("aria-expanded", "true");
+					chev?.classList.add("rotate-180");
+
+					// Allow auto height after transition
+					setTimeout(() => {
+						if (content.getAttribute("data-collapsed") === "false") {
+							content.style.maxHeight = "none";
+						}
+					}, 310);
+				} else {
+					// Set height back to scrollHeight for transition to 0
+					content.style.maxHeight = content.scrollHeight + "px";
+					content.offsetHeight; // force reflow
+					content.style.maxHeight = "0";
+					content.style.opacity = "0";
+					content.setAttribute("data-collapsed", "true");
+					btn.setAttribute("aria-expanded", "false");
+					chev?.classList.remove("rotate-180");
+				}
+			});
+		});
+	}
+
+	function initImageModal() {
+		const modal = document.getElementById("img-modal");
+		const modalContent = document.getElementById("img-modal-content");
+		const modalImg = document.getElementById("img-modal-img") as HTMLImageElement;
+		const modalClose = document.getElementById("img-modal-close");
+
+		if (!modal || !modalImg) return;
+
+		function open(src: string) {
+			modalImg.src = src;
+			modal?.classList.remove("hidden", "pointer-events-none", "opacity-0");
+			modal?.classList.add("opacity-100");
+			modalContent?.classList.remove("scale-95");
+			modalContent?.classList.add("scale-100");
+			document.body.style.overflow = "hidden";
+			(modalClose as HTMLElement)?.focus?.();
+		}
+
+		function close() {
+			modal?.classList.add("pointer-events-none", "opacity-0");
+			modal?.classList.remove("opacity-100");
+			modalContent?.classList.remove("scale-100");
+			modalContent?.classList.add("scale-95");
+			document.body.style.overflow = "";
+			setTimeout(() => {
+				if (modal?.classList.contains("opacity-0")) {
+					modal?.classList.add("hidden");
+					modalImg.src = "";
+				}
+			}, 310);
+		}
+
+		modalClose?.addEventListener("click", close);
+		modal.addEventListener("click", (e) => {
+			if (e.target === modal) close();
+		});
+		document.addEventListener("keydown", (e) => {
+			if (e.key === "Escape") close();
+		});
+
+		document.addEventListener("click", (e) => {
+			const t = e.target;
+			if (!(t instanceof HTMLImageElement)) return;
+			if (!t.classList.contains("pub-thumb-img")) return;
+			const src = t.dataset.fullsrc || t.currentSrc || t.src;
+			if (src) open(src);
+		});
+	}
+
+	function setup() {
+		initAbstractToggles();
+		initImageModal();
+	}
+
+	setup();
+	document.addEventListener("astro:after-swap", setup);
+</script>

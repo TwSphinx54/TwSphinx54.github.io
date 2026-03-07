@@ -5,6 +5,7 @@ import ShaderGradientBg from "@/components/ShaderGradientBg.tsx";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import { getEntry } from "astro:content";
+import PublicationItem from "@/components/PublicationItem.astro";
 
 // =========================
 // EDITABLE CONTENT (edit here)
@@ -26,6 +27,7 @@ type PublicationEditable = {
 	venueRank?: string;
 	venueLogo?: string;
 	abstract?: string;
+	selected?: boolean;
 };
 
 type PublicationResolved = Omit<PublicationEditable, "image" | "venueLogo"> & {
@@ -56,7 +58,15 @@ type ProjectEditable = {
 type HomeIntroSegment =
 	| { type: "text"; html: string }
 	| { type: "link"; name: string; href: string; class?: string }
-	| { type: "org"; key: string; name: string; href: string; alt?: string; width?: number; class?: string };
+	| {
+			type: "org";
+			key: string;
+			name: string;
+			href: string;
+			alt?: string;
+			width?: number;
+			class?: string;
+	  };
 
 type HomeIntro = { paragraphs: { segments: HomeIntroSegment[] }[] };
 
@@ -96,8 +106,10 @@ if (!homeEntry) throw new Error("Missing content entry: src/content/home/index.y
 const publicationsEditable = homeEntry.data.publicationsEditable as PublicationEditable[];
 const newsItems = homeEntry.data.newsItems as NewsItem[];
 const projectsEditable = homeEntry.data.projectsEditable as ProjectEditable[];
-const experienceMeta =
-	(homeEntry.data.experienceMeta ?? {}) as Record<string, { name: string; link: string }>;
+const experienceMeta = (homeEntry.data.experienceMeta ?? {}) as Record<
+	string,
+	{ name: string; link: string }
+>;
 const orderFromYaml = homeEntry.data.order as string[] | undefined;
 const homeIntro = (homeEntry.data.homeIntro ?? null) as HomeIntro | null;
 const acknowledgements = (homeEntry.data.acknowledgements ?? null) as Acknowledgements | null;
@@ -170,11 +182,13 @@ function assetToSrc(a: any): string {
 // Derived data (publications/projects/experiences/logos)
 // =========================
 
-const cactusTech: PublicationResolved[] = publicationsEditable.map((pub) => {
-	const img = resolveAsset(pub.image);
-	const vlogo = resolveAsset(pub.venueLogo);
-	return { ...pub, image: img, fullSrc: assetToSrc(img), venueLogo: vlogo };
-});
+const cactusTech: PublicationResolved[] = publicationsEditable
+	.map((pub) => {
+		const img = resolveAsset(pub.image);
+		const vlogo = resolveAsset(pub.venueLogo);
+		return { ...pub, image: img, fullSrc: assetToSrc(img), venueLogo: vlogo };
+	})
+	.filter((p) => p.selected === true);
 
 const projects = projectsEditable;
 
@@ -256,77 +270,84 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-    <ShaderGradientBg client:load />
-	<section class="glass rounded-2xl pr-6 pb-6">
+	<ShaderGradientBg client:load />
+	<section class="glass rounded-2xl pb-6 pr-6">
 		<h1 class="title mb-6">Hello World!</h1>
 
 		{/* Home description (YAML-driven via homeIntro) */}
-		{homeIntro?.paragraphs.map((para) => (
-			<p class="mb-3">
-				{para.segments.map((seg) => {
-					if (seg.type === "text") return <span set:html={seg.html} />;
-					if (seg.type === "link")
+		{
+			homeIntro?.paragraphs.map((para) => (
+				<p class="mb-3">
+					{para.segments.map((seg) => {
+						if (seg.type === "text") return <span set:html={seg.html} />;
+						if (seg.type === "link")
+							return (
+								<a class={seg.class ?? "cactus-link"} href={seg.href}>
+									{seg.name}
+								</a>
+							);
+						// org (IMPORTANT: keep logo and link text adjacent: no whitespace node)
+						const logo = logoByKey[seg.key];
 						return (
-							<a class={seg.class ?? "cactus-link"} href={seg.href}>
-								{seg.name}
-							</a>
+							<>
+								{logo ? (
+									<Image
+										src={logo}
+										alt={seg.alt ?? `${seg.name} logo`}
+										width={seg.width ?? 20}
+										densities={[1, 2]}
+										loading="eager"
+										class={seg.class ?? "mb-1 ml-0.5 mr-0.5 inline h-4 w-auto object-contain"}
+									/>
+								) : null}
+								<a class="cactus-link" href={seg.href}>
+									{seg.name}
+								</a>
+							</>
 						);
-					// org (IMPORTANT: keep logo and link text adjacent: no whitespace node)
-					const logo = logoByKey[seg.key];
-					return (
-						<>
-							{logo ? (
-								<Image
-									src={logo}
-									alt={seg.alt ?? `${seg.name} logo`}
-									width={seg.width ?? 20}
-									densities={[1, 2]}
-									loading="eager"
-									class={seg.class ?? "mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"}
-								/>
-							) : null}<a class="cactus-link" href={seg.href}>{seg.name}</a>
-						</>
-					);
-				})}
-			</p>
-		))}
+					})}
+				</p>
+			))
+		}
 
 		<SocialList />
 	</section>
 
-	<section class="glass mt-6 rounded-2xl pr-6 pb-6" aria-label="News">
+	<section class="glass mt-6 rounded-2xl pb-6 pr-6" aria-label="News">
 		<h2 class="title mb-4 text-xl">News</h2>
-		<ul class="news-fade space-y-3 h-56 overflow-y-auto pr-2">
-			{newsItems.map((item) => (
-				<li class="flex gap-3">
-					<span class="w-[5.5rem] shrink-0 font-medium font-mono text-gray-600 dark:text-gray-400">
-						{item.date}
-					</span>
+		<ul class="news-fade h-56 space-y-3 overflow-y-auto pr-2">
+			{
+				newsItems.map((item) => (
+					<li class="flex gap-3">
+						<span class="w-[5.5rem] shrink-0 font-mono font-medium text-gray-600 dark:text-gray-400">
+							{item.date}
+						</span>
 
-					<div class="min-w-0 text-gray-700 dark:text-gray-300">
-						{item.html ? (
-							// NOTE: html is rendered as-is; only put trusted content here
-							<span set:html={item.html} />
-						) : (
-							<>
-								{item.text && <span set:html={escapeHtml(item.text)} />}
-								{item.href && (
-									<>
-										{" "}
-										<a class="cactus-link" href={item.href} target="_blank" rel="noopener">
-											{item.label ?? "More"}
-										</a>
-									</>
-								)}
-							</>
-						)}
-					</div>
-				</li>
-			))}
+						<div class="min-w-0 text-gray-700 dark:text-gray-300">
+							{item.html ? (
+								// NOTE: html is rendered as-is; only put trusted content here
+								<span set:html={item.html} />
+							) : (
+								<>
+									{item.text && <span set:html={escapeHtml(item.text)} />}
+									{item.href && (
+										<>
+											{" "}
+											<a class="cactus-link" href={item.href} target="_blank" rel="noopener">
+												{item.label ?? "More"}
+											</a>
+										</>
+									)}
+								</>
+							)}
+						</div>
+					</li>
+				))
+			}
 		</ul>
 	</section>
 
-	<section class="glass mt-6 rounded-2xl pr-6 pb-6" aria-label="Experiences">
+	<section class="glass mt-6 rounded-2xl pb-6 pr-6" aria-label="Experiences">
 		<h2 class="title mb-4 text-xl">Experiences</h2>
 		<div class="flex flex-wrap items-center gap-6">
 			{
@@ -346,7 +367,7 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 							class="h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
 							loading="lazy"
 						/>
-						<span class="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-0.5 text-[10px] font-medium leading-snug tracking-wide text-white opacity-0 shadow transition-opacity group-hover:opacity-100 text-center">
+						<span class="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-0.5 text-center text-[10px] font-medium leading-snug tracking-wide text-white opacity-0 shadow transition-opacity group-hover:opacity-100">
 							<span set:html={exp.tooltipHtml} />
 						</span>
 					</a>
@@ -357,261 +378,85 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 		<br />
 
 		{/* Acknowledgements (YAML-driven via acknowledgements) */}
-		{acknowledgements && (
-			<p class="mb-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-				<b>{acknowledgements.title}</b><br />
-
-				{acknowledgements.introLines?.map((l) => (
+		{
+			acknowledgements && (
+				<p class="mb-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
 					<>
-						{l}<br />
+						<b>{acknowledgements.title}</b>
+						<br />
 					</>
-				))}
 
-				{acknowledgements.mentors?.map((p, i) => (
-					<>
-						<a class="cactus-link" href={p.href}>{p.name}</a>
-						{i < (acknowledgements.mentors?.length ?? 0) - 1 ? "," : ","}
-						{i === (acknowledgements.mentors?.length ?? 0) - 1 ? <br /> : " "}
-					</>
-				))}
+					{acknowledgements.introLines?.map((l) => (
+						<>
+							{l}
+							<br />
+						</>
+					))}
 
-				{acknowledgements.peersIntro ? (
-					<>
-						{acknowledgements.peersIntro}<br />
-					</>
-				) : null}
+					{acknowledgements.mentors?.map((p, i) => (
+						<>
+							<a class="cactus-link" href={p.href}>
+								{p.name}
+							</a>
+							{i < (acknowledgements.mentors?.length ?? 0) - 1 ? "," : ","}
+							{i === (acknowledgements.mentors?.length ?? 0) - 1 ? <br /> : " "}
+						</>
+					))}
 
-				{acknowledgements.peers?.map((p, i) => (
-					<>
-						<a class="cactus-link" href={p.href}>{p.name}</a>
-						{i < (acknowledgements.peers?.length ?? 0) - 1 ? "," : ""}
-						{i === (acknowledgements.peers?.length ?? 0) - 1 ? (
-							<>
-								<br />{acknowledgements.outro ?? ""}
-							</>
-						) : " "}
-					</>
-				))}
-			</p>
-		)}
+					{acknowledgements.peersIntro ? (
+						<>
+							{acknowledgements.peersIntro}
+							<br />
+						</>
+					) : null}
+
+					{acknowledgements.peers?.map((p, i) => (
+						<>
+							<a class="cactus-link" href={p.href}>
+								{p.name}
+							</a>
+							{i < (acknowledgements.peers?.length ?? 0) - 1 ? "," : ""}
+							{i === (acknowledgements.peers?.length ?? 0) - 1 ? (
+								<>
+									<br />
+									{acknowledgements.outro ?? ""}
+								</>
+							) : (
+								" "
+							)}
+						</>
+					))}
+				</p>
+			)
+		}
 	</section>
 
-	<section class="mt-4" aria-label="Publications">
-		<h2 class="title mb-4 text-xl">Publications</h2>
+	<section class="mt-8" aria-label="Publications">
+		<div class="mb-4 flex items-center justify-between">
+			<h2 class="title text-xl">Selected Publications</h2>
+			<a
+				href="/publications"
+				class="group flex items-center gap-x-1.5 rounded-full border border-zinc-200/50 bg-white/70 px-4 py-1.5 text-[10px] font-bold tracking-[0.2em] text-zinc-500 shadow-sm backdrop-blur-md transition-all hover:border-accent hover:bg-accent hover:text-white dark:border-zinc-700/50 dark:bg-zinc-900/40 dark:text-zinc-400 dark:hover:border-accent dark:hover:bg-accent dark:hover:text-white"
+			>
+				VIEW ALL
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="3"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path d="M5 12h14"></path>
+					<path d="m12 5 7 7-7 7"></path>
+				</svg>
+			</a>
+		</div>
 		<div class="-mx-3 sm:-mx-4 md:-mx-6">
 			<dl class="space-y-4 px-3 sm:px-4 md:px-6">
-			{
-				cactusTech.map((pub) => {
-					const {
-						author,
-						title,
-						booktitle,
-						time,
-						doi,
-						paper,
-						code,
-						huggingface,
-						site,
-						abstract,
-						venueIcon,
-						venueColor,
-						venueRank,
-						venueLogo,
-						image,
-						fullSrc,
-					} = pub;
-
-					const slug = title
-						.toLowerCase()
-						.replace(/\s+/g, "-")
-						.replace(/[^a-z0-9\-]/g, "");
-
-					return (
-						<article class="pub-article group relative w-full overflow-hidden rounded-xl bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:bg-zinc-900/80">
-							<div class="grid grid-cols-1 gap-4 lg:flex lg:items-start lg:gap-6">
-								<div class="min-w-0 lg:flex-1">
-									<h3 class="text-lg font-semibold leading-snug tracking-tight">
-										<span class="text-accent">
-											{title}
-										</span>
-									</h3>
-									<p class="mt-1 text-gray-700 dark:text-gray-300">
-										{author.map((name: string, index: number) => (
-											<span style={{ fontWeight: name === "Xu Pan" ? "700" : "normal" }}>
-												{name}{index < author.length - 1 && ","}
-											</span>
-										))}
-									</p>
-									<div class="mt-2 flex flex-wrap gap-2">
-										<span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 font-medium text-sm text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
-											{venueLogo ? (
-												<Image
-													src={venueLogo}
-													alt="Venue logo"
-													width={14}
-													height={14}
-													densities={[1, 2]}
-													loading="lazy"
-													class="mr-1 inline-block h-[14px] w-[14px] object-contain align-[-0.2em]"
-												/>
-											) : (
-												venueIcon && (
-													<Icon
-														name={venueIcon}
-														width="14"
-														height="14"
-														class="mr-1 inline-block align-[-0.2em]"
-														style={`color: ${venueColor}`}
-														aria-hidden="true"
-													/>
-												)
-											)}
-											{booktitle}
-										</span>
-
-										{venueRank && (
-											<span class="rounded-full bg-accent/10 px-2 py-0.5 font-medium text-sm text-accent dark:bg-accent/15">
-												{venueRank}
-											</span>
-										)}
-
-										{time && (
-											<span class="rounded-full bg-gray-100 px-2 py-0.5 font-medium text-sm text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
-												{time}
-											</span>
-										)}
-									</div>
-									<div class="mt-3 flex flex-wrap gap-2" aria-label="Publication actions">
-										{abstract && (
-											<button
-												type="button"
-												class="abstract-btn cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-												data-abstract-id={`abstract-${slug}`}
-												aria-expanded="false"
-											>
-												ABSTRACT
-												<svg
-													class="chev ml-2 h-3 w-3 transform transition-transform duration-200"
-													viewBox="0 0 20 20"
-													fill="none"
-													xmlns="http://www.w3.org/2000/svg"
-													aria-hidden="true"
-												>
-													<path
-														d="M6 8l4 4 4-4"
-														stroke="currentColor"
-														stroke-width="1.6"
-														stroke-linecap="round"
-														stroke-linejoin="round"
-													/>
-												</svg>
-											</button>
-										)}
-										{code && (
-											<a
-												class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-												href={code}
-												target="_blank"
-												rel="noopener"
-											>
-												CODE
-											</a>
-										)}
-										{huggingface && (
-											<a
-												class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-												href={huggingface}
-												target="_blank"
-												rel="noopener"
-											>
-												HF
-											</a>
-										)}
-										{site && (
-											<a
-												class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-												href={site}
-												target="_blank"
-												rel="noopener"
-											>
-												SITE
-											</a>
-										)}
-										{doi && (
-											<a
-												class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-												href={doi}
-												target="_blank"
-												rel="noopener"
-											>
-												DOI
-											</a>
-										)}
-										{paper && (
-											<a
-												class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-												href={paper}
-												target="_blank"
-												rel="noopener"
-											>
-												{isArxivLink(paper) ? (
-													<>
-														<Icon
-															name="simple-icons:arxiv"
-															width="14"
-															height="14"
-															class="mr-1 inline-block"
-															style="color: #B31B1B"
-															aria-hidden="true"
-														/>
-														ARXIV
-													</>
-												) : (
-													"PAPER"
-												)}
-											</a>
-										)}
-									</div>
-								</div>
-
-								{/* thumbnail column (part of flow on large screens). Keep hidden on small screens. */}
-								{image && (
-									<div class="pub-thumb hidden lg:ml-2 lg:block">
-										<button
-											type="button"
-											class="pub-thumb-btn group block cursor-zoom-in"
-											aria-label="Open image"
-										>
-											<Image
-												src={image}
-												alt="[Thumbnail]"
-												width={180}
-												height={120}
-												densities={[1, 2]}
-												data-fullsrc={fullSrc}
-												class="pub-thumb-img h-[120px] w-[180px] rounded-xl border-2 border-transparent object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:border-dashed group-hover:border-accent group-hover:shadow-lg"
-												loading="lazy"
-												decoding="async"
-											/>
-										</button>
-									</div>
-								)}
-							</div>
-
-							{abstract && (
-								<div
-									class="abstract-collapse mt-3 w-full overflow-hidden text-gray-700 transition-[max-height,opacity] duration-300 ease-in-out dark:text-gray-300"
-									id={`abstract-content-${slug}`}
-									style="max-height: 0; opacity: 0;"
-									data-collapsed="true"
-								>
-									{abstract}
-								</div>
-							)}
-						</article>
-					);
-				})
-			}
+				{cactusTech.map((pub) => <PublicationItem pub={pub} />)}
 			</dl>
 		</div>
 	</section>
@@ -619,346 +464,224 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 		<h2 class="title mb-4 text-xl">Projects</h2>
 
 		<div class="-mx-3 sm:-mx-4 md:-mx-6">
-			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 px-3 sm:px-4 md:px-6">
-			{projects.map((p) => (
-				<article class="group relative w-full overflow-hidden rounded-xl bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:bg-zinc-900/80">
-					<div class="min-w-0">
-						<div class="flex flex-wrap items-center gap-2">
-							<h3 class="text-lg font-semibold leading-snug tracking-tight text-accent">
-								{p.name}
-							</h3>
-							{p.time && (
-								<span class="rounded-full bg-gray-100 px-2 py-0.5 font-medium text-sm text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
-									{p.time}
-								</span>
-							)}
-						</div>
-
-						<p class="mt-2 text-gray-700 dark:text-gray-300">{p.description}</p>
-
-						{p.tags && p.tags.length > 0 && (
-							<div class="mt-2 flex flex-wrap gap-2">
-								{p.tags.map((t) => (
-									<span class="rounded-full bg-accent/10 px-2 py-0.5 font-medium text-sm text-accent dark:bg-accent/15">
-										{t}
-									</span>
-								))}
-							</div>
-						)}
-
-						<div class="mt-3 flex items-center justify-between gap-3" aria-label="Project links">
-							<div class="flex flex-wrap gap-2 min-w-0">
-								{p.repo && (
-									<a
-										class="inline-flex items-center gap-1.5 rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300 dark:hover:bg-accent/15"
-										href={p.repo}
-										target="_blank"
-										rel="noopener"
-										aria-label={`GitHub repo: ${repoLabel(p.repo)}`}
-									>
-										<Icon
-											name="simple-icons:github"
-											width="14"
-											height="14"
-											class="inline-block"
-											aria-hidden="true"
-										/>
-										<span class="truncate">{repoLabel(p.repo)}</span>
-									</a>
-								)}
-
-								{p.site && (
-									<a
-										class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-										href={p.site}
-										target="_blank"
-										rel="noopener"
-									>
-										SITE
-									</a>
-								)}
-								{p.paper && (
-									<a
-										class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
-										href={p.paper}
-										target="_blank"
-										rel="noopener"
-									>
-										PAPER
-									</a>
-								)}
-							</div>
-
-							{p.orgLogos?.length ? (
-								<div class="shrink-0 flex items-center">
-									{p.orgLogos.map((k) => {
-										const src = projectLogoByKey[k];
-										return (
-											src && (
-												<Image
-													src={src}
-													alt={`${k} logo`}
-													width={28}
-													densities={[1, 2]}
-													loading="lazy"
-													class="ml-1 inline h-5 w-auto object-contain opacity-90"
-												/>
-											)
-										);
-									})}
+			<div class="grid grid-cols-1 gap-4 px-3 sm:px-4 md:grid-cols-2 md:px-6">
+				{
+					projects.map((p) => (
+						<article class="group relative w-full overflow-hidden rounded-xl bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:bg-zinc-900/80">
+							<div class="min-w-0">
+								<div class="flex flex-wrap items-center gap-2">
+									<h3 class="text-lg font-semibold leading-snug tracking-tight text-accent">
+										{p.name}
+									</h3>
+									{p.time && (
+										<span class="rounded-full bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+											{p.time}
+										</span>
+									)}
 								</div>
-							) : null}
-						</div>
-					</div>
-				</article>
-			))}
+
+								<p class="mt-2 text-gray-700 dark:text-gray-300">{p.description}</p>
+
+								{p.tags && p.tags.length > 0 && (
+									<div class="mt-2 flex flex-wrap gap-2">
+										{p.tags.map((t) => (
+											<span class="rounded-full bg-accent/10 px-2 py-0.5 text-sm font-medium text-accent dark:bg-accent/15">
+												{t}
+											</span>
+										))}
+									</div>
+								)}
+
+								<div
+									class="mt-3 flex items-center justify-between gap-3"
+									aria-label="Project links"
+								>
+									<div class="flex min-w-0 flex-wrap gap-2">
+										{p.repo && (
+											<a
+												class="inline-flex items-center gap-1.5 rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300 dark:hover:bg-accent/15"
+												href={p.repo}
+												target="_blank"
+												rel="noopener"
+												aria-label={`GitHub repo: ${repoLabel(p.repo)}`}
+											>
+												<Icon
+													name="simple-icons:github"
+													width="14"
+													height="14"
+													class="inline-block"
+													aria-hidden="true"
+												/>
+												<span class="truncate">{repoLabel(p.repo)}</span>
+											</a>
+										)}
+
+										{p.site && (
+											<a
+												class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
+												href={p.site}
+												target="_blank"
+												rel="noopener"
+											>
+												SITE
+											</a>
+										)}
+										{p.paper && (
+											<a
+												class="cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
+												href={p.paper}
+												target="_blank"
+												rel="noopener"
+											>
+												PAPER
+											</a>
+										)}
+									</div>
+
+									{p.orgLogos?.length ? (
+										<div class="flex shrink-0 items-center">
+											{p.orgLogos.map((k) => {
+												const src = projectLogoByKey[k];
+												return (
+													src && (
+														<Image
+															src={src}
+															alt={`${k} logo`}
+															width={28}
+															densities={[1, 2]}
+															loading="lazy"
+															class="ml-1 inline h-5 w-auto object-contain opacity-90"
+														/>
+													)
+												);
+											})}
+										</div>
+									) : null}
+								</div>
+							</div>
+						</article>
+					))
+				}
 			</div>
 		</div>
- 	</section>
-
-	<section class="glass mt-10 rounded-2xl pr-6 pb-6" aria-label="Academic Service">
-		<h2 class="title mb-4 text-xl">Academic Service</h2>
-
-		{academicServices.length > 0 ? (
-			<div class="overflow-x-auto">
-				<table class="w-full text-gray-700 dark:text-gray-300">
- 					<tbody>
- 						{academicServices.map((service) => (
-							<tr class="align-middle">
-								<td class="py-1 pr-2 align-middle w-6">
-									<span class="inline-block h-2 w-1 rounded-full bg-accent align-middle translate-y-[-1.5px]"></span>
-								</td>
-								<td class="py-1 pr-2 font-semibold align-middle">{service.role}</td>
-								<td class="py-1 px-2 align-middle">
- 									{service.venueLink ? (
- 										<a class="cactus-link" href={service.venueLink} target="_blank" rel="noopener">
- 											{service.venue}
- 										</a>
- 									) : (
- 										<span>{service.venue}</span>
- 									)}
- 								</td>
-								<td class="py-1 pl-2 align-middle whitespace-nowrap text-right">
-									<span class="rounded-full bg-gray-100 px-2 py-0.5 font-medium text-sm text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
-										{service.year}
-									</span>
-								</td>
- 							</tr>
- 						))}
- 					</tbody>
- 				</table>
- 			</div>
- 		) : null}
- 	</section>
-
-	<section class="glass mt-6 rounded-2xl pr-6 pb-6" aria-label="Personal Philosophy">
-		<h2 class="title mb-4 text-xl">Personal Philosophy</h2>
-
-		{personalPhilosophy && (
-			<>
-				<p class="mb-4">{personalPhilosophy.intro}</p>
-
-				<figure class="relative border-l-4 border-accent pl-4">
-					<blockquote class="italic">{personalPhilosophy.quote}</blockquote>
-					<figcaption class="mt-2 text-right text-gray-600 dark:text-gray-400">
-						{personalPhilosophy.cite}
-					</figcaption>
-				</figure>
-
-				<p class="mt-4 mb-4">
-					I resonate with the spirit of{" "}
-					<a
-						class="cactus-link"
-						href={personalPhilosophy.slowScience.href}
-						target="_blank"
-						rel="noopener"
-					>{personalPhilosophy.slowScience.text}</a>.
-				</p>
-
-				{(personalPhilosophy.paragraphs ?? []).map((t) => (
-					<p class="mt-4 mb-4">{t}</p>
-				))}
-			</>
-		)}
 	</section>
 
-	<div
-		id="img-modal"
-		class="z-70 fixed inset-0 flex hidden items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
-	>
-		<div class="relative flex max-h-[90vh] max-w-[90vw] items-center justify-center">
-			<button
-				id="img-modal-close"
-				class="absolute right-3 top-3 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-accent shadow-md hover:bg-white"
-				aria-label="Close image modal"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 24 24"
-					width="16"
-					height="16"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					aria-hidden="true"
-				>
-					<line x1="18" y1="6" x2="6" y2="18"></line>
-					<line x1="6" y1="6" x2="18" y2="18"></line>
-				</svg>
-			</button>
-			<img
-				id="img-modal-img"
-				src=""
-				alt="Large image"
-				class="max-h-[90vh] max-w-full rounded-2xl object-contain shadow-xl"
-			/>
-		</div>
-	</div>
+	<section class="glass mt-10 rounded-2xl pb-6 pr-6" aria-label="Academic Service">
+		<h2 class="title mb-4 text-xl">Academic Service</h2>
 
-	<script>
-		// UI behaviors: abstract toggle + image modal
-		function onReady(fn: () => void): void {
-			if (document.readyState === "loading")
-				document.addEventListener("DOMContentLoaded", fn, { once: true });
-			else fn();
+		{
+			academicServices.length > 0 ? (
+				<div class="overflow-x-auto">
+					<table class="w-full text-gray-700 dark:text-gray-300">
+						<tbody>
+							{academicServices.map((service) => (
+								<tr class="align-middle">
+									<td class="w-6 py-1 pr-2 align-middle">
+										<span class="inline-block h-2 w-1 translate-y-[-1.5px] rounded-full bg-accent align-middle" />
+									</td>
+									<td class="py-1 pr-2 align-middle font-semibold">{service.role}</td>
+									<td class="px-2 py-1 align-middle">
+										{service.venueLink ? (
+											<a
+												class="cactus-link"
+												href={service.venueLink}
+												target="_blank"
+												rel="noopener"
+											>
+												{service.venue}
+											</a>
+										) : (
+											<span>{service.venue}</span>
+										)}
+									</td>
+									<td class="whitespace-nowrap py-1 pl-2 text-right align-middle">
+										<span class="rounded-full bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+											{service.year}
+										</span>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			) : null
 		}
+	</section>
 
-		function initAbstractToggles() {
-			const buttons = document.querySelectorAll(".abstract-btn");
-			buttons.forEach((btn) => {
-				const id = btn.getAttribute("data-abstract-id");
-				const slug = id ? id.replace("abstract-", "") : null;
-				const content = slug ? document.getElementById(`abstract-content-${slug}`) : null;
-				const chev = btn.querySelector(".chev");
+	<section class="glass mt-6 rounded-2xl pb-6 pr-6" aria-label="Personal Philosophy">
+		<h2 class="title mb-4 text-xl">Personal Philosophy</h2>
 
-				const syncChevron = () => {
-					if (!chev || !content) return;
-					const expanded = content.getAttribute("data-collapsed") === "false";
-					chev.classList.toggle("rotate-180", expanded);
-					btn.setAttribute("aria-expanded", expanded ? "true" : "false");
-				};
+		{
+			personalPhilosophy && (
+				<>
+					<p class="mb-4">{personalPhilosophy.intro}</p>
 
-				syncChevron();
+					<figure class="relative border-l-4 border-accent pl-4">
+						<blockquote class="italic">{personalPhilosophy.quote}</blockquote>
+						<figcaption class="mt-2 text-right text-gray-600 dark:text-gray-400">
+							{personalPhilosophy.cite}
+						</figcaption>
+					</figure>
 
-				btn.addEventListener("click", () => {
-					if (!content) return;
+					<p class="mb-4 mt-4">
+						I resonate with the spirit of{" "}
+						<a
+							class="cactus-link"
+							href={personalPhilosophy.slowScience.href}
+							target="_blank"
+							rel="noopener"
+						>
+							{personalPhilosophy.slowScience.text}
+						</a>
+						.
+					</p>
 
-					const isCollapsed = content.getAttribute("data-collapsed") !== "false";
-					if (isCollapsed) {
-						content.style.maxHeight = content.scrollHeight + "px";
-						content.style.opacity = "1";
-						content.setAttribute("data-collapsed", "false");
-
-						// allow transition to finish, then unlock height
-						setTimeout(() => {
-							if (content.getAttribute("data-collapsed") === "false") content.style.maxHeight = "none";
-						}, 310);
-					} else {
-						content.style.maxHeight = content.scrollHeight + "px";
-						content.getBoundingClientRect(); // force reflow
-						content.style.maxHeight = "0";
-						content.style.opacity = "0";
-						content.setAttribute("data-collapsed", "true");
-					}
-					syncChevron();
-				});
-			});
+					{(personalPhilosophy.paragraphs ?? []).map((t) => (
+						<p class="mb-4 mt-4">{t}</p>
+					))}
+				</>
+			)
 		}
-
-		function initImageModal(): void {
-			const imgModal = document.getElementById("img-modal") as HTMLDivElement | null;
-			const imgModalImg = document.getElementById("img-modal-img") as HTMLImageElement | null;
-			const imgModalClose = document.getElementById("img-modal-close") as HTMLButtonElement | null;
-
-			if (!imgModal || !imgModalImg) return;
-
-			// Bind non-null references so TS is happy inside nested functions/handlers.
-			const modal = imgModal;
-			const modalImg = imgModalImg;
-			const modalClose = imgModalClose;
-
-			function open(src: string): void {
-				modalImg.src = src;
-				modal.classList.remove("hidden");
-				document.body.style.overflow = "hidden";
-				modalClose?.focus?.();
-			}
-
-			function close(): void {
-				modal.classList.add("hidden");
-				modalImg.src = "";
-				document.body.style.overflow = "";
-			}
-
-			modalClose?.addEventListener("click", close);
-			modal.addEventListener("click", (e: MouseEvent) => {
-				if (e.target === modal) close();
-			});
-			document.addEventListener("keydown", (e: KeyboardEvent) => {
-				if (e.key === "Escape") close();
-			});
-
-			// Delegate click from publication thumbnails only
-			document.addEventListener("click", (e: MouseEvent) => {
-				const t = e.target;
-				if (!(t instanceof HTMLImageElement)) return;
-				if (!t.classList.contains("pub-thumb-img")) return;
-				const src = t.dataset?.fullsrc || t.currentSrc || t.src;
-				if (src) open(src);
-			});
-		}
-
-		onReady(() => {
-			initAbstractToggles();
-			initImageModal();
-		});
-	</script>
-
-	<style>
-		:global(.glass) {
-			backdrop-filter: blur(20px) saturate(120%);
-			-webkit-backdrop-filter: blur(20px) saturate(120%);
-			background: transparent;
-		}
-
-		:global(.news-fade) {
-			-webkit-mask-image: linear-gradient(
-				to bottom,
-				#000 0%,
-				#000 calc(100% - 2.5rem),
-				transparent 100%
-			);
-			mask-image: linear-gradient(
-				to bottom,
-				#000 0%,
-				#000 calc(100% - 2.5rem),
-				transparent 100%
-			);
-			-webkit-mask-size: 100% 100%;
-			mask-size: 100% 100%;
-			-webkit-mask-repeat: no-repeat;
-			mask-repeat: no-repeat;
-		}
-
-		:global(.news-fade::-webkit-scrollbar) {
-			display: none;
-		}
-
-		/* Shader gradient delayed fade-in */
-		:global(canvas) {
-			opacity: 0;
-			animation: shaderFadeIn 1s ease-in-out 0.2s forwards;
-		}
-
-		@keyframes shaderFadeIn {
-			from {
-				opacity: 0;
-			}
-			to {
-				opacity: 1;
-			}
-		}
-	</style>
+	</section>
 </PageLayout>
+
+<style>
+	:global(.glass) {
+		backdrop-filter: blur(20px) saturate(120%);
+		-webkit-backdrop-filter: blur(20px) saturate(120%);
+		background: transparent;
+	}
+
+	:global(.news-fade) {
+		-webkit-mask-image: linear-gradient(
+			to bottom,
+			#000 0%,
+			#000 calc(100% - 2.5rem),
+			transparent 100%
+		);
+		mask-image: linear-gradient(to bottom, #000 0%, #000 calc(100% - 2.5rem), transparent 100%);
+		-webkit-mask-size: 100% 100%;
+		mask-size: 100% 100%;
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+	}
+
+	:global(.news-fade::-webkit-scrollbar) {
+		display: none;
+	}
+
+	/* Shader gradient delayed fade-in */
+	:global(canvas) {
+		opacity: 0;
+		animation: shaderFadeIn 1s ease-in-out 0.2s forwards;
+	}
+
+	@keyframes shaderFadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+</style>

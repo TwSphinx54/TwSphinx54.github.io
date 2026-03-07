@@ -46,6 +46,7 @@ publicationsEditable:
       alignment mitigates policy over-specialization and preserves zero-shot generalization to more complex 
       tasks. Experiments on challenging multi-object and cluttered benchmarks demonstrate that SA-VLA enables 
       stable RL fine-tuning and substantially more robust, transferable behaviors.
+    selected: true
 
   - author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"]
     title: "Scale-aware Co-visible Region Detection for Image Matching"
@@ -74,6 +75,7 @@ publicationsEditable:
       challenging datasets demonstrate that SCoDe outperforms state-of-the-art methods, improving the precision
       of a modern local feature matcher by 8.41%. Notably, SCoDe shows a clear advantage when handling images
       with drastic scale variations.
+    selected: true
 
   - author: ["Ming Sun", "Rui Wang", "Xingrui Yu*", "Lihua Jing", "Hangyu Du", "Zhenglin Wan", "Xu Pan", "Ivor Tsang"]
     title: "SleeperVLA: Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
@@ -96,6 +98,7 @@ publicationsEditable:
       Extensive experiments across multiple datasets, model architectures, and adaptation settings demonstrate that SleeperVLA
       enables reliable and unique ownership verification while preserving benign task performance. Further results show that
       the embedded watermark remains detectable under post-release model adaptation.
+    selected: true
 
   - author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "He Chen*", "Xianwei Zheng*"]
     title: "SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching"
@@ -126,6 +129,7 @@ publicationsEditable:
       Beyond quantitative gains, our results indicate that monocular visual foundation models can be systematically
       extended to multi-view correspondence estimation when co-visibility is explicitly modeled, offering new insights
       for fusion-based visual understanding.
+    selected: true
 
   - author: ["Jiashen Huang", "Xu Pan"]
     title: "The Institutional Filter of AI Trust: How Domestic and Global Models Become Unequally Trusted"

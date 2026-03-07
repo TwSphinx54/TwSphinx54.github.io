@@ -1,0 +1,79 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+import { getEntry } from "astro:content";
+import PublicationItem from "@/components/PublicationItem.astro";
+
+// Load content
+const homeEntry = await getEntry("home", "index");
+if (!homeEntry) throw new Error("Missing content entry: src/content/home/index.yaml");
+
+const publicationsEditable = homeEntry.data.publicationsEditable as any[];
+
+// Asset resolution logic (similar to index.astro)
+const assetImages = import.meta.glob("../assets/**/*.{png,jpg,jpeg,svg,gif,webp}", {
+	eager: true,
+	import: "default",
+});
+
+function normalizeAssetKey(p: string): string {
+	const s = p.trim();
+	if (s.startsWith("../assets/")) return s;
+	if (s.startsWith("/src/assets/")) return ".." + s.replace("/src", "");
+	if (s.startsWith("/assets/")) return "../assets" + s.replace("/assets", "");
+	return `../assets/${s}`;
+}
+
+function resolveAsset(p?: string): any | null {
+	if (!p) return null;
+	const key = normalizeAssetKey(p);
+	return (assetImages[key] as any) || null;
+}
+
+function assetToSrc(img: any): string {
+	if (!img) return "";
+	if (typeof img === "string") return img;
+	if (img.src) return img.src;
+	return "";
+}
+
+const publications = publicationsEditable.map((pub) => {
+	const img = resolveAsset(pub.image);
+	const vlogo = resolveAsset(pub.venueLogo);
+	return { ...pub, image: img, fullSrc: assetToSrc(img), venueLogo: vlogo };
+});
+
+const meta = {
+	description: "Full list of publications by Xu Pan",
+	title: "Publications",
+};
+---
+
+<PageLayout meta={meta}>
+	<div class="space-y-6">
+		<a
+			href="/"
+			class="group inline-flex items-center gap-x-2 text-sm font-semibold text-zinc-500 transition-colors hover:text-accent"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-4 w-4 transition-transform group-hover:-translate-x-1"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2.5"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<line x1="19" y1="12" x2="5" y2="12"></line>
+				<polyline points="12 19 5 12 12 5"></polyline>
+			</svg>
+			Back to Home
+		</a>
+		<h1 class="title text-3xl">Publications</h1>
+		<div class="-mx-3 sm:-mx-4 md:-mx-6">
+			<div class="space-y-6 px-3 sm:px-4 md:px-6">
+				{publications.map((pub) => <PublicationItem pub={pub} />)}
+			</div>
+		</div>
+	</div>
+</PageLayout>
