@@ -164,9 +164,16 @@ newsItems:
   # - date: "May 2026"
   #   html: |
   #     Attended the <em>2026 Vision and Learning Seminar (VALSE)</em> in Wuhan, China.
+  - date: "Mar 2026"
+    html: |
+      Our work <strong>SAMatcher</strong> is now available! 
+            <a class="cactus-link" href="https://xupan.top/Projects/samatcher" target="_blank" rel="noopener">[Project]</a> 
+            <a class="cactus-link" href="https://github.com/TwSphinx54/SAMatcher" target="_blank" rel="noopener">[GitHub]</a> 
   - date: "Jan 2026"
     html: |
-      Our work <strong>SA-VLA</strong> is now available at <a class="cactus-link" href="https://github.com/TwSphinx54/SA-VLA" target="_blank" rel="noopener">GitHub</a>.
+      Our work <strong>SA-VLA</strong> is now available! 
+            <a class="cactus-link" href="https://xupan.top/Projects/savla" target="_blank" rel="noopener">[Project]</a> 
+            <a class="cactus-link" href="https://github.com/TwSphinx54/SA-VLA" target="_blank" rel="noopener">[GitHub]</a> 
             <a class="cactus-link" href="https://arxiv.org/abs/2602.00743" target="_blank" rel="noopener">[arXiv]</a>
   - date: "Nov 2025"
     text: "Successfully defended my Master's thesis proposal."
