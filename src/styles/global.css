@@ -12,7 +12,7 @@
 		--theme-text: 203deg 11% 15%;
 		--theme-accent: 351deg 66% 48%;
 		--theme-accent-2: 0deg 0% 7%;
-		--theme-quote: 351deg 66% 48%;
+		--theme-quote: var(--theme-accent);
 		/* highlight underline (light) */
 		--em-underline-color: #fdf3c4;
 		--em-underline-height: 0.42em;
@@ -25,7 +25,7 @@
 		--theme-text: 220deg 3% 79%;
 		--theme-accent: 159deg 64% 45%;
 		--theme-accent-2: 0deg 0% 93%;
-		--theme-quote: 102deg 100% 86%;
+		--theme-quote: var(--theme-accent);
 		/* highlight underline (dark) */
 		--em-underline-color: #155e75; /* teal-800-ish for subtle; adjust if too low contrast */
 		--em-underline-height: 0.42em;
@@ -44,5 +44,31 @@
 		background-repeat: no-repeat;
 		background-size: 100% var(--em-underline-height);
 		background-position: 0 100%;
+	}
+
+	.rich-content p + p {
+		margin-top: 0.75rem;
+	}
+
+	.rich-content .inline-logo {
+		display: inline-block;
+		vertical-align: baseline;
+    margin-bottom: -0.15rem;
+	}
+
+	.rich-content .philosophy-quote {
+		margin: 1rem 0;
+		padding-left: 1rem;
+		border-left: 4px solid hsl(var(--theme-accent));
+	}
+
+	.rich-content .philosophy-quote blockquote {
+		font-style: italic;
+	}
+
+	.rich-content .philosophy-quote figcaption {
+		margin-top: 0.5rem;
+		text-align: right;
+		color: hsl(var(--theme-text) / 0.72);
 	}
 }

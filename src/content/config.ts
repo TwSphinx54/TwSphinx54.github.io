@@ -48,36 +48,6 @@ const ProjectEditable = z.object({
     .transform((arr) => (arr ? removeDupsAndLowerCase(arr) : arr)),
 });
 
-const HomeIntroSegment = z.union([
-  z.object({
-    type: z.literal("text"),
-    html: z.string(),
-  }),
-  z.object({
-    type: z.literal("link"),
-    name: z.string(),
-    href: z.string(),
-    class: z.string().optional(),
-  }),
-  z.object({
-    type: z.literal("org"),
-    key: z.string(),
-    name: z.string(),
-    href: z.string(),
-    alt: z.string().optional(),
-    width: z.number().optional(),
-    class: z.string().optional(),
-  }),
-]);
-
-const HomeIntro = z.object({
-  paragraphs: z.array(
-    z.object({
-      segments: z.array(HomeIntroSegment),
-    }),
-  ),
-});
-
 const AckPerson = z.object({
   name: z.string(),
   href: z.string(),
@@ -90,17 +60,6 @@ const Acknowledgements = z.object({
   peersIntro: z.string().optional(),
   peers: z.array(AckPerson).optional(),
   outro: z.string().optional(),
-});
-
-const PersonalPhilosophy = z.object({
-  intro: z.string(),
-  quote: z.string(),
-  cite: z.string(),
-  slowScience: z.object({
-    text: z.string(),
-    href: z.string(),
-  }),
-  paragraphs: z.array(z.string()).default([]),
 });
 
 const AcademicService = z.object({
@@ -121,9 +80,9 @@ const home = defineCollection({
       .optional()
       .default({}),
     order: z.array(z.string()).optional(),
-    homeIntro: HomeIntro.optional(),
+    homeIntroHtml: z.string().optional(),
     acknowledgements: Acknowledgements.optional(),
-    personalPhilosophy: PersonalPhilosophy.optional(),
+    personalPhilosophyHtml: z.string().optional(),
     academicServices: z.array(AcademicService).optional(),
   }),
 });

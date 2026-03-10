@@ -1,5 +1,6 @@
 ---
 import PageLayout from "@/layouts/Base.astro";
+import ShaderGradientBg from "@/components/ShaderGradientBg.tsx";
 import { getEntry } from "astro:content";
 import PublicationItem from "@/components/PublicationItem.astro";
 
@@ -49,27 +50,9 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-	<div class="space-y-6">
-		<a
-			href="/"
-			class="group inline-flex items-center gap-x-2 text-sm font-semibold text-zinc-500 transition-colors hover:text-accent"
-		>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="h-4 w-4 transition-transform group-hover:-translate-x-1"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2.5"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<line x1="19" y1="12" x2="5" y2="12"></line>
-				<polyline points="12 19 5 12 12 5"></polyline>
-			</svg>
-			Back to Home
-		</a>
-		<h1 class="title text-3xl">Publications</h1>
+	<ShaderGradientBg client:load />
+	<div class="glass relative z-10 max-w-5xl space-y-6 rounded-2xl pb-6 pr-6">
+		<h1 class="title">Publications</h1>
 		<div class="-mx-3 sm:-mx-4 md:-mx-6">
 			<div class="space-y-6 px-3 sm:px-4 md:px-6">
 				{publications.map((pub) => <PublicationItem pub={pub} />)}
@@ -77,3 +60,26 @@ const meta = {
 		</div>
 	</div>
 </PageLayout>
+
+<style is:global>
+	.glass {
+		backdrop-filter: blur(20px) saturate(120%);
+		-webkit-backdrop-filter: blur(20px) saturate(120%);
+		background: transparent;
+	}
+
+	/* Shader gradient delayed fade-in */
+	canvas {
+		opacity: 0;
+		animation: shaderFadeIn 1s ease-in-out 0.2s forwards;
+	}
+
+	@keyframes shaderFadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+</style>

@@ -55,21 +55,6 @@ type ProjectEditable = {
 	orgLogos?: string[];
 };
 
-type HomeIntroSegment =
-	| { type: "text"; html: string }
-	| { type: "link"; name: string; href: string; class?: string }
-	| {
-			type: "org";
-			key: string;
-			name: string;
-			href: string;
-			alt?: string;
-			width?: number;
-			class?: string;
-	  };
-
-type HomeIntro = { paragraphs: { segments: HomeIntroSegment[] }[] };
-
 type AckPerson = { name: string; href: string };
 type Acknowledgements = {
 	title: string;
@@ -80,20 +65,21 @@ type Acknowledgements = {
 	outro?: string;
 };
 
-type PersonalPhilosophy = {
-	intro: string;
-	quote: string;
-	cite: string;
-	slowScience: { text: string; href: string };
-	paragraphs?: string[];
-};
-
 type AcademicService = {
 	role: string;
 	venue: string;
 	venueLink?: string;
 	year: string;
 };
+
+type RichHtmlToken =
+	| { type: "html"; value: string }
+	| {
+			type: "logo";
+			key: string;
+			alt: string;
+			height: number;
+	  };
 
 // =========================
 // Content loading (YAML-driven data)
@@ -111,9 +97,9 @@ const experienceMeta = (homeEntry.data.experienceMeta ?? {}) as Record<
 	{ name: string; link: string }
 >;
 const orderFromYaml = homeEntry.data.order as string[] | undefined;
-const homeIntro = (homeEntry.data.homeIntro ?? null) as HomeIntro | null;
+const homeIntroHtml = (homeEntry.data.homeIntroHtml ?? "") as string;
 const acknowledgements = (homeEntry.data.acknowledgements ?? null) as Acknowledgements | null;
-const personalPhilosophy = (homeEntry.data.personalPhilosophy ?? null) as PersonalPhilosophy | null;
+const personalPhilosophyHtml = (homeEntry.data.personalPhilosophyHtml ?? "") as string;
 const academicServices = (homeEntry.data.academicServices ?? []) as AcademicService[];
 
 // =========================
@@ -176,6 +162,49 @@ function resolveAsset(p?: string): any | null {
 function assetToSrc(a: any): string {
 	if (!a) return "";
 	return typeof a === "string" ? a : a.src;
+}
+
+function logoHeight(value: number): number {
+	return value;
+}
+
+function logoDimensionsForHeight(asset: any, height: number) {
+	if (!asset || typeof asset === "string" || !asset.width || !asset.height) {
+		return { width: height, height };
+	}
+	return {
+		width: Math.max(1, Math.round((asset.width * height) / asset.height)),
+		height,
+	};
+}
+
+function tokenizeRichHtml(html: string): RichHtmlToken[] {
+	if (!html) return [];
+	const tokens: RichHtmlToken[] = [];
+	const re = /\{\{logo:([^|}]+)\|([^|}]+)\|([^}]+)\}\}/g;
+	let lastIndex = 0;
+
+	for (const match of html.matchAll(re)) {
+		const index = match.index ?? 0;
+		if (index > lastIndex) {
+			tokens.push({ type: "html", value: html.slice(lastIndex, index) });
+		}
+
+		tokens.push({
+			type: "logo",
+			key: match[1].trim(),
+			alt: match[2].trim(),
+			height: logoHeight(Number(match[3]) || 20),
+		});
+
+		lastIndex = index + match[0].length;
+	}
+
+	if (lastIndex < html.length) {
+		tokens.push({ type: "html", value: html.slice(lastIndex) });
+	}
+
+	return tokens;
 }
 
 // =========================
@@ -251,22 +280,14 @@ function findLogoAny(keys: string | string[]) {
 	return null;
 }
 
-const introLogoKeys = new Set<string>(
-	homeIntro?.paragraphs
-		.flatMap((p) => p.segments)
-		.filter((s): s is Extract<HomeIntroSegment, { type: "org" }> => s.type === "org")
-		.map((s) => s.key) ?? [],
-);
-
 const projectLogoKeys = new Set<string>(projectsEditable.flatMap((p) => p.orgLogos ?? []));
-const allLogoKeys = new Set<string>([...projectLogoKeys, ...introLogoKeys]);
-
-const logoByKey: Record<string, any | null> = {};
-for (const k of allLogoKeys) logoByKey[k] = findLogoAny(LOGO_ALIASES[k] ?? k);
 
 const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
-	[...projectLogoKeys].map((k) => [k, logoByKey[k] ?? null]),
+	[...projectLogoKeys].map((k) => [k, findLogoAny(LOGO_ALIASES[k] ?? k)]),
 );
+
+const homeIntroTokens = tokenizeRichHtml(homeIntroHtml);
+const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 ---
 
 <PageLayout meta={{ title: "Home" }}>
@@ -274,41 +295,27 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 	<section class="glass rounded-2xl pb-6 pr-6">
 		<h1 class="title mb-6">Hello World!</h1>
 
-		{/* Home description (YAML-driven via homeIntro) */}
-		{
-			homeIntro?.paragraphs.map((para) => (
-				<p class="mb-3">
-					{para.segments.map((seg) => {
-						if (seg.type === "text") return <span set:html={seg.html} />;
-						if (seg.type === "link")
-							return (
-								<a class={seg.class ?? "cactus-link"} href={seg.href}>
-									{seg.name}
-								</a>
-							);
-						// org (IMPORTANT: keep logo and link text adjacent: no whitespace node)
-						const logo = logoByKey[seg.key];
-						return (
-							<>
-								{logo ? (
-									<Image
-										src={logo}
-										alt={seg.alt ?? `${seg.name} logo`}
-										width={seg.width ?? 20}
-										densities={[1, 2]}
-										loading="eager"
-										class={seg.class ?? "mb-1 ml-0.5 mr-0.5 inline h-4 w-auto object-contain"}
-									/>
-								) : null}
-								<a class="cactus-link" href={seg.href}>
-									{seg.name}
-								</a>
-							</>
-						);
-					})}
-				</p>
-			))
-		}
+		{homeIntroTokens.length > 0 && (
+			<div class="rich-content space-y-3">
+				{homeIntroTokens.map((token) => {
+					if (token.type === "html") return <Fragment set:html={token.value} />;
+					const src = findLogoAny(LOGO_ALIASES[token.key] ?? token.key);
+					if (!src) return null;
+					const dims = logoDimensionsForHeight(src, token.height);
+					return (
+						<Image
+							src={src}
+							alt={token.alt}
+							width={dims.width}
+							height={dims.height}
+							densities={[1, 2]}
+							loading="eager"
+							class="inline-logo"
+						/>
+					);
+				})}
+			</div>
+		)}
 
 		<SocialList />
 	</section>
@@ -608,41 +615,30 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 		}
 	</section>
 
-	<section class="glass mt-6 rounded-2xl pb-6 pr-6" aria-label="Personal Philosophy">
-		<h2 class="title mb-4 text-xl">Personal Philosophy</h2>
-
-		{
-			personalPhilosophy && (
-				<>
-					<p class="mb-4">{personalPhilosophy.intro}</p>
-
-					<figure class="relative border-l-4 border-accent pl-4">
-						<blockquote class="italic">{personalPhilosophy.quote}</blockquote>
-						<figcaption class="mt-2 text-right text-gray-600 dark:text-gray-400">
-							{personalPhilosophy.cite}
-						</figcaption>
-					</figure>
-
-					<p class="mb-4 mt-4">
-						I resonate with the spirit of{" "}
-						<a
-							class="cactus-link"
-							href={personalPhilosophy.slowScience.href}
-							target="_blank"
-							rel="noopener"
-						>
-							{personalPhilosophy.slowScience.text}
-						</a>
-						.
-					</p>
-
-					{(personalPhilosophy.paragraphs ?? []).map((t) => (
-						<p class="mb-4 mt-4">{t}</p>
-					))}
-				</>
-			)
-		}
-	</section>
+	{personalPhilosophyTokens.length > 0 ? (
+		<section class="glass mt-6 rounded-2xl pb-6 pr-6" aria-label="Personal Philosophy">
+			<h2 class="title mb-4 text-xl">Personal Philosophy</h2>
+			<div class="rich-content">
+				{personalPhilosophyTokens.map((token) => {
+					if (token.type === "html") return <Fragment set:html={token.value} />;
+					const src = findLogoAny(LOGO_ALIASES[token.key] ?? token.key);
+					if (!src) return null;
+					const dims = logoDimensionsForHeight(src, token.height);
+					return (
+						<Image
+							src={src}
+							alt={token.alt}
+							width={dims.width}
+							height={dims.height}
+							densities={[1, 2]}
+							loading="eager"
+							class="inline-logo"
+						/>
+					);
+				})}
+			</div>
+		</section>
+	) : null}
 </PageLayout>
 
 <style>

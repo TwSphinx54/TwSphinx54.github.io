@@ -2,6 +2,7 @@
 # 1) Put logo files under: src/assets/logos/
 # 2) In projectsEditable[*].orgLogos, add a key like "nus"
 # 3) Ensure the filename contains that key (case-insensitive), e.g. "nus.svg" or "logo-nus.png"
+# 4) In homeIntroHtml, {{logo:key|alt|size}} 的第 3 个参数现在按“高度”处理
 
 publicationsEditable:
   # - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Ivor Tsang"]
@@ -256,70 +257,6 @@ experienceMeta:
       Institute of High Performance Computing (IHPC), Agency for Science, Technology and Research (A*STAR)
     link: "https://www.a-star.edu.sg/cfar"
 
-homeIntro:
-  paragraphs:
-    - segments:
-        - type: text
-          html: "Hi, I am a M.Sc. student at "
-        - type: org
-          key: whu
-          name: "Wuhan University"
-          href: "https://en.whu.edu.cn/"
-          alt: "Wuhan University logo"
-          width: 24
-          class: "mr-0.5 ml-0.5 mb-1 inline h-5 w-auto object-contain"
-        - type: text
-          html: ", working at the "
-        - type: org
-          key: liesmars
-          name: "State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)"
-          href: "https://liesmars.whu.edu.cn/"
-          alt: "LIESMARS logo"
-          width: 20
-          class: "mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
-        - type: text
-          html: ", under the guidance of "
-        - type: link
-          name: "Prof. Xianwei Zheng"
-          href: "https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm"
-        - type: text
-          html: ". My research focuses on <em class='highlight'>embodied intelligence</em> and <em class='highlight'>3D visual perception</em>, with an emphasis on how spatial representations support generalizable decision-making and agent-centric policy learning."
-
-    - segments:
-        - type: text
-          html: "My current work lies at the intersection of <em class='highlight'>computer vision</em>, <em class='highlight'>reinforcement learning</em>, and <em class='highlight'>generative modeling</em>, where I study how 2D and 3D representations can be unified to enable robust perception–action coupling. I am particularly interested in <em class='highlight'>structure-aware visual representations</em> that support cross-view understanding, generalization across environments, and interaction-driven learning in embodied settings."
-
-    - segments:
-        - type: text
-          html: "Previously, I explored generative AI for image and video synthesis during my internship at "
-        - type: org
-          key: baidu
-          name: "Baidu"
-          href: "https://www.baidu.com/"
-          alt: "Baidu logo"
-          width: 20
-          class: "mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
-        - type: text
-          html: ". I am currently a remote research intern at the "
-        - type: org
-          key: astar
-          name: "Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)"
-          href: "https://www.a-star.edu.sg/cfar"
-          alt: "A*STAR logo"
-          width: 20
-          class: "mr-0.5 ml-0.5 mb-1 inline h-4 w-auto object-contain"
-        - type: text
-          html: ", supervised by "
-        - type: link
-          name: "Dr. Xingrui Yu"
-          href: "https://xingruiyu.github.io/"
-        - type: text
-          html: ", where I work on <em class='highlight'>generalizable reinforcement learning for embodied agents</em>, with a focus on agent-centric formulations and transferable policies grounded in implicit spatial representations that support generalization across tasks and scenes."
-
-    - segments:
-        - type: text
-          html: "More broadly, my goal is to develop spatially grounded learning frameworks that bridge perception, geometry, and control, advancing the next generation of embodied systems that can reason about and act within complex real-world environments."
-
 acknowledgements:
   title: "Acknowledgements:"
   introLines:
@@ -353,16 +290,6 @@ acknowledgements:
       href: "https://www.researchgate.net/scientific-contributions/He-Chen-2315784007"
   outro: "and others I’ve had the pleasure to work with."
 
-personalPhilosophy:
-  intro: "I follow Stoic philosophy. Life is a joyful ascent: a true mountaineer delights in the climb itself, not just the summit."
-  quote: "Thou sufferest this justly: for thou choosest rather to become good to-morrow than to be good to-day."
-  cite: "— Marcus Aurelius, Meditations 8.22"
-  slowScience:
-    text: "Slow Science"
-    href: "http://slow-science.org/"
-  paragraphs:
-    - "We live in an age tyrannized by efficiency, outcomes, and speed, to the point that nothing lasts and nothing leaves a deep impression. In the midst of noisy bubbles and short-lived hype, I hope to take time to think carefully, to doubt, to refine, and to do research that is genuinely meaningful and worth remembering."
-
 academicServices:
   # - role: "Reviewer"
   #   venue: "43rd International Conference on Machine Learning (ICML'26)"
@@ -380,3 +307,67 @@ academicServices:
     venue: "2022 International Graduate Workshop on Geo-Informatics (IGWG'22)"
     venueLink: "https://www.polyu.edu.hk/lsgi/news-and-events/news/2022/1212-international-graduate-workshop-on-geoinformatics-2022/?sc_lang=en"
     year: "2022"
+
+homeIntroHtml: |
+  <p>
+    Hi, I am a M.Sc. student at
+    {{logo:whu|Wuhan University logo|18}}
+    <a class="cactus-link" href="https://en.whu.edu.cn/" target="_blank" rel="noopener">Wuhan University</a>,
+    working at the
+    {{logo:liesmars|LIESMARS logo|16}}
+    <a class="cactus-link" href="https://liesmars.whu.edu.cn/" target="_blank" rel="noopener">State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)</a>,
+    under the guidance of
+    <a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm" target="_blank" rel="noopener">Prof. Xianwei Zheng</a>.
+    My research focuses on <em class="highlight">embodied intelligence</em> and <em class="highlight">3D visual perception</em>,
+    with an emphasis on how spatial representations support generalizable decision-making and agent-centric policy learning.
+  </p>
+
+  <p>
+    My current work lies at the intersection of <em class="highlight">computer vision</em>, <em class="highlight">reinforcement learning</em>, and
+    <em class="highlight">generative modeling</em>, where I study how 2D and 3D representations can be unified to enable robust perception-action coupling.
+    I am particularly interested in <em class="highlight">structure-aware visual representations</em> that support cross-view understanding,
+    generalization across environments, and interaction-driven learning in embodied settings.
+  </p>
+
+  <p>
+    Previously, I explored generative AI for image and video synthesis during my internship at
+    {{logo:baidu|Baidu logo|16}}
+    <a class="cactus-link" href="https://www.baidu.com/" target="_blank" rel="noopener">Baidu</a>.
+    I am currently a remote research assistant at the
+    {{logo:astar|A*STAR logo|16}}
+    <a class="cactus-link" href="https://www.a-star.edu.sg/cfar" target="_blank" rel="noopener">Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)</a>,
+    supervised by
+    <a class="cactus-link" href="https://xingruiyu.github.io/" target="_blank" rel="noopener">Dr. Xingrui Yu</a>,
+    where I work on <em class="highlight">generalizable reinforcement learning for embodied agents</em>,
+    with a focus on agent-centric formulations and transferable policies grounded in implicit spatial representations that support generalization across tasks and scenes.
+  </p>
+
+  <p>
+    More broadly, my goal is to develop spatially grounded learning frameworks that bridge perception, geometry, and control, 
+    advancing the next generation of embodied systems that can reason about and act within complex real-world environments.
+  </p>
+  <p></p>
+
+personalPhilosophyHtml: |
+  <p>
+    I follow Stoic philosophy. Life is a joyful ascent: a true mountaineer delights in the climb itself, not just the summit.
+  </p>
+
+  <figure class="philosophy-quote">
+    <blockquote>
+      Thou sufferest this justly: for thou choosest rather to become good to-morrow than to be good to-day.
+    </blockquote>
+    <figcaption>
+      — Marcus Aurelius, <em>Meditations</em> 8.22
+    </figcaption>
+  </figure>
+
+  <p>
+    I also resonate with the spirit of
+    <a class="cactus-link" href="http://slow-science.org/" target="_blank" rel="noopener">Slow Science</a>.
+  </p>
+
+  <p>
+    We live in an age tyrannized by efficiency, outcomes, and speed, to the point that nothing lasts and nothing leaves a deep impression. 
+    In the midst of noisy bubbles and short-lived hype, I hope to take time to think carefully, to doubt, to refine, and to do research that is genuinely meaningful and worth remembering.
+  </p>
