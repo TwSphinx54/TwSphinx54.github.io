@@ -4,16 +4,18 @@ import { menuLinks } from "@/site-config";
 const url = new URL(Astro.request.url);
 ---
 
-<div id="island-wrapper" class="pointer-events-none fixed left-1/2 top-4 z-[100] -translate-x-1/2">
+<div
+	id="island-wrapper"
+	class="pointer-events-none fixed left-1/2 top-4 z-[100] flex -translate-x-1/2 items-center justify-center"
+>
 	<div
 		id="dynamic-island"
 		class="cubic-bezier-apple pointer-events-auto flex items-center gap-x-2 rounded-full border border-white/20 bg-white/30 p-1.5 opacity-0 shadow-[0_12px_44px_-10px_rgba(0,0,0,0.15)] ring-1 ring-white/10 backdrop-blur-3xl transition-all duration-700 will-change-transform hover:scale-[1.02] hover:bg-white/45 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)] dark:border-white/5 dark:bg-black/35 dark:shadow-[0_20px_80px_rgba(0,0,0,0.5)] dark:ring-white/5 dark:hover:bg-black/45 sm:gap-x-4 sm:p-2"
 		style="transform: scale(0.85) translateY(-20px);"
 	>
-		<!-- Name -->
 		<a
 			href="/"
-			class="group flex items-center gap-x-3 rounded-full px-3 py-1 transition-all duration-300 hover:bg-zinc-800/5 dark:hover:bg-white/10 sm:px-4"
+			class="group flex items-center gap-x-2 rounded-full px-2.5 py-1 transition-all duration-300 hover:bg-zinc-800/5 dark:hover:bg-white/10 sm:px-3.5"
 		>
 			<span
 				class="whitespace-nowrap text-sm font-bold tracking-tight text-textColor transition-transform group-active:scale-95 sm:text-base"
@@ -22,11 +24,7 @@ const url = new URL(Astro.request.url);
 			</span>
 		</a>
 
-		<!-- Divider -->
-		<div class="h-5 w-[1px] bg-zinc-400/20 dark:bg-zinc-600/30"></div>
-
-		<!-- Navigation -->
-		<nav class="flex items-center gap-x-1 sm:gap-x-1.5">
+		<nav class="flex items-center gap-x-0.5 sm:gap-x-1">
 			{
 				menuLinks.map((link) => {
 					const isActive =
@@ -34,7 +32,7 @@ const url = new URL(Astro.request.url);
 					return (
 						<a
 							href={link.path}
-							class={`relative rounded-full px-3 py-1.5 text-[11px] font-bold tracking-wider transition-all duration-300 sm:px-4 sm:text-[13px] ${
+							class={`relative rounded-full px-2.5 py-1 text-[11px] font-bold tracking-wider transition-all duration-300 sm:px-3 sm:text-xs ${
 								isActive
 									? "text-accent"
 									: "text-zinc-500 hover:bg-zinc-800/5 hover:text-textColor dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"
@@ -53,29 +51,160 @@ const url = new URL(Astro.request.url);
 			}
 		</nav>
 	</div>
+
+	<div
+		id="dynamic-island-tools"
+		class="cubic-bezier-apple pointer-events-auto absolute left-[calc(100%+8px)] flex items-center gap-x-1 rounded-full border border-white/20 bg-white/30 p-1 opacity-0 shadow-[0_12px_44px_-10px_rgba(0,0,0,0.15)] ring-1 ring-white/10 backdrop-blur-3xl transition-all duration-700 will-change-transform dark:border-white/5 dark:bg-black/35 dark:shadow-[0_20px_80px_rgba(0,0,0,0.5)] dark:ring-white/5 sm:left-[calc(100%+12px)] sm:p-1.5"
+		style="transform: translateX(-16px) scale(0.85);"
+	>
+		<button
+			id="island-theme-toggle"
+			class="group flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 hover:bg-zinc-800/5 dark:hover:bg-white/10 sm:h-9 sm:w-9"
+			aria-label="Toggle theme"
+		>
+			<svg
+				class="h-3.5 w-3.5 text-zinc-600 dark:hidden sm:h-4 sm:w-4"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<circle cx="12" cy="12" r="5"></circle>
+				<line x1="12" y1="1" x2="12" y2="3"></line>
+				<line x1="12" y1="21" x2="12" y2="23"></line>
+				<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+				<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+				<line x1="1" y1="12" x2="3" y2="12"></line>
+				<line x1="21" y1="12" x2="23" y2="12"></line>
+				<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+				<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+			</svg>
+			<svg
+				class="hidden h-3.5 w-3.5 text-zinc-400 dark:block sm:h-4 sm:w-4"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+			</svg>
+		</button>
+
+		<div class="h-4 w-[1px] bg-zinc-400/20 dark:bg-zinc-600/30 sm:h-5"></div>
+
+		<button
+			id="island-scroll-top"
+			class="group flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 hover:bg-zinc-800/5 dark:hover:bg-white/10 sm:h-9 sm:w-9"
+			aria-label="Scroll to top"
+		>
+			<svg
+				class="h-3.5 w-3.5 text-zinc-600 transition-transform group-hover:-translate-y-0.5 dark:text-zinc-400 sm:h-4 sm:w-4"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path d="M12 19V5M5 12l7-7 7 7"></path>
+			</svg>
+		</button>
+	</div>
 </div>
 
 <script>
 	const island = document.getElementById("dynamic-island");
+	const islandTools = document.getElementById("dynamic-island-tools");
 	const threshold = 180;
+	const transitionDuration = 700;
+	const islandHiddenTransform = "translateX(0) scale(0.85) translateY(-20px)";
+	let ticking = false;
+	let visibilityTimer: number | undefined;
+	let isVisible = false;
+	let toolsVisible = false;
 
-	if (island) {
-		const handleScroll = () => {
-			const shouldShow = window.scrollY > threshold;
+	if (island && islandTools) {
+		const getToolsGap = () => (window.innerWidth <= 640 ? 8 : 12);
+		const getGroupShift = () => (islandTools.offsetWidth + getToolsGap()) / 2;
+		const getIslandShownTransform = (shifted = false) =>
+			`translateX(-${shifted ? getGroupShift() : 0}px) scale(1) translateY(0)`;
+		const getToolsShownTransform = () => `translateX(-${getGroupShift()}px) scale(1)`;
+		const getToolsHiddenTransform = () => `translateX(-${getGroupShift() + 16}px) scale(0.85)`;
 
-			if (shouldShow) {
+		const setIslandVisible = (visible: boolean, shifted = false) => {
+			if (visible) {
 				island.classList.remove("opacity-0", "pointer-events-none");
 				island.classList.add("opacity-100", "pointer-events-auto");
-				island.style.transform = "scale(1) translateY(0)";
-			} else {
-				island.classList.add("opacity-0", "pointer-events-none");
-				island.classList.remove("opacity-100", "pointer-events-auto");
-				island.style.transform = "scale(0.85) translateY(-20px)";
+				island.style.transform = getIslandShownTransform(shifted);
+				return;
+			}
+
+			island.classList.add("opacity-0", "pointer-events-none");
+			island.classList.remove("opacity-100", "pointer-events-auto");
+			island.style.transform = islandHiddenTransform;
+		};
+
+		const setToolsVisible = (visible: boolean) => {
+			toolsVisible = visible;
+
+			if (visible) {
+				islandTools.classList.remove("opacity-0", "pointer-events-none");
+				islandTools.classList.add("opacity-100", "pointer-events-auto");
+				islandTools.style.transform = getToolsShownTransform();
+				return;
+			}
+
+			islandTools.classList.add("opacity-0", "pointer-events-none");
+			islandTools.classList.remove("opacity-100", "pointer-events-auto");
+			islandTools.style.transform = getToolsHiddenTransform();
+		};
+
+		const clearVisibilityTimer = () => {
+			if (visibilityTimer !== undefined) {
+				window.clearTimeout(visibilityTimer);
+				visibilityTimer = undefined;
 			}
 		};
 
-		let ticking = false;
-		function onScroll() {
+		const handleScroll = () => {
+			const isMobile = window.innerWidth <= 640;
+			const shouldShow = isMobile || window.scrollY > threshold;
+
+			if (shouldShow === isVisible) {
+				if (shouldShow) {
+					setIslandVisible(true, toolsVisible);
+					setToolsVisible(toolsVisible);
+				}
+				return;
+			}
+
+			clearVisibilityTimer();
+			isVisible = shouldShow;
+
+			if (shouldShow) {
+				setIslandVisible(true, false);
+				setToolsVisible(false);
+				visibilityTimer = window.setTimeout(() => {
+					if (isVisible) {
+						setIslandVisible(true, true);
+						setToolsVisible(true);
+					}
+				}, transitionDuration);
+				return;
+			}
+
+			setIslandVisible(true, true);
+			setToolsVisible(false);
+			visibilityTimer = window.setTimeout(() => {
+				if (!isVisible) setIslandVisible(false, false);
+			}, transitionDuration);
+		};
+
+		function onScrollOrResize() {
 			if (!ticking) {
 				window.requestAnimationFrame(() => {
 					handleScroll();
@@ -85,25 +214,43 @@ const url = new URL(Astro.request.url);
 			}
 		}
 
-		window.addEventListener("scroll", onScroll, { passive: true });
+		window.addEventListener("scroll", onScrollOrResize, { passive: true });
+		window.addEventListener("resize", onScrollOrResize, { passive: true });
 		handleScroll();
+
+		const scrollBtn = document.getElementById("island-scroll-top");
+		scrollBtn?.addEventListener("click", () => {
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		});
+
+		const themeBtn = document.getElementById("island-theme-toggle");
+		themeBtn?.addEventListener("click", () => {
+			const isDark =
+				document.documentElement.classList.contains("dark") ||
+				document.documentElement.getAttribute("data-theme") === "dark";
+			const themeChangeEvent = new CustomEvent("theme-change", {
+				detail: { theme: isDark ? "light" : "dark" },
+			});
+			document.dispatchEvent(themeChangeEvent);
+		});
 	}
 </script>
 
 <style>
 	.cubic-bezier-apple {
-		transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+		transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
 	}
 
-	#dynamic-island {
+	#dynamic-island,
+	#dynamic-island-tools {
 		backface-visibility: hidden;
-		/* Premium rim light and double border effect */
 		box-shadow:
 			0 12px 40px -10px rgba(0, 0, 0, 0.2),
 			inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
 	}
 
-	:global(.dark) #dynamic-island {
+	:global(.dark) #dynamic-island,
+	:global(.dark) #dynamic-island-tools {
 		box-shadow:
 			0 25px 60px -12px rgba(0, 0, 0, 0.5),
 			inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.1);
