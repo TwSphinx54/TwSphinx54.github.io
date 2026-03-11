@@ -197,7 +197,7 @@ const url = new URL(Astro.request.url);
 				return;
 			}
 
-			setIslandVisible(true, true);
+			setIslandVisible(true, false);
 			setToolsVisible(false);
 			visibilityTimer = window.setTimeout(() => {
 				if (!isVisible) setIslandVisible(false, false);
