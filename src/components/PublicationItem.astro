@@ -44,8 +44,7 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 				{
 					author.map((name: string, index: number) => (
 						<span style={{ fontWeight: name === "Xu Pan" ? "700" : "normal" }}>
-							{name}
-							{index < author.length - 1 && ","}
+							{name}{index < author.length - 1 && ","}
 						</span>
 					))
 				}

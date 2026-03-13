@@ -102,7 +102,7 @@ publicationsEditable:
       the embedded watermark remains detectable under post-release model adaptation.
     selected: true
 
-  - author: ["Xu Pan", "Qiyuan Ma", "Jintao Zhang", "He Chen*", "Xianwei Zheng*"]
+  - author: ["Xu Pan", "Qiyuan Ma", "Mingyue Dong", "He Chen", "Wei Ji", "Xianwei Zheng*"]
     title: "SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching"
     booktitle: "IEEE Transactions on Geoscience and Remote Sensing (Under Review)"
     time: "2026"
@@ -222,7 +222,7 @@ projectsEditable:
     repo: "https://github.com/Geo-Tell/SCoDe"
     site: "https://xupan.top/Projects/scode"
     paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260"
-    orgLogos: ["whu", "epfl"]
+    orgLogos: ["whu", "epfl", "seu"]
 
   - name: "GNDAS"
     description: "The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system application designed for the analysis and assessment of natural disasters."
