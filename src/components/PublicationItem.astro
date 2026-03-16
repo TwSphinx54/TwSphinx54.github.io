@@ -20,6 +20,7 @@ const {
 	venueLogo,
 	image,
 	fullSrc,
+	semanticScholarId,
 } = pub;
 
 const slug = title
@@ -44,7 +45,8 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 				{
 					author.map((name: string, index: number) => (
 						<span style={{ fontWeight: name === "Xu Pan" ? "700" : "normal" }}>
-							{name}{index < author.length - 1 && ","}
+							{name}
+							{index < author.length - 1 && ","}
 						</span>
 					))
 				}
@@ -85,6 +87,28 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 						<span class="rounded-full bg-accent/10 px-2 py-0.5 text-sm font-medium text-accent dark:bg-accent/15">
 							{venueRank}
 						</span>
+					)
+				}
+
+				{
+					semanticScholarId && (
+						<a
+							class="semantic-citation inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50"
+							data-id={semanticScholarId}
+							href={`https://www.semanticscholar.org/paper/${semanticScholarId}`}
+							target="_blank"
+							rel="noopener"
+							title="View on Semantic Scholar"
+						>
+							<Icon
+								name="simple-icons:semanticscholar"
+								class="mr-1 inline-block"
+								width="14"
+								height="14"
+								aria-hidden="true"
+							/>
+							Citations&nbsp;<span class="citation-count">0</span>
+						</a>
 					)
 				}
 
@@ -240,3 +264,26 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 		)
 	}
 </article>
+
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const citationElements = document.querySelectorAll(".semantic-citation");
+		citationElements.forEach(async (el) => {
+			const id = (el as HTMLElement).dataset.id;
+			if (!id) return;
+			try {
+				const res = await fetch(
+					`https://api.semanticscholar.org/graph/v1/paper/${id}?fields=citationCount`,
+				);
+				if (!res.ok) return;
+				const data = await res.json();
+				if (data && data.citationCount !== undefined) {
+					const countSpan = el.querySelector(".citation-count");
+					if (countSpan) countSpan.textContent = data.citationCount;
+				}
+			} catch (e) {
+				console.error("Failed to fetch citation for", id, e);
+			}
+		});
+	});
+</script>

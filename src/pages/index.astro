@@ -28,6 +28,7 @@ type PublicationEditable = {
 	venueLogo?: string;
 	abstract?: string;
 	selected?: boolean;
+	semanticScholarId?: string;
 };
 
 type PublicationResolved = Omit<PublicationEditable, "image" | "venueLogo"> & {
