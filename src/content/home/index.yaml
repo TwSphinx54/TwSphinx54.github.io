@@ -37,7 +37,7 @@ publicationsEditable:
     # venueLogo: "icons/icml.svg"
     venueIcon: "simple-icons:arxiv"
     venueColor: "#B31B1B"
-    semanticScholarId: "CorpusID:285271261"
+    semanticScholarId: "285271261"
     abstract: >-
       Vision-Language-Action (VLA) models achieve strong performance in robotic manipulation, but reinforcement 
       learning (RL) fine-tuning often degrades generalization under spatial distribution shifts. We analyze 
@@ -63,7 +63,7 @@ publicationsEditable:
     image: "pubs/pub0_scode.png"
     venueIcon: "simple-icons:elsevier"
     venueColor: "#FF6C00"
-    semanticScholarId: "CorpusID:280934765"
+    semanticScholarId: "280934765"
     abstract: >-
       Matching images with significant scale differences remains a persistent challenge in photogrammetry
       and remote sensing. The scale discrepancy often degrades appearance consistency and introduces

@@ -29,6 +29,104 @@ const slug = title
 	.replace(/[^a-z0-9\-]/g, "");
 
 const isArxivLink = (url: string) => url.includes("arxiv.org");
+
+type CitationCacheEntry = { value: number | null; expiresAt: number };
+type CitationCache = Map<string, CitationCacheEntry>;
+type CitationInFlight = Map<string, Promise<number | null>>;
+
+const globalWithCache = globalThis as typeof globalThis & {
+	__s2CitationCache?: CitationCache;
+	__s2CitationInFlight?: CitationInFlight;
+};
+
+const citationCache = (globalWithCache.__s2CitationCache ??= new Map());
+const citationInFlight = (globalWithCache.__s2CitationInFlight ??= new Map());
+
+const CITATION_TTL_MS = 12 * 60 * 60 * 1000; // 12h
+const NEGATIVE_TTL_MS = 2 * 60 * 1000; // 2min
+const MAX_RETRIES = 3;
+const REQUEST_TIMEOUT_MS = 8000;
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const getCorpusDigits = (raw?: string) => (raw ? raw.replace(/\D/g, "") : "");
+
+const getRetryDelayMs = (res: Response, attempt: number) => {
+	const retryAfter = Number(res.headers.get("retry-after"));
+	if (Number.isFinite(retryAfter) && retryAfter > 0) return retryAfter * 1000;
+	return 400 * 2 ** attempt + Math.floor(Math.random() * 200);
+};
+
+const requestCitation = async (
+	paperId: string,
+	headers: Record<string, string>,
+): Promise<number | null> => {
+	for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+		const controller = new AbortController();
+		const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+		try {
+			const res = await fetch(
+				`https://api.semanticscholar.org/graph/v1/paper/${encodeURIComponent(paperId)}?fields=citationCount`,
+				{ headers, signal: controller.signal },
+			);
+			clearTimeout(timer);
+
+			if (res.ok) {
+				const data = await res.json();
+				return typeof data?.citationCount === "number" ? data.citationCount : null;
+			}
+
+			if ((res.status === 429 || res.status >= 500) && attempt < MAX_RETRIES) {
+				await sleep(getRetryDelayMs(res, attempt));
+				continue;
+			}
+
+			console.warn(`[S2] ${paperId} request failed: ${res.status}`);
+			return null;
+		} catch (e) {
+			clearTimeout(timer);
+			if (attempt < MAX_RETRIES) {
+				await sleep(400 * 2 ** attempt + Math.floor(Math.random() * 200));
+				continue;
+			}
+			console.warn(`[S2] ${paperId} fetch error`, e);
+			return null;
+		}
+	}
+	return null;
+};
+
+const getCitationCount = async (rawId?: string): Promise<number | null> => {
+	const digits = getCorpusDigits(rawId);
+	if (!digits) return null;
+
+	const now = Date.now();
+	const cached = citationCache.get(digits);
+	if (cached && cached.expiresAt > now) return cached.value;
+
+	const inFlight = citationInFlight.get(digits);
+	if (inFlight) return inFlight;
+
+	const paperId = `CorpusId:${digits}`;
+	const apiKey = import.meta.env.S2_API_KEY; // server-only
+	const headers: Record<string, string> = apiKey ? { "x-api-key": apiKey } : {};
+
+	const task = (async () => {
+		const value = await requestCitation(paperId, headers);
+		citationCache.set(digits, {
+			value,
+			expiresAt: Date.now() + (value === null ? NEGATIVE_TTL_MS : CITATION_TTL_MS),
+		});
+		return value;
+	})().finally(() => {
+		citationInFlight.delete(digits);
+	});
+
+	citationInFlight.set(digits, task);
+	return task;
+};
+
+const citationCount = await getCitationCount(semanticScholarId);
 ---
 
 <article
@@ -91,13 +189,9 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 
 				{
 					semanticScholarId && (
-						<a
-							class="semantic-citation inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50"
-							data-id={semanticScholarId}
-							href={`https://www.semanticscholar.org/paper/${semanticScholarId}`}
-							target="_blank"
-							rel="noopener"
-							title="View on Semantic Scholar"
+						<span
+							class="semantic-citation inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+							title="Semantic Scholar citation count"
 						>
 							<Icon
 								name="simple-icons:semanticscholar"
@@ -106,8 +200,8 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 								height="14"
 								aria-hidden="true"
 							/>
-							Citations&nbsp;<span class="citation-count">0</span>
-						</a>
+							Citations&nbsp;<span class="citation-count">{citationCount ?? "--"}</span>
+						</span>
 					)
 				}
 
@@ -263,26 +357,3 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 		)
 	}
 </article>
-
-<script>
-	document.addEventListener("DOMContentLoaded", () => {
-		const citationElements = document.querySelectorAll(".semantic-citation");
-		citationElements.forEach(async (el) => {
-			const id = (el as HTMLElement).dataset.id;
-			if (!id) return;
-			try {
-				const res = await fetch(
-					`https://api.semanticscholar.org/graph/v1/paper/${id}?fields=citationCount`,
-				);
-				if (!res.ok) return;
-				const data = await res.json();
-				if (data && data.citationCount !== undefined) {
-					const countSpan = el.querySelector(".citation-count");
-					if (countSpan) countSpan.textContent = data.citationCount;
-				}
-			} catch (e) {
-				console.error("Failed to fetch citation for", id, e);
-			}
-		});
-	});
-</script>
