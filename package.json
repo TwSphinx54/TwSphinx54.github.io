@@ -43,7 +43,7 @@
     },
     "devDependencies": {
         "@astrojs/check": "^0.9.4",
-        "@biomejs/biome": "^2.4.7",
+        "@biomejs/biome": "^2.4.8",
         "@iconify-json/mdi": "^1.2.3",
         "@iconify-json/simple-icons": "^1.2.74",
         "@tailwindcss/typography": "^0.5.19",

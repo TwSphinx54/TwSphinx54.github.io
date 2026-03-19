@@ -403,10 +403,7 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 
 					{acknowledgements.mentors?.map((p, i) => (
 						<>
-							<a class="cactus-link" href={p.href}>
-								{p.name}
-							</a>
-							{i < (acknowledgements.mentors?.length ?? 0) - 1 ? "," : ","}
+							<a class="cactus-link" href={p.href}>{p.name}</a>{i < (acknowledgements.mentors?.length ?? 0) - 1 ? "," : ","}
 							{i === (acknowledgements.mentors?.length ?? 0) - 1 ? <br /> : " "}
 						</>
 					))}
@@ -420,20 +417,16 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 
 					{acknowledgements.peers?.map((p, i) => (
 						<>
-							<a class="cactus-link" href={p.href}>
-								{p.name}
-							</a>
-							{i < (acknowledgements.peers?.length ?? 0) - 1 ? "," : ""}
-							{i === (acknowledgements.peers?.length ?? 0) - 1 ? (
-								<>
-									<br />
-									{acknowledgements.outro ?? ""}
-								</>
-							) : (
-								" "
-							)}
+							<a class="cactus-link" href={p.href}>{p.name}</a>{i < (acknowledgements.peers?.length ?? 0) - 1 ? "," : ","}
+							{i === (acknowledgements.peers?.length ?? 0) - 1 ? <br /> : " "}
 						</>
 					))}
+                    {acknowledgements.outro ? (
+						<>
+							{acknowledgements.outro}
+							<br />
+						</>
+					) : null}
 				</p>
 			)
 		}
