@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import mdx from "@astrojs/mdx";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from '@tailwindcss/vite';
 import react from "@astrojs/react";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
@@ -24,10 +24,6 @@ export default defineConfig({
     react(),
     expressiveCode(expressiveCodeOptions),
     icon(),
-    tailwind({
-      applyBaseStyles: false,
-      nesting: true,
-    }),
     mdx(),
     robotsTxt(),
   ],
@@ -53,10 +49,38 @@ export default defineConfig({
   // ! Please remember to replace the following site property with your own domain
   site: "https://TwSphinx54.github.io",
   vite: {
+    build: {
+      chunkSizeWarningLimit: 800,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes("node_modules")) return;
+            if (id.includes("@shadergradient/react")) {
+              return "vendor-shadergradient";
+            }
+            if (id.includes("@react-three/fiber")) {
+              return "vendor-r3f";
+            }
+            if (id.includes("three-stdlib") || id.includes("camera-controls")) {
+              return "vendor-three-stdlib";
+            }
+            if (id.includes("/three/")) {
+              return "vendor-three-core";
+            }
+            if (id.includes("react") || id.includes("scheduler")) {
+              return "vendor-react";
+            }
+          },
+        },
+      },
+    },
     optimizeDeps: {
       exclude: [],
     },
-    plugins: [rawFonts([".ttf", ".woff"])],
+    plugins: [
+      rawFonts([".ttf", ".woff"]),
+      tailwindcss()
+    ],
   },
 });
 

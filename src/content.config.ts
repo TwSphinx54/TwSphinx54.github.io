@@ -1,4 +1,6 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
+import { glob } from "astro/loaders";
 
 function removeDupsAndLowerCase(array: string[]) {
   if (!array.length) return array;
@@ -71,20 +73,20 @@ const AcademicService = z.object({
 });
 
 const home = defineCollection({
-  type: "data",
+  loader: glob({ pattern: "index.yaml", base: "./src/content/home" }),
   schema: z.object({
-    publicationsEditable: z.array(PublicationEditable),
-    newsItems: z.array(NewsItem),
-    projectsEditable: z.array(ProjectEditable),
+    publicationsEditable: z.array(PublicationEditable).default([]),
+    newsItems: z.array(NewsItem).default([]),
+    projectsEditable: z.array(ProjectEditable).default([]),
     experienceMeta: z
-      .record(z.object({ name: z.string(), link: z.string() }))
+      .record(z.string(), z.object({ name: z.string(), link: z.string() }))
       .optional()
       .default({}),
-    order: z.array(z.string()).optional(),
+    order: z.array(z.string()).optional().default([]),
     homeIntroHtml: z.string().optional(),
     acknowledgements: Acknowledgements.optional(),
     personalPhilosophyHtml: z.string().optional(),
-    academicServices: z.array(AcademicService).optional(),
+    academicServices: z.array(AcademicService).optional().default([]),
   }),
 });
 

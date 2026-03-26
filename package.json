@@ -13,14 +13,13 @@
         "check": "astro check"
     },
     "dependencies": {
-        "@astrojs/check": "0.9.6",
-        "@astrojs/mdx": "4.3.12",
-        "@astrojs/react": "^4.4.2",
-        "@astrojs/tailwind": "6.0.2",
+        "@astrojs/check": "0.9.8",
+        "@astrojs/mdx": "5.0.2",
+        "@astrojs/react": "^5.0.1",
         "@react-three/fiber": "^9.5.0",
         "@shadergradient/react": "^2.4.20",
-        "@types/three": "^0.182.0",
-        "astro": "^5.18.1",
+        "@types/three": "^0.183.1",
+        "astro": "^6.0.8",
         "astro-expressive-code": "^0.41.7",
         "astro-icon": "^1.1.5",
         "astro-robots-txt": "^1.0.0",
@@ -34,19 +33,19 @@
         "react-dom": "^19.2.4",
         "rehype-external-links": "^3.0.0",
         "remark-directive": "^4.0.0",
-        "sharp": "^0.33.5",
-        "three": "^0.182.0",
+        "sharp": "^0.34.5",
+        "three": "^0.183.2",
         "three-stdlib": "^2.36.1",
-        "typescript": "^5.9.3",
         "unified": "^11.0.5",
         "unist-util-visit": "^5.1.0"
     },
     "devDependencies": {
         "@astrojs/check": "^0.9.4",
-        "@biomejs/biome": "^2.4.8",
+        "@biomejs/biome": "^2.4.9",
         "@iconify-json/mdi": "^1.2.3",
-        "@iconify-json/simple-icons": "^1.2.74",
+        "@iconify-json/simple-icons": "^1.2.75",
         "@tailwindcss/typography": "^0.5.19",
+        "@tailwindcss/vite": "^4.2.2",
         "@types/hast": "^3.0.4",
         "@types/mdast": "^4.0.4",
         "autoprefixer": "^10.4.27",
@@ -54,7 +53,7 @@
         "prettier-plugin-astro": "0.14.1",
         "prettier-plugin-tailwindcss": "^0.7.2",
         "rehype-unwrap-images": "^1.0.0",
-        "tailwindcss": "^3.4.19",
-        "typescript": "^5.6.2"
+        "tailwindcss": "^4.2.2",
+        "typescript": "^6.0.2"
     }
 }
