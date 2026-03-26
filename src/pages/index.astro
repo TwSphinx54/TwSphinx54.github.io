@@ -6,6 +6,7 @@ import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import { getEntry } from "astro:content";
 import PublicationItem from "@/components/PublicationItem.astro";
+import figureImage from "../assets/figure.jpg";
 
 // =========================
 // EDITABLE CONTENT (edit here)
@@ -126,14 +127,6 @@ function repoLabel(url: string): string {
 		return url;
 	} catch {
 		return url;
-	}
-}
-
-function isArxivLink(url: string): boolean {
-	try {
-		return new URL(url).hostname.includes("arxiv.org");
-	} catch {
-		return false;
 	}
 }
 
@@ -295,7 +288,17 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 	<ShaderGradientBg client:load />
 	<section class="glass rounded-2xl pb-6 pr-6">
 		<h1 class="title mb-6">Hello World!</h1>
-
+		<Image
+			src={figureImage}
+			alt="Xu Pan"
+			width={112}
+			height={160}
+			sizes="(min-width: 640px) 140px, 100px"
+			densities={[1, 2]}
+			loading="eager"
+			fetchpriority="high"
+			class="float-right ml-4 mb-3 h-46 w-32 rounded-md object-cover shadow-md"
+		/>
 		{homeIntroTokens.length > 0 && (
 			<div class="rich-content space-y-3">
 				{homeIntroTokens.map((token) => {
@@ -318,7 +321,9 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 			</div>
 		)}
 
-		<SocialList />
+		<div class="clear-both">
+			<SocialList />
+		</div>
 	</section>
 
 	<section class="glass mt-6 rounded-2xl pb-6 pr-6" aria-label="News">

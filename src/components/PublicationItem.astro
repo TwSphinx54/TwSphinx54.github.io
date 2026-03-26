@@ -81,15 +81,13 @@ const requestCitation = async (
 				continue;
 			}
 
-			console.warn(`[S2] ${paperId} request failed: ${res.status}`);
 			return null;
-		} catch (e) {
+		} catch {
 			clearTimeout(timer);
 			if (attempt < MAX_RETRIES) {
 				await sleep(400 * 2 ** attempt + Math.floor(Math.random() * 200));
 				continue;
 			}
-			console.warn(`[S2] ${paperId} fetch error`, e);
 			return null;
 		}
 	}

@@ -1,6 +1,7 @@
 {
     "name": "twsphinx54",
     "version": "4.11.0",
+    "type": "module",
     "scripts": {
         "dev": "astro dev",
         "start": "astro dev",

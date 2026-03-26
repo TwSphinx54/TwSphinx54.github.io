@@ -1,65 +1,53 @@
 ---
-import { Image } from "astro:assets";
 import { menuLinks } from "@/site-config";
 import ThemeToggle from "../ThemeToggle.astro";
-import figureImage from "../../assets/figure.jpg";
 
 const url = new URL(Astro.request.url);
 ---
 
-<header class="group relative mb-10 mt-5 flex items-center sm:mt-0 sm:ps-[6.5rem]" id="main-header">
-	<div class="flex sm:flex-col">
+<header class="group relative mb-10 mt-5 flex flex-col sm:mt-0" id="main-header">
+	<div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
 		<a
 			aria-current={url.pathname === "/" ? "page" : false}
-			class="inline-flex items-center grayscale hover:filter-none sm:relative sm:inline-block"
+			class="inline-flex items-center"
 			href="/"
 		>
-			<Image
-				src={figureImage}
-				alt="figure"
-				width={112}
-				height={160}
-				sizes="(min-width: 640px) 112px, 64px"
-				densities={[1, 2]}
-				loading="eager"
-				fetchpriority="high"
-				class="me-6 h-24 w-16 rounded-md object-cover sm:absolute sm:start-[-6.5rem] sm:me-0 sm:h-40 sm:w-28"
-			/>
-			<div class="ms-0 leading-tight sm:ms-8">
-				<div class="flex items-end gap-3 sm:block sm:gap-0">
-					<span class="block text-xl font-medium tracking-wide sm:text-5xl">
+			<div class="leading-tight">
+				<div class="flex items-end gap-1">
+					<span class="text-xl font-medium tracking-wide sm:text-5xl">
 						<span>Xu</span><span class="-ms-1">&nbsp;&nbsp;Pan</span>
 					</span>
-					<span class="block text-lg font-semibold sm:text-3xl">潘旭</span>
+                    <span>&nbsp;&nbsp;</span>
+					<span class="text-lg font-semibold sm:text-3xl sm:leading-none mb-1">潘旭</span>
 				</div>
-				<span class="mt-2 block text-xs leading-snug sm:text-base sm:leading-normal">
+				<span class="text-xs leading-snug sm:text-base sm:leading-normal">
 					Research Assistant at Agency for Science, Technology and Research (A*STAR)<br />
 					M.Sc. Student at Wuhan University
 				</span>
 			</div>
 		</a>
-		<nav
-			aria-label="Main menu"
-			class="absolute -inset-x-4 top-14 hidden flex-col items-end gap-y-4 rounded-md bg-bgColor/[.85] py-4 text-accent shadow backdrop-blur group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:ms-4 sm:flex sm:flex-row sm:items-center sm:rounded-none sm:bg-transparent sm:py-0 sm:shadow-none sm:backdrop-blur-none"
-			id="navigation-menu"
-		>
-			{
-				menuLinks.map((link) => (
-					<a
-						aria-current={url.pathname === link.path ? "page" : false}
-						class="px-4 py-4 underline-offset-2 sm:py-0 sm:hover:underline"
-						data-astro-prefetch
-						href={link.path}
-					>
-						{link.title}
-					</a>
-				))
-			}
-		</nav>
+		<div class="hidden sm:flex sm:items-start">
+			<ThemeToggle />
+		</div>
 	</div>
-	<div class="ms-auto hidden sm:block">
-		<ThemeToggle />
-	</div>
+    <nav
+        aria-label="Main menu"
+        class="absolute left-2 right-0 top-32 hidden flex-col gap-y-4 rounded-md bg-bgColor/[.85] py-4 text-accent shadow backdrop-blur group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:-ml-2 sm:flex sm:flex-row sm:items-center sm:gap-1 sm:rounded-none sm:bg-transparent sm:py-0 sm:shadow-none sm:backdrop-blur-none"
+        id="navigation-menu"
+    >
+        {
+            menuLinks.map((link) => (
+                <a
+                    aria-current={url.pathname === link.path ? "page" : false}
+                    class="px-0 py-4 underline-offset-2 sm:px-2 sm:py-0 sm:hover:underline"
+                    data-astro-prefetch
+                    href={link.path}
+                >
+                    {link.title}
+                </a>
+            ))
+        }
+    </nav>
 </header>
 
 <style>
@@ -73,7 +61,7 @@ const url = new URL(Astro.request.url);
 			position: absolute;
 			inset-inline-start: 0;
 			top: 50%;
-			transform: translate(-0.2rem, -50%);
+			transform: translate(-0.3rem, -50%);
 			opacity: 0.6;
 			color: currentColor;
 			pointer-events: none;

@@ -1,25 +1,16 @@
 import type { Config } from "tailwindcss";
-import { fontFamily } from "tailwindcss/defaultTheme";
+import defaultTheme from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
+import typography from "@tailwindcss/typography";
 
 export default {
 	content: [
 		"./src/**/*.{astro,html,js,jsx,md,svelte,ts,tsx,vue}",
 		"!./src/pages/og-image/[slug].png.ts",
 	],
-	corePlugins: {
-		// disable some core plugins as they are included in the css, even when unused
-		borderOpacity: false,
-		fontVariantNumeric: false,
-		ringOffsetColor: false,
-		ringOffsetWidth: false,
-		scrollSnapType: false,
-		textOpacity: false,
-		touchAction: false,
-	},
-	darkMode: ["class", '[data-theme="dark"]'],
+	darkMode: "class",
 	plugins: [
-		require("@tailwindcss/typography"),
+		typography,
 		plugin(({ addComponents }) => {
 			addComponents({
 				".cactus-link": {
@@ -46,16 +37,14 @@ export default {
 			},
 			fontFamily: {
 				// Add any custom fonts here
-				sans: ['"Google Sans Flex"', ...fontFamily.sans],
-				mono: ['"Google Sans Code"', ...fontFamily.mono],
-				serif: [...fontFamily.serif],
+				sans: ['"Google Sans Flex"', ...defaultTheme.fontFamily.sans],
+				mono: ['"Google Sans Code"', ...defaultTheme.fontFamily.mono],
+				serif: [...defaultTheme.fontFamily.serif],
 			},
 			transitionProperty: {
 				height: "height",
 			},
-			// @ts-expect-error
-			// Remove above once tailwindcss exposes theme type
-			typography: (theme) => ({
+			typography: ({ theme }) => ({
 				DEFAULT: {
 					css: {
 						a: {
@@ -118,13 +107,16 @@ export default {
 						/* Admonitions/Aside */
 						".aside": {
 							"--admonition-color": "var(--tw-prose-quotes)",
-							"@apply my-4 py-4 ps-4 border-s-2 border-[--admonition-color]": "",
+							"@apply my-4 py-4 ps-4 border-s-2": "",
+							borderInlineStartColor: "var(--admonition-color)",
 							".aside-title": {
-								"@apply font-bold text-base flex items-center gap-2 my-0 capitalize text-[--admonition-color]":
+								"@apply font-bold text-base flex items-center gap-2 my-0 capitalize":
 									"",
+								color: "var(--admonition-color)",
 								"&:before": {
-									"@apply inline-block shrink-0 overflow-visible h-4 w-4 align-middle content-[''] bg-[--admonition-color]":
+									"@apply inline-block shrink-0 overflow-visible h-4 w-4 align-middle content-['']":
 										"",
+									backgroundColor: "var(--admonition-color)",
 									"mask-size": "contain",
 									"mask-position": "center",
 									"mask-repeat": "no-repeat",
@@ -199,7 +191,7 @@ export default {
 				sm: {
 					css: {
 						code: {
-							fontSize: theme("fontSize.sm")[0],
+							fontSize: "0.875rem",
 							fontWeight: "400",
 						},
 					},

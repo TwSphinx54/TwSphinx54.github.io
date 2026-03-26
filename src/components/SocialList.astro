@@ -92,12 +92,16 @@ const SCALE: Record<IconName, number> = {
 		transition: background-color 150ms ease, color 150ms ease;
 	}
 	.social-icon-wrapper:hover {
-		background-color: var(--accent);
+		background-color: hsl(var(--theme-accent));
 		color: #fff;
 	}
-	:global(.dark) .social-icon-wrapper {
+	:global(:root[data-theme="dark"]) .social-icon-wrapper {
 		background-color: rgb(31 41 55);
 		color: rgb(229 231 235);
+	}
+	:global(:root[data-theme="dark"]) .social-icon-wrapper:hover {
+		background-color: hsl(var(--theme-accent));
+		color: #fff;
 	}
 	.social-icon-wrapper svg {
 		width: 1.25rem;

@@ -25,7 +25,7 @@ publicationsEditable:
   - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Youkai Ke", "Ming Sun", "Rui Wang", "Ziwei Wang", "Ivor Tsang"]
     title: "SA-VLA: Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models"
     # booktitle: "International Conference on Machine Learning (ICML)"
-    booktitle: "(Under Review)"
+    booktitle: "Under Review"
     time: "2026"
     # venueRank: "h5i 272 · CCF A"
     doi: "https://doi.org/10.48550/arXiv.2602.00743"
@@ -84,7 +84,7 @@ publicationsEditable:
   - author: ["Ming Sun", "Rui Wang", "Xingrui Yu*", "Lihua Jing", "Hangyu Du", "Zhenglin Wan", "Xu Pan", "Ivor Tsang"]
     title: "SleeperVLA: Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
     # booktitle: "International Conference on Machine Learning (ICML)"
-    booktitle: "(Under Review)"
+    booktitle: "Under Review"
     time: "2026"
     image: "pubs/pub3_sleepervla.png"
     # venueRank: "h5i 272 · CCF A"

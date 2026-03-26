@@ -54,16 +54,9 @@ export const expressiveCodeOptions: AstroExpressiveCodeOptions = {
     },
     uiLineHeight: "inherit",
   },
-  themeCssSelector(theme, { styleVariants }) {
-    // If one dark and one light theme are available
-    // generate theme CSS selectors compatible with cactus-theme dark mode switch
-    if (styleVariants.length >= 2) {
-      const baseTheme = styleVariants[0]?.theme;
-      const altTheme = styleVariants.find((v) => v.theme.type !== baseTheme?.type)?.theme;
-      if (theme === baseTheme || theme === altTheme) return `[data-theme='${theme.type}']`;
-    }
-    // return default selector
-    return `[data-theme="${theme.name}"]`;
+  themeCssSelector(theme) {
+    // Map directly to the site's theme switcher values to avoid context-dependent issues.
+    return `[data-theme='${theme.type}']`;
   },
   // One dark, one light theme => https://expressive-code.com/guides/themes/#available-themes
   themes: ["dracula", "github-light"],
