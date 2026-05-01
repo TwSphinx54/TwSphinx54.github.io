@@ -128,7 +128,7 @@ const citationCount = await getCitationCount(semanticScholarId);
 ---
 
 <article
-	class="pub-article group relative w-full overflow-hidden rounded-xl bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:bg-zinc-900/80"
+	class="pub-article group relative w-full overflow-hidden rounded-xl border border-zinc-200/60 bg-white/80 p-4 backdrop-blur transition duration-200 hover:-translate-y-[1px] hover:border-accent/50 hover:bg-white/90 supports-[backdrop-filter]:bg-white/70 dark:border-zinc-700/60 dark:bg-zinc-900/80 dark:hover:border-accent/60 dark:hover:bg-zinc-900/90"
 >
 	<div class="grid grid-cols-1 gap-4 lg:flex lg:items-start lg:gap-6">
 		<div class="min-w-0 lg:flex-1">
@@ -205,7 +205,7 @@ const citationCount = await getCitationCount(semanticScholarId);
 
 				{
 					time && (
-						<span class="rounded-full bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+						<span class="rounded-full bg-gray-100 px-2 py-0.5 font-mono text-sm font-medium tabular-nums text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
 							{time}
 						</span>
 					)
@@ -216,26 +216,16 @@ const citationCount = await getCitationCount(semanticScholarId);
 					abstract && (
 						<button
 							type="button"
-							class="abstract-btn cactus-link inline-flex items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
+							class="abstract-btn cactus-link ui-press inline-flex cursor-pointer items-center rounded border border-zinc-300 px-2.5 py-1 text-xs font-medium text-gray-700 hover:bg-accent/10 dark:border-zinc-700 dark:text-gray-300"
 							data-abstract-id={`abstract-${slug}`}
 							aria-expanded="false"
 						>
 							ABSTRACT
-							<svg
-								class="chev ml-2 h-3 w-3 transform transition-transform duration-200"
-								viewBox="0 0 20 20"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
+							<Icon
+								name="lucide:chevron-down"
+								class="func-icon chev ml-2 h-3 w-3 transform transition-transform duration-200"
 								aria-hidden="true"
-							>
-								<path
-									d="M6 8l4 4 4-4"
-									stroke="currentColor"
-									stroke-width="1.6"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
+							/>
 						</button>
 					)
 				}
@@ -332,7 +322,7 @@ const citationCount = await getCitationCount(semanticScholarId);
 							height={120}
 							densities={[1, 2]}
 							data-fullsrc={fullSrc}
-							class="pub-thumb-img h-[120px] w-[180px] rounded-xl border-2 border-transparent object-cover shadow-md transition duration-200 group-hover:scale-[1.04] group-hover:border-dashed group-hover:border-accent group-hover:shadow-lg"
+							class="pub-thumb-img h-[120px] w-[180px] transform-gpu rounded-xl border border-zinc-200/70 object-cover transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.025] group-hover:border-accent/40 group-hover:brightness-105 group-hover:contrast-105 group-hover:ring-2 group-hover:ring-accent/30 dark:border-zinc-700/70"
 							loading="lazy"
 							decoding="async"
 						/>

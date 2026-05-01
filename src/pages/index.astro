@@ -1,7 +1,6 @@
 ---
 import SocialList from "@/components/SocialList.astro";
 import PageLayout from "@/layouts/Base.astro";
-import ShaderGradientBg from "@/components/ShaderGradientBg.tsx";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import { getEntry } from "astro:content";
@@ -74,6 +73,12 @@ type AcademicService = {
 	year: string;
 };
 
+type HonorItem = {
+	title: string;
+	issuer: string;
+	date: string;
+};
+
 type RichHtmlToken =
 	| { type: "html"; value: string }
 	| {
@@ -98,11 +103,11 @@ const experienceMeta = (homeEntry.data.experienceMeta ?? {}) as Record<
 	string,
 	{ name: string; link: string }
 >;
-const orderFromYaml = homeEntry.data.order as string[] | undefined;
 const homeIntroHtml = (homeEntry.data.homeIntroHtml ?? "") as string;
 const acknowledgements = (homeEntry.data.acknowledgements ?? null) as Acknowledgements | null;
 const personalPhilosophyHtml = (homeEntry.data.personalPhilosophyHtml ?? "") as string;
 const academicServices = (homeEntry.data.academicServices ?? []) as AcademicService[];
+const honors = (homeEntry.data.honors ?? []) as HonorItem[];
 
 // =========================
 // Helpers (pure utilities)
@@ -226,26 +231,32 @@ function expNumericOrder(file: string): number | null {
 	return m ? Number(m[1]) : null;
 }
 
+function fileStem(file: string): string {
+	return file.replace(/\.[^.]+$/, "");
+}
+
+function getExperienceMeta(file: string): { name: string; link: string } {
+	const stem = fileStem(file);
+	return (
+		experienceMeta[file] ||
+		experienceMeta[stem] ||
+		experienceMeta[file.toLowerCase()] ||
+		experienceMeta[stem.toLowerCase()] || { name: stem, link: "#" }
+	);
+}
+
 const experiences = Object.entries(expImages)
 	.map(([path, mod]: [string, any]) => {
 		const file = path.split("/").pop() || "";
-		const meta = experienceMeta[file] || { name: file, link: "#" };
+		const meta = getExperienceMeta(file);
 		const altTitleName = meta.name.replace(/\s*\n\s*/g, " ");
 		const tooltipHtml = escapeHtml(meta.name).replaceAll("\n", "<br/>");
 		return { file, image: mod as any, name: meta.name, altTitleName, tooltipHtml, link: meta.link };
 	})
 	.sort((a, b) => {
-		if (orderFromYaml?.length) {
-			const ai = orderFromYaml.indexOf(a.file);
-			const bi = orderFromYaml.indexOf(b.file);
-			if (ai === -1 && bi === -1) return a.file.localeCompare(b.file);
-			if (ai === -1) return 1;
-			if (bi === -1) return -1;
-			return ai - bi;
-		}
 		const an = expNumericOrder(a.file);
 		const bn = expNumericOrder(b.file);
-		if (an != null && bn != null) return an - bn;
+		if (an != null && bn != null) return bn - an;
 		if (an != null) return -1;
 		if (bn != null) return 1;
 		return a.file.localeCompare(b.file);
@@ -282,22 +293,28 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 
 const homeIntroTokens = tokenizeRichHtml(homeIntroHtml);
 const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
+const HONORS_PREVIEW_COUNT = 5;
+const honorsPreview = honors.slice(0, HONORS_PREVIEW_COUNT);
+const honorsRest = honors.slice(HONORS_PREVIEW_COUNT);
+
+const NEWS_PREVIEW_COUNT = 5;
+const newsPreview = newsItems.slice(0, NEWS_PREVIEW_COUNT);
+const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-	<ShaderGradientBg client:load />
-	<section class="glass rounded-2xl pb-6 pr-6">
+	<section class="rounded-2xl pb-6 pr-6">
 		<h1 class="title mb-6">Hello World!</h1>
 		<Image
 			src={figureImage}
 			alt="Xu Pan"
-			width={112}
-			height={160}
-			sizes="(min-width: 640px) 140px, 100px"
+			width={320}
+			height={320}
+			sizes="(min-width: 640px) 320px, 320px"
 			densities={[1, 2]}
 			loading="eager"
 			fetchpriority="high"
-			class="float-right ml-4 mb-3 h-46 w-32 rounded-md object-cover shadow-md"
+			class="float-right ml-4 mb-3 w-52 h-auto rounded-md shadow-md"
 		/>
 		{homeIntroTokens.length > 0 && (
 			<div class="rich-content space-y-3">
@@ -326,11 +343,11 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 		</div>
 	</section>
 
-	<section class="glass mt-6 rounded-2xl pb-6 pr-6" aria-label="News">
+	<section class="mt-8 rounded-2xl pb-6 pr-6" aria-label="News">
 		<h2 class="title mb-4 text-xl">News</h2>
-		<ul class="news-fade h-56 space-y-3 overflow-y-auto pr-2">
+		<ul class="space-y-3 pr-2">
 			{
-				newsItems.map((item) => (
+				newsPreview.map((item) => (
 					<li class="flex gap-3">
 						<span class="w-[5.5rem] shrink-0 font-mono font-medium text-gray-600 dark:text-gray-400">
 							{item.date}
@@ -358,17 +375,60 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 				))
 			}
 		</ul>
+
+		{newsRest.length > 0 ? (
+			<details class="group mt-3">
+				<summary class="flex cursor-pointer list-none items-center justify-center px-3 py-2 text-sm font-semibold tracking-wide text-zinc-500 transition hover:text-accent dark:text-zinc-400 dark:hover:text-accent">
+					<span>SHOW {newsRest.length} MORE</span>
+					<Icon
+						name="lucide:chevron-down"
+						class="ml-1 h-3.5 w-3.5 transition-transform duration-200 group-open:rotate-180"
+						aria-hidden="true"
+					/>
+				</summary>
+				<ul class="mt-3 space-y-3 pr-2">
+					{
+						newsRest.map((item) => (
+							<li class="flex gap-3">
+								<span class="w-[5.5rem] shrink-0 font-mono font-medium text-gray-600 dark:text-gray-400">
+									{item.date}
+								</span>
+
+								<div class="min-w-0 text-gray-700 dark:text-gray-300">
+									{item.html ? (
+										<span set:html={item.html} />
+									) : (
+										<>
+											{item.text && <span set:html={escapeHtml(item.text)} />}
+											{item.href && (
+												<>
+													{" "}
+													<a class="cactus-link" href={item.href} target="_blank" rel="noopener">
+														{item.label ?? "More"}
+													</a>
+												</>
+											)}
+										</>
+									)}
+								</div>
+							</li>
+						))
+					}
+				</ul>
+			</details>
+		) : null}
 	</section>
 
-	<section class="glass mt-6 rounded-2xl pb-6 pr-6" aria-label="Experiences">
+	<section class="mt-8 rounded-2xl pb-6 pr-6" aria-label="Experiences">
 		<h2 class="title mb-4 text-xl">Experiences</h2>
-		<div class="flex flex-wrap items-center gap-6">
+		<div class="flex flex-wrap items-center gap-2">
 			{
 				experiences.map((exp) => (
 					<a
 						href={exp.link}
 						target="_blank"
 						rel="noopener"
+						aria-label={exp.altTitleName}
 						class="group relative flex items-center justify-center p-1"
 					>
 						<Image
@@ -377,10 +437,10 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 							title={exp.altTitleName}
 							width={256}
 							densities={[1, 2]}
-							class="h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+							class="h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
 							loading="lazy"
 						/>
-						<span class="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-0.5 text-center text-[10px] font-medium leading-snug tracking-wide text-white opacity-0 shadow transition-opacity group-hover:opacity-100">
+						<span class="pointer-events-none absolute left-1/2 top-full z-10 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-0.5 text-center text-[10px] font-medium leading-snug tracking-wide text-white opacity-0 shadow transition-opacity duration-200 group-hover:opacity-100">
 							<span set:html={exp.tooltipHtml} />
 						</span>
 					</a>
@@ -388,12 +448,10 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 			}
 		</div>
 
-		<br />
-
 		{/* Acknowledgements (YAML-driven via acknowledgements) */}
 		{
 			acknowledgements && (
-				<p class="mb-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+				<p class="mt-3 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
 					<>
 						<b>{acknowledgements.title}</b>
 						<br />
@@ -426,12 +484,7 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 							{i === (acknowledgements.peers?.length ?? 0) - 1 ? <br /> : " "}
 						</>
 					))}
-                    {acknowledgements.outro ? (
-						<>
-							{acknowledgements.outro}
-							<br />
-						</>
-					) : null}
+					{acknowledgements.outro ? <>{acknowledgements.outro}</> : null}
 				</p>
 			)
 		}
@@ -442,22 +495,15 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 			<h2 class="title text-xl">Selected Publications</h2>
 			<a
 				href="/publications"
-				class="group flex items-center gap-x-1.5 rounded-full border border-zinc-200/50 bg-white/70 px-4 py-1.5 text-[10px] font-bold tracking-[0.2em] text-zinc-500 shadow-sm backdrop-blur-md transition-all hover:border-accent hover:bg-accent hover:text-white dark:border-zinc-700/50 dark:bg-zinc-900/40 dark:text-zinc-400 dark:hover:border-accent dark:hover:bg-accent dark:hover:text-white"
+				aria-label="View all publications"
+				class="ui-press group flex items-center gap-x-1.5 rounded-full border border-zinc-200/50 bg-white/70 px-4 py-1.5 text-[10px] font-bold tracking-[0.2em] text-zinc-500 shadow-sm backdrop-blur-md hover:border-accent hover:bg-accent hover:text-white dark:border-zinc-700/50 dark:bg-zinc-900/40 dark:text-zinc-400 dark:hover:border-accent dark:hover:bg-accent dark:hover:text-white"
 			>
 				VIEW ALL
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="3"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<path d="M5 12h14"></path>
-					<path d="m12 5 7 7-7 7"></path>
-				</svg>
+				<Icon
+					name="lucide:arrow-right"
+					class="func-icon h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+					aria-hidden="true"
+				/>
 			</a>
 		</div>
 		<div class="-mx-3 sm:-mx-4 md:-mx-6">
@@ -473,14 +519,14 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 			<div class="grid grid-cols-1 gap-4 px-3 sm:px-4 md:grid-cols-2 md:px-6">
 				{
 					projects.map((p) => (
-						<article class="group relative w-full overflow-hidden rounded-xl bg-white/80 p-4 shadow-sm backdrop-blur transition hover:shadow-md supports-[backdrop-filter]:bg-white/70 dark:bg-zinc-900/80">
+						<article class="group relative w-full overflow-hidden rounded-xl border border-zinc-200/60 bg-white/80 p-4 backdrop-blur transition duration-200 hover:-translate-y-[1px] hover:border-accent/50 hover:bg-white/90 supports-[backdrop-filter]:bg-white/70 dark:border-zinc-700/60 dark:bg-zinc-900/80 dark:hover:border-accent/60 dark:hover:bg-zinc-900/90">
 							<div class="min-w-0">
 								<div class="flex flex-wrap items-center gap-2">
 									<h3 class="text-lg font-semibold leading-snug tracking-tight text-accent">
 										{p.name}
 									</h3>
 									{p.time && (
-										<span class="rounded-full bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+										<span class="rounded-full bg-gray-100 px-2 py-0.5 font-mono text-sm font-medium tabular-nums text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
 											{p.time}
 										</span>
 									)}
@@ -528,6 +574,7 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 												href={p.site}
 												target="_blank"
 												rel="noopener"
+												aria-label={`${p.name} project site`}
 											>
 												SITE
 											</a>
@@ -538,6 +585,7 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 												href={p.paper}
 												target="_blank"
 												rel="noopener"
+												aria-label={`${p.name} paper`}
 											>
 												PAPER
 											</a>
@@ -572,7 +620,61 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 		</div>
 	</section>
 
-	<section class="glass mt-10 rounded-2xl pb-6 pr-6" aria-label="Academic Service">
+	<section class="mt-8 pb-6 pr-6" aria-label="Honors and Awards">
+		<h2 class="title mb-4 text-xl">Honors & Awards</h2>
+
+		{
+			honors.length > 0 ? (
+				<div class="-mr-6 rounded-xl border border-zinc-200/70 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:border-zinc-700/70 dark:bg-zinc-900/80">
+					<ul class="divide-y divide-zinc-200/70 dark:divide-zinc-700/70">
+						{honorsPreview.map((honor) => (
+							<li class="flex items-start justify-between gap-3 px-3 py-1.5 pr-6">
+								<div class="min-w-0">
+									<p class="leading-5 font-medium text-zinc-800 dark:text-zinc-100">
+										{honor.title}
+									</p>
+									<p class="leading-5 text-zinc-500 dark:text-zinc-400">{honor.issuer}</p>
+								</div>
+								<span class="w-[5.5rem] shrink-0 text-right font-mono font-medium tabular-nums text-gray-600 dark:text-gray-400">
+									{honor.date}
+								</span>
+							</li>
+						))}
+					</ul>
+
+					{honorsRest.length > 0 ? (
+						<details class="group border-t border-zinc-200/70 dark:border-zinc-700/70">
+							<summary class="flex cursor-pointer list-none items-center justify-center px-3 py-2 text-sm font-semibold tracking-wide text-zinc-500 transition hover:text-accent dark:text-zinc-400 dark:hover:text-accent">
+								<span>SHOW {honorsRest.length} MORE</span>
+								<Icon
+									name="lucide:chevron-down"
+									class="ml-1 h-3.5 w-3.5 transition-transform duration-200 group-open:rotate-180"
+									aria-hidden="true"
+								/>
+							</summary>
+							<ul class="divide-y divide-zinc-200/70 dark:divide-zinc-700/70">
+								{honorsRest.map((honor) => (
+									<li class="flex items-start justify-between gap-3 px-3 py-1.5 pr-6">
+										<div class="min-w-0">
+											<p class="leading-5 font-medium text-zinc-800 dark:text-zinc-100">
+												{honor.title}
+											</p>
+											<p class="leading-5 text-zinc-500 dark:text-zinc-400">{honor.issuer}</p>
+										</div>
+										<span class="w-[5.5rem] shrink-0 text-right font-mono font-medium tabular-nums text-gray-600 dark:text-gray-400">
+											{honor.date}
+										</span>
+									</li>
+								))}
+							</ul>
+						</details>
+					) : null}
+				</div>
+			) : null
+		}
+	</section>
+
+	<section class="mt-8 rounded-2xl pb-6 pr-6" aria-label="Academic Service">
 		<h2 class="title mb-4 text-xl">Academic Service</h2>
 
 		{
@@ -593,6 +695,7 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 												href={service.venueLink}
 												target="_blank"
 												rel="noopener"
+												aria-label={`${service.venue} - ${service.role}`}
 											>
 												{service.venue}
 											</a>
@@ -601,7 +704,7 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 										)}
 									</td>
 									<td class="whitespace-nowrap py-1 pl-2 text-right align-middle">
-										<span class="rounded-full bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
+										<span class="inline-flex min-w-[4ch] justify-center rounded-full bg-gray-100 px-2 py-0.5 font-mono text-sm font-medium tabular-nums text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
 											{service.year}
 										</span>
 									</td>
@@ -615,7 +718,7 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 	</section>
 
 	{personalPhilosophyTokens.length > 0 ? (
-		<section class="glass mt-6 rounded-2xl pb-6 pr-6" aria-label="Personal Philosophy">
+		<section class="mt-8 rounded-2xl pb-6 pr-6" aria-label="Personal Philosophy">
 			<h2 class="title mb-4 text-xl">Personal Philosophy</h2>
 			<div class="rich-content">
 				{personalPhilosophyTokens.map((token) => {
@@ -640,43 +743,3 @@ const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 	) : null}
 </PageLayout>
 
-<style>
-	:global(.glass) {
-		backdrop-filter: blur(20px) saturate(120%);
-		-webkit-backdrop-filter: blur(20px) saturate(120%);
-		background: transparent;
-	}
-
-	:global(.news-fade) {
-		-webkit-mask-image: linear-gradient(
-			to bottom,
-			#000 0%,
-			#000 calc(100% - 2.5rem),
-			transparent 100%
-		);
-		mask-image: linear-gradient(to bottom, #000 0%, #000 calc(100% - 2.5rem), transparent 100%);
-		-webkit-mask-size: 100% 100%;
-		mask-size: 100% 100%;
-		-webkit-mask-repeat: no-repeat;
-		mask-repeat: no-repeat;
-	}
-
-	:global(.news-fade::-webkit-scrollbar) {
-		display: none;
-	}
-
-	/* Shader gradient delayed fade-in */
-	:global(canvas) {
-		opacity: 0;
-		animation: shaderFadeIn 1s ease-in-out 0.2s forwards;
-	}
-
-	@keyframes shaderFadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-</style>

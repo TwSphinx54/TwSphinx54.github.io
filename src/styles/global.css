@@ -1,5 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&text=潘旭&display=swap');
 @import "tailwindcss";
+
 @config "../../tailwind.config.ts";
+
+@font-face {
+	font-family: 'Harding Text Web';
+	src: local('Harding Text Web'), url('/fonts/HardingTextWeb.woff2') format('woff2');
+	font-weight: 500;
+	font-display: swap;
+}
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
 @layer base {
@@ -60,6 +70,7 @@
 		margin: 1rem 0;
 		padding-left: 1rem;
 		border-left: 4px solid hsl(var(--theme-accent));
+		font-family: 'Libre Baskerville', serif;
 	}
 
 	.rich-content .philosophy-quote blockquote {
@@ -70,5 +81,29 @@
 		margin-top: 0.5rem;
 		text-align: right;
 		color: hsl(var(--theme-text) / 0.72);
+	}
+
+	/* Shared functional icon style (Apple-like system feel) */
+	.func-icon {
+		stroke-width: 1.85;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.ui-press {
+		transition:
+			transform 180ms ease,
+			background-color 180ms ease,
+			color 180ms ease,
+			border-color 180ms ease,
+			box-shadow 180ms ease;
+	}
+
+	.ui-press:hover {
+		transform: translateY(-1px);
+	}
+
+	.ui-press:active {
+		transform: scale(0.96);
 	}
 }

@@ -1,6 +1,8 @@
 ---
-import PageLayout from "@/layouts/Base.astro";
-import ShaderGradient404 from "@/components/ShaderGradient404.tsx";
+import BaseHead from "@/components/BaseHead.astro";
+import ThemeProvider from "@/components/ThemeProvider.astro";
+import { Icon } from "astro-icon/components";
+import { siteConfig } from "@/site-config";
 
 const meta = {
 	description: "Oops! It looks like this page is lost in space!",
@@ -8,11 +10,22 @@ const meta = {
 };
 ---
 
-<PageLayout meta={meta}>
-	<div style="position: relative; z-index: 2;">
-		<h1 class="title mb-6">404 | Oops! Something went wrong</h1>
-		<p class="mb-8">Please find your way back home.</p>
-		<a href="/" style="position: relative; z-index: 2; display: inline-block; margin-top: 1rem;">← Back to Home</a>
-	</div>
-    <ShaderGradient404 client:load />
-</PageLayout>
+<html class="scroll-smooth" lang={siteConfig.lang}>
+	<head>
+		<BaseHead description={meta.description} title={meta.title} />
+	</head>
+	<body class="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center bg-bgColor px-4 font-normal text-textColor antialiased sm:px-8">
+		<ThemeProvider />
+		<div class="relative z-[2] text-center">
+			<h1 class="title mb-6">404 | Oops! Something went wrong</h1>
+			<p class="mb-8">Please find your way back home.</p>
+			<a
+				href="/"
+				class="ui-press relative z-[2] mt-4 inline-flex items-center gap-1.5 rounded-lg border border-zinc-200/50 bg-white/30 px-4 py-2 text-sm font-medium text-zinc-800 shadow-sm backdrop-blur-md hover:bg-white/45 dark:border-white/10 dark:bg-black/30 dark:text-zinc-100 dark:hover:bg-black/45"
+			>
+				<Icon name="lucide:arrow-left" class="func-icon h-4 w-4" aria-hidden="true" />
+				Back to Home
+			</a>
+		</div>
+	</body>
+</html>

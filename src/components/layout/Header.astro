@@ -7,25 +7,20 @@ const url = new URL(Astro.request.url);
 
 <header class="group relative mb-10 mt-5 flex flex-col sm:mt-0" id="main-header">
 	<div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-		<a
-			aria-current={url.pathname === "/" ? "page" : false}
-			class="inline-flex items-center"
-			href="/"
-		>
+		<div class="inline-flex items-center">
 			<div class="leading-tight">
-				<div class="flex items-end gap-1">
-					<span class="text-xl font-medium tracking-wide sm:text-5xl">
-						<span>Xu</span><span class="-ms-1">&nbsp;&nbsp;Pan</span>
+				<div class="flex items-baseline gap-1">
+					<span class="text-xl font-black tracking-wide sm:text-5xl" style="font-family: 'Harding Text Web', serif;">
+						<span>Xu</span><span class="-ms-1">&nbsp;Pan</span>
 					</span>
                     <span>&nbsp;&nbsp;</span>
-					<span class="text-lg font-semibold sm:text-3xl sm:leading-none mb-1">潘旭</span>
+					<span class="text-lg font-black sm:text-3xl sm:leading-none relative -top-[2px]" style="font-family: 'Noto Serif SC', serif;">潘旭</span>
 				</div>
 				<span class="text-xs leading-snug sm:text-base sm:leading-normal">
-					Research Assistant at Agency for Science, Technology and Research (A*STAR)<br />
-					M.Sc. Student at Wuhan University
+					Incoming Research Associate at Nanyang Technological University, Singapore<br />
 				</span>
 			</div>
-		</a>
+		</div>
 		<div class="hidden sm:flex sm:items-start">
 			<ThemeToggle />
 		</div>

@@ -72,6 +72,12 @@ const AcademicService = z.object({
   year: z.string(),
 });
 
+const HonorItem = z.object({
+  title: z.string(),
+  issuer: z.string(),
+  date: z.string(),
+});
+
 const home = defineCollection({
   loader: glob({ pattern: "index.yaml", base: "./src/content/home" }),
   schema: z.object({
@@ -87,6 +93,7 @@ const home = defineCollection({
     acknowledgements: Acknowledgements.optional(),
     personalPhilosophyHtml: z.string().optional(),
     academicServices: z.array(AcademicService).optional().default([]),
+    honors: z.array(HonorItem).optional().default([]),
   }),
 });
 

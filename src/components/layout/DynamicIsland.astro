@@ -1,5 +1,6 @@
 ---
 import { menuLinks } from "@/site-config";
+import { Icon } from "astro-icon/components";
 
 const url = new URL(Astro.request.url);
 ---
@@ -55,43 +56,15 @@ const url = new URL(Astro.request.url);
 	<div
 		id="dynamic-island-tools"
 		class="cubic-bezier-apple pointer-events-auto absolute left-[calc(100%+8px)] flex items-center gap-x-1 rounded-full border border-white/20 bg-white/30 p-1 opacity-0 shadow-[0_12px_44px_-10px_rgba(0,0,0,0.15)] ring-1 ring-white/10 backdrop-blur-3xl transition-all duration-700 will-change-transform dark:border-white/5 dark:bg-black/35 dark:shadow-[0_20px_80px_rgba(0,0,0,0.5)] dark:ring-white/5 sm:left-[calc(100%+12px)] sm:p-1.5"
-		style="transform: translateX(-16px) scale(0.85);"
+		style="transform: translateX(-16px) scale(0.85) translateY(-20px);"
 	>
 		<button
 			id="island-theme-toggle"
 			class="group flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 hover:bg-zinc-800/5 dark:hover:bg-white/10 sm:h-9 sm:w-9"
 			aria-label="Toggle theme"
 		>
-			<svg
-				class="h-3.5 w-3.5 text-zinc-600 dark:hidden sm:h-4 sm:w-4"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<circle cx="12" cy="12" r="5"></circle>
-				<line x1="12" y1="1" x2="12" y2="3"></line>
-				<line x1="12" y1="21" x2="12" y2="23"></line>
-				<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-				<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-				<line x1="1" y1="12" x2="3" y2="12"></line>
-				<line x1="21" y1="12" x2="23" y2="12"></line>
-				<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-				<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-			</svg>
-			<svg
-				class="hidden h-3.5 w-3.5 text-zinc-400 dark:block sm:h-4 sm:w-4"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-			</svg>
+			<Icon name="lucide:sun" class="func-icon h-3.5 w-3.5 text-zinc-600 dark:hidden sm:h-4 sm:w-4" />
+			<Icon name="lucide:moon" class="func-icon hidden h-3.5 w-3.5 text-zinc-400 dark:block sm:h-4 sm:w-4" />
 		</button>
 
 		<div class="h-4 w-[1px] bg-zinc-400/20 dark:bg-zinc-600/30 sm:h-5"></div>
@@ -101,17 +74,10 @@ const url = new URL(Astro.request.url);
 			class="group flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 hover:bg-zinc-800/5 dark:hover:bg-white/10 sm:h-9 sm:w-9"
 			aria-label="Scroll to top"
 		>
-			<svg
-				class="h-3.5 w-3.5 text-zinc-600 transition-transform group-hover:-translate-y-0.5 dark:text-zinc-400 sm:h-4 sm:w-4"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<path d="M12 19V5M5 12l7-7 7 7"></path>
-			</svg>
+			<Icon
+				name="lucide:arrow-up"
+				class="func-icon h-3.5 w-3.5 text-zinc-600 transition-transform group-hover:-translate-y-0.5 dark:text-zinc-400 sm:h-4 sm:w-4"
+			/>
 		</button>
 	</div>
 </div>
@@ -120,10 +86,8 @@ const url = new URL(Astro.request.url);
 	const island = document.getElementById("dynamic-island");
 	const islandTools = document.getElementById("dynamic-island-tools");
 	const threshold = 180;
-	const transitionDuration = 700;
 	const islandHiddenTransform = "translateX(0) scale(0.85) translateY(-20px)";
 	let ticking = false;
-	let visibilityTimer: number | undefined;
 	let isVisible = false;
 	let toolsVisible = false;
 
@@ -132,8 +96,9 @@ const url = new URL(Astro.request.url);
 		const getGroupShift = () => (islandTools.offsetWidth + getToolsGap()) / 2;
 		const getIslandShownTransform = (shifted = false) =>
 			`translateX(-${shifted ? getGroupShift() : 0}px) scale(1) translateY(0)`;
-		const getToolsShownTransform = () => `translateX(-${getGroupShift()}px) scale(1)`;
-		const getToolsHiddenTransform = () => `translateX(-${getGroupShift() + 16}px) scale(0.85)`;
+		const getToolsShownTransform = () => `translateX(-${getGroupShift()}px) scale(1) translateY(0)`;
+		const getToolsHiddenTransform = () =>
+			`translateX(-${getGroupShift() + 16}px) scale(0.85) translateY(-20px)`;
 
 		const setIslandVisible = (visible: boolean, shifted = false) => {
 			if (visible) {
@@ -163,45 +128,29 @@ const url = new URL(Astro.request.url);
 			islandTools.style.transform = getToolsHiddenTransform();
 		};
 
-		const clearVisibilityTimer = () => {
-			if (visibilityTimer !== undefined) {
-				window.clearTimeout(visibilityTimer);
-				visibilityTimer = undefined;
-			}
-		};
-
 		const handleScroll = () => {
 			const isMobile = window.innerWidth <= 640;
 			const shouldShow = isMobile || window.scrollY > threshold;
+			const shouldShowTools = shouldShow;
 
 			if (shouldShow === isVisible) {
 				if (shouldShow) {
-					setIslandVisible(true, toolsVisible);
-					setToolsVisible(toolsVisible);
+					setIslandVisible(true, shouldShowTools);
+					setToolsVisible(shouldShowTools);
 				}
 				return;
 			}
 
-			clearVisibilityTimer();
 			isVisible = shouldShow;
 
 			if (shouldShow) {
-				setIslandVisible(true, false);
-				setToolsVisible(false);
-				visibilityTimer = window.setTimeout(() => {
-					if (isVisible) {
-						setIslandVisible(true, true);
-						setToolsVisible(true);
-					}
-				}, transitionDuration);
+				setIslandVisible(true, shouldShowTools);
+				setToolsVisible(shouldShowTools);
 				return;
 			}
 
-			setIslandVisible(true, false);
+			setIslandVisible(false, false);
 			setToolsVisible(false);
-			visibilityTimer = window.setTimeout(() => {
-				if (!isVisible) setIslandVisible(false, false);
-			}, transitionDuration);
 		};
 
 		function onScrollOrResize() {

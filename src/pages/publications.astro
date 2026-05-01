@@ -1,6 +1,5 @@
 ---
 import PageLayout from "@/layouts/Base.astro";
-import ShaderGradientBg from "@/components/ShaderGradientBg.tsx";
 import { getEntry } from "astro:content";
 import PublicationItem from "@/components/PublicationItem.astro";
 
@@ -50,36 +49,11 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-	<ShaderGradientBg client:load />
-	<div class="glass relative z-10 max-w-5xl space-y-6 rounded-2xl pb-6 pr-6">
-		<h1 class="title">Publications</h1>
-		<div class="-mx-3 sm:-mx-4 md:-mx-6">
-			<div class="space-y-6 px-3 sm:px-4 md:px-6">
-				{publications.map((pub) => <PublicationItem pub={pub} />)}
-			</div>
-		</div>
-	</div>
+	<h1 class="title mb-6">Publications</h1>
+    <div class="-mx-3 sm:-mx-4 md:-mx-6">
+        <div class="space-y-4 px-3 sm:px-4 md:px-6">
+            {publications.map((pub) => <PublicationItem pub={pub} />)}
+        </div>
+    </div>
 </PageLayout>
 
-<style is:global>
-	.glass {
-		backdrop-filter: blur(20px) saturate(120%);
-		-webkit-backdrop-filter: blur(20px) saturate(120%);
-		background: transparent;
-	}
-
-	/* Shader gradient delayed fade-in */
-	canvas {
-		opacity: 0;
-		animation: shaderFadeIn 1s ease-in-out 0.2s forwards;
-	}
-
-	@keyframes shaderFadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-</style>

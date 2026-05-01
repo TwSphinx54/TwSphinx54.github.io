@@ -1,3 +1,7 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
 <!-- Abstract / Image Modal Common Elements and Scripts -->
 <div
 	id="img-modal"
@@ -9,24 +13,10 @@
 	>
 		<button
 			id="img-modal-close"
-			class="absolute right-3 top-3 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-accent shadow-md transition-colors hover:bg-white"
+			class="ui-press absolute right-3 top-3 z-20 inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-zinc-200/70 bg-white/90 text-accent shadow-md hover:bg-accent/10 dark:border-zinc-700/70 dark:bg-zinc-900/90 dark:hover:bg-accent/20"
 			aria-label="Close image modal"
 		>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 24 24"
-				width="16"
-				height="16"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				aria-hidden="true"
-			>
-				<line x1="18" y1="6" x2="6" y2="18"></line>
-				<line x1="6" y1="6" x2="18" y2="18"></line>
-			</svg>
+			<Icon name="lucide:x" class="func-icon" width="16" height="16" aria-hidden="true" />
 		</button>
 		<img
 			id="img-modal-img"

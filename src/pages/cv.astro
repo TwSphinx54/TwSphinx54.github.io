@@ -1,7 +1,6 @@
 ---
 import PageLayout from "@/layouts/Base.astro";
 import SocialList from "@/components/SocialList.astro";
-import ShaderGradientBg from "@/components/ShaderGradientBg.tsx";
 
 const meta = {
 	description:
@@ -11,8 +10,7 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-	<ShaderGradientBg client:load />
-	<section class="glass relative z-10 max-w-5xl rounded-2xl pb-6 pr-6">
+	<section class="relative z-10 max-w-5xl rounded-2xl pb-6 pr-6">
 		<h1 class="title mb-6">Curriculum Vitae</h1>
 
 		<p class="mb-4 text-gray-700 dark:text-gray-300">
@@ -86,25 +84,3 @@ const meta = {
 	</section>
 </PageLayout>
 
-<style is:global>
-	.glass {
-		backdrop-filter: blur(20px) saturate(120%);
-		-webkit-backdrop-filter: blur(20px) saturate(120%);
-		background: transparent;
-	}
-
-	/* Shader gradient delayed fade-in */
-	canvas {
-		opacity: 0;
-		animation: shaderFadeIn 1s ease-in-out 0.2s forwards;
-	}
-
-	@keyframes shaderFadeIn {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-</style>
