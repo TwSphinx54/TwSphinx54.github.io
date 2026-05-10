@@ -142,9 +142,9 @@ newsItems:
   # - date: "Jun 2026"
   #   html: |
   #     Received my M.Sc. degree from Wuhan University with an honor of Outstanding Graduating Graduate Student.
-  # - date: "May 2026"
-  #   html: |
-  #     Attended the <em>2026 Vision and Learning Seminar (VALSE)</em> in Wuhan, China.
+  - date: "May 2026"
+    html: |
+      Attended the <em>2026 Vision and Learning Seminar (VALSE)</em> in Wuhan, China.
   - date: "Mar 2026"
     html: |
       Our work <strong>SAMatcher</strong> is now available! 
