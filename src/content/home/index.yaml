@@ -51,7 +51,7 @@ publicationsEditable:
     selected: true
 
   - author: ["Ming Sun", "Rui Wang", "Xingrui Yu*", "Lihua Jing", "Hangyu Du", "Zhenglin Wan", "Xu Pan", "Ivor Tsang"]
-    title: "SleeperVLA: Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
+    title: "Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
     booktitle: "Under Review"
     time: "2026"
     image: "pubs/pub3_sleepervla.png"
