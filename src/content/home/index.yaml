@@ -25,9 +25,9 @@ publicationsEditable:
   - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Youkai Ke", "Ming Sun", "Rui Wang", "Ziwei Wang", "Ivor Tsang"]
     title: "SA-VLA: Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models"
     # booktitle: "Conference on Robot Learning (CoRL)"
-    booktitle: "Under Review"
+    booktitle: "IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)"
     time: "2026"
-    # venueRank: "h5i 107"
+    venueRank: "CCF A · h5i 450"
     doi: "https://doi.org/10.48550/arXiv.2602.00743"
     paper: "https://arxiv.org/abs/2602.00743"
     code: "https://github.com/TwSphinx54/SA-VLA"
@@ -35,8 +35,8 @@ publicationsEditable:
     site: "https://xupan.top/Projects/savla"
     image: "pubs/pub1_savla.gif"
     # venueLogo: "icons/pmlr.svg"
-    venueIcon: "simple-icons:arxiv"
-    venueColor: "#B31B1B"
+    venueIcon: "simple-icons:ieee"
+    venueColor: "#00629B"
     semanticScholarId: "285271261"
     abstract: >-
       Vision-Language-Action (VLA) models achieve strong performance in robotic manipulation, but reinforcement 
@@ -142,6 +142,10 @@ newsItems:
   # - date: "Jun 2026"
   #   html: |
   #     Received my M.Sc. degree from Wuhan University with an honor of Outstanding Graduating Graduate Student.
+  - date: "May 2026"
+    html: |
+      One paper accepted by the <em>CVPR 2026 Workshop on 3D-LLM/VLA</em>.
+            <a class="cactus-link" href="https://openreview.net/pdf?id=xmmp2bzSIo" target="_blank" rel="noopener">[Paper]</a>
   - date: "May 2026"
     html: |
       Attended the <em>2026 Vision and Learning Seminar (VALSE)</em> in Wuhan, China.
