@@ -19,12 +19,12 @@
 		/* https://tailwindcss.com/docs/customizing-colors#using-css-variables */
 		--theme-bg: 0deg 0% 98%;
 		--theme-text: 203deg 11% 15%;
-		--theme-accent: 351deg 66% 48%;
+		--theme-accent: 215deg 90% 46%;
 		--theme-link: var(--theme-accent);
 		--theme-accent-2: 0deg 0% 7%;
 		--theme-quote: var(--theme-accent);
 		/* highlight underline (light) */
-		--em-underline-color: #fdf3c4;
+		--em-underline-color: #dbeafe;
 		--em-underline-height: 0.42em;
 	}
 
@@ -32,12 +32,12 @@
 		color-scheme: dark;
 		--theme-bg: 210deg 6% 12%;
 		--theme-text: 220deg 3% 79%;
-		--theme-accent: 159deg 64% 45%;
+		--theme-accent: 210deg 80% 56%;
 		--theme-link: var(--theme-accent);
 		--theme-accent-2: 0deg 0% 93%;
 		--theme-quote: var(--theme-accent);
 		/* highlight underline (dark) */
-		--em-underline-color: #155e75; /* teal-800-ish for subtle; adjust if too low contrast */
+		--em-underline-color: #075985; /* sky-700-ish */
 		--em-underline-height: 0.42em;
 	}
 

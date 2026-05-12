@@ -19,7 +19,7 @@ const PublicationEditable = z.object({
   code: z.string().optional(),
   huggingface: z.string().optional(),
   site: z.string().optional(),
-  image: z.string().optional(),
+  
   venueIcon: z.string().optional(),
   venueColor: z.string().optional(),
   venueRank: z.string().optional(),

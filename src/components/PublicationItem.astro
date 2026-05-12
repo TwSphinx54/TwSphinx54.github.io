@@ -18,8 +18,6 @@ const {
 	venueColor,
 	venueRank,
 	venueLogo,
-	image,
-	fullSrc,
 	semanticScholarId,
 } = pub;
 
@@ -148,7 +146,7 @@ const citationCount = await getCitationCount(semanticScholarId);
 			</p>
 			<div class="mt-2 flex flex-wrap gap-2">
 				<span
-					class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300"
+					class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300"
 				>
 					{
 						venueLogo ? (
@@ -188,7 +186,7 @@ const citationCount = await getCitationCount(semanticScholarId);
 				{
 					semanticScholarId && (
 						<span
-							class="semantic-citation inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+							class="semantic-citation inline-flex items-center rounded-full bg-orange-100 px-2 py-0.5 text-sm font-medium text-orange-700 dark:bg-orange-900/30 dark:text-orange-300"
 							title="Semantic Scholar citation count"
 						>
 							<Icon
@@ -306,30 +304,7 @@ const citationCount = await getCitationCount(semanticScholarId);
 			</div>
 		</div>
 
-		{/* thumbnail column (part of flow on large screens). Keep hidden on small screens. */}
-		{
-			image && (
-				<div class="pub-thumb hidden lg:ml-2 lg:block">
-					<button
-						type="button"
-						class="pub-thumb-btn group block cursor-zoom-in"
-						aria-label="Open image"
-					>
-						<Image
-							src={image}
-							alt="[Thumbnail]"
-							width={180}
-							height={120}
-							densities={[1, 2]}
-							data-fullsrc={fullSrc}
-							class="pub-thumb-img h-[120px] w-[180px] transform-gpu rounded-xl border border-zinc-200/70 object-cover transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.025] group-hover:border-accent/40 group-hover:brightness-105 group-hover:contrast-105 group-hover:ring-2 group-hover:ring-accent/30 dark:border-zinc-700/70"
-							loading="lazy"
-							decoding="async"
-						/>
-					</button>
-				</div>
-			)
-		}
+		
 	</div>
 
 	{

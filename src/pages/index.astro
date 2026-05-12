@@ -21,7 +21,6 @@ type PublicationEditable = {
 	code?: string;
 	huggingface?: string;
 	site?: string;
-	image?: string;
 	venueIcon?: string;
 	venueColor?: string;
 	venueRank?: string;
@@ -31,10 +30,8 @@ type PublicationEditable = {
 	semanticScholarId?: string;
 };
 
-type PublicationResolved = Omit<PublicationEditable, "image" | "venueLogo"> & {
-	image: any | null;
-	fullSrc: string;
-	venueLogo: any | null;
+type PublicationResolved = PublicationEditable & {
+    venueLogo: any | null;
 };
 
 type NewsItem = {
@@ -212,9 +209,8 @@ function tokenizeRichHtml(html: string): RichHtmlToken[] {
 
 const cactusTech: PublicationResolved[] = publicationsEditable
 	.map((pub) => {
-		const img = resolveAsset(pub.image);
 		const vlogo = resolveAsset(pub.venueLogo);
-		return { ...pub, image: img, fullSrc: assetToSrc(img), venueLogo: vlogo };
+		return { ...pub, venueLogo: vlogo };
 	})
 	.filter((p) => p.selected === true);
 
@@ -291,7 +287,10 @@ const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
 	[...projectLogoKeys].map((k) => [k, findLogoAny(LOGO_ALIASES[k] ?? k)]),
 );
 
-const homeIntroTokens = tokenizeRichHtml(homeIntroHtml);
+const homeIntroLeadMatch = homeIntroHtml.match(/^\s*<p>([\s\S]*?)<\/p>\s*/);
+const homeIntroLeadHtml = homeIntroLeadMatch ? `<p>${homeIntroLeadMatch[1].trim()}</p>` : "";
+const homeIntroBodyHtml = homeIntroLeadMatch ? homeIntroHtml.slice(homeIntroLeadMatch[0].length) : homeIntroHtml;
+const homeIntroTokens = tokenizeRichHtml(homeIntroBodyHtml);
 const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
 const HONORS_PREVIEW_COUNT = 5;
 const honorsPreview = honors.slice(0, HONORS_PREVIEW_COUNT);
@@ -305,6 +304,11 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 <PageLayout meta={{ title: "Home" }}>
 	<section class="rounded-2xl pb-6 pr-6">
 		<h1 class="title mb-6">Hello World!</h1>
+		{homeIntroLeadHtml && (
+			<div class="rich-content space-y-3">
+				<Fragment set:html={homeIntroLeadHtml} />
+			</div>
+		)}
 		<Image
 			src={figureImage}
 			alt="Xu Pan"
@@ -314,7 +318,7 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 			densities={[1, 2]}
 			loading="eager"
 			fetchpriority="high"
-			class="float-right ml-4 mb-3 w-52 h-auto rounded-md shadow-md"
+			class="mb-3 float-right ml-3 h-auto w-39 rounded-md shadow-md sm:ml-4 sm:w-52"
 		/>
 		{homeIntroTokens.length > 0 && (
 			<div class="rich-content space-y-3">
@@ -537,7 +541,7 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 								{p.tags && p.tags.length > 0 && (
 									<div class="mt-2 flex flex-wrap gap-2">
 										{p.tags.map((t) => (
-											<span class="rounded-full bg-accent/10 px-2 py-0.5 text-sm font-medium text-accent dark:bg-accent/15">
+											<span class="rounded-full bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
 												{t}
 											</span>
 										))}

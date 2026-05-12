@@ -11,8 +11,8 @@ const url = new URL(Astro.request.url);
 >
 	<div
 		id="dynamic-island"
-		class="cubic-bezier-apple pointer-events-auto flex items-center gap-x-2 rounded-full border border-white/20 bg-white/30 p-1.5 opacity-0 shadow-[0_12px_44px_-10px_rgba(0,0,0,0.15)] ring-1 ring-white/10 backdrop-blur-3xl transition-all duration-700 will-change-transform hover:scale-[1.02] hover:bg-white/45 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)] dark:border-white/5 dark:bg-black/35 dark:shadow-[0_20px_80px_rgba(0,0,0,0.5)] dark:ring-white/5 dark:hover:bg-black/45 sm:gap-x-4 sm:p-2"
-		style="transform: scale(0.85) translateY(-20px);"
+		class="cubic-bezier-apple pointer-events-auto flex items-center gap-x-2 rounded-full border border-white/20 bg-white/30 p-1.5 opacity-0 shadow-[0_12px_44px_-10px_rgba(0,0,0,0.15)] ring-1 ring-white/10 backdrop-blur-3xl transition-all duration-500 will-change-transform hover:scale-[1.02] hover:bg-white/45 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)] dark:border-white/5 dark:bg-black/35 dark:shadow-[0_20px_80px_rgba(0,0,0,0.5)] dark:ring-white/5 dark:hover:bg-black/45 sm:gap-x-4 sm:p-2"
+		style="transform: scaleY(0.86) translateY(-28px);"
 	>
 		<a
 			href="/"
@@ -55,8 +55,8 @@ const url = new URL(Astro.request.url);
 
 	<div
 		id="dynamic-island-tools"
-		class="cubic-bezier-apple pointer-events-auto absolute left-[calc(100%+8px)] flex items-center gap-x-1 rounded-full border border-white/20 bg-white/30 p-1 opacity-0 shadow-[0_12px_44px_-10px_rgba(0,0,0,0.15)] ring-1 ring-white/10 backdrop-blur-3xl transition-all duration-700 will-change-transform dark:border-white/5 dark:bg-black/35 dark:shadow-[0_20px_80px_rgba(0,0,0,0.5)] dark:ring-white/5 sm:left-[calc(100%+12px)] sm:p-1.5"
-		style="transform: translateX(-16px) scale(0.85) translateY(-20px);"
+		class="cubic-bezier-apple pointer-events-auto absolute left-1/2 top-0 flex items-center gap-x-1 rounded-full border border-white/20 bg-white/30 p-1 opacity-0 shadow-[0_12px_44px_-10px_rgba(0,0,0,0.15)] ring-1 ring-white/10 backdrop-blur-3xl transition-all duration-500 will-change-transform dark:border-white/5 dark:bg-black/35 dark:shadow-[0_20px_80px_rgba(0,0,0,0.5)] dark:ring-white/5 sm:p-1.5"
+		style="transform: translateX(-50%) scaleY(0.86) translateY(-28px);"
 	>
 		<button
 			id="island-theme-toggle"
@@ -86,25 +86,30 @@ const url = new URL(Astro.request.url);
 	const island = document.getElementById("dynamic-island");
 	const islandTools = document.getElementById("dynamic-island-tools");
 	const threshold = 180;
-	const islandHiddenTransform = "translateX(0) scale(0.85) translateY(-20px)";
+	const islandHiddenTransform = "translateX(0) scaleY(0.86) translateY(-28px)";
+	const toolsHiddenTransform = "translateX(-50%) scaleY(0.86) translateY(-28px)";
 	let ticking = false;
 	let isVisible = false;
 	let toolsVisible = false;
 
 	if (island && islandTools) {
-		const getToolsGap = () => (window.innerWidth <= 640 ? 8 : 12);
-		const getGroupShift = () => (islandTools.offsetWidth + getToolsGap()) / 2;
-		const getIslandShownTransform = (shifted = false) =>
-			`translateX(-${shifted ? getGroupShift() : 0}px) scale(1) translateY(0)`;
-		const getToolsShownTransform = () => `translateX(-${getGroupShift()}px) scale(1) translateY(0)`;
-		const getToolsHiddenTransform = () =>
-			`translateX(-${getGroupShift() + 16}px) scale(0.85) translateY(-20px)`;
+		const getToolsGap = () => (window.innerWidth <= 640 ? 4 : 10);
+		const getIslandShift = () => {
+			const toolsWidth = islandTools.offsetWidth;
+			return (toolsWidth + getToolsGap()) / 2;
+		};
+		const getToolsShift = () => {
+			const islandWidth = island.offsetWidth;
+			return (islandWidth + getToolsGap()) / 2;
+		};
+		const getIslandShownTransform = () => `translateX(-${getIslandShift()}px) scaleY(1) translateY(0)`;
+		const getToolsShownTransform = () => `translateX(calc(-50% + ${getToolsShift()}px)) scaleY(1) translateY(0)`;
 
-		const setIslandVisible = (visible: boolean, shifted = false) => {
+		const setIslandVisible = (visible: boolean) => {
 			if (visible) {
 				island.classList.remove("opacity-0", "pointer-events-none");
 				island.classList.add("opacity-100", "pointer-events-auto");
-				island.style.transform = getIslandShownTransform(shifted);
+				island.style.transform = getIslandShownTransform();
 				return;
 			}
 
@@ -119,44 +124,52 @@ const url = new URL(Astro.request.url);
 			if (visible) {
 				islandTools.classList.remove("opacity-0", "pointer-events-none");
 				islandTools.classList.add("opacity-100", "pointer-events-auto");
-				islandTools.style.transform = getToolsShownTransform();
+				islandTools.style.transform = toolsHiddenTransform;
+				requestAnimationFrame(() => {
+					islandTools.style.transform = getToolsShownTransform();
+				});
 				return;
 			}
 
 			islandTools.classList.add("opacity-0", "pointer-events-none");
 			islandTools.classList.remove("opacity-100", "pointer-events-auto");
-			islandTools.style.transform = getToolsHiddenTransform();
+			islandTools.style.transform = toolsHiddenTransform;
 		};
 
 		const handleScroll = () => {
 			const isMobile = window.innerWidth <= 640;
 			const shouldShow = isMobile || window.scrollY > threshold;
-			const shouldShowTools = shouldShow;
 
 			if (shouldShow === isVisible) {
-				if (shouldShow) {
-					setIslandVisible(true, shouldShowTools);
-					setToolsVisible(shouldShowTools);
-				}
 				return;
 			}
 
 			isVisible = shouldShow;
 
 			if (shouldShow) {
-				setIslandVisible(true, shouldShowTools);
-				setToolsVisible(shouldShowTools);
+				setIslandVisible(true);
+				setToolsVisible(true);
 				return;
 			}
 
-			setIslandVisible(false, false);
+			setIslandVisible(false);
 			setToolsVisible(false);
+		};
+
+		const updateTransforms = () => {
+			if (isVisible) {
+				island.style.transform = getIslandShownTransform();
+			}
+			if (toolsVisible) {
+				islandTools.style.transform = getToolsShownTransform();
+			}
 		};
 
 		function onScrollOrResize() {
 			if (!ticking) {
 				window.requestAnimationFrame(() => {
 					handleScroll();
+					updateTransforms();
 					ticking = false;
 				});
 				ticking = true;
