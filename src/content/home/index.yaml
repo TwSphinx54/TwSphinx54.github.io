@@ -53,6 +53,8 @@ publicationsEditable:
     title: "Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
     booktitle: "Under Review"
     time: "2026"
+    doi: "https://doi.org/10.48550/arXiv.2605.09005"
+    paper: "https://arxiv.org/abs/2605.09005"
     venueIcon: "simple-icons:arxiv"
     venueColor: "#B31B1B"
     abstract: >-
