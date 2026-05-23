@@ -20,7 +20,7 @@
         "@react-three/fiber": "^9.6.1",
         "@shadergradient/react": "^2.4.20",
         "@types/three": "^0.183.1",
-        "astro": "^6.3.5",
+        "astro": "^6.3.7",
         "astro-expressive-code": "^0.41.7",
         "astro-icon": "^1.1.5",
         "astro-robots-txt": "^1.0.0",
@@ -43,7 +43,7 @@
     "devDependencies": {
         "@astrojs/check": "^0.9.4",
         "@biomejs/biome": "^2.4.15",
-        "@iconify-json/lucide": "^1.2.108",
+        "@iconify-json/lucide": "^1.2.109",
         "@iconify-json/mdi": "^1.2.3",
         "@iconify-json/simple-icons": "^1.2.83",
         "@tailwindcss/typography": "^0.5.19",

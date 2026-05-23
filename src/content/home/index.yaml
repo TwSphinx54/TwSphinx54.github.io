@@ -141,6 +141,9 @@ newsItems:
   #     Received my M.Sc. degree from Wuhan University with an honor of Outstanding Graduating Graduate Student.
   - date: "May 2026"
     html: |
+      Successfully Defended Master's Thesis with All Excellent Ratings.
+  - date: "May 2026"
+    html: |
       One paper accepted by the <em>CVPR 2026 Workshop on 3D-LLM/VLA</em>.
             <a class="cactus-link" href="https://openreview.net/pdf?id=xmmp2bzSIo" target="_blank" rel="noopener">[Paper]</a>
   - date: "May 2026"
