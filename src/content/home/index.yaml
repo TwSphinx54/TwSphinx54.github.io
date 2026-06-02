@@ -23,8 +23,37 @@ publicationsEditable:
   #     ...
 
   - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Youkai Ke", "Ming Sun", "Rui Wang", "Ziwei Wang", "Ivor Tsang"]
-    title: "SA-VLA: Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models"
+    title: "SFM: Spatially-Aware Flow Matching for Embodied Reinforcement Learning"
     # booktitle: "Conference on Robot Learning (CoRL)"
+    booktitle: "Under Review"
+    time: "2026"
+    # venueRank: "CCF A · h5i 450"
+    doi: "https://doi.org/10.48550/arXiv.2602.00743"
+    paper: "https://arxiv.org/abs/2602.00743"
+    code: "https://github.com/TwSphinx54/SA-VLA"
+    huggingface: "https://huggingface.co/SSSSphinx/SA-VLA"
+    site: "https://xupan.top/Projects/savla"
+    # venueLogo: "icons/pmlr.svg"
+    venueIcon: "simple-icons:arxiv"
+    venueColor: "#B31B1B"
+    semanticScholarId: "285271261"
+    abstract: >-
+      Reinforcement learning (RL) fine-tuning of flow-matching Vision-Language-Action (VLA) policies often 
+      improves in-distribution performance but degrades spatial generalization under distribution shifts, leading 
+      to inconsistent geometric behavior across viewpoints and scene layouts commonly encountered in robotic 
+      deployment. We identify this failure as a coupled breakdown of spatial inductive bias during online 
+      optimization, caused by representation drift, sparse step-level supervision, and spatially unstructured 
+      exploration. These factors jointly bias policies toward short-horizon visual correlations and undermine 
+      geometric consistency. We propose SFM, a unified framework that restores spatial inductive bias by aligning 
+      representation, reward, and exploration in a shared geometric latent space. It integrates implicit spatial 
+      representations for stable grounding, a step-level spatially grounded reward (SGR) for geometric credit 
+      assignment, and SCAE, a spatially-conditioned annealed exploration strategy. Across cluttered manipulation 
+      benchmarks under spatial distribution shifts, SFM improves spatial robustness, achieving 5.05% gains under 
+      viewpoint perturbations while maintaining in-distribution performance.
+    selected: true
+  
+  - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Youkai Ke", "Ming Sun", "Rui Wang", "Ziwei Wang", "Ivor Tsang"]
+    title: "SA-VLA: Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models"
     booktitle: "IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)"
     time: "2026"
     venueRank: "CCF A · h5i 450"
@@ -33,20 +62,21 @@ publicationsEditable:
     code: "https://github.com/TwSphinx54/SA-VLA"
     huggingface: "https://huggingface.co/SSSSphinx/SA-VLA"
     site: "https://xupan.top/Projects/savla"
-    # venueLogo: "icons/pmlr.svg"
     venueIcon: "simple-icons:ieee"
     venueColor: "#00629B"
     semanticScholarId: "285271261"
     abstract: >-
-      Vision-Language-Action (VLA) models achieve strong performance in robotic manipulation, but reinforcement 
-      learning (RL) fine-tuning often degrades generalization under spatial distribution shifts. We analyze 
-      flow-matching VLA policies and identify the collapse of spatial inductive bias as a key factor limiting 
-      robust transfer. To address this, we propose SA-VLA, which explicitly grounds VLA policies in spatial 
-      structure by integrating implicit spatial representations, spatially-aware step-level dense rewards, and 
-      SCAN, a spatially-conditioned exploration strategy tailored for flow-matching policies. This principled 
-      alignment mitigates policy over-specialization and preserves zero-shot generalization to more complex 
-      tasks. Experiments on challenging multi-object and cluttered benchmarks demonstrate that SA-VLA enables 
-      stable RL fine-tuning and substantially more robust, transferable behaviors.
+      Reinforcement learning (RL) fine-tuning of flow-matching Vision-Language-Action (VLA) policies often 
+      improves in-distribution performance but degrades spatial generalization under distribution shifts, leading 
+      to inconsistent geometric behavior across viewpoints and scene layouts. We identify this failure as a 
+      coupled breakdown of spatial inductive bias during online optimization, caused by representation drift, 
+      sparse step-level supervision, and spatially unstructured exploration. These factors jointly bias policies 
+      toward short-horizon visual correlations and undermine geometric consistency. We propose SA-VLA, a unified 
+      framework that restores spatial inductive bias by jointly aligning representation, reward, and exploration 
+      in a shared geometric latent space. It integrates implicit spatial representations for stable grounding, 
+      step-level dense rewards for geometric credit assignment, and SCAN, a spatially-conditioned annealed 
+      exploration strategy. Across cluttered manipulation benchmarks under spatial distribution shifts, SA-VLA 
+      improves robustness while maintaining in-distribution performance.
     selected: true
 
   - author: ["Ming Sun", "Rui Wang", "Xingrui Yu*", "Lihua Jing", "Hangyu Du", "Zhenglin Wan", "Xu Pan", "Ivor Tsang"]
@@ -58,16 +88,7 @@ publicationsEditable:
     venueIcon: "simple-icons:arxiv"
     venueColor: "#B31B1B"
     abstract: >-
-      Vision-Language-Action models (VLAs) support generalist robotic control by enabling end-to-end decision policies
-      directly from multi-modal inputs. As trained VLAs are increasingly shared and adapted, protecting model ownership
-      becomes essential for secure deployment and responsible open-source usage. In this paper, we present SleeperVLA, the
-      first backdoor-based ownership verification framework specifically designed for VLAs. SleeperVLA embeds a stealthy
-      and harmless backdoor watermark into the protected model during training by injecting secret messages into embodied
-      visual data. For post-release verification, we propose a swap-and-detect mechanism, in which a trigger-aware projector
-      and an external classifier head are used to activate and detect the embedded backdoor based on prediction probabilities.
-      Extensive experiments across multiple datasets, model architectures, and adaptation settings demonstrate that SleeperVLA
-      enables reliable and unique ownership verification while preserving benign task performance. Further results show that
-      the embedded watermark remains detectable under post-release model adaptation.
+      Vision-Language-Action models (VLAs) support generalist robotic control by enabling end-to-end decision policies directly from multi-modal inputs. As trained VLAs are increasingly shared and adapted, protecting model ownership becomes essential for secure deployment and responsible open-source usage. In this paper, we present GuardVLA, the first backdoor-based ownership verification framework specifically designed for VLAs. GuardVLA embeds a stealthy and harmless backdoor watermark into the protected model during training by injecting secret messages into embodied visual data. For post-release verification, we propose a swap-and-detect mechanism, in which the trigger projector and an external classifier head are used to activate and detect the embedded backdoor based on prediction probabilities. Extensive experiments across multiple datasets, model architectures, and adaptation settings demonstrate that GuardVLA enables reliable ownership verification while preserving benign task performance. Further results show that the embedded watermark remains detectable under post-release model adaptation.
     selected: false
 
   - author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"]
@@ -121,6 +142,19 @@ publicationsEditable:
       Extensive experiments on challenging benchmarks demonstrate that SAMatcher significantly improves robustness under large-scale geometric and viewpoint variations.
       These results suggest that monocular visual foundation models can be systematically extended to multi-view correspondence estimation through explicit co-visibility modeling, providing a new perspective on structured representation learning for image matching.
     selected: true
+  
+  - author: ["Jiashen Huang*", "Yu Jia", "Xu Pan"]
+    title: "Trusting AI in China: Institutional Trust and the Domestic Advantage of DeepSeek over ChatGPT"
+    booktitle: "Chinese Journal of Communication (Under Review)"
+    time: "2026"
+    venueRank: "CiteScore Q1 · IF 1.9"
+    doi: "https://doi.org/10.48550/arXiv.2606.01228"
+    paper: https://arxiv.org/abs/2606.01228
+    venueIcon: "simple-icons:arxiv"
+    venueColor: "#B31B1B"
+    abstract: >-
+      Public trust in generative artificial intelligence exhibits increasingly divergent patterns across national contexts, yet prevailing research largely overlooks the macro-structural forces underlying this divergence. This study argues that trust in AI is not merely a technical response to performance but a product of institutional refraction. We propose an ‘Institutional Prism’ framework to demonstrate how institutional trust shapes user trust in domestic (DeepSeek) and global (ChatGPT) large language models. Drawing on Cognitive-Affective Trust Theory, we distinguish between cognitive and affective dimensions of trust and analyze survey data from 405 Chinese users. The findings show that higher institutional trust is positively associated with stronger affective trust in domestic AI models and shifts cognitive evaluations in a more favorable direction. While under lower institutional trust, this domestic advantage weakens. These findings reveal that institutional trust has emerged as a core dimension of AI trust formation. By linking micro-level psychological judgments with macro-level governance, this research contributes a new perspective to human-machine communication.
+    selected: false
 
   - author: ["Xu Pan"]
     title: "Research on Co-Visibility Prior-Guided Image Matching under Large-Scale Disparity"
@@ -141,7 +175,7 @@ newsItems:
   #     Received my M.Sc. degree from Wuhan University with an honor of Outstanding Graduating Graduate Student.
   - date: "May 2026"
     html: |
-      Successfully Defended Master's Thesis with All Excellent Ratings.
+      Successfully defended Master's thesis with all excellent ratings.
   - date: "May 2026"
     html: |
       One paper accepted by the <em>CVPR 2026 Workshop on 3D-LLM/VLA</em>.
@@ -282,6 +316,10 @@ acknowledgements:
   outro: "and others I’ve had the pleasure to work with."
 
 academicServices:
+  - role: "Reviewer"
+    venue: "10th Annual Conference on Robot Learning (CoRL'26)"
+    venueLink: "https://www.corl.org/"
+    year: "2026"
   - role: "Member"
     venue: "ISPRS Student Consortium (ISPRS SC)"
     venueLink: "https://sc.isprs.org/"
