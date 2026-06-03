@@ -126,6 +126,8 @@ publicationsEditable:
     booktitle: "IEEE Transactions on Image Processing (Under Review)"
     time: "2026"
     venueRank: "JCR Q1 · IF 13.7"
+    doi: "https://doi.org/10.48550/arXiv.2606.03406"
+    paper: "https://arxiv.org/abs/2606.03406"
     code: "https://github.com/TwSphinx54/SAMatcher"
     huggingface: "https://huggingface.co/SSSSphinx/SAMatcher"
     site: "https://xupan.top/Projects/samatcher"
