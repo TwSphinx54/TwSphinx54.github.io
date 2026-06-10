@@ -9,6 +9,8 @@ declare module "@pagefind/default-ui" {
 
 interface ImportMetaEnv {
 	readonly WEBMENTION_API_KEY: string;
+	readonly OPENALEX_API_KEY?: string;
+	readonly OPENALEX_MAILTO?: string;
 }
 
 interface ImportMeta {

@@ -26,7 +26,7 @@ const PublicationEditable = z.object({
   venueLogo: z.string().optional(),
   abstract: z.string().optional(),
   selected: z.boolean().optional().default(false),
-  semanticScholarId: z.string().optional(),
+  openAlexId: z.string().optional(),
 });
 
 const NewsItem = z.object({

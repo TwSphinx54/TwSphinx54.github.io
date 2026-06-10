@@ -27,7 +27,7 @@ type PublicationEditable = {
 	venueLogo?: string;
 	abstract?: string;
 	selected?: boolean;
-	semanticScholarId?: string;
+	openAlexId?: string;
 };
 
 type PublicationResolved = PublicationEditable & {
@@ -746,4 +746,3 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 		</section>
 	) : null}
 </PageLayout>
-

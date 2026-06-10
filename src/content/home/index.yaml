@@ -36,7 +36,6 @@ publicationsEditable:
     # venueLogo: "icons/pmlr.svg"
     venueIcon: "simple-icons:arxiv"
     venueColor: "#B31B1B"
-    semanticScholarId: "285271261"
     abstract: >-
       Reinforcement learning (RL) fine-tuning of flow-matching Vision-Language-Action (VLA) policies often 
       improves in-distribution performance but degrades spatial generalization under distribution shifts, leading 
@@ -64,7 +63,6 @@ publicationsEditable:
     site: "https://xupan.top/Projects/savla"
     venueIcon: "simple-icons:ieee"
     venueColor: "#00629B"
-    semanticScholarId: "285271261"
     abstract: >-
       Reinforcement learning (RL) fine-tuning of flow-matching Vision-Language-Action (VLA) policies often 
       improves in-distribution performance but degrades spatial generalization under distribution shifts, leading 
@@ -87,7 +85,6 @@ publicationsEditable:
     paper: "https://arxiv.org/abs/2605.09005"
     venueIcon: "simple-icons:arxiv"
     venueColor: "#B31B1B"
-    semanticScholarId: "288258757"
     abstract: >-
       Vision-Language-Action models (VLAs) support generalist robotic control by enabling end-to-end decision policies directly from multi-modal inputs. As trained VLAs are increasingly shared and adapted, protecting model ownership becomes essential for secure deployment and responsible open-source usage. In this paper, we present GuardVLA, the first backdoor-based ownership verification framework specifically designed for VLAs. GuardVLA embeds a stealthy and harmless backdoor watermark into the protected model during training by injecting secret messages into embodied visual data. For post-release verification, we propose a swap-and-detect mechanism, in which the trigger projector and an external classifier head are used to activate and detect the embedded backdoor based on prediction probabilities. Extensive experiments across multiple datasets, model architectures, and adaptation settings demonstrate that GuardVLA enables reliable ownership verification while preserving benign task performance. Further results show that the embedded watermark remains detectable under post-release model adaptation.
     selected: false
@@ -104,7 +101,6 @@ publicationsEditable:
     site: "https://xupan.top/Projects/scode"
     venueIcon: "simple-icons:elsevier"
     venueColor: "#FF6C00"
-    semanticScholarId: "280934765"
     abstract: >-
       Matching images with significant scale differences remains a persistent challenge in photogrammetry
       and remote sensing. The scale discrepancy often degrades appearance consistency and introduces
@@ -134,7 +130,6 @@ publicationsEditable:
     site: "https://xupan.top/Projects/samatcher"
     venueIcon: "simple-icons:elsevier"
     venueColor: "#FF6C00"
-    semanticScholarId: "288903729"
     abstract: >-
       Reliable correspondence estimation is a fundamental problem in image processing, underpinning a wide range of applications such as Structure from Motion, visual localization, and image registration.
       While recent learning-based approaches have substantially improved the representation capability of local features, most methods still operate primarily at the pixel or patch level.
@@ -156,7 +151,6 @@ publicationsEditable:
     paper: https://arxiv.org/abs/2606.01228
     venueIcon: "simple-icons:arxiv"
     venueColor: "#B31B1B"
-    semanticScholarId: "288861106"
     abstract: >-
       Public trust in generative artificial intelligence exhibits increasingly divergent patterns across national contexts, yet prevailing research largely overlooks the macro-structural forces underlying this divergence. This study argues that trust in AI is not merely a technical response to performance but a product of institutional refraction. We propose an ‘Institutional Prism’ framework to demonstrate how institutional trust shapes user trust in domestic (DeepSeek) and global (ChatGPT) large language models. Drawing on Cognitive-Affective Trust Theory, we distinguish between cognitive and affective dimensions of trust and analyze survey data from 405 Chinese users. The findings show that higher institutional trust is positively associated with stronger affective trust in domestic AI models and shifts cognitive evaluations in a more favorable direction. While under lower institutional trust, this domestic advantage weakens. These findings reveal that institutional trust has emerged as a core dimension of AI trust formation. By linking micro-level psychological judgments with macro-level governance, this research contributes a new perspective to human-machine communication.
     selected: false
