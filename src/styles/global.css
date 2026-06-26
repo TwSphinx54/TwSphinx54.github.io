@@ -44,20 +44,43 @@
 	.highlight,
 	em.highlight {
 		font-weight: 600;
-		font-style: italic;
-		padding: 0 2px;
-		border-radius: 2px;
-		background-image: linear-gradient(
-			transparent calc(100% - var(--em-underline-height)),
-			var(--em-underline-color) 0
-		);
-		background-repeat: no-repeat;
-		background-size: 100% var(--em-underline-height);
-		background-position: 0 100%;
+		font-style: normal;
+		display: inline-block;
+		padding: 0 0 0.07rem 0;
+		line-height: 1;
+		border-radius: 0.06em;
+		background: hsl(var(--theme-accent));
+		color: hsl(var(--theme-bg));
+		box-decoration-break: clone;
+		-webkit-box-decoration-break: clone;
 	}
 
 	.rich-content p + p {
 		margin-top: 0.75rem;
+	}
+
+	.hero-slogan {
+		margin-bottom: 0.5rem;
+	}
+
+	.hero-slogan p {
+		margin: 0;
+		font-family: 'Libre Baskerville', Georgia, "Times New Roman", serif;
+		font-size: clamp(0.82rem, 0.95vw + 0.6rem, 1.08rem);
+		line-height: 1.45;
+		letter-spacing: 0;
+		color: hsl(var(--theme-text));
+		white-space: normal;
+	}
+
+	:root[data-theme="dark"] .hero-slogan p {
+		color: hsl(var(--theme-text) / 0.96);
+	}
+
+	@media (max-width: 480px) {
+		.hero-slogan p {
+			font-size: 0.84rem;
+		}
 	}
 
 	.rich-content .inline-logo {

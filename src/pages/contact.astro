@@ -1,0 +1,119 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+import SocialList from "@/components/SocialList.astro";
+import { Icon } from "astro-icon/components";
+
+const meta = {
+	description:
+		"Contact — download my resume, get in touch, or schedule a meeting.",
+	title: "Contact",
+};
+---
+
+<PageLayout meta={meta}>
+	<section class="relative z-10 max-w-5xl">
+		<div class="mb-8 overflow-hidden rounded-[2rem] border border-zinc-200 bg-white/80 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.35)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/70">
+			<div class="grid gap-0 lg:grid-cols-[1.35fr_0.95fr]">
+				<div class="p-6 sm:p-8 lg:p-10">
+					<p class="mb-3 text-sm font-medium uppercase tracking-[0.22em] text-accent">
+						Contact
+					</p>
+					<h1 class="title mb-4 text-4xl leading-tight sm:text-5xl">
+						Let&apos;s stay in touch
+					</h1>
+					<p class="max-w-2xl text-base leading-7 text-gray-700 dark:text-gray-300">
+						For collaboration, research discussion, internship, job, or Ph.D. opportunities,
+						you can download my resume, email me directly, or book a meeting slot.
+					</p>
+
+					<div class="mt-6 flex flex-wrap gap-3">
+						<a
+							class="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+							href="https://calendar.notion.so/meet/xupan/schedule"
+							target="_blank"
+							rel="noopener"
+							aria-label="Schedule a meeting"
+						>
+							<Icon name="lucide:calendar-plus" class="h-4 w-4" />
+							Schedule a meeting
+						</a>
+						<a
+							class="inline-flex items-center gap-2 rounded-full border border-zinc-300 px-4 py-2.5 text-sm font-semibold text-gray-800 transition hover:border-accent hover:bg-accent/5 dark:border-zinc-700 dark:text-gray-100 dark:hover:bg-accent/10"
+							href="mailto:panxurs@whu.edu.cn"
+							aria-label="Send email"
+						>
+							<Icon name="lucide:mail" class="h-4 w-4" />
+							Send email
+						</a>
+					</div>
+				</div>
+
+				<div class="flex flex-col justify-between gap-4 border-t border-zinc-200 bg-zinc-50/80 p-6 dark:border-zinc-800 dark:bg-zinc-900/60 sm:p-8 lg:border-l lg:border-t-0">
+					<div>
+						<p class="mb-3 text-sm font-medium uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+							Quick access
+						</p>
+						<div class="grid gap-3">
+							<a
+								class="group flex items-center justify-between rounded-2xl border border-zinc-200 bg-white px-4 py-3 transition hover:-translate-y-0.5 hover:border-accent hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-950"
+								href="https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/Resume.pdf"
+								target="_blank"
+								rel="noopener"
+								aria-label="Download Resume English"
+							>
+								<div>
+									<p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Resume (EN)</p>
+									<p class="text-xs text-gray-500 dark:text-gray-400">PDF download</p>
+								</div>
+								<Icon
+									name="lucide:download"
+									class="h-4 w-4 text-gray-500 transition group-hover:text-accent"
+								/>
+							</a>
+							<a
+								class="group flex items-center justify-between rounded-2xl border border-zinc-200 bg-white px-4 py-3 transition hover:-translate-y-0.5 hover:border-accent hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-950"
+								href="https://raw.githubusercontent.com/TwSphinx54/TwSphinx54.github.io/refs/heads/main/public/Resume_zh_CN.pdf"
+								target="_blank"
+								rel="noopener"
+								aria-label="Download Resume Chinese"
+							>
+								<div>
+									<p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Resume (ZH)</p>
+									<p class="text-xs text-gray-500 dark:text-gray-400">PDF download</p>
+								</div>
+								<Icon
+									name="lucide:download"
+									class="h-4 w-4 text-gray-500 transition group-hover:text-accent"
+								/>
+							</a>
+							<a
+								class="group flex items-center justify-between rounded-2xl border border-zinc-200 bg-white px-4 py-3 transition hover:-translate-y-0.5 hover:border-accent hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-950"
+								href="https://linkedin.com/in/x-pan"
+								target="_blank"
+								rel="noopener"
+								aria-label="LinkedIn profile"
+							>
+								<div>
+									<p class="text-sm font-semibold text-gray-900 dark:text-gray-100">LinkedIn</p>
+									<p class="text-xs text-gray-500 dark:text-gray-400">Professional profile</p>
+								</div>
+								<Icon
+									name="simple-icons:linkedin"
+									class="h-4 w-4 text-gray-500 transition group-hover:text-accent"
+								/>
+							</a>
+						</div>
+					</div>
+
+					<p class="text-sm text-gray-600 dark:text-gray-400">
+						Email is best for detailed requests; Notion scheduling is best for meetings.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="mt-8">
+			<SocialList />
+		</div>
+	</section>
+</PageLayout>
