@@ -396,15 +396,6 @@ homeIntroHtml: |
     <a class="cactus-link" href="https://www.ntu.edu.sg/eee" target="_blank" rel="noopener">School of Electrical and Electronic Engineering (EEE)</a>,
     {{logo:ntu|NTU logo|16}}
     <a class="cactus-link" href="https://www.ntu.edu.sg/" target="_blank" rel="noopener">Nanyang Technological University (NTU)</a>.
-    My research focuses on <em class="highlight">embodied intelligence</em>,
-    with an emphasis on <em class="highlight">spatial representations</em> that enable
-    <em class="highlight">generalizable perception-action coupling</em> for embodied agents.
-  </p>
-
-  <p>
-    I study how <em class="highlight">structure-aware representations</em> can support robust interaction,
-    enabling agents to generalize across diverse environments, viewpoints, and embodiments,
-    with a particular interest in agent-centric policy learning and spatial reasoning.
   </p>
 
   <p>
@@ -420,13 +411,14 @@ homeIntroHtml: |
     and was a remote Research Assistant at the
     {{logo:astar|A*STAR logo|16}}
     <a class="cactus-link" href="https://www.a-star.edu.sg/cfar" target="_blank" rel="noopener">Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)</a>,
-    working with
+    working closely with
     <a class="cactus-link" href="https://xingruiyu.github.io/" target="_blank" rel="noopener">Dr. Xingrui Yu</a>.
   </p>
 
   <p>
-    More broadly, I aim to develop <em class="highlight">scalable and generalizable learning frameworks</em>
-    that advance spatial intelligence and enable embodied systems to operate reliably in complex real-world settings.
+    My research focuses on <em class="highlight">embodied intelligence</em>, 
+    investigating the <em class="highlight">spatial principles</em> that underpin robust perception, reasoning, and action in the physical world.
+    I develop <em class="highlight">scalable learning frameworks</em> that enable <em class="highlight">general-purpose embodied agents</em> to adapt across diverse environments, tasks, and embodiments.
   </p>
   <p></p>
 
