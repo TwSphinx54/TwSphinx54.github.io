@@ -155,11 +155,6 @@ function resolveAsset(p?: string): any | null {
 	return (assetImages as any)[key] ?? null;
 }
 
-function assetToSrc(a: any): string {
-	if (!a) return "";
-	return typeof a === "string" ? a : a.src;
-}
-
 function logoHeight(value: number): number {
 	return value;
 }

@@ -8,13 +8,6 @@ import robotsTxt from "astro-robots-txt";
 import { defineConfig } from "astro/config";
 import { expressiveCodeOptions } from "./src/site.config";
 
-// Remark plugins
-import remarkDirective from "remark-directive"; /* Handle ::: directives as nodes */
-import { remarkAdmonitions } from "./src/plugins/remark-admonitions"; /* Add admonitions */
-
-// Rehype plugins
-import rehypeExternalLinks from "rehype-external-links";
-
 // https://astro.build/config
 export default defineConfig({
   image: {
@@ -27,23 +20,6 @@ export default defineConfig({
     mdx(),
     robotsTxt(),
   ],
-  markdown: {
-    rehypePlugins: [
-      [
-        rehypeExternalLinks,
-        {
-          rel: ["nofollow, noreferrer"],
-          target: "_blank",
-        },
-      ],
-    ],
-    remarkPlugins: [remarkDirective, remarkAdmonitions],
-    remarkRehype: {
-      footnoteLabelProperties: {
-        className: [""],
-      },
-    },
-  },
   // https://docs.astro.build/en/guides/prefetch/
   prefetch: true,
   // ! Please remember to replace the following site property with your own domain
@@ -55,18 +31,6 @@ export default defineConfig({
         output: {
           manualChunks(id) {
             if (!id.includes("node_modules")) return;
-            if (id.includes("@shadergradient/react")) {
-              return "vendor-shadergradient";
-            }
-            if (id.includes("@react-three/fiber")) {
-              return "vendor-r3f";
-            }
-            if (id.includes("three-stdlib") || id.includes("camera-controls")) {
-              return "vendor-three-stdlib";
-            }
-            if (id.includes("/three/")) {
-              return "vendor-three-core";
-            }
             if (id.includes("react") || id.includes("scheduler")) {
               return "vendor-react";
             }
