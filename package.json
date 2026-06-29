@@ -34,7 +34,7 @@
         "@tailwindcss/typography": "^0.5.20",
         "@tailwindcss/vite": "^4.3.1",
         "autoprefixer": "^10.5.2",
-        "prettier": "^3.8.5",
+        "prettier": "^3.9.1",
         "prettier-plugin-astro": "0.14.1",
         "prettier-plugin-tailwindcss": "^0.7.4",
         "rehype-unwrap-images": "^1.0.0",

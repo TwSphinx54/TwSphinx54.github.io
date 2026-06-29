@@ -294,10 +294,41 @@ const honorsRest = honors.slice(HONORS_PREVIEW_COUNT);
 const NEWS_PREVIEW_COUNT = 5;
 const newsPreview = newsItems.slice(0, NEWS_PREVIEW_COUNT);
 const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
+const sectionNav = [
+	{ id: "intro", label: "Intro" },
+	{ id: "news", label: "News" },
+	{ id: "experiences", label: "Experiences" },
+	{ id: "publications", label: "Publications" },
+	{ id: "projects", label: "Projects" },
+	{ id: "honors", label: "Honors" },
+	{ id: "service", label: "Service" },
+	...(personalPhilosophyTokens.length > 0 ? [{ id: "philosophy", label: "Philosophy" }] : []),
+];
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-	<section class="rounded-2xl pb-6 pr-6">
+	<nav class="section-rail hidden lg:block" aria-label="Section navigation" data-section-nav>
+		<ul class="section-rail__list">
+			{
+				sectionNav.map((item) => (
+					<li>
+						<a
+							href={`#${item.id}`}
+							class="section-rail__link"
+							data-section-link
+							data-section-id={item.id}
+							aria-label={`Jump to ${item.label}`}
+						>
+							<span class="section-rail__dot" aria-hidden="true" />
+							<span class="section-rail__label">{item.label}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+
+	<section id="intro" data-home-section class="rounded-2xl pb-6 pr-6">
 		<h1 class="title mb-6">Hello World!</h1>
 		{homeIntroLeadHtml && (
 			<div class="hero-slogan mb-5">
@@ -342,7 +373,7 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 		</div>
 	</section>
 
-	<section class="mt-8 rounded-2xl pb-6 pr-6" aria-label="News">
+	<section id="news" data-home-section class="mt-8 rounded-2xl pb-6 pr-6" aria-label="News">
 		<h2 class="title mb-4 text-xl">News</h2>
 		<ul class="space-y-3 pr-2">
 			{
@@ -418,7 +449,12 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 		) : null}
 	</section>
 
-	<section class="mt-8 rounded-2xl pb-6 pr-6" aria-label="Experiences">
+	<section
+		id="experiences"
+		data-home-section
+		class="mt-8 rounded-2xl pb-6 pr-6"
+		aria-label="Experiences"
+	>
 		<h2 class="title mb-4 text-xl">Experiences</h2>
 		<div class="flex flex-wrap items-center gap-2">
 			{
@@ -489,7 +525,7 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 		}
 	</section>
 
-	<section class="mt-8" aria-label="Publications">
+	<section id="publications" data-home-section class="mt-8" aria-label="Publications">
 		<div class="mb-4 flex items-center justify-between">
 			<h2 class="title text-xl">Selected Publications</h2>
 			<a
@@ -511,7 +547,7 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 			</dl>
 		</div>
 	</section>
-	<section class="mt-8" aria-label="Projects">
+	<section id="projects" data-home-section class="mt-8" aria-label="Projects">
 		<h2 class="title mb-4 text-xl">Projects</h2>
 
 		<div class="-mx-3 sm:-mx-4 md:-mx-6">
@@ -619,7 +655,7 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 		</div>
 	</section>
 
-	<section class="mt-8 pb-6 pr-6" aria-label="Honors and Awards">
+	<section id="honors" data-home-section class="mt-8 pb-6 pr-6" aria-label="Honors and Awards">
 		<h2 class="title mb-4 text-xl">Honors & Awards</h2>
 
 		{
@@ -673,7 +709,12 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 		}
 	</section>
 
-	<section class="mt-8 rounded-2xl pb-6 pr-6" aria-label="Academic Service">
+	<section
+		id="service"
+		data-home-section
+		class="mt-8 rounded-2xl pb-6 pr-6"
+		aria-label="Academic Service"
+	>
 		<h2 class="title mb-4 text-xl">Academic Service</h2>
 
 		{
@@ -717,7 +758,12 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 	</section>
 
 	{personalPhilosophyTokens.length > 0 ? (
-		<section class="mt-8 rounded-2xl pb-6 pr-6" aria-label="Personal Philosophy">
+		<section
+			id="philosophy"
+			data-home-section
+			class="mt-8 rounded-2xl pb-6 pr-6"
+			aria-label="Personal Philosophy"
+		>
 			<h2 class="title mb-4 text-xl">Personal Philosophy</h2>
 			<div class="rich-content">
 				{personalPhilosophyTokens.map((token) => {
@@ -741,3 +787,338 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 		</section>
 	) : null}
 </PageLayout>
+
+<script is:inline>
+	const links = Array.from(document.querySelectorAll("[data-section-link]"));
+	const sections = Array.from(document.querySelectorAll("[data-home-section]"));
+
+	if (links.length > 0 && sections.length > 0) {
+		const linkById = new Map(links.map((link) => [link.dataset.sectionId, link]));
+		const sectionById = new Map(sections.map((section) => [section.id, section]));
+		let activeId = "";
+		let ticking = false;
+		let clickFeedbackTimer;
+		let pendingId = "";
+		let pendingUntil = 0;
+
+		const setActiveLink = (id) => {
+			if (!id || id === activeId) return;
+			activeId = id;
+
+			for (const link of links) {
+				const isActive = link.dataset.sectionId === id;
+				link.classList.toggle("is-active", isActive);
+				if (isActive) {
+					link.setAttribute("aria-current", "location");
+				} else {
+					link.removeAttribute("aria-current");
+				}
+			}
+		};
+
+		const syncActiveSection = () => {
+			ticking = false;
+			const anchorY = window.innerHeight * 0.3;
+
+			if (pendingId) {
+				const pendingSection = sectionById.get(pendingId);
+				if (pendingSection) {
+					const rect = pendingSection.getBoundingClientRect();
+					const reachedPendingSection =
+						(rect.top <= anchorY && rect.bottom >= anchorY) || Math.abs(rect.top - anchorY) < 24;
+
+					if (reachedPendingSection) {
+						setActiveLink(pendingId);
+						pendingId = "";
+						pendingUntil = 0;
+						return;
+					}
+
+					if (performance.now() < pendingUntil) {
+						setActiveLink(pendingId);
+						return;
+					}
+				}
+
+				pendingId = "";
+				pendingUntil = 0;
+			}
+
+			let currentId = sections[0]?.id ?? "";
+
+			for (const section of sections) {
+				if (section.getBoundingClientRect().top <= anchorY) {
+					currentId = section.id;
+				} else {
+					break;
+				}
+			}
+
+			setActiveLink(currentId);
+		};
+
+		const queueSync = () => {
+			if (ticking) return;
+			ticking = true;
+			window.requestAnimationFrame(syncActiveSection);
+		};
+
+		for (const link of links) {
+			link.addEventListener("click", () => {
+				const id = link.dataset.sectionId;
+				window.clearTimeout(clickFeedbackTimer);
+				for (const item of links) item.classList.remove("is-pressed");
+				link.classList.add("is-pressed");
+				clickFeedbackTimer = window.setTimeout(() => {
+					link.classList.remove("is-pressed");
+				}, 360);
+				if (id) {
+					pendingId = id;
+					pendingUntil = performance.now() + 900;
+					setActiveLink(id);
+				}
+			});
+		}
+
+		window.addEventListener("scroll", queueSync, { passive: true });
+		window.addEventListener("resize", queueSync);
+		window.addEventListener("hashchange", () => {
+			const id = window.location.hash.replace(/^#/, "");
+			if (linkById.has(id)) setActiveLink(id);
+			queueSync();
+		});
+
+		const initialHash = window.location.hash.replace(/^#/, "");
+		if (linkById.has(initialHash)) {
+			setActiveLink(initialHash);
+		}
+		syncActiveSection();
+	}
+</script>
+
+<style>
+	[data-home-section] {
+		scroll-margin-top: 7rem;
+	}
+
+	.section-rail {
+		position: fixed;
+		top: 50%;
+		left: max(1rem, calc(50vw - 38.5rem));
+		z-index: 30;
+		transform: translateY(-50%);
+	}
+
+	.section-rail__list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.section-rail__link {
+		--rail-ink: rgb(113 113 122 / 0.78);
+		--rail-ink-active: hsl(var(--theme-accent));
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		width: 2.6rem;
+		padding: 0.05rem 0;
+		overflow: hidden;
+		color: var(--rail-ink);
+		transition:
+			width 180ms ease,
+			color 180ms ease,
+			transform 180ms ease;
+		transform-origin: left center;
+	}
+
+	:global(.dark) .section-rail__link {
+		--rail-ink: rgb(161 161 170 / 0.8);
+	}
+
+	.section-rail__link:focus-visible {
+		outline: 2px solid hsl(var(--theme-accent) / 0.35);
+		outline-offset: 3px;
+	}
+
+	.section-rail__dot {
+		position: relative;
+		display: block;
+		height: 0.35rem;
+		width: 0.35rem;
+		flex: 0 0 auto;
+		border-radius: 999px;
+		background: currentColor;
+		opacity: 0.38;
+		transition:
+			opacity 180ms ease,
+			width 180ms ease,
+			transform 180ms ease,
+			background-color 180ms ease;
+		z-index: 1;
+	}
+
+	.section-rail__dot::after {
+		content: none;
+	}
+
+	.section-rail__link.is-active .section-rail__dot {
+		opacity: 1;
+		width: 1.5rem;
+		border-radius: 999px;
+		transform: none;
+	}
+
+	.section-rail__label {
+		max-width: 0;
+		overflow: hidden;
+		white-space: nowrap;
+		display: inline-block;
+		font-size: 0.64rem;
+		font-weight: 600;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+		opacity: 0;
+		transform: translateX(-0.3rem);
+		transition:
+			max-width 180ms ease,
+			opacity 140ms ease,
+			transform 180ms ease;
+		position: relative;
+		z-index: 1;
+	}
+
+	.section-rail__label::before,
+	.section-rail__label::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		width: 0;
+		height: 0.94em;
+		top: 50%;
+		transform: translateY(-50%);
+		background: hsl(var(--theme-accent));
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.section-rail__label::before {
+		z-index: 2;
+	}
+
+	.section-rail__label::after {
+		z-index: 3;
+		background: var(--theme-bg-swatch, rgb(255 255 255));
+	}
+
+	:global(.dark) .section-rail__label::after {
+		background: rgb(24 24 27);
+	}
+
+	.section-rail:hover .section-rail__link,
+	.section-rail:focus-within .section-rail__link {
+		width: 9.5rem;
+		--rail-ink: rgb(82 82 91 / 0.95);
+	}
+
+	:global(.dark) .section-rail:hover .section-rail__link,
+	:global(.dark) .section-rail:focus-within .section-rail__link {
+		--rail-ink: rgb(212 212 216 / 0.92);
+	}
+
+	.section-rail:hover .section-rail__dot,
+	.section-rail:focus-within .section-rail__dot {
+		width: 0;
+		opacity: 0;
+	}
+
+	.section-rail:hover .section-rail__label,
+	.section-rail:focus-within .section-rail__label,
+	.section-rail__link.is-active .section-rail__label {
+		max-width: 7rem;
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	.section-rail__link.is-active {
+		color: var(--rail-ink-active);
+	}
+
+	.section-rail__link.is-pressed {
+		animation: section-rail-tone 360ms linear;
+	}
+
+	.section-rail__link.is-pressed .section-rail__label::before {
+		animation: section-rail-fill 460ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.section-rail__link.is-pressed .section-rail__label::after {
+		animation: section-rail-reveal 460ms cubic-bezier(0.3, 0, 0.2, 1);
+	}
+
+	.section-rail:hover .section-rail__link.is-active,
+	.section-rail:focus-within .section-rail__link.is-active {
+		color: hsl(var(--theme-accent));
+	}
+
+	.section-rail:not(:hover):not(:focus-within) .section-rail__link.is-active .section-rail__label {
+		max-width: 0;
+		opacity: 0;
+		transform: translateX(-0.3rem);
+	}
+
+	@keyframes section-rail-tone {
+		0%,
+		84% {
+			color: var(--rail-ink);
+		}
+
+		85%,
+		100% {
+			color: var(--rail-ink-active);
+		}
+	}
+
+	@keyframes section-rail-fill {
+		0% {
+			opacity: 0;
+			width: 0;
+		}
+
+		12% {
+			opacity: 1;
+		}
+
+		55% {
+			opacity: 0.96;
+			width: 100%;
+		}
+
+		100% {
+			opacity: 0;
+			width: 100%;
+		}
+	}
+
+	@keyframes section-rail-reveal {
+		0%,
+		40% {
+			opacity: 0;
+			left: 0;
+			width: 0;
+		}
+
+		41% {
+			opacity: 1;
+			left: 0;
+			width: 100%;
+		}
+
+		100% {
+			opacity: 1;
+			left: 100%;
+			width: 0;
+		}
+	}
+</style>
