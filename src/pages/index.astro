@@ -27,7 +27,7 @@ type PublicationEditable = {
 	venueLogo?: string;
 	abstract?: string;
 	selected?: boolean;
-	openAlexId?: string;
+	semantic_scholar_id?: string;
 };
 
 type PublicationResolved = PublicationEditable & {
@@ -472,7 +472,7 @@ const sectionNav = [
 							title={exp.altTitleName}
 							width={256}
 							densities={[1, 2]}
-							class="h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+							class="h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
 							loading="lazy"
 						/>
 						<span class="pointer-events-none absolute left-1/2 top-full z-10 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-0.5 text-center text-[10px] font-medium leading-snug tracking-wide text-white opacity-0 shadow transition-opacity duration-200 group-hover:opacity-100">

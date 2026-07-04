@@ -1,5 +1,4 @@
 import type { SiteConfig } from "@/types";
-import type { AstroExpressiveCodeOptions } from "astro-expressive-code";
 
 export const siteConfig: SiteConfig = {
   // Used as both a meta property (src/components/BaseHead.astro L:31 + L:49) & the generated satori png (src/pages/og-image/[slug].png.ts)
@@ -39,26 +38,3 @@ export const menuLinks: { path: string; title: string }[] = [
     title: "Contact",
   },
 ];
-
-// https://expressive-code.com/reference/configuration/
-export const expressiveCodeOptions: AstroExpressiveCodeOptions = {
-  styleOverrides: {
-    borderRadius: "4px",
-    codeFontFamily:
-      'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;',
-    codeFontSize: "0.875rem",
-    codeLineHeight: "1.7142857rem",
-    codePaddingInline: "1rem",
-    frames: {
-      frameBoxShadowCssValue: "none",
-    },
-    uiLineHeight: "inherit",
-  },
-  themeCssSelector(theme) {
-    // Map directly to the site's theme switcher values to avoid context-dependent issues.
-    return `[data-theme='${theme.type}']`;
-  },
-  // One dark, one light theme => https://expressive-code.com/guides/themes/#available-themes
-  themes: ["dracula", "github-light"],
-  useThemedScrollbars: false,
-};

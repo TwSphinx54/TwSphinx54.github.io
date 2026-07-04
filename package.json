@@ -27,18 +27,18 @@
     },
     "devDependencies": {
         "@astrojs/check": "^0.9.9",
-        "@biomejs/biome": "^2.5.1",
-        "@iconify-json/lucide": "^1.2.114",
+        "@biomejs/biome": "^2.5.2",
+        "@iconify-json/lucide": "^1.2.116",
         "@iconify-json/mdi": "^1.2.3",
-        "@iconify-json/simple-icons": "^1.2.87",
+        "@iconify-json/simple-icons": "^1.2.88",
         "@tailwindcss/typography": "^0.5.20",
-        "@tailwindcss/vite": "^4.3.1",
+        "@tailwindcss/vite": "^4.3.2",
         "autoprefixer": "^10.5.2",
-        "prettier": "^3.9.1",
+        "prettier": "^3.9.4",
         "prettier-plugin-astro": "0.14.1",
         "prettier-plugin-tailwindcss": "^0.7.4",
         "rehype-unwrap-images": "^1.0.0",
-        "tailwindcss": "^4.3.1",
+        "tailwindcss": "^4.3.2",
         "typescript": "^6.0.3"
     }
 }

@@ -2,11 +2,9 @@ import fs from "node:fs";
 import mdx from "@astrojs/mdx";
 import tailwindcss from '@tailwindcss/vite';
 import react from "@astrojs/react";
-import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
 import robotsTxt from "astro-robots-txt";
 import { defineConfig } from "astro/config";
-import { expressiveCodeOptions } from "./src/site.config";
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,7 +13,6 @@ export default defineConfig({
   },
   integrations: [
     react(),
-    expressiveCode(expressiveCodeOptions),
     icon(),
     mdx(),
     robotsTxt(),

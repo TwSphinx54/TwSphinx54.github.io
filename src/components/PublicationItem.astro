@@ -1,7 +1,6 @@
 ---
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
-import { getOpenAlexCitationCount, hasCitationLookup } from "@/utils/citations";
 
 const { pub } = Astro.props;
 const {
@@ -19,7 +18,7 @@ const {
 	venueColor,
 	venueRank,
 	venueLogo,
-	openAlexId,
+	semantic_scholar_id,
 } = pub;
 
 const slug = title
@@ -28,9 +27,6 @@ const slug = title
 	.replace(/[^a-z0-9\-]/g, "");
 
 const isArxivLink = (url: string) => url.includes("arxiv.org");
-
-const citationEnabled = hasCitationLookup(pub);
-const citationCount = citationEnabled ? await getOpenAlexCitationCount(pub) : null;
 ---
 
 <article
@@ -92,20 +88,8 @@ const citationCount = citationEnabled ? await getOpenAlexCitationCount(pub) : nu
 				}
 
 				{
-					citationEnabled && (
-						<span
-							class="openalex-citation inline-flex items-center rounded-full bg-sky-100 px-2 py-0.5 text-sm font-medium text-sky-700 dark:bg-sky-900/30 dark:text-sky-300"
-							title={openAlexId ? "OpenAlex citation count" : "OpenAlex citation count matched by DOI/title"}
-						>
-							<Icon
-								name="lucide:quote"
-								class="mr-1 inline-block"
-								width="14"
-								height="14"
-								aria-hidden="true"
-							/>
-							Citations&nbsp;<span class="citation-count">{citationCount ?? "--"}</span>
-						</span>
+					semantic_scholar_id && (
+						<span data-semantic-scholar-id={semantic_scholar_id}></span>
 					)
 				}
 
