@@ -52,6 +52,7 @@ import { Icon } from "astro-icon/components";
 				if (isCollapsed) {
 					content.style.maxHeight = content.scrollHeight + "px";
 					content.style.opacity = "1";
+					content.style.marginTop = "0.75rem";
 					content.setAttribute("data-collapsed", "false");
 					btn.setAttribute("aria-expanded", "true");
 					chev?.classList.add("rotate-180");
@@ -68,6 +69,7 @@ import { Icon } from "astro-icon/components";
 					content.offsetHeight; // force reflow
 					content.style.maxHeight = "0";
 					content.style.opacity = "0";
+					content.style.marginTop = "0";
 					content.setAttribute("data-collapsed", "true");
 					btn.setAttribute("aria-expanded", "false");
 					chev?.classList.remove("rotate-180");

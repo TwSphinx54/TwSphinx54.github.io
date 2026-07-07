@@ -72,7 +72,7 @@ const meta = {
 							aria-label={`Jump to ${item.label}`}
 						>
 							<span class="section-rail__dot" aria-hidden="true" />
-							<span class="section-rail__label">{item.label}</span>
+							<span class="section-rail__label" data-rail-label={item.label}>{item.label}</span>
 						</a>
 					</li>
 				))
@@ -80,26 +80,26 @@ const meta = {
 		</ul>
 	</nav>
 
-	<h1 class="title mb-6">Publications</h1>
-	<section id="lead" data-home-section>
-		<h2 class="title mb-4 flex items-baseline gap-2 text-xl">
+	<h1 class="title">Publications</h1>
+	<section id="lead" data-home-section class="mt-10">
+		<h2 class="title mb-3 flex items-baseline gap-2 text-xl">
 			<span>Lead Publications</span>
 			<span class="section-count">{firstAuthorPublications.length}</span>
 		</h2>
 		<div class="-mx-3 sm:-mx-4 md:-mx-6">
-			<div class="space-y-4 px-3 sm:px-4 md:px-6">
+			<div class="px-3 sm:px-4 md:px-6">
 				{firstAuthorPublications.map((pub) => <PublicationItem pub={pub} />)}
 			</div>
 		</div>
 	</section>
 
 	<section id="collaborative" data-home-section class="mt-10">
-		<h2 class="title mb-4 flex items-baseline gap-2 text-xl">
+		<h2 class="title mb-3 flex items-baseline gap-2 text-xl">
 			<span>Collaborative Publications</span>
 			<span class="section-count">{collaborativePublications.length}</span>
 		</h2>
 		<div class="-mx-3 sm:-mx-4 md:-mx-6">
-			<div class="space-y-4 px-3 sm:px-4 md:px-6">
+			<div class="px-3 sm:px-4 md:px-6">
 				{collaborativePublications.map((pub) => <PublicationItem pub={pub} />)}
 			</div>
 		</div>
@@ -321,31 +321,21 @@ const meta = {
 		z-index: 1;
 	}
 
-	.section-rail__label::before,
-	.section-rail__label::after {
-		content: "";
+	.section-rail__label::before {
 		position: absolute;
 		left: 0;
-		width: 0;
-		height: 0.94em;
-		top: 50%;
+		right: 0;
+		top: calc(50% + 0.05em);
 		transform: translateY(-50%);
-		background: hsl(var(--theme-accent));
-		opacity: 0;
 		pointer-events: none;
 	}
 
 	.section-rail__label::before {
-		z-index: 2;
-	}
-
-	.section-rail__label::after {
-		z-index: 3;
-		background: rgb(255 255 255);
-	}
-
-	:global(.dark) .section-rail__label::after {
-		background: rgb(24 24 27);
+		content: "";
+		height: 1.02em;
+		background: hsl(var(--theme-accent));
+		clip-path: inset(0 100% 0 0);
+		z-index: 4;
 	}
 
 	.section-rail:hover .section-rail__link,
@@ -381,12 +371,12 @@ const meta = {
 		animation: section-rail-tone 360ms linear;
 	}
 
-	.section-rail__link.is-pressed .section-rail__label::before {
-		animation: section-rail-fill 460ms cubic-bezier(0.22, 1, 0.36, 1);
+	.section-rail__link.is-pressed .section-rail__label {
+		animation: section-rail-label-tone 460ms linear;
 	}
 
-	.section-rail__link.is-pressed .section-rail__label::after {
-		animation: section-rail-reveal 460ms cubic-bezier(0.3, 0, 0.2, 1);
+	.section-rail__link.is-pressed .section-rail__label::before {
+		animation: section-rail-fill 460ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
 	.section-rail:hover .section-rail__link.is-active,
@@ -412,45 +402,30 @@ const meta = {
 		}
 	}
 
+	@keyframes section-rail-label-tone {
+		0%,
+		44% {
+			color: transparent;
+		}
+
+		45%,
+		100% {
+			color: hsl(var(--theme-accent));
+		}
+	}
+
 	@keyframes section-rail-fill {
 		0% {
-			opacity: 0;
-			width: 0;
+			clip-path: inset(0 100% 0 0);
 		}
 
-		12% {
-			opacity: 1;
-		}
-
-		55% {
-			opacity: 0.96;
-			width: 100%;
+		45% {
+			clip-path: inset(0 0 0 0);
 		}
 
 		100% {
-			opacity: 0;
-			width: 100%;
+			clip-path: inset(0 0 0 100%);
 		}
 	}
 
-	@keyframes section-rail-reveal {
-		0%,
-		40% {
-			opacity: 0;
-			left: 0;
-			width: 0;
-		}
-
-		41% {
-			opacity: 1;
-			left: 0;
-			width: 100%;
-		}
-
-		100% {
-			opacity: 1;
-			left: 100%;
-			width: 0;
-		}
-	}
 </style>

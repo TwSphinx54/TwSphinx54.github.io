@@ -247,7 +247,7 @@ projectsEditable:
     repo: "https://github.com/Geo-Tell/SCoDe"
     site: "https://xupan.top/Projects/scode"
     paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260"
-    orgLogos: ["whu", "epfl", "seu"]
+    orgLogos: ["whu", "epfl", "seu", "cas"]
 
   - name: "GNDAS"
     description: "The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system application designed for the analysis and assessment of natural disasters."

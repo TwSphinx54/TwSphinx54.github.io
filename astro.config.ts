@@ -1,7 +1,5 @@
 import fs from "node:fs";
-import mdx from "@astrojs/mdx";
 import tailwindcss from '@tailwindcss/vite';
-import react from "@astrojs/react";
 import icon from "astro-icon";
 import robotsTxt from "astro-robots-txt";
 import { defineConfig } from "astro/config";
@@ -12,9 +10,7 @@ export default defineConfig({
     domains: ["webmention.io"],
   },
   integrations: [
-    react(),
     icon(),
-    mdx(),
     robotsTxt(),
   ],
   // https://docs.astro.build/en/guides/prefetch/
@@ -24,16 +20,6 @@ export default defineConfig({
   vite: {
     build: {
       chunkSizeWarningLimit: 800,
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (!id.includes("node_modules")) return;
-            if (id.includes("react") || id.includes("scheduler")) {
-              return "vendor-react";
-            }
-          },
-        },
-      },
     },
     optimizeDeps: {
       exclude: [],
