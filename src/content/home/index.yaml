@@ -232,7 +232,7 @@ newsItems:
 
 projectsEditable:
   - name: "SA-VLA"
-    description: "A research project on robust RL adaptation of flow-matching–based VLA models for robotic manipulation, focusing on generalization under distribution shifts in challenging benchmarks."
+    description: "A research project on robust RL adaptation of flow-matching–based VLA models for robotic manipulation, focusing on generalization under challenging distribution shifts."
     tags: ["Vision-Language-Action Model", "Robotic Manipulation", "Flow-Matching", "Reinforcement Learning"]
     time: "2026"
     repo: "https://github.com/TwSphinx54/SA-VLA"
@@ -241,7 +241,7 @@ projectsEditable:
     orgLogos: ["whu", "astar", "ntu", "nus", "cas"]
 
   - name: "Co-visibility Guided Image Matching"
-    description: "A research project on robust image matching in robot vision, photogrammetry and remote sensing, using explicit co-visibility modeling to handle extreme scale and viewpoint variations."
+    description: "A research project on robust image matching in robot vision, photogrammetry and remote sensing, using explicit co-visibility modeling to handle extreme scale variations."
     tags: ["Co-visibility", "Image Matching", "3D Vision", "Segmentation", "Photogrammetry", "SCoDe", "SAMatcher"]
     time: "2025"
     repo: "https://github.com/Geo-Tell/SCoDe"
@@ -250,14 +250,14 @@ projectsEditable:
     orgLogos: ["whu", "epfl", "seu", "cas"]
 
   - name: "GNDAS"
-    description: "The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system application designed for the analysis and assessment of natural disasters."
+    description: "The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system designed for the analysis and assessment of natural disasters."
     tags: ["Natural Disasters", "Geographic Information System (GIS)"]
     time: "2022"
     repo: "https://github.com/TwSphinx54/GNDAS"
     orgLogos: ["whu"]
 
   - name: "I2RSI"
-    description: "The I2RSI System (Intelligent Interpretation of Remote Sensing Images) is a web-based application for remote sensing image interpretation, powered by the Baidu PaddlePaddle deep learning framework."
+    description: "The I2RSI System (Intelligent Interpretation of Remote Sensing Images) is a web-based remote sensing image interpretation system, powered by the Baidu PaddlePaddle."
     tags: ["Remote Sensing", "Interpretation", "Deep Learning"]
     time: "2022"
     repo: "https://github.com/TwSphinx54/I2RSI"
