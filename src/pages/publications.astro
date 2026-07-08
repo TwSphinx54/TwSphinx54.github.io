@@ -59,7 +59,7 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-	<nav class="section-rail hidden lg:block" aria-label="Section navigation">
+	<nav class="section-rail" aria-label="Section navigation">
 		<ul class="section-rail__list">
 			{
 				sectionNav.map((item) => (
@@ -220,17 +220,56 @@ const meta = {
 	}
 
 	.section-rail {
+		--section-rail-gap: 0.5rem;
+		--section-rail-collapsed-width: 1.45rem;
+		--section-rail-expanded-width: 8.3rem;
+		--section-rail-label-width: 5.95rem;
+		--section-rail-min-edge: 1rem;
+		--section-rail-normal-left: calc(
+			50vw - 32rem - var(--section-rail-expanded-width) - var(--section-rail-gap)
+		);
+		--section-rail-tight-left: calc(
+			50vw - 32rem - var(--section-rail-collapsed-width) - var(--section-rail-gap)
+		);
+		--section-rail-left: max(
+			var(--section-rail-min-edge),
+			min(var(--section-rail-normal-left), var(--section-rail-tight-left))
+		);
+		--section-rail-max-width: calc(100vw - var(--section-rail-left) - var(--section-rail-min-edge));
 		position: fixed;
 		top: 50%;
-		left: max(1rem, calc(50vw - 38.5rem));
-		z-index: 30;
+		left: var(--section-rail-left);
+		z-index: 120;
+		isolation: isolate;
 		transform: translateY(-50%);
+		width: var(--section-rail-collapsed-width);
+		box-sizing: border-box;
+		padding: 0.12rem 0.08rem;
+		border: 1px solid transparent;
+		border-radius: 0.8rem;
+		background: rgb(255 255 255 / 0);
+		backdrop-filter: blur(0);
+		-webkit-backdrop-filter: blur(0);
+		overflow: visible;
+		transition:
+			width 180ms ease,
+			background-color 180ms ease,
+			border-color 180ms ease,
+			backdrop-filter 180ms ease,
+			-webkit-backdrop-filter 180ms ease;
+	}
+
+	@media (max-width: 63.99rem) {
+		.section-rail {
+			display: none;
+		}
 	}
 
 	.section-rail__list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: 0.4rem;
+		width: 100%;
 	}
 
 	.section-count {
@@ -258,7 +297,7 @@ const meta = {
 		display: flex;
 		align-items: center;
 		gap: 0.4rem;
-		width: 2.6rem;
+		width: 100%;
 		padding: 0.05rem 0;
 		overflow: hidden;
 		color: var(--rail-ink);
@@ -281,8 +320,8 @@ const meta = {
 	.section-rail__dot {
 		position: relative;
 		display: block;
-		height: 0.35rem;
-		width: 0.35rem;
+		height: 0.2rem;
+		width: 0.2rem;
 		flex: 0 0 auto;
 		border-radius: 999px;
 		background: currentColor;
@@ -297,9 +336,24 @@ const meta = {
 
 	.section-rail__link.is-active .section-rail__dot {
 		opacity: 1;
-		width: 1.5rem;
+		width: 1.05rem;
 		border-radius: 999px;
 		transform: none;
+	}
+
+	.section-rail:hover,
+	.section-rail:focus-within {
+		width: min(var(--section-rail-expanded-width), var(--section-rail-max-width));
+		border-color: rgb(255 255 255 / 0.18);
+		background: rgb(255 255 255 / 0.2);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+	}
+
+	:global(.dark) .section-rail:hover,
+	:global(.dark) .section-rail:focus-within {
+		border-color: rgb(255 255 255 / 0.08);
+		background: rgb(10 10 12 / 0.26);
 	}
 
 	.section-rail__label {
@@ -340,7 +394,7 @@ const meta = {
 
 	.section-rail:hover .section-rail__link,
 	.section-rail:focus-within .section-rail__link {
-		width: 9.5rem;
+		width: 100%;
 		--rail-ink: rgb(82 82 91 / 0.95);
 	}
 
@@ -355,10 +409,17 @@ const meta = {
 		opacity: 0;
 	}
 
+	.section-rail:not(:hover):not(:focus-within) {
+		border-color: transparent;
+		background: transparent;
+		backdrop-filter: blur(0);
+		-webkit-backdrop-filter: blur(0);
+	}
+
 	.section-rail:hover .section-rail__label,
 	.section-rail:focus-within .section-rail__label,
 	.section-rail__link.is-active .section-rail__label {
-		max-width: 7rem;
+		max-width: var(--section-rail-label-width);
 		opacity: 1;
 		transform: translateX(0);
 	}

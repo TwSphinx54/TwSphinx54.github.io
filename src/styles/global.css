@@ -133,39 +133,46 @@
 	.title-invert-hover {
 		position: relative;
 		display: inline-block;
+		max-width: 100%;
+		vertical-align: top;
+	}
+
+	.title-invert-hover__base,
+	.title-invert-hover__overlay,
+	.title-invert-hover__reveal {
+		max-width: 100%;
+		white-space: normal;
+		overflow-wrap: anywhere;
+		line-height: inherit;
+	}
+
+	.title-invert-hover__base {
+		display: block;
 		color: hsl(var(--theme-accent));
-		isolation: isolate;
 	}
 
-	.title-invert-hover::before {
-		content: "";
-		position: absolute;
-		left: -0.04em;
-		right: -0.04em;
-		bottom: 0.05em;
-		height: 1.1em;
-		background: hsl(var(--theme-accent));
-		clip-path: inset(0 100% 0 0);
-		transition: clip-path 460ms cubic-bezier(0.22, 1, 0.36, 1);
-		z-index: -1;
-	}
-
-	.title-invert-hover::after {
-		content: attr(data-text);
+	.title-invert-hover__overlay {
 		position: absolute;
 		inset: 0;
-		color: hsl(var(--theme-bg));
+		display: block;
 		clip-path: inset(0 100% 0 0);
-		transition: clip-path 460ms cubic-bezier(0.22, 1, 0.36, 1);
-		overflow: hidden;
-		white-space: nowrap;
 		pointer-events: none;
+		transition: clip-path 460ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	.group:hover .title-invert-hover::before,
-	.group:hover .title-invert-hover::after,
-	.group:focus-within .title-invert-hover::before,
-	.group:focus-within .title-invert-hover::after {
+	.title-invert-hover__reveal {
+		color: hsl(var(--theme-bg));
+		background-image: linear-gradient(
+			transparent 0.1em,
+			hsl(var(--theme-accent)) 0 calc(100% - 0.04em),
+			transparent 0
+		);
+		-webkit-box-decoration-break: clone;
+		box-decoration-break: clone;
+	}
+
+	.group:hover .title-invert-hover__overlay,
+	.group:focus-within .title-invert-hover__overlay {
 		clip-path: inset(0 0 0 0);
 	}
 }
