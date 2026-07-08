@@ -26,6 +26,15 @@
 		/* highlight underline (light) */
 		--em-underline-color: #dbeafe;
 		--em-underline-height: 0.42em;
+		--glass-floating-bg: 0deg 0% 100% / 0.72;
+		--glass-floating-bg-strong: 0deg 0% 100% / 0.84;
+		--glass-floating-border: 0deg 0% 100% / 0.42;
+		--glass-floating-shadow:
+			0 12px 44px -10px rgba(0, 0, 0, 0.15),
+			inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
+		--glass-floating-shadow-strong:
+			0 20px 60px -15px rgba(0, 0, 0, 0.22),
+			inset 0 1px 1px 0 rgba(255, 255, 255, 0.34);
 	}
 
 	:root[data-theme="dark"] {
@@ -39,6 +48,15 @@
 		/* highlight underline (dark) */
 		--em-underline-color: #075985; /* sky-700-ish */
 		--em-underline-height: 0.42em;
+		--glass-floating-bg: 220deg 10% 8% / 0.48;
+		--glass-floating-bg-strong: 220deg 10% 8% / 0.6;
+		--glass-floating-border: 0deg 0% 100% / 0.1;
+		--glass-floating-shadow:
+			0 20px 80px rgba(0, 0, 0, 0.5),
+			inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.1);
+		--glass-floating-shadow-strong:
+			0 24px 88px rgba(0, 0, 0, 0.56),
+			inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.12);
 	}
 
 	.highlight,

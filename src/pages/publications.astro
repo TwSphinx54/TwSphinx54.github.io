@@ -276,12 +276,8 @@ const meta = {
 		font-size: 0.7rem;
 		font-weight: 500;
 		letter-spacing: 0.02em;
-		color: rgb(113 113 122 / 0.58);
+		color: color-mix(in srgb, hsl(var(--theme-text)) 52%, transparent);
 		transform: translateY(-0.08rem);
-	}
-
-	:global(.dark) .section-count {
-		color: rgb(161 161 170 / 0.54);
 	}
 
 	.section-count::before {
@@ -291,7 +287,7 @@ const meta = {
 	}
 
 	.section-rail__link {
-		--rail-ink: rgb(113 113 122 / 0.78);
+		--rail-ink: color-mix(in srgb, hsl(var(--theme-text)) 68%, transparent);
 		--rail-ink-active: hsl(var(--theme-accent));
 		position: relative;
 		display: flex;
@@ -306,10 +302,6 @@ const meta = {
 			color 180ms ease,
 			transform 180ms ease;
 		transform-origin: left center;
-	}
-
-	:global(.dark) .section-rail__link {
-		--rail-ink: rgb(161 161 170 / 0.8);
 	}
 
 	.section-rail__link:focus-visible {
@@ -344,16 +336,10 @@ const meta = {
 	.section-rail:hover,
 	.section-rail:focus-within {
 		width: min(var(--section-rail-expanded-width), var(--section-rail-max-width));
-		border-color: rgb(255 255 255 / 0.18);
-		background: rgb(255 255 255 / 0.2);
+		border-color: transparent;
+		background: hsl(var(--theme-bg) / 0.08);
 		backdrop-filter: blur(16px);
 		-webkit-backdrop-filter: blur(16px);
-	}
-
-	:global(.dark) .section-rail:hover,
-	:global(.dark) .section-rail:focus-within {
-		border-color: rgb(255 255 255 / 0.08);
-		background: rgb(10 10 12 / 0.26);
 	}
 
 	.section-rail__label {
@@ -395,12 +381,7 @@ const meta = {
 	.section-rail:hover .section-rail__link,
 	.section-rail:focus-within .section-rail__link {
 		width: 100%;
-		--rail-ink: rgb(82 82 91 / 0.95);
-	}
-
-	:global(.dark) .section-rail:hover .section-rail__link,
-	:global(.dark) .section-rail:focus-within .section-rail__link {
-		--rail-ink: rgb(212 212 216 / 0.92);
+		--rail-ink: color-mix(in srgb, hsl(var(--theme-text)) 88%, transparent);
 	}
 
 	.section-rail:hover .section-rail__dot,

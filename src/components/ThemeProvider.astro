@@ -15,13 +15,17 @@
 		}
 
 		const root = document.documentElement;
+		const shouldBeDark = newTheme === "dark";
+		const themeAlreadySet = newTheme === root.getAttribute("data-theme");
+		const classAlreadySynced = root.classList.contains("dark") === shouldBeDark;
 
-		// root already set to newTheme, exit early
-		if (newTheme === root.getAttribute("data-theme")) {
+		// Keep both data-theme and the .dark class in sync for components that depend on either.
+		if (themeAlreadySet && classAlreadySynced) {
 			return;
 		}
 
 		root.setAttribute("data-theme", newTheme);
+		root.classList.toggle("dark", shouldBeDark);
 
 		const colorThemeMetaTag = document.querySelector("meta[name='theme-color']");
 		const bgColour = getComputedStyle(document.body).getPropertyValue("--theme-bg");
