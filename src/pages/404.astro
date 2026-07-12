@@ -14,18 +14,51 @@ const meta = {
 	<head>
 		<BaseHead description={meta.description} title={meta.title} />
 	</head>
-	<body class="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center bg-bgColor px-4 font-normal text-textColor antialiased sm:px-8">
+	<body class="error-page">
 		<ThemeProvider />
-		<div class="relative z-[2] text-center">
-			<h1 class="title mb-6">404 | Oops! Something went wrong</h1>
-			<p class="mb-8">Please find your way back home.</p>
-			<a
-				href="/"
-				class="ui-press relative z-[2] mt-4 inline-flex items-center gap-1.5 rounded-lg border border-zinc-200/50 bg-white/30 px-4 py-2 text-sm font-medium text-zinc-800 shadow-sm backdrop-blur-md hover:bg-white/45 dark:border-white/10 dark:bg-black/30 dark:text-zinc-100 dark:hover:bg-black/45"
-			>
+		<div class="error-page__content">
+			<span class="error-page__index">ERROR / 404</span>
+			<h1>Lost in<br />the latent space.</h1>
+			<p>The requested coordinate does not exist.</p>
+			<a href="/" class="ui-control error-page__link">
 				<Icon name="lucide:arrow-left" class="func-icon h-4 w-4" aria-hidden="true" />
 				Back to Home
 			</a>
 		</div>
-	</body>
+	</body><style>
+		.error-page {
+			display: grid;
+			min-height: 100vh;
+			place-items: center;
+			padding: 24px;
+		}
+		.error-page__content {
+			width: min(92vw, 820px);
+			padding: 48px 0;
+			border-top: 1px solid var(--line);
+			border-bottom: 1px solid var(--line);
+		}
+		.error-page__index {
+			color: var(--muted);
+			font-family: var(--font-mono);
+			font-size: 10px;
+			letter-spacing: 0.08em;
+		}
+		.error-page h1 {
+			margin: 64px 0 28px;
+			font-family: var(--font-sans);
+			font-size: clamp(2.5rem, 7vw, 4.5rem);
+			font-weight: 400;
+			letter-spacing: -0.035em;
+			line-height: 0.92;
+		}
+		.error-page p {
+			color: var(--muted);
+		}
+		.error-page__link {
+			gap: 8px;
+			margin-top: 24px;
+			padding: 9px 12px;
+		}
+	</style>
 </html>

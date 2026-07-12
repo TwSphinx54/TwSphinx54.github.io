@@ -1,27 +1,41 @@
-# Xu Pan
+# Xu Pan — Personal Website
 
-M.Sc. student at **Wuhan University (WHU)**, working on **embodied intelligence** and **3D visual perception**.
+Astro-based academic portfolio for publications, projects, experience, honors, service, and contact information.
 
-🌐 [Homepage](https://xupan.top) · 📫 [Email](mailto:panxurs@whu.edu.cn)
+## Development
 
-## About Me
+```bash
+pnpm install
+pnpm dev
+```
 
-- Researching spatially grounded learning for robust perception and decision-making
-- Interested in Vision-Language-Action, reinforcement learning, and cross-view understanding
-- Previously worked on generative AI during internship at Baidu
-- Currently collaborating with CFAR (A*STAR) on embodied RL topics
+Before publishing, run:
 
-## Featured Projects
+```bash
+pnpm build
+pnpm check
+```
 
-- [SA-VLA](https://github.com/TwSphinx54/SA-VLA) — Spatially-aware RL for flow-matching VLA models
-- [SAMatcher](https://github.com/TwSphinx54/SAMatcher) — Co-visibility modeling for robust feature matching
-- [SCoDe](https://github.com/Geo-Tell/SCoDe) — Scale-aware co-visible region detection for image matching
+## Content
 
-## Connect
+Most homepage content is maintained in [`src/content/home/index.yaml`](src/content/home/index.yaml), including publications, news, projects, experience metadata, honors, service, acknowledgements, the introduction, philosophy, and the optional homepage callout.
 
-- [GitHub](https://github.com/TwSphinx54)
-- [Google Scholar](https://scholar.google.com/citations?user=IuCPqLcAAAAJ)
-- [LinkedIn](https://linkedin.com/in/xupanwhu)
-- [X (Twitter)](https://x.com/xupan_whu)
-- [ORCID](https://orcid.org/0009-0007-3297-0385)
+The callout is shown only when it contains text:
 
+```yaml
+callout: |
+  I am actively seeking Ph.D. opportunities. <a href="/contact/">Connect with me</a>.
+```
+
+Set `callout:` to an empty value, or remove the field, to hide it.
+
+## Structure
+
+- `src/pages/` — page entry points
+- `src/layouts/` — shared document layout
+- `src/components/` — reusable UI and publication components
+- `src/content/` — validated YAML content
+- `src/styles/` — global design system and responsive styles
+- `src/utils/` — shared DOM and asset helpers
+- `src/assets/` — source images and organization logos
+- `public/` — downloadable resumes and favicon

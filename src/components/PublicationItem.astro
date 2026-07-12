@@ -32,29 +32,28 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 <article
 	class="pub-article group relative w-full border-t border-zinc-200/70 py-5 first:border-t-0 dark:border-zinc-800/70"
 >
-	<div class="grid grid-cols-1 gap-4 lg:flex lg:items-start lg:gap-6">
+	<div class="pub-article__grid">
+		<div class="pub-article__meta" aria-hidden="true">{time ?? "—"}</div>
 		<div class="min-w-0 lg:flex-1">
-			<h3 class="text-lg font-semibold leading-snug tracking-tight">
-				<span class="title-invert-hover">
-					<span class="title-invert-hover__base">{title}</span>
-					<span class="title-invert-hover__overlay" aria-hidden="true">
-						<span class="title-invert-hover__reveal">{title}</span>
-					</span>
-				</span>
-			</h3>
+			<h3 class="text-lg leading-snug font-semibold tracking-tight">{title}</h3>
 			<p class="mt-1 text-gray-700 dark:text-gray-300">
 				{
 					author.map((name: string, index: number) => (
-						<span style={{ fontWeight: name === "Xu Pan" ? "700" : "normal" }}>
-							{name}{index < author.length - 1 && ", "}
-						</span>
+						<>
+							<span
+								class={
+									name.replaceAll("*", "").trim() === "Xu Pan" ? "author-highlight" : undefined
+								}
+							>
+								{name}
+							</span>
+							{index < author.length - 1 && ", "}
+						</>
 					))
 				}
 			</p>
 			<div class="mt-2 flex flex-wrap gap-2">
-				<span
-					class="inline-flex items-center rounded-full bg-zinc-100/80 px-2 py-0.5 text-sm font-medium text-gray-700 dark:bg-zinc-800/80 dark:text-gray-300"
-				>
+				<span class="pub-badge">
 					{
 						venueLogo ? (
 							<Image
@@ -82,34 +81,16 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 					{booktitle}
 				</span>
 
-				{
-					venueRank && (
-						<span class="rounded-full bg-accent/10 px-2 py-0.5 text-sm font-medium text-accent dark:bg-accent/15">
-							{venueRank}
-						</span>
-					)
-				}
+				{venueRank && <span class="pub-badge">{venueRank}</span>}
 
-				{
-					semantic_scholar_id && (
-						<span data-semantic-scholar-id={semantic_scholar_id}></span>
-					)
-				}
-
-				{
-					time && (
-						<span class="rounded-full bg-zinc-100/80 px-2 py-0.5 font-mono text-sm font-medium tabular-nums text-gray-700 dark:bg-zinc-800/80 dark:text-gray-300">
-							{time}
-						</span>
-					)
-				}
+				{semantic_scholar_id && <span data-semantic-scholar-id={semantic_scholar_id} />}
 			</div>
 			<div class="mt-3 flex flex-wrap gap-2" aria-label="Publication actions">
 				{
 					abstract && (
 						<button
 							type="button"
-							class="abstract-btn cactus-link ui-press inline-flex cursor-pointer items-center rounded border border-zinc-300/80 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-zinc-700/80 dark:text-gray-300"
+							class="ui-control abstract-btn inline-flex cursor-pointer items-center px-2.5 py-1"
 							data-abstract-id={`abstract-${slug}`}
 							aria-expanded="false"
 						>
@@ -125,7 +106,7 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 				{
 					code && (
 						<a
-							class="cactus-link inline-flex items-center rounded border border-zinc-300/80 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-zinc-700/80 dark:text-gray-300"
+							class="ui-control inline-flex items-center px-2.5 py-1"
 							href={code}
 							target="_blank"
 							rel="noopener"
@@ -137,7 +118,7 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 				{
 					huggingface && (
 						<a
-							class="cactus-link inline-flex items-center rounded border border-zinc-300/80 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-zinc-700/80 dark:text-gray-300"
+							class="ui-control inline-flex items-center px-2.5 py-1"
 							href={huggingface}
 							target="_blank"
 							rel="noopener"
@@ -149,7 +130,7 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 				{
 					site && (
 						<a
-							class="cactus-link inline-flex items-center rounded border border-zinc-300/80 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-zinc-700/80 dark:text-gray-300"
+							class="ui-control inline-flex items-center px-2.5 py-1"
 							href={site}
 							target="_blank"
 							rel="noopener"
@@ -161,7 +142,7 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 				{
 					doi && (
 						<a
-							class="cactus-link inline-flex items-center rounded border border-zinc-300/80 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-zinc-700/80 dark:text-gray-300"
+							class="ui-control inline-flex items-center px-2.5 py-1"
 							href={doi}
 							target="_blank"
 							rel="noopener"
@@ -173,7 +154,7 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 				{
 					paper && (
 						<a
-							class="cactus-link inline-flex items-center rounded border border-zinc-300/80 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-zinc-700/80 dark:text-gray-300"
+							class="ui-control inline-flex items-center px-2.5 py-1"
 							href={paper}
 							target="_blank"
 							rel="noopener"
@@ -198,14 +179,12 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 				}
 			</div>
 		</div>
-
-		
 	</div>
 
 	{
 		abstract && (
 			<div
-				class="abstract-collapse w-full overflow-hidden text-gray-700 transition-[max-height,opacity,margin-top] duration-300 ease-in-out dark:text-gray-300"
+				class="abstract-collapse w-full overflow-hidden transition-[max-height,opacity,margin-top] duration-300 ease-in-out"
 				id={`abstract-content-${slug}`}
 				style="max-height: 0; opacity: 0; margin-top: 0;"
 				data-collapsed="true"

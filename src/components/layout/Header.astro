@@ -3,77 +3,69 @@ import { menuLinks } from "@/site-config";
 import ThemeToggle from "../ThemeToggle.astro";
 
 const url = new URL(Astro.request.url);
+const socialLinks = [
+	{ label: "Email", href: "mailto:panxurs@whu.edu.cn" },
+	{ label: "X", href: "https://x.com/xupan_x" },
+	{ label: "Google Scholar", href: "https://scholar.google.com/citations?user=IuCPqLcAAAAJ" },
+	{ label: "Bluesky", href: "https://bsky.app/profile/xu-pan.bsky.social" },
+	{ label: "LinkedIn", href: "https://linkedin.com/in/x-pan" },
+	{ label: "ResearchGate", href: "https://www.researchgate.net/profile/Xu-Pan-10" },
+	{ label: "Semantic Scholar", href: "https://www.semanticscholar.org/author/Xu-Pan/2387896133" },
+	{ label: "ORCID", href: "https://orcid.org/0009-0007-3297-0385" },
+	{ label: "GitHub", href: "https://github.com/TwSphinx54" },
+	{ label: "Hugging Face", href: "https://huggingface.co/SSSSphinx" },
+];
 ---
 
-<header class="group relative mb-10 mt-5 flex flex-col sm:mt-0" id="main-header">
-	<div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-		<div class="inline-flex items-center">
-			<div class="leading-tight">
-				<div class="flex items-baseline gap-1">
-					<span class="text-3xl font-black tracking-wide sm:text-5xl" style="font-family: 'Harding Text Web', serif;">
-						<span>Xu</span><span class="-ms-0.5 sm:-ms-1">&nbsp;Pan</span>
-					</span>
-                    <span>&nbsp;&nbsp;</span>
-					<span class="text-xl font-black sm:text-3xl sm:leading-none relative -top-[2px]" style="font-family: 'Noto Serif SC', serif;">潘旭</span>
-				</div>
-				<span class="text-xs leading-snug sm:text-base sm:leading-normal">
-					Incoming Research Associate at Nanyang Technological University, Singapore<br />
-				</span>
-			</div>
-		</div>
-		<div class="hidden sm:flex sm:items-start">
+<header class="site-header" id="main-header">
+	<div class="site-brand">
+		<a href="/" class="site-mark" aria-label="Xu Pan — Home">
+			<span class="site-mark__name">Xu Pan <em>潘旭</em></span>
+		</a>
+		<p class="site-role">Incoming Research Associate at Nanyang Technological University</p>
+	</div>
+
+	<nav aria-label="Main menu" class="site-nav" id="navigation-menu">
+		{
+			menuLinks.map((link) => (
+				<a
+					aria-current={url.pathname === link.path ? "page" : false}
+					data-astro-prefetch
+					href={link.path}
+				>
+					{link.title}
+				</a>
+			))
+		}
+	</nav>
+
+	<div class="site-header__meta site-header__meta--mobile">
+		<nav class="site-socials" aria-label="Social profiles">
+			{
+				socialLinks.map((link) => (
+					<a href={link.href} target="_blank" rel="noreferrer">
+						{link.label}
+					</a>
+				))
+			}
+		</nav>
+		<ThemeToggle />
+	</div>
+</header>
+
+<div class="site-header__meta-boundary">
+	<div class="site-header__meta-viewport">
+		<div class="site-header__meta site-header__meta--desktop">
+			<nav class="site-socials" aria-label="Social profiles">
+				{
+					socialLinks.map((link) => (
+						<a href={link.href} target="_blank" rel="noreferrer">
+							{link.label}
+						</a>
+					))
+				}
+			</nav>
 			<ThemeToggle />
 		</div>
 	</div>
-    <nav
-        aria-label="Main menu"
-        class="mobile-nav-glass absolute left-2 right-0 top-32 hidden flex-col gap-y-4 rounded-md py-4 text-accent backdrop-blur-xl group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:-ml-2 sm:flex sm:flex-row sm:items-center sm:gap-1 sm:rounded-none sm:border-none sm:bg-transparent sm:py-0 sm:shadow-none sm:backdrop-blur-none"
-        id="navigation-menu"
-    >
-        {
-            menuLinks.map((link) => (
-                <a
-                    aria-current={url.pathname === link.path ? "page" : false}
-                    class="px-0 py-4 underline-offset-2 sm:px-2 sm:py-0 sm:hover:underline"
-                    data-astro-prefetch
-                    href={link.path}
-                >
-                    {link.title}
-                </a>
-            ))
-        }
-    </nav>
-</header>
-
-<style>
-	@media (min-width: 0px) {
-		.mobile-nav-glass {
-			border: 1px solid hsl(var(--glass-floating-border));
-			background: hsl(var(--glass-floating-bg));
-			box-shadow: var(--glass-floating-shadow);
-		}
-
-		#navigation-menu a + a {
-			position: relative;
-		}
-
-		#navigation-menu a + a::before {
-			content: "•";
-			position: absolute;
-			inset-inline-start: 0;
-			top: 50%;
-			transform: translate(-0.3rem, -50%);
-			opacity: 0.6;
-			color: currentColor;
-			pointer-events: none;
-		}
-	}
-
-	@media (min-width: 40rem) {
-		.mobile-nav-glass {
-			border: none;
-			background: transparent;
-			box-shadow: none;
-		}
-	}
-</style>
+</div>

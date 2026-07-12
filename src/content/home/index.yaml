@@ -2,7 +2,6 @@
 # 1) Put logo files under: src/assets/logos/
 # 2) In projectsEditable[*].orgLogos, add a key like "nus"
 # 3) Ensure the filename contains that key (case-insensitive), e.g. "nus.svg" or "logo-nus.png"
-# 4) In homeIntroHtml, {{logo:key|alt|size}} 的第 3 个参数现在按“高度”处理
 
 publicationsEditable:
   # - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Ivor Tsang"]
@@ -35,7 +34,6 @@ publicationsEditable:
     code: "https://github.com/TwSphinx54/SA-VLA"
     huggingface: "https://huggingface.co/SSSSphinx/SA-VLA"
     site: "https://xupan.top/Projects/savla"
-    # venueLogo: "icons/pmlr.svg"
     venueIcon: "simple-icons:arxiv"
     venueColor: "#B31B1B"
     abstract: >-
@@ -402,22 +400,17 @@ homeIntroHtml: |
     <a class="cactus-link" href="https://ziweiwangthu.github.io/" target="_blank" rel="noopener">Prof. Ziwei Wang</a>,
     within the
     <a class="cactus-link" href="https://www.ntu.edu.sg/eee" target="_blank" rel="noopener">School of Electrical and Electronic Engineering (EEE)</a>,
-    {{logo:ntu|NTU logo|16}}
     <a class="cactus-link" href="https://www.ntu.edu.sg/" target="_blank" rel="noopener">Nanyang Technological University (NTU)</a>.
   </p>
 
   <p>
     Previously, I received my B.Eng. and M.Sc. degrees from
-    {{logo:whu|Wuhan University logo|16}}
     <a class="cactus-link" href="https://en.whu.edu.cn/" target="_blank" rel="noopener">Wuhan University</a>,
     where I worked at the
-    {{logo:liesmars|LIESMARS logo|16}}
     <a class="cactus-link" href="https://liesmars.whu.edu.cn/" target="_blank" rel="noopener">State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS)</a>.
     I also interned at
-    {{logo:baidu|Baidu logo|16}}
     <a class="cactus-link" href="https://www.baidu.com/" target="_blank" rel="noopener">Baidu</a>,
-    and was a remote Research Assistant at the
-    {{logo:astar|A*STAR logo|16}}
+    and was a remote research assistant at the
     <a class="cactus-link" href="https://www.a-star.edu.sg/cfar" target="_blank" rel="noopener">Centre for Frontier AI Research (CFAR), Agency for Science, Technology and Research (A*STAR)</a>,
     working closely with
     <a class="cactus-link" href="https://xingruiyu.github.io/" target="_blank" rel="noopener">Dr. Xingrui Yu</a>.
@@ -430,6 +423,10 @@ homeIntroHtml: |
   </p>
   <p></p>
 
+# Leave this empty (`callout:`) or remove it to hide the callout.
+callout: |
+  I am actively seeking Ph.D. opportunities. <a class="cactus-link" href="/contact/">Connect with me</a>.
+
 personalPhilosophyHtml: |
   <p>
     I follow Stoic philosophy. Life is a joyful ascent: a true mountaineer delights in the climb itself, not just the summit.
@@ -440,7 +437,7 @@ personalPhilosophyHtml: |
       Thou sufferest this justly: for thou choosest rather to become good to-morrow than to be good to-day.
     </blockquote>
     <figcaption>
-      — Marcus Aurelius, <a class="cactus-link" href="https://classics.mit.edu/Antoninus/meditations.8.eight.html#:~:text=Thou%20sufferest%20this%20justly%3A%20for%20thou%20choosest%20rather%20to%20become%20good%20to%2Dmorrow%20than%20to%20be%20good%20to%2Dday." target="_blank" rel="noopener"><em>Meditations</em> 8.22</a>
+      Marcus Aurelius, <a class="cactus-link" href="https://classics.mit.edu/Antoninus/meditations.8.eight.html#:~:text=Thou%20sufferest%20this%20justly%3A%20for%20thou%20choosest%20rather%20to%20become%20good%20to%2Dmorrow%20than%20to%20be%20good%20to%2Dday." target="_blank" rel="noopener"><em>Meditations</em> 8.22</a>
     </figcaption>
   </figure>
 

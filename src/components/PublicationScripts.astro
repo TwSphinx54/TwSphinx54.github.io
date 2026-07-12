@@ -2,31 +2,6 @@
 import { Icon } from "astro-icon/components";
 ---
 
-<!-- Abstract / Image Modal Common Elements and Scripts -->
-<div
-	id="img-modal"
-	class="pointer-events-none fixed inset-0 z-[110] flex hidden items-center justify-center bg-black/40 p-4 opacity-0 shadow-2xl backdrop-blur-sm transition-all duration-300"
->
-	<div
-		class="pointer-events-auto relative mt-16 flex max-h-[90vh] max-w-[90vw] scale-95 items-center justify-center transition-transform duration-300"
-		id="img-modal-content"
-	>
-		<button
-			id="img-modal-close"
-			class="ui-press absolute right-3 top-3 z-20 inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-zinc-200/70 bg-white/90 text-accent shadow-md hover:bg-accent/10 dark:border-zinc-700/70 dark:bg-zinc-900/90 dark:hover:bg-accent/20"
-			aria-label="Close image modal"
-		>
-			<Icon name="lucide:x" class="func-icon" width="16" height="16" aria-hidden="true" />
-		</button>
-		<img
-			id="img-modal-img"
-			src=""
-			alt="Large image"
-			class="max-h-[90vh] max-w-full rounded-2xl object-contain shadow-2xl ring-1 ring-white/20"
-		/>
-	</div>
-</div>
-
 <template id="semantic-scholar-citation-icon-template">
 	<span class="mr-1 inline-flex h-[14px] w-[14px] items-center justify-center" aria-hidden="true">
 		<Icon name="lucide:quote" width="14" height="14" />
@@ -78,55 +53,6 @@ import { Icon } from "astro-icon/components";
 		});
 	}
 
-	function initImageModal() {
-		const modal = document.getElementById("img-modal");
-		const modalContent = document.getElementById("img-modal-content");
-		const modalImg = document.getElementById("img-modal-img") as HTMLImageElement;
-		const modalClose = document.getElementById("img-modal-close");
-
-		if (!modal || !modalImg) return;
-
-		function open(src: string) {
-			modalImg.src = src;
-			modal?.classList.remove("hidden", "pointer-events-none", "opacity-0");
-			modal?.classList.add("opacity-100");
-			modalContent?.classList.remove("scale-95");
-			modalContent?.classList.add("scale-100");
-			document.body.style.overflow = "hidden";
-			(modalClose as HTMLElement)?.focus?.();
-		}
-
-		function close() {
-			modal?.classList.add("pointer-events-none", "opacity-0");
-			modal?.classList.remove("opacity-100");
-			modalContent?.classList.remove("scale-100");
-			modalContent?.classList.add("scale-95");
-			document.body.style.overflow = "";
-			setTimeout(() => {
-				if (modal?.classList.contains("opacity-0")) {
-					modal?.classList.add("hidden");
-					modalImg.src = "";
-				}
-			}, 310);
-		}
-
-		modalClose?.addEventListener("click", close);
-		modal.addEventListener("click", (e) => {
-			if (e.target === modal) close();
-		});
-		document.addEventListener("keydown", (e) => {
-			if (e.key === "Escape") close();
-		});
-
-		document.addEventListener("click", (e) => {
-			const t = e.target;
-			if (!(t instanceof HTMLImageElement)) return;
-			if (!t.classList.contains("pub-thumb-img")) return;
-			const src = t.dataset.fullsrc || t.currentSrc || t.src;
-			if (src) open(src);
-		});
-	}
-
 	const SEMANTIC_SCHOLAR_CACHE_PREFIX = "semanticScholarCitationCount:";
 	const SEMANTIC_SCHOLAR_CACHE_TTL_MS = 60 * 60 * 1000;
 
@@ -172,11 +98,7 @@ import { Icon } from "astro-icon/components";
 		}
 	}
 
-	function renderSemanticScholarBadge(
-		target: Element,
-		id: string,
-		citationCount: number,
-	) {
+	function renderSemanticScholarBadge(target: Element, id: string, citationCount: number) {
 		if (!(target instanceof HTMLElement) || typeof citationCount !== "number") return;
 
 		target.replaceChildren();
@@ -185,8 +107,7 @@ import { Icon } from "astro-icon/components";
 		link.target = "_blank";
 		link.rel = "noopener noreferrer";
 		link.title = "Semantic Scholar citation count";
-		link.className =
-			"semantic-scholar-citation inline-flex items-center rounded-full bg-sky-100 px-2 py-0.5 text-sm font-medium text-sky-700 dark:bg-sky-900/30 dark:text-sky-300";
+		link.className = "pub-badge semantic-scholar-citation";
 
 		const iconTemplate = document.getElementById(
 			"semantic-scholar-citation-icon-template",
@@ -248,16 +169,13 @@ import { Icon } from "astro-icon/components";
 
 			for (const paper of papers) {
 				const id = normalizeSemanticScholarId(paper?.paperId);
-				const citationCount =
-					typeof paper?.citationCount === "number" ? paper.citationCount : null;
+				const citationCount = typeof paper?.citationCount === "number" ? paper.citationCount : null;
 				if (!id || citationCount === null) continue;
 
 				writeSemanticScholarCache(id, citationCount);
 				const group = targetGroups.get(id);
 				if (group) {
-					group.forEach((target: Element) =>
-						renderSemanticScholarBadge(target, id, citationCount),
-					);
+					group.forEach((target: Element) => renderSemanticScholarBadge(target, id, citationCount));
 				}
 			}
 		} catch {
@@ -267,10 +185,8 @@ import { Icon } from "astro-icon/components";
 
 	function setup() {
 		initAbstractToggles();
-		initImageModal();
 		initSemanticScholarCitations();
 	}
 
 	setup();
-	document.addEventListener("astro:after-swap", setup);
 </script>

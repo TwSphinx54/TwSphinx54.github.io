@@ -1,10 +1,12 @@
 ---
-import SocialList from "@/components/SocialList.astro";
 import PageLayout from "@/layouts/Base.astro";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import { getEntry } from "astro:content";
 import PublicationItem from "@/components/PublicationItem.astro";
+import PublicationScripts from "@/components/PublicationScripts.astro";
+import { findAssetByName, resolveAsset } from "@/utils/assets";
 import figureImage from "../assets/figure.jpg";
 
 // =========================
@@ -30,8 +32,8 @@ type PublicationEditable = {
 	semantic_scholar_id?: string;
 };
 
-type PublicationResolved = PublicationEditable & {
-    venueLogo: any | null;
+type PublicationResolved = Omit<PublicationEditable, "venueLogo"> & {
+	venueLogo: ImageMetadata | null;
 };
 
 type NewsItem = {
@@ -76,15 +78,6 @@ type HonorItem = {
 	date: string;
 };
 
-type RichHtmlToken =
-	| { type: "html"; value: string }
-	| {
-			type: "logo";
-			key: string;
-			alt: string;
-			height: number;
-	  };
-
 // =========================
 // Content loading (YAML-driven data)
 // =========================
@@ -101,6 +94,7 @@ const experienceMeta = (homeEntry.data.experienceMeta ?? {}) as Record<
 	{ name: string; link: string }
 >;
 const homeIntroHtml = (homeEntry.data.homeIntroHtml ?? "") as string;
+const callout = (homeEntry.data.callout ?? "") as string;
 const acknowledgements = (homeEntry.data.acknowledgements ?? null) as Acknowledgements | null;
 const personalPhilosophyHtml = (homeEntry.data.personalPhilosophyHtml ?? "") as string;
 const academicServices = (homeEntry.data.academicServices ?? []) as AcademicService[];
@@ -136,68 +130,6 @@ function repoLabel(url: string): string {
 // Asset resolution (images/logos)
 // =========================
 
-const assetImages = import.meta.glob("../assets/**/*.{png,jpg,jpeg,svg,gif,webp}", {
-	eager: true,
-	import: "default",
-});
-
-function normalizeAssetKey(p: string): string {
-	const s = p.trim();
-	if (s.startsWith("../assets/")) return s;
-	if (s.startsWith("/src/assets/")) return ".." + s.replace("/src", "");
-	if (s.startsWith("/assets/")) return "../assets" + s.replace("/assets", "");
-	return `../assets/${s}`;
-}
-
-function resolveAsset(p?: string): any | null {
-	if (!p) return null;
-	const key = normalizeAssetKey(p);
-	return (assetImages as any)[key] ?? null;
-}
-
-function logoHeight(value: number): number {
-	return value;
-}
-
-function logoDimensionsForHeight(asset: any, height: number) {
-	if (!asset || typeof asset === "string" || !asset.width || !asset.height) {
-		return { width: height, height };
-	}
-	return {
-		width: Math.max(1, Math.round((asset.width * height) / asset.height)),
-		height,
-	};
-}
-
-function tokenizeRichHtml(html: string): RichHtmlToken[] {
-	if (!html) return [];
-	const tokens: RichHtmlToken[] = [];
-	const re = /\{\{logo:([^|}]+)\|([^|}]+)\|([^}]+)\}\}/g;
-	let lastIndex = 0;
-
-	for (const match of html.matchAll(re)) {
-		const index = match.index ?? 0;
-		if (index > lastIndex) {
-			tokens.push({ type: "html", value: html.slice(lastIndex, index) });
-		}
-
-		tokens.push({
-			type: "logo",
-			key: match[1].trim(),
-			alt: match[2].trim(),
-			height: logoHeight(Number(match[3]) || 20),
-		});
-
-		lastIndex = index + match[0].length;
-	}
-
-	if (lastIndex < html.length) {
-		tokens.push({ type: "html", value: html.slice(lastIndex) });
-	}
-
-	return tokens;
-}
-
 // =========================
 // Derived data (publications/projects/experiences/logos)
 // =========================
@@ -212,7 +144,7 @@ const cactusTech: PublicationResolved[] = publicationsEditable
 const projects = projectsEditable;
 
 // Experiences (auto logos from /assets/exps)
-const expImages = import.meta.glob("../assets/exps/*.{png,jpg,jpeg,svg,webp}", {
+const expImages = import.meta.glob<ImageMetadata>("../assets/exps/*.{png,jpg,jpeg,svg,webp}", {
 	eager: true,
 	import: "default",
 });
@@ -228,21 +160,22 @@ function fileStem(file: string): string {
 
 function getExperienceMeta(file: string): { name: string; link: string } {
 	const stem = fileStem(file);
-	return (
+	const meta =
 		experienceMeta[file] ||
 		experienceMeta[stem] ||
 		experienceMeta[file.toLowerCase()] ||
-		experienceMeta[stem.toLowerCase()] || { name: stem, link: "#" }
-	);
+		experienceMeta[stem.toLowerCase()];
+	if (!meta) throw new Error(`Missing experienceMeta entry for ${file}`);
+	return meta;
 }
 
 const experiences = Object.entries(expImages)
-	.map(([path, mod]: [string, any]) => {
+	.map(([path, image]) => {
 		const file = path.split("/").pop() || "";
 		const meta = getExperienceMeta(file);
 		const altTitleName = meta.name.replace(/\s*\n\s*/g, " ");
 		const tooltipHtml = escapeHtml(meta.name).replaceAll("\n", "<br/>");
-		return { file, image: mod as any, name: meta.name, altTitleName, tooltipHtml, link: meta.link };
+		return { file, image, name: meta.name, altTitleName, tooltipHtml, link: meta.link };
 	})
 	.sort((a, b) => {
 		const an = expNumericOrder(a.file);
@@ -253,40 +186,21 @@ const experiences = Object.entries(expImages)
 		return a.file.localeCompare(b.file);
 	});
 
-// Logos from /assets/logos
-const logoImages = import.meta.glob("../assets/logos/*.{png,svg,jpg,jpeg,webp}", {
-	eager: true,
-	import: "default",
-});
-
 const LOGO_ALIASES: Record<string, string[]> = {
 	whu: ["whu", "wuhan"],
 };
 
-function findLogoAny(keys: string | string[]) {
-	const ks = Array.isArray(keys) ? keys : [keys];
-	for (const sub of ks) {
-		for (const path of Object.keys(logoImages)) {
-			if (path.toLowerCase().includes(sub.toLowerCase())) {
-				const mod: any = (logoImages as any)[path];
-				return mod || null;
-			}
-		}
-	}
-	return null;
-}
-
 const projectLogoKeys = new Set<string>(projectsEditable.flatMap((p) => p.orgLogos ?? []));
 
-const projectLogoByKey: Record<string, any | null> = Object.fromEntries(
-	[...projectLogoKeys].map((k) => [k, findLogoAny(LOGO_ALIASES[k] ?? k)]),
+const projectLogoByKey: Record<string, ImageMetadata | null> = Object.fromEntries(
+	[...projectLogoKeys].map((k) => [k, findAssetByName(LOGO_ALIASES[k] ?? k)]),
 );
 
 const homeIntroLeadMatch = homeIntroHtml.match(/^\s*<p>([\s\S]*?)<\/p>\s*/);
-const homeIntroLeadHtml = homeIntroLeadMatch ? `<p>${homeIntroLeadMatch[1].trim()}</p>` : "";
-const homeIntroBodyHtml = homeIntroLeadMatch ? homeIntroHtml.slice(homeIntroLeadMatch[0].length) : homeIntroHtml;
-const homeIntroTokens = tokenizeRichHtml(homeIntroBodyHtml);
-const personalPhilosophyTokens = tokenizeRichHtml(personalPhilosophyHtml);
+const homeIntroLeadText = homeIntroLeadMatch ? homeIntroLeadMatch[1].trim() : "";
+const homeIntroBodyHtml = homeIntroLeadMatch
+	? homeIntroHtml.slice(homeIntroLeadMatch[0].length)
+	: homeIntroHtml;
 const HONORS_PREVIEW_COUNT = 5;
 const honorsPreview = honors.slice(0, HONORS_PREVIEW_COUNT);
 const honorsRest = honors.slice(HONORS_PREVIEW_COUNT);
@@ -294,94 +208,47 @@ const honorsRest = honors.slice(HONORS_PREVIEW_COUNT);
 const NEWS_PREVIEW_COUNT = 5;
 const newsPreview = newsItems.slice(0, NEWS_PREVIEW_COUNT);
 const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
-const sectionNav = [
-	{ id: "intro", label: "Intro" },
-	{ id: "news", label: "News" },
-	{ id: "experiences", label: "Experiences" },
-	{ id: "publications", label: "Publications" },
-	{ id: "projects", label: "Projects" },
-	{ id: "honors", label: "Honors" },
-	{ id: "service", label: "Service" },
-	...(personalPhilosophyTokens.length > 0 ? [{ id: "philosophy", label: "Philosophy" }] : []),
-];
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-	<nav class="section-rail" aria-label="Section navigation" data-section-nav>
-		<ul class="section-rail__list">
-			{
-				sectionNav.map((item) => (
-					<li>
-						<a
-							href={`#${item.id}`}
-							class="section-rail__link"
-							data-section-link
-							data-section-id={item.id}
-							aria-label={`Jump to ${item.label}`}
-						>
-							<span class="section-rail__dot" aria-hidden="true" />
-							<span class="section-rail__label" data-rail-label={item.label}>{item.label}</span>
-						</a>
-					</li>
-				))
-			}
-		</ul>
-	</nav>
-
-	<section id="intro" data-home-section class="rounded-2xl pb-6 pr-6">
-		<h1 class="title mb-6">Hello World!</h1>
-		{homeIntroLeadHtml && (
-			<div class="hero-slogan mb-5">
-				<Fragment set:html={homeIntroLeadHtml} />
-			</div>
-		)}
-		<Image
-			src={figureImage}
-			alt="Xu Pan"
-			width={320}
-			height={320}
-			sizes="(min-width: 640px) 320px, 320px"
-			densities={[1, 2]}
-			loading="eager"
-			fetchpriority="high"
-			class="mb-3 float-right ml-3 h-auto w-39 rounded-md shadow-md sm:ml-4 sm:w-52"
-		/>
-		{homeIntroTokens.length > 0 && (
-			<div class="rich-content space-y-3">
-				{homeIntroTokens.map((token) => {
-					if (token.type === "html") return <Fragment set:html={token.value} />;
-					const src = findLogoAny(LOGO_ALIASES[token.key] ?? token.key);
-					if (!src) return null;
-					const dims = logoDimensionsForHeight(src, token.height);
-					return (
-						<Image
-							src={src}
-							alt={token.alt}
-							width={dims.width}
-							height={dims.height}
-							densities={[1, 2]}
-							loading="eager"
-							class="inline-logo"
-						/>
-					);
-				})}
-			</div>
-		)}
-
-		<div class="clear-both">
-			<SocialList />
-		</div>
+	<section id="intro" class="rounded-2xl pr-6 pb-6">
+		{homeIntroLeadText && <h1 class="hero-title">{homeIntroLeadText}</h1>}
+		<figure class="profile-figure">
+			<Image
+				src={figureImage}
+				alt="Xu Pan"
+				width={320}
+				sizes="(min-width: 1180px) 18vw, 220px"
+				densities={[1, 2]}
+				loading="eager"
+				fetchpriority="high"
+			/>
+			<figcaption>Fig. 1. Taken before graduation, 2026.</figcaption>
+		</figure>
+		{
+			homeIntroBodyHtml.trim() && (
+				<div class="rich-content space-y-3">
+					<Fragment set:html={homeIntroBodyHtml} />
+				</div>
+			)
+		}
 	</section>
 
-	<section id="news" data-home-section class="mt-8 rounded-2xl pb-6 pr-6" aria-label="News">
+	{
+		callout.trim() ? (
+			<aside class="home-callout" aria-label="Current status">
+				<div class="home-callout__content" set:html={callout} />
+			</aside>
+		) : null
+	}
+
+	<section id="news" class="mt-8 rounded-2xl pr-6 pb-6" aria-label="News">
 		<h2 class="title mb-3 text-xl">News</h2>
-		<ul class="space-y-3 pr-2">
+		<ul class="news-list">
 			{
 				newsPreview.map((item) => (
-					<li class="flex gap-3">
-						<span class="w-[5.5rem] shrink-0 font-mono font-medium text-gray-600 dark:text-gray-400">
-							{item.date}
-						</span>
+					<li class="news-item">
+						<span class="news-item__date">{item.date}</span>
 
 						<div class="min-w-0 text-gray-700 dark:text-gray-300">
 							{item.html ? (
@@ -406,23 +273,21 @@ const sectionNav = [
 			}
 		</ul>
 
-		{newsRest.length > 0 ? (
-			<details class="group mt-3">
-				<summary class="flex cursor-pointer list-none items-center justify-center px-3 py-2 text-sm font-semibold tracking-wide text-zinc-500 transition hover:text-accent dark:text-zinc-400 dark:hover:text-accent">
-					<span>SHOW {newsRest.length} MORE</span>
-					<Icon
-						name="lucide:chevron-down"
-						class="ml-1 h-3.5 w-3.5 transition-transform duration-200 group-open:rotate-180"
-						aria-hidden="true"
-					/>
-				</summary>
-				<ul class="mt-3 space-y-3 pr-2">
-					{
-						newsRest.map((item) => (
-							<li class="flex gap-3">
-								<span class="w-[5.5rem] shrink-0 font-mono font-medium text-gray-600 dark:text-gray-400">
-									{item.date}
-								</span>
+		{
+			newsRest.length > 0 ? (
+				<details class="group">
+					<summary class="ui-control mx-auto flex w-fit cursor-pointer list-none items-center px-3 py-2">
+						<span>SHOW {newsRest.length} MORE</span>
+						<Icon
+							name="lucide:chevron-down"
+							class="ml-1 h-3.5 w-3.5 transition-transform duration-200 group-open:rotate-180"
+							aria-hidden="true"
+						/>
+					</summary>
+					<ul class="news-list">
+						{newsRest.map((item) => (
+							<li class="news-item">
+								<span class="news-item__date">{item.date}</span>
 
 								<div class="min-w-0 text-gray-700 dark:text-gray-300">
 									{item.html ? (
@@ -442,21 +307,16 @@ const sectionNav = [
 									)}
 								</div>
 							</li>
-						))
-					}
-				</ul>
-			</details>
-		) : null}
+						))}
+					</ul>
+				</details>
+			) : null
+		}
 	</section>
 
-	<section
-		id="experiences"
-		data-home-section
-		class="mt-8 rounded-2xl pb-6 pr-6"
-		aria-label="Experiences"
-	>
+	<section id="experiences" class="mt-8 rounded-2xl pr-6 pb-6" aria-label="Experiences">
 		<h2 class="title mb-3 text-xl">Experiences</h2>
-		<div class="flex flex-wrap items-center gap-2">
+		<div class="experience-grid">
 			{
 				experiences.map((exp) => (
 					<a
@@ -464,18 +324,17 @@ const sectionNav = [
 						target="_blank"
 						rel="noopener"
 						aria-label={exp.altTitleName}
-						class="group relative flex items-center justify-center p-1"
+						class="experience-item group relative flex items-center justify-center"
 					>
 						<Image
 							src={exp.image}
 							alt={exp.altTitleName}
-							title={exp.altTitleName}
 							width={256}
 							densities={[1, 2]}
-							class="h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+							class="experience-logo w-auto object-contain"
 							loading="lazy"
 						/>
-						<span class="pointer-events-none absolute left-1/2 top-full z-10 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-0.5 text-center text-[10px] font-medium leading-snug tracking-wide text-white opacity-0 shadow transition-opacity duration-200 group-hover:opacity-100">
+						<span class="experience-tooltip">
 							<span set:html={exp.tooltipHtml} />
 						</span>
 					</a>
@@ -486,7 +345,7 @@ const sectionNav = [
 		{/* Acknowledgements (YAML-driven via acknowledgements) */}
 		{
 			acknowledgements && (
-				<p class="mt-3 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+				<p class="acknowledgements">
 					<>
 						<b>{acknowledgements.title}</b>
 						<br />
@@ -501,7 +360,10 @@ const sectionNav = [
 
 					{acknowledgements.mentors?.map((p, i) => (
 						<>
-							<a class="cactus-link" href={p.href}>{p.name}</a>{i < (acknowledgements.mentors?.length ?? 0) - 1 ? "," : ","}
+							<a class="cactus-link" href={p.href}>
+								{p.name}
+							</a>
+							{i < (acknowledgements.mentors?.length ?? 0) - 1 ? "," : ","}
 							{i === (acknowledgements.mentors?.length ?? 0) - 1 ? <br /> : " "}
 						</>
 					))}
@@ -515,7 +377,10 @@ const sectionNav = [
 
 					{acknowledgements.peers?.map((p, i) => (
 						<>
-							<a class="cactus-link" href={p.href}>{p.name}</a>{i < (acknowledgements.peers?.length ?? 0) - 1 ? "," : ","}
+							<a class="cactus-link" href={p.href}>
+								{p.name}
+							</a>
+							{i < (acknowledgements.peers?.length ?? 0) - 1 ? "," : ","}
 							{i === (acknowledgements.peers?.length ?? 0) - 1 ? <br /> : " "}
 						</>
 					))}
@@ -525,13 +390,13 @@ const sectionNav = [
 		}
 	</section>
 
-	<section id="publications" data-home-section class="mt-8" aria-label="Publications">
+	<section id="publications" class="mt-8" aria-label="Publications">
 		<div class="mb-3 flex items-center justify-between">
 			<h2 class="title text-xl">Selected Publications</h2>
 			<a
 				href="/publications"
 				aria-label="View all publications"
-				class="ui-press group flex items-center gap-x-1.5 rounded-full border border-zinc-200/50 bg-white/70 px-4 py-1.5 text-[10px] font-bold tracking-[0.2em] text-zinc-500 shadow-sm backdrop-blur-md hover:border-accent hover:bg-accent hover:text-white dark:border-zinc-700/50 dark:bg-zinc-900/40 dark:text-zinc-400 dark:hover:border-accent dark:hover:bg-accent dark:hover:text-white"
+				class="ui-control group flex items-center gap-x-1.5 px-3 py-1.5"
 			>
 				VIEW ALL {publicationsEditable.length}
 				<Icon
@@ -547,29 +412,18 @@ const sectionNav = [
 			</dl>
 		</div>
 	</section>
-	<section id="projects" data-home-section class="mt-8" aria-label="Projects">
+	<section id="projects" class="mt-8" aria-label="Projects">
 		<h2 class="title mb-3 text-xl">Projects</h2>
 
 		<div class="-mx-3 sm:-mx-4 md:-mx-6">
-			<div class="grid grid-cols-1 gap-y-0 px-3 sm:px-4 md:grid-cols-2 md:gap-x-6 md:px-6">
+			<div class="projects-list px-3 sm:px-4 md:px-6">
 				{
 					projects.map((p) => (
-						<article class="group relative w-full border-t border-zinc-200/70 py-4 first:border-t-0 md:first:border-t md:[&:nth-child(-n+2)]:border-t-0 dark:border-zinc-800/70">
-							<div class="min-w-0">
+						<article class="project-item group relative w-full py-4">
+							<div class="project-item__meta">{p.time ?? "—"}</div>
+							<div class="project-item__content min-w-0">
 								<div class="flex flex-wrap items-center gap-2">
-									<h3 class="text-lg font-semibold leading-snug tracking-tight text-accent">
-										<span class="title-invert-hover">
-											<span class="title-invert-hover__base">{p.name}</span>
-											<span class="title-invert-hover__overlay" aria-hidden="true">
-												<span class="title-invert-hover__reveal">{p.name}</span>
-											</span>
-										</span>
-									</h3>
-									{p.time && (
-										<span class="rounded-full bg-zinc-100/80 px-2 py-0.5 font-mono text-sm font-medium tabular-nums text-gray-700 dark:bg-zinc-800/80 dark:text-gray-300">
-											{p.time}
-										</span>
-									)}
+									<h3 class="text-lg leading-snug font-semibold tracking-tight">{p.name}</h3>
 								</div>
 
 								<p class="mt-2 text-gray-700 dark:text-gray-300">{p.description}</p>
@@ -577,9 +431,7 @@ const sectionNav = [
 								{p.tags && p.tags.length > 0 && (
 									<div class="mt-2 flex flex-wrap gap-2">
 										{p.tags.map((t) => (
-											<span class="rounded-full bg-zinc-100/80 px-2 py-0.5 text-sm font-medium text-gray-700 dark:bg-zinc-800/80 dark:text-gray-300">
-												{t}
-											</span>
+											<span class="pub-badge">{t}</span>
 										))}
 									</div>
 								)}
@@ -591,7 +443,7 @@ const sectionNav = [
 									<div class="flex min-w-0 flex-wrap gap-2">
 										{p.repo && (
 											<a
-												class="inline-flex items-center gap-1.5 rounded border border-zinc-300/80 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-zinc-700/80 dark:text-gray-300"
+												class="ui-control inline-flex items-center gap-1.5 px-2.5 py-1"
 												href={p.repo}
 												target="_blank"
 												rel="noopener"
@@ -610,7 +462,7 @@ const sectionNav = [
 
 										{p.site && (
 											<a
-												class="cactus-link inline-flex items-center rounded border border-zinc-300/80 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-zinc-700/80 dark:text-gray-300"
+												class="ui-control inline-flex items-center px-2.5 py-1"
 												href={p.site}
 												target="_blank"
 												rel="noopener"
@@ -621,7 +473,7 @@ const sectionNav = [
 										)}
 										{p.paper && (
 											<a
-												class="cactus-link inline-flex items-center rounded border border-zinc-300/80 px-2.5 py-1 text-xs font-medium text-gray-700 transition hover:border-accent/40 hover:text-accent dark:border-zinc-700/80 dark:text-gray-300"
+												class="ui-control inline-flex items-center px-2.5 py-1"
 												href={p.paper}
 												target="_blank"
 												rel="noopener"
@@ -660,7 +512,7 @@ const sectionNav = [
 		</div>
 	</section>
 
-	<section id="honors" data-home-section class="mt-8 pb-6 pr-6" aria-label="Honors and Awards">
+	<section id="honors" class="mt-8 pr-6 pb-6" aria-label="Honors and Awards">
 		<h2 class="title mb-3 text-xl">Honors & Awards</h2>
 
 		{
@@ -668,23 +520,21 @@ const sectionNav = [
 				<div class="-mx-3 sm:-mx-4 md:-mx-6">
 					<ul class="px-3 sm:px-4 md:px-6">
 						{honorsPreview.map((honor) => (
-							<li class="flex items-start justify-between gap-3 border-t border-zinc-200/70 py-2 first:border-t-0 dark:border-zinc-700/70">
+							<li class="honor-item">
+								<span class="honor-item__date">{honor.date}</span>
 								<div class="min-w-0">
 									<p class="leading-5 font-medium text-zinc-800 dark:text-zinc-100">
 										{honor.title}
 									</p>
 									<p class="leading-5 text-zinc-500 dark:text-zinc-400">{honor.issuer}</p>
 								</div>
-								<span class="w-[5.5rem] shrink-0 text-right font-mono font-medium tabular-nums text-gray-600 dark:text-gray-400">
-									{honor.date}
-								</span>
 							</li>
 						))}
 					</ul>
 
 					{honorsRest.length > 0 ? (
-						<details class="group border-t border-zinc-200/70 dark:border-zinc-700/70">
-							<summary class="flex cursor-pointer list-none items-center justify-center px-3 py-2 text-sm font-semibold tracking-wide text-zinc-500 transition hover:text-accent dark:text-zinc-400 dark:hover:text-accent">
+						<details class="group">
+							<summary class="ui-control mx-auto flex w-fit cursor-pointer list-none items-center px-3 py-2">
 								<span>SHOW {honorsRest.length} MORE</span>
 								<Icon
 									name="lucide:chevron-down"
@@ -694,16 +544,14 @@ const sectionNav = [
 							</summary>
 							<ul class="px-3 sm:px-4 md:px-6">
 								{honorsRest.map((honor) => (
-									<li class="flex items-start justify-between gap-3 border-t border-zinc-200/70 py-2 dark:border-zinc-700/70">
+									<li class="honor-item">
+										<span class="honor-item__date">{honor.date}</span>
 										<div class="min-w-0">
 											<p class="leading-5 font-medium text-zinc-800 dark:text-zinc-100">
 												{honor.title}
 											</p>
 											<p class="leading-5 text-zinc-500 dark:text-zinc-400">{honor.issuer}</p>
 										</div>
-										<span class="w-[5.5rem] shrink-0 text-right font-mono font-medium tabular-nums text-gray-600 dark:text-gray-400">
-											{honor.date}
-										</span>
 									</li>
 								))}
 							</ul>
@@ -714,437 +562,49 @@ const sectionNav = [
 		}
 	</section>
 
-	<section
-		id="service"
-		data-home-section
-		class="mt-8 rounded-2xl pb-6 pr-6"
-		aria-label="Academic Service"
-	>
+	<section id="service" class="mt-8 rounded-2xl pr-6 pb-6" aria-label="Academic Service">
 		<h2 class="title mb-3 text-xl">Academic Service</h2>
 
 		{
 			academicServices.length > 0 ? (
-				<div class="overflow-x-auto">
-					<table class="w-full text-gray-700 dark:text-gray-300">
-						<tbody>
-							{academicServices.map((service) => (
-								<tr class="align-middle">
-									<td class="w-6 py-1 pr-2 align-middle">
-										<span class="inline-block h-2 w-1 translate-y-[-1.5px] rounded-full bg-accent align-middle" />
-									</td>
-									<td class="py-1 pr-2 align-middle font-semibold">{service.role}</td>
-									<td class="px-2 py-1 align-middle">
-										{service.venueLink ? (
-											<a
-												class="cactus-link"
-												href={service.venueLink}
-												target="_blank"
-												rel="noopener"
-												aria-label={`${service.venue} - ${service.role}`}
-											>
-												{service.venue}
-											</a>
-										) : (
-											<span>{service.venue}</span>
-										)}
-									</td>
-									<td class="whitespace-nowrap py-1 pl-2 text-right align-middle">
-										<span class="inline-flex min-w-[4ch] justify-center rounded-full bg-gray-100 px-2 py-0.5 font-mono text-sm font-medium tabular-nums text-gray-700 dark:bg-zinc-800 dark:text-gray-300">
-											{service.year}
-										</span>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
+				<div class="service-list">
+					{academicServices.map((service) => (
+						<div class="service-item">
+							<div class="service-item__year">{service.year}</div>
+							<div class="service-item__content">
+								<div class="service-item__role">{service.role}</div>
+								<div class="service-item__venue">
+									{service.venueLink ? (
+										<a
+											class="cactus-link"
+											href={service.venueLink}
+											target="_blank"
+											rel="noopener"
+											aria-label={`${service.venue} - ${service.role}`}
+										>
+											{service.venue}
+										</a>
+									) : (
+										<span>{service.venue}</span>
+									)}
+								</div>
+							</div>
+						</div>
+					))}
 				</div>
 			) : null
 		}
 	</section>
 
-	{personalPhilosophyTokens.length > 0 ? (
-		<section
-			id="philosophy"
-			data-home-section
-			class="mt-8 rounded-2xl pb-6 pr-6"
-			aria-label="Personal Philosophy"
-		>
-			<h2 class="title mb-3 text-xl">Personal Philosophy</h2>
-			<div class="rich-content">
-				{personalPhilosophyTokens.map((token) => {
-					if (token.type === "html") return <Fragment set:html={token.value} />;
-					const src = findLogoAny(LOGO_ALIASES[token.key] ?? token.key);
-					if (!src) return null;
-					const dims = logoDimensionsForHeight(src, token.height);
-					return (
-						<Image
-							src={src}
-							alt={token.alt}
-							width={dims.width}
-							height={dims.height}
-							densities={[1, 2]}
-							loading="eager"
-							class="inline-logo"
-						/>
-					);
-				})}
-			</div>
-		</section>
-	) : null}
+	{
+		personalPhilosophyHtml.trim() ? (
+			<section id="philosophy" class="mt-8 rounded-2xl pr-6 pb-6" aria-label="Personal Philosophy">
+				<h2 class="title mb-3 text-xl">Personal Philosophy</h2>
+				<div class="rich-content">
+					<Fragment set:html={personalPhilosophyHtml} />
+				</div>
+			</section>
+		) : null
+	}
 </PageLayout>
-
-<script is:inline>
-	const links = Array.from(document.querySelectorAll("[data-section-link]"));
-	const sections = Array.from(document.querySelectorAll("[data-home-section]"));
-
-	if (links.length > 0 && sections.length > 0) {
-		const linkById = new Map(links.map((link) => [link.dataset.sectionId, link]));
-		const sectionById = new Map(sections.map((section) => [section.id, section]));
-		let activeId = "";
-		let ticking = false;
-		let clickFeedbackTimer;
-		let pendingId = "";
-		let pendingUntil = 0;
-
-		const setActiveLink = (id) => {
-			if (!id || id === activeId) return;
-			activeId = id;
-
-			for (const link of links) {
-				const isActive = link.dataset.sectionId === id;
-				link.classList.toggle("is-active", isActive);
-				if (isActive) {
-					link.setAttribute("aria-current", "location");
-				} else {
-					link.removeAttribute("aria-current");
-				}
-			}
-		};
-
-		const syncActiveSection = () => {
-			ticking = false;
-			const anchorY = window.innerHeight * 0.3;
-
-			if (pendingId) {
-				const pendingSection = sectionById.get(pendingId);
-				if (pendingSection) {
-					const rect = pendingSection.getBoundingClientRect();
-					const reachedPendingSection =
-						(rect.top <= anchorY && rect.bottom >= anchorY) || Math.abs(rect.top - anchorY) < 24;
-
-					if (reachedPendingSection) {
-						setActiveLink(pendingId);
-						pendingId = "";
-						pendingUntil = 0;
-						return;
-					}
-
-					if (performance.now() < pendingUntil) {
-						setActiveLink(pendingId);
-						return;
-					}
-				}
-
-				pendingId = "";
-				pendingUntil = 0;
-			}
-
-			let currentId = sections[0]?.id ?? "";
-
-			for (const section of sections) {
-				if (section.getBoundingClientRect().top <= anchorY) {
-					currentId = section.id;
-				} else {
-					break;
-				}
-			}
-
-			setActiveLink(currentId);
-		};
-
-		const queueSync = () => {
-			if (ticking) return;
-			ticking = true;
-			window.requestAnimationFrame(syncActiveSection);
-		};
-
-		for (const link of links) {
-			link.addEventListener("click", () => {
-				const id = link.dataset.sectionId;
-				window.clearTimeout(clickFeedbackTimer);
-				for (const item of links) item.classList.remove("is-pressed");
-				link.classList.add("is-pressed");
-				clickFeedbackTimer = window.setTimeout(() => {
-					link.classList.remove("is-pressed");
-				}, 360);
-				if (id) {
-					pendingId = id;
-					pendingUntil = performance.now() + 900;
-					setActiveLink(id);
-				}
-			});
-		}
-
-		window.addEventListener("scroll", queueSync, { passive: true });
-		window.addEventListener("resize", queueSync);
-		window.addEventListener("hashchange", () => {
-			const id = window.location.hash.replace(/^#/, "");
-			if (linkById.has(id)) setActiveLink(id);
-			queueSync();
-		});
-
-		const initialHash = window.location.hash.replace(/^#/, "");
-		if (linkById.has(initialHash)) {
-			setActiveLink(initialHash);
-		}
-		syncActiveSection();
-	}
-</script>
-
-<style>
-	[data-home-section] {
-		scroll-margin-top: 7rem;
-	}
-
-	.section-rail {
-		--section-rail-gap: 0.5rem;
-		--section-rail-collapsed-width: 1.45rem;
-		--section-rail-expanded-width: 6.5rem;
-		--section-rail-label-width: 5.5rem;
-		--section-rail-min-edge: 1rem;
-		--section-rail-normal-left: calc(
-			50vw - 32rem - var(--section-rail-expanded-width) - var(--section-rail-gap)
-		);
-		--section-rail-tight-left: calc(
-			50vw - 32rem - var(--section-rail-collapsed-width) - var(--section-rail-gap)
-		);
-		--section-rail-left: max(
-			var(--section-rail-min-edge),
-			min(var(--section-rail-normal-left), var(--section-rail-tight-left))
-		);
-		--section-rail-max-width: calc(100vw - var(--section-rail-left) - var(--section-rail-min-edge));
-		position: fixed;
-		top: 50%;
-		left: var(--section-rail-left);
-		z-index: 120;
-		isolation: isolate;
-		transform: translateY(-50%);
-		width: var(--section-rail-collapsed-width);
-		box-sizing: border-box;
-		padding: 0.12rem 0.08rem;
-		border: 1px solid transparent;
-		border-radius: 0.8rem;
-		background: rgb(255 255 255 / 0);
-		backdrop-filter: blur(0);
-		-webkit-backdrop-filter: blur(0);
-		overflow: visible;
-		transition:
-			width 180ms ease,
-			background-color 180ms ease,
-			border-color 180ms ease,
-			backdrop-filter 180ms ease,
-			-webkit-backdrop-filter 180ms ease;
-	}
-
-	@media (max-width: 63.99rem) {
-		.section-rail {
-			display: none;
-		}
-	}
-
-	.section-rail__list {
-		display: flex;
-		flex-direction: column;
-		gap: 0.4rem;
-		width: 100%;
-	}
-
-	.section-rail__link {
-		--rail-ink: color-mix(in srgb, hsl(var(--theme-text)) 68%, transparent);
-		--rail-ink-active: hsl(var(--theme-accent));
-		position: relative;
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-		width: 100%;
-		padding: 0.05rem 0;
-		overflow: hidden;
-		color: var(--rail-ink);
-		transition:
-			width 180ms ease,
-			color 180ms ease,
-			transform 180ms ease;
-		transform-origin: left center;
-	}
-
-	.section-rail__link:focus-visible {
-		outline: 2px solid hsl(var(--theme-accent) / 0.35);
-		outline-offset: 3px;
-	}
-
-	.section-rail__dot {
-		position: relative;
-		display: block;
-		height: 0.2rem;
-		width: 0.2rem;
-		flex: 0 0 auto;
-		border-radius: 999px;
-		background: currentColor;
-		opacity: 0.38;
-		transition:
-			opacity 180ms ease,
-			width 180ms ease,
-			transform 180ms ease,
-			background-color 180ms ease;
-		z-index: 1;
-	}
-
-	.section-rail__dot::after {
-		content: none;
-	}
-
-	.section-rail__link.is-active .section-rail__dot {
-		opacity: 1;
-		width: 1.05rem;
-		border-radius: 999px;
-		transform: none;
-	}
-
-	.section-rail:hover,
-	.section-rail:focus-within {
-		width: min(var(--section-rail-expanded-width), var(--section-rail-max-width));
-		border-color: transparent;
-		background: hsl(var(--theme-bg) / 0.08);
-		backdrop-filter: blur(16px);
-		-webkit-backdrop-filter: blur(16px);
-	}
-
-	.section-rail__label {
-		max-width: 0;
-		overflow: hidden;
-		white-space: nowrap;
-		display: inline-block;
-		font-size: 0.64rem;
-		font-weight: 600;
-		letter-spacing: 0.03em;
-		text-transform: uppercase;
-		opacity: 0;
-		transform: translateX(-0.3rem);
-		transition:
-			max-width 180ms ease,
-			opacity 140ms ease,
-			transform 180ms ease;
-		position: relative;
-		z-index: 1;
-	}
-
-	.section-rail__label::before {
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: calc(50% + 0.05em);
-		transform: translateY(-50%);
-		pointer-events: none;
-	}
-
-	.section-rail__label::before {
-		content: "";
-		height: 1.02em;
-		background: hsl(var(--theme-accent));
-		clip-path: inset(0 100% 0 0);
-		z-index: 4;
-	}
-
-	.section-rail:hover .section-rail__link,
-	.section-rail:focus-within .section-rail__link {
-		width: 100%;
-		--rail-ink: color-mix(in srgb, hsl(var(--theme-text)) 88%, transparent);
-	}
-
-	.section-rail:hover .section-rail__dot,
-	.section-rail:focus-within .section-rail__dot {
-		width: 0;
-		opacity: 0;
-	}
-
-	.section-rail:not(:hover):not(:focus-within) {
-		border-color: transparent;
-		background: transparent;
-		backdrop-filter: blur(0);
-		-webkit-backdrop-filter: blur(0);
-	}
-
-	.section-rail:hover .section-rail__label,
-	.section-rail:focus-within .section-rail__label,
-	.section-rail__link.is-active .section-rail__label {
-		max-width: var(--section-rail-label-width);
-		opacity: 1;
-		transform: translateX(0);
-	}
-
-	.section-rail__link.is-active {
-		color: var(--rail-ink-active);
-	}
-
-	.section-rail__link.is-pressed {
-		animation: section-rail-tone 360ms linear;
-	}
-
-	.section-rail__link.is-pressed .section-rail__label {
-		animation: section-rail-label-tone 460ms linear;
-	}
-
-	.section-rail__link.is-pressed .section-rail__label::before {
-		animation: section-rail-fill 460ms cubic-bezier(0.22, 1, 0.36, 1);
-	}
-
-	.section-rail:hover .section-rail__link.is-active,
-	.section-rail:focus-within .section-rail__link.is-active {
-		color: hsl(var(--theme-accent));
-	}
-
-	.section-rail:not(:hover):not(:focus-within) .section-rail__link.is-active .section-rail__label {
-		max-width: 0;
-		opacity: 0;
-		transform: translateX(-0.3rem);
-	}
-
-	@keyframes section-rail-tone {
-		0%,
-		84% {
-			color: var(--rail-ink);
-		}
-
-		85%,
-		100% {
-			color: var(--rail-ink-active);
-		}
-	}
-
-	@keyframes section-rail-label-tone {
-		0%,
-		44% {
-			color: transparent;
-		}
-
-		45%,
-		100% {
-			color: hsl(var(--theme-accent));
-		}
-	}
-
-	@keyframes section-rail-fill {
-		0% {
-			clip-path: inset(0 100% 0 0);
-		}
-
-		45% {
-			clip-path: inset(0 0 0 0);
-		}
-
-		100% {
-			clip-path: inset(0 0 0 100%);
-		}
-	}
-
-</style>
+<PublicationScripts />
