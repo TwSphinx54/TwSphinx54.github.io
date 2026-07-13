@@ -6,103 +6,26 @@ import type { ImageMetadata } from "astro";
 import { getEntry } from "astro:content";
 import PublicationItem from "@/components/PublicationItem.astro";
 import PublicationScripts from "@/components/PublicationScripts.astro";
-import { findAssetByName, resolveAsset } from "@/utils/assets";
+import ResearchProjectCarousel from "@/components/ResearchProjectCarousel.astro";
+import { resolveAsset } from "@/utils/assets";
 import figureImage from "../assets/figure.jpg";
 
-// =========================
-// EDITABLE CONTENT (edit here)
-// =========================
-
-type PublicationEditable = {
-	author: string[];
-	title: string;
-	booktitle: string;
-	time?: string;
-	doi?: string;
-	paper?: string;
-	code?: string;
-	huggingface?: string;
-	site?: string;
-	venueIcon?: string;
-	venueColor?: string;
-	venueRank?: string;
-	venueLogo?: string;
-	abstract?: string;
-	selected?: boolean;
-	semantic_scholar_id?: string;
-};
-
-type PublicationResolved = Omit<PublicationEditable, "venueLogo"> & {
-	venueLogo: ImageMetadata | null;
-};
-
-type NewsItem = {
-	date: string;
-	html?: string;
-	text?: string;
-	href?: string;
-	label?: string;
-};
-
-type ProjectEditable = {
-	name: string;
-	description: string;
-	tags?: string[];
-	time?: string;
-	repo?: string;
-	site?: string;
-	paper?: string;
-	orgLogos?: string[];
-};
-
-type AckPerson = { name: string; href: string };
-type Acknowledgements = {
-	title: string;
-	introLines?: string[];
-	mentors?: AckPerson[];
-	peersIntro?: string;
-	peers?: AckPerson[];
-	outro?: string;
-};
-
-type AcademicService = {
-	role: string;
-	venue: string;
-	venueLink?: string;
-	year: string;
-};
-
-type HonorItem = {
-	title: string;
-	issuer: string;
-	date: string;
-};
-
-// =========================
-// Content loading (YAML-driven data)
-// =========================
-
-// Load editable content from YAML (src/content/home/index.yaml)
 const homeEntry = await getEntry("home", "index");
 if (!homeEntry) throw new Error("Missing content entry: src/content/home/index.yaml");
 
-const publicationsEditable = homeEntry.data.publicationsEditable as PublicationEditable[];
-const newsItems = homeEntry.data.newsItems as NewsItem[];
-const projectsEditable = homeEntry.data.projectsEditable as ProjectEditable[];
-const experienceMeta = (homeEntry.data.experienceMeta ?? {}) as Record<
-	string,
-	{ name: string; link: string }
->;
-const homeIntroHtml = (homeEntry.data.homeIntroHtml ?? "") as string;
-const callout = (homeEntry.data.callout ?? "") as string;
-const acknowledgements = (homeEntry.data.acknowledgements ?? null) as Acknowledgements | null;
-const personalPhilosophyHtml = (homeEntry.data.personalPhilosophyHtml ?? "") as string;
-const academicServices = (homeEntry.data.academicServices ?? []) as AcademicService[];
-const honors = (homeEntry.data.honors ?? []) as HonorItem[];
+const publicationsEditable = homeEntry.data.publicationsEditable;
+const newsItems = homeEntry.data.newsItems;
+const experienceMeta = homeEntry.data.experienceMeta;
+const homeIntroHtml = homeEntry.data.homeIntroHtml ?? "";
+const callout = homeEntry.data.callout ?? "";
+const acknowledgements = homeEntry.data.acknowledgements;
+const personalPhilosophyHtml = homeEntry.data.personalPhilosophyHtml ?? "";
+const academicServices = homeEntry.data.academicServices;
+const honors = homeEntry.data.honors;
 
-// =========================
-// Helpers (pure utilities)
-// =========================
+type PublicationResolved = Omit<(typeof publicationsEditable)[number], "venueLogo"> & {
+	venueLogo: ImageMetadata | null;
+};
 
 function escapeHtml(s: string) {
 	return s
@@ -113,27 +36,6 @@ function escapeHtml(s: string) {
 		.replaceAll("'", "&#039;");
 }
 
-function repoLabel(url: string): string {
-	try {
-		const u = new URL(url);
-		const host = u.hostname.toLowerCase();
-		if (host === "github.com" || host.endsWith(".github.com")) {
-			return u.pathname.replace(/^\/+|\/+$/g, "");
-		}
-		return url;
-	} catch {
-		return url;
-	}
-}
-
-// =========================
-// Asset resolution (images/logos)
-// =========================
-
-// =========================
-// Derived data (publications/projects/experiences/logos)
-// =========================
-
 const cactusTech: PublicationResolved[] = publicationsEditable
 	.map((pub) => {
 		const vlogo = resolveAsset(pub.venueLogo);
@@ -141,9 +43,6 @@ const cactusTech: PublicationResolved[] = publicationsEditable
 	})
 	.filter((p) => p.selected === true);
 
-const projects = projectsEditable;
-
-// Experiences (auto logos from /assets/exps)
 const expImages = import.meta.glob<ImageMetadata>("../assets/exps/*.{png,jpg,jpeg,svg,webp}", {
 	eager: true,
 	import: "default",
@@ -185,16 +84,6 @@ const experiences = Object.entries(expImages)
 		if (bn != null) return 1;
 		return a.file.localeCompare(b.file);
 	});
-
-const LOGO_ALIASES: Record<string, string[]> = {
-	whu: ["whu", "wuhan"],
-};
-
-const projectLogoKeys = new Set<string>(projectsEditable.flatMap((p) => p.orgLogos ?? []));
-
-const projectLogoByKey: Record<string, ImageMetadata | null> = Object.fromEntries(
-	[...projectLogoKeys].map((k) => [k, findAssetByName(LOGO_ALIASES[k] ?? k)]),
-);
 
 const homeIntroLeadMatch = homeIntroHtml.match(/^\s*<p>([\s\S]*?)<\/p>\s*/);
 const homeIntroLeadText = homeIntroLeadMatch ? homeIntroLeadMatch[1].trim() : "";
@@ -390,6 +279,10 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 		}
 	</section>
 
+	<section id="research-projects" class="mt-8" aria-label="Research Projects">
+		<ResearchProjectCarousel />
+	</section>
+
 	<section id="publications" class="mt-8" aria-label="Publications">
 		<div class="mb-3 flex items-center justify-between">
 			<h2 class="title text-xl">Selected Publications</h2>
@@ -412,106 +305,6 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 			</dl>
 		</div>
 	</section>
-	<section id="projects" class="mt-8" aria-label="Projects">
-		<h2 class="title mb-3 text-xl">Projects</h2>
-
-		<div class="-mx-3 sm:-mx-4 md:-mx-6">
-			<div class="projects-list px-3 sm:px-4 md:px-6">
-				{
-					projects.map((p) => (
-						<article class="project-item group relative w-full py-4">
-							<div class="project-item__meta">{p.time ?? "—"}</div>
-							<div class="project-item__content min-w-0">
-								<div class="flex flex-wrap items-center gap-2">
-									<h3 class="text-lg leading-snug font-semibold tracking-tight">{p.name}</h3>
-								</div>
-
-								<p class="mt-2 text-gray-700 dark:text-gray-300">{p.description}</p>
-
-								{p.tags && p.tags.length > 0 && (
-									<div class="mt-2 flex flex-wrap gap-2">
-										{p.tags.map((t) => (
-											<span class="pub-badge">{t}</span>
-										))}
-									</div>
-								)}
-
-								<div
-									class="mt-3 flex items-center justify-between gap-3"
-									aria-label="Project links"
-								>
-									<div class="flex min-w-0 flex-wrap gap-2">
-										{p.repo && (
-											<a
-												class="ui-control inline-flex items-center gap-1.5 px-2.5 py-1"
-												href={p.repo}
-												target="_blank"
-												rel="noopener"
-												aria-label={`GitHub repo: ${repoLabel(p.repo)}`}
-											>
-												<Icon
-													name="simple-icons:github"
-													width="14"
-													height="14"
-													class="inline-block"
-													aria-hidden="true"
-												/>
-												<span class="truncate">{repoLabel(p.repo)}</span>
-											</a>
-										)}
-
-										{p.site && (
-											<a
-												class="ui-control inline-flex items-center px-2.5 py-1"
-												href={p.site}
-												target="_blank"
-												rel="noopener"
-												aria-label={`${p.name} project site`}
-											>
-												SITE
-											</a>
-										)}
-										{p.paper && (
-											<a
-												class="ui-control inline-flex items-center px-2.5 py-1"
-												href={p.paper}
-												target="_blank"
-												rel="noopener"
-												aria-label={`${p.name} paper`}
-											>
-												PAPER
-											</a>
-										)}
-									</div>
-
-									{p.orgLogos?.length ? (
-										<div class="flex shrink-0 items-center">
-											{p.orgLogos.map((k) => {
-												const src = projectLogoByKey[k];
-												return (
-													src && (
-														<Image
-															src={src}
-															alt={`${k} logo`}
-															width={28}
-															densities={[1, 2]}
-															loading="lazy"
-															class="ml-1 inline h-5 w-auto object-contain opacity-90"
-														/>
-													)
-												);
-											})}
-										</div>
-									) : null}
-								</div>
-							</div>
-						</article>
-					))
-				}
-			</div>
-		</div>
-	</section>
-
 	<section id="honors" class="mt-8 pr-6 pb-6" aria-label="Honors and Awards">
 		<h2 class="title mb-3 text-xl">Honors & Awards</h2>
 

@@ -8,13 +8,14 @@ The goal is not to reproduce a paper as HTML. A project page should be an accura
 
 Use sources in this order:
 
-1. The paper's LaTeX source for title, author order, affiliations, method details, metrics, table values, figure numbering, captions, citations, and BibTeX.
+1. The paper's LaTeX source for title, author order, affiliations, method details, metrics, table values, figure content, captions, citations, and BibTeX.
 2. The previous project HTML, if supplied, for author profile links, project links, venue links, and useful media that may not be present in the paper source.
 3. The current project pages for layout and interaction patterns:
    - `src/pages/projects/savla.astro`
    - `src/pages/projects/samatcher.astro`
    - `src/pages/projects/scode.astro`
 4. `src/layouts/Project.astro` for shared navigation, theme switching, MathJax, More Works, table-caption sizing, and BibTeX-copy behavior.
+5. `src/components/ProjectHero.astro` for the shared year, title, authors, affiliations, venue, and resource links.
 
 Do not invent claims, affiliations, citations, metric values, venue status, or release links. Resolve discrepancies against the latest paper source and clearly flag anything that cannot be verified.
 
@@ -25,9 +26,66 @@ For a project slug named `<slug>`:
 - Create `src/pages/projects/<slug>.astro`.
 - Put imported images in `src/assets/projects/<slug>/`.
 - Put video or other files that must be served unchanged in `public/projects/<slug>/`.
-- Add the project name, compact venue, year, and lowercase route to `src/data/projects.ts`.
+- Generate one homepage/index card image and save it as `src/assets/projects/cards/<slug>-card.png` (or `.jpg`, `.jpeg`, or `.webp`).
+- Add one object to `projectDefinitions` in `src/data/projects.ts`. The route is derived from `slug`, and the card image is discovered by filename.
 - Add or update the corresponding homepage publication/project entry in `src/content/home/index.yaml` when appropriate.
 - Use `/projects/<slug>/` for all internal links. Never introduce new `/Projects/...` links.
+
+Do not edit `ResearchProjectCarousel.astro`, `ResearchProjectList.astro`, or `Project.astro` when adding an ordinary research project. All three consume the shared project registry. The registry order controls the homepage carousel, `/projects/` list, and More Works menu order.
+
+Register the project in exactly one place:
+
+```ts
+{
+	slug: "method-name",
+	name: "METHOD-NAME",
+	topic: "Research Area",
+	venue: "VENUE · 2026",
+	description: "One compact sentence describing the contribution.",
+},
+```
+
+The following values are derived automatically:
+
+- `href`: `/projects/<slug>/`
+- `cardImage`: the asset matching `src/assets/projects/cards/<slug>-card.*`
+- Research-project counts on the homepage and `/projects/`
+- The homepage carousel card
+- The `/projects/` research-project row
+- The project-page More Works entry
+
+The build fails with a clear missing-card error when a registered project has no matching card asset. This is intentional: never add a silent placeholder or another page-specific image map.
+
+### End-to-end addition sequence
+
+1. Verify the paper source and decide the lowercase `<slug>`.
+2. Create the scientific media folders and the `/projects/<slug>/` page using `ProjectLayout` and `ProjectHero`.
+3. Finish the page content, citations, figures, tables, and links before writing promotional copy.
+4. Generate the 16:9 editorial card from the paper's core method and save it as `src/assets/projects/cards/<slug>-card.*`.
+5. Add the single `projectDefinitions` entry. At this point the homepage carousel, Projects page, counts, route, and More Works menu should all update automatically.
+6. Link the corresponding publication in `src/content/home/index.yaml` when a project/site button is appropriate. Research-project registration and publication registration remain separate because not every publication has a dedicated project page.
+7. Run formatting, checks, lint, and the production build. Inspect the project page, homepage carousel, `/projects/`, and More Works menu at desktop and mobile widths.
+8. Search for the slug and confirm there is no second metadata object, direct card import, uppercase route, or stale asset filename.
+
+### Homepage card generation
+
+Create the card from the paper's central concept rather than reusing a scientific figure or screenshot. The image is a decorative editorial identity: it should communicate the topic at a glance while the adjacent card text carries the factual information.
+
+Use a panoramic 16:9 canvas. A source around 1600 × 900 px is sufficient. Keep important marks away from the extreme edges because the homepage card uses a cropped responsive frame. Save the final source with the stable `<slug>-card` filename; changing the visual later should replace the file without changing the project registry.
+
+Start from this prompt and replace the bracketed concepts with project-specific visual structures:
+
+```text
+Panoramic 16:9 abstract technical editorial graphic for [PROJECT], an artificial intelligence research project about [CORE RESEARCH IDEA]. Post-digital graphic design with archival print aesthetics: [PROJECT-SPECIFIC COMPUTATIONAL MOTIFS], data-flow lines, node graphs, dot-matrix patterns, procedural geometry, technical grids, registration marks, and subtle illegible micro-annotations used only as texture. Photocopied paper texture, xerox grain, halftone printing, toner noise. Restrained duotone palette of warm ivory and off-black with one muted accent color. Swiss modernist composition fused with neo-brutalist web design, minimal, intellectual, conceptual, flat graphic layout with generous negative space. No readable title, no logo, no watermark, no literal scene, no central character, no realistic objects, no cinematic rendering, no glossy 3D.
+```
+
+Choose motifs that encode the method rather than generic AI imagery. Examples:
+
+- Spatial policy learning: branching action trajectories, coordinate fields, spatial tokens, policy-flow diagrams.
+- Cross-view matching: paired planes, co-visible masks, symmetric correspondence nodes, connecting data lines.
+- Scale-aware matching: nested grids, repeated frames at different resolutions, bounding regions, scale-alignment paths.
+
+Use one muted accent per project so cards remain related without becoming indistinguishable. Do not generate readable project names or explanatory copy inside the image. After generation, verify the file type and dimensions, place it at `src/assets/projects/cards/<slug>-card.*`, then run the production build so Astro generates optimized responsive variants.
 
 The generic compatibility logic in `src/pages/404.astro` handles legacy uppercase `/Projects/<slug>` URLs. Do not create case-only duplicate pages or Astro redirects on a case-insensitive filesystem.
 
@@ -55,10 +113,25 @@ Every project page must use `ProjectLayout`:
 </ProjectLayout>
 ```
 
+Render the shared hero immediately inside `.project-page`:
+
+```astro
+<ProjectHero
+	year="2026"
+	title="Full Paper Title"
+	{authors}
+	{affiliations}
+	notes={[{ mark: "*", text: "Corresponding author" }]}
+	venue={{ label: "Venue Name", href: "https://..." }}
+	{links}
+/>
+```
+
 Only include navigation items for sections that exist. Add `In motion` only when the page contains a video section.
 
 Do not reimplement these shared elements inside a page:
 
+- Project hero, author/affiliation formatting, venue link, or resource-link bar
 - Project-name brand and page table of contents
 - Home, More Works, and theme controls
 - More Works project catalog
@@ -105,6 +178,10 @@ const links = [
 ```
 
 Author links should come from verified existing HTML, the paper source, or an authoritative profile. Internal author links stay in the same tab; external links use `target="_blank"` and `rel="noreferrer"`.
+
+When a new project shares authors with an existing project page, audit the two author arrays name by name and reuse every verified profile URL. Do not copy only the first few links or leave the same author linked on one page and unlinked on another. Preserve the new paper's own author order and affiliation marks even when profile URLs are reused.
+
+Affiliation labels contain institution and research-unit names only. Omit postal addresses and trailing city, state, or country names. Use established abbreviations such as LIESMARS, CFAR, IHPC, and A*STAR when they improve recognition, but keep the expanded institution name in the same label.
 
 Affiliations must be allowed to use the full available project-page width. Do not constrain them to the narrow reading column.
 
@@ -163,12 +240,15 @@ Use `loading="eager"` only for the leading abstract figure. Other images should 
 - A very wide diagram may extend beyond the reading column up to the site's right content boundary.
 - Do not exceed the overall page boundary or create document-level horizontal scrolling.
 - Every image receives a descriptive `alt`, not merely `Fig. 3`.
-- Every visible figure caption begins with `Fig. x.` and follows the numbering in the paper.
+- Every visible figure caption begins with `Fig. x.` and is numbered consecutively in webpage display order, starting from `Fig. 1.`. Do not inherit skipped, appendix, or supplementary figure numbers from the paper.
+- Give separate diagrams or plots separate `<figure>` elements and numbers. A multi-panel group may share one number only when its panels form one semantic comparison and use one caption; do not combine unrelated media merely to preserve paper numbering.
 - Caption wording should be based on the paper caption but edited for web readability and nearby context.
 - The four theme-color corner crosses appear immediately on figure hover, without a fade. The image itself does not animate on hover.
 - In light mode, white figure backgrounds may use the established blending behavior to merge with the page. In dark mode, preserve a readable white image canvas when blending would damage the figure.
 
 Do not import unused media. After implementation, verify that every file in `src/assets/projects/<slug>/` is referenced.
+
+The homepage card is separate from paper figures. It lives in `src/assets/projects/cards/`, follows the `<slug>-card.*` convention, and is consumed through `src/data/projects.ts`; do not import it directly in page or list components.
 
 ### Media-size review
 
@@ -217,6 +297,11 @@ Table requirements:
 - Ordinary data-cell hover uses a neutral gray derived from theme variables.
 - Highlighted rows/columns or emphasized values use the theme signal color on hover.
 - Horizontal table scrollbars remain visually hidden at rest and appear without changing layout height.
+
+Common table regressions to check explicitly:
+
+- Every table figure has both `data-sync-table-caption` and `class="table-caption"`; omitting either can make captions wrap at the page width or collapse incorrectly.
+- Neutral hover applies only to ordinary data cells. Highlighted rows and emphasized values use a signal-color hover, while headers and the first column keep their base background.
 
 ## 7. Citations, references, and LaTeX
 
@@ -275,18 +360,28 @@ Do not fix mobile readability by applying an arbitrary narrow percentage width. 
 - Keep content data near the top of the page file: authors, affiliations, project links, result rows, captions, and BibTeX.
 - Prefer named object fields over positional tuples.
 - Render repeated authors, links, corner markers, rows, and result cards from arrays.
+- Use `ProjectHero` for shared hero markup and `projectDefinitions` as the only research-project catalog.
 - Keep project-specific CSS in the page, but move repeated cross-project behavior to `ProjectLayout` or a shared component.
 - Do not duplicate global theme or responsive fixes in every page.
 - Do not leave commented experiments, obsolete selectors, unused imports, unused assets, or duplicate hover rules.
 - Preserve unrelated user changes in a dirty worktree.
 - Keep new routes and asset names lowercase and stable.
 
+Before considering a project-page revision complete, run this focused regression pass:
+
+1. Compare shared authors against existing project pages and confirm every reusable profile link is present.
+2. Remove geographic address suffixes from affiliation labels without changing affiliation marks.
+3. Read all visible figure captions from top to bottom and confirm an uninterrupted `Fig. 1, Fig. 2, ...` sequence; number tables independently as `Table 1, Table 2, ...`.
+4. Confirm every figure media wrapper renders four signal-color corner crosses immediately on hover and that the image itself does not resize or animate.
+5. Confirm table captions match the visible table width and highlighted-cell hover remains in the signal-color family.
+6. Compare neighboring figure heights and information density; resize the wrapper or grid proportions deliberately rather than forcing every source image to the same dimensions.
+
 ## 11. Required verification
 
 Run at minimum:
 
 ```bash
-pnpm exec prettier --write src/pages/projects/<slug>.astro src/data/projects.ts
+pnpm exec prettier --write src/pages/projects/<slug>.astro src/data/projects.ts PROJECT_PAGE_GUIDE.md
 pnpm check
 pnpm lint
 pnpm build
@@ -307,8 +402,10 @@ Verify:
 - Authors and affiliations are complete
 - Home, More Works, and theme controls align exactly
 - More Works contains the new project name and venue
+- The homepage carousel and `/projects/` list both show the new card image and metadata
+- `VIEW ALL` and section counts include the new research project without component edits
 - All nav anchors resolve to real sections
-- Figure numbering and captions match the paper
+- Figure numbering is consecutive in webpage display order, while caption claims remain faithful to the paper
 - Images retain intended aspect ratios and sizes
 - Table captions match actual table widths
 - Table header/first-column hover is disabled
@@ -323,8 +420,9 @@ A new project page is complete only when:
 
 1. Its factual content has been checked against the paper source.
 2. It is reachable at `/projects/<slug>/` and registered in More Works.
-3. Its hero, authors, affiliations, venue, project links, sections, figures, tables, citation, and references are complete as applicable.
-4. Desktop, mobile, light theme, and dark theme have all been inspected.
-5. No page-level overflow, dead link, missing asset, uncited reference, or duplicated shared logic remains.
-6. Checks and production build pass.
-7. Large media are reported to the user before committing unless the user explicitly asks Codex to optimize them.
+3. Its `<slug>-card.*` image exists and it appears automatically on the homepage and `/projects/` page.
+4. Its hero, authors, affiliations, venue, project links, sections, figures, tables, citation, and references are complete as applicable.
+5. Desktop, mobile, light theme, and dark theme have all been inspected.
+6. No page-level overflow, dead link, missing asset, uncited reference, or duplicated shared logic remains.
+7. Checks and production build pass.
+8. Large media are reported to the user before committing unless the user explicitly asks Codex to optimize them.

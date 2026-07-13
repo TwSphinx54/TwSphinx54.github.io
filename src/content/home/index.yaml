@@ -1,27 +1,9 @@
 # Logo usage:
 # 1) Put logo files under: src/assets/logos/
-# 2) In projectsEditable[*].orgLogos, add a key like "nus"
+# 2) In selectedBuilds[*].orgLogos, add a key like "nus"
 # 3) Ensure the filename contains that key (case-insensitive), e.g. "nus.svg" or "logo-nus.png"
 
 publicationsEditable:
-  # - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Ivor Tsang"]
-  #   title: "Ongoing Project"
-  #   booktitle: "Annual Conference on Neural Information Processing Systems (NeurIPS)"
-  #   # booktitle: "(Under Review)"
-  #   time: "2026"
-  #   # venueRank: "h5i 272 · CCF A"
-  #   # semantic_scholar_id: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  #   # doi: "https://doi.org/10.48550/arXiv.2602.00743"
-  #   # paper: "https://arxiv.org/abs/2602.00743"
-  #   # code: "https://github.com/TwSphinx54/SA-VLA"
-  #   # demo: "https://xupan.top/projects/savla"
-  #   # image: "pubs/pub1_savla.gif"
-  #   venueLogo: "icons/neurips.svg"
-  #   # venueIcon: "simple-icons:arxiv"
-  #   # venueColor: "#B31B1B"
-  #   abstract: >-
-  #     ...
-
   - author:
       [
         "Xu Pan",
@@ -35,31 +17,19 @@ publicationsEditable:
         "Ivor Tsang",
       ]
     title: "SFM: Spatially-Aware Flow Matching for Embodied Reinforcement Learning"
-    # booktitle: "Conference on Robot Learning (CoRL)"
     booktitle: "Under Review"
     time: "2026"
-    # venueRank: "CCF A · h5i 450"
-    # semantic_scholar_id: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    doi: "https://doi.org/10.48550/arXiv.2602.00743"
-    paper: "https://arxiv.org/abs/2602.00743"
     code: "https://github.com/TwSphinx54/SA-VLA"
     huggingface: "https://huggingface.co/SSSSphinx/SA-VLA"
-    site: "/projects/savla/"
-    venueIcon: "simple-icons:arxiv"
-    venueColor: "#B31B1B"
+    site: "/projects/sfm/"
     abstract: >-
-      Reinforcement learning (RL) fine-tuning of flow-matching Vision-Language-Action (VLA) policies often 
-      improves in-distribution performance but degrades spatial generalization under distribution shifts, leading 
-      to inconsistent geometric behavior across viewpoints and scene layouts commonly encountered in robotic 
-      deployment. We identify this failure as a coupled breakdown of spatial inductive bias during online 
-      optimization, caused by representation drift, sparse step-level supervision, and spatially unstructured 
-      exploration. These factors jointly bias policies toward short-horizon visual correlations and undermine 
-      geometric consistency. We propose SFM, a unified framework that restores spatial inductive bias by aligning 
-      representation, reward, and exploration in a shared geometric latent space. It integrates implicit spatial 
-      representations for stable grounding, a step-level spatially grounded reward (SGR) for geometric credit 
-      assignment, and SCAE, a spatially-conditioned annealed exploration strategy. Across cluttered manipulation 
-      benchmarks under spatial distribution shifts, SFM improves spatial robustness, achieving 5.05% gains under 
-      viewpoint perturbations while maintaining in-distribution performance.
+      Reinforcement learning fine-tuning of flow-matching Vision-Language-Action policies can improve
+      in-distribution performance while degrading spatial generalization. SFM addresses this coupled failure
+      by aligning representation, reward, and exploration in a shared geometric latent space. It combines
+      implicit spatial token fusion, Spatially Grounded Reward for phase-aware geometric credit assignment,
+      and Spatially Conditioned Annealed Exploration for geometry-aware stochastic exploration. Across
+      LIBERO and LIBERO-Plus, SFM improves robustness under spatial distribution shifts while retaining
+      in-distribution task performance.
     selected: true
 
   - author:
@@ -121,7 +91,6 @@ publicationsEditable:
     venueColor: "#B31B1B"
     abstract: >-
       Vision-Language-Action models (VLAs) support generalist robotic control by enabling end-to-end decision policies directly from multi-modal inputs. As trained VLAs are increasingly shared and adapted, protecting model ownership becomes essential for secure deployment and responsible open-source usage. In this paper, we present GuardVLA, the first backdoor-based ownership verification framework specifically designed for VLAs. GuardVLA embeds a stealthy and harmless backdoor watermark into the protected model during training by injecting secret messages into embodied visual data. For post-release verification, we propose a swap-and-detect mechanism, in which the trigger projector and an external classifier head are used to activate and detect the embedded backdoor based on prediction probabilities. Extensive experiments across multiple datasets, model architectures, and adaptation settings demonstrate that GuardVLA enables reliable ownership verification while preserving benign task performance. Further results show that the embedded watermark remains detectable under post-release model adaptation.
-    selected: false
 
   - author: ["Xu Pan", "Zimin Xia", "Xianwei Zheng*"]
     title: "Scale-aware Co-visible Region Detection for Image Matching"
@@ -153,7 +122,8 @@ publicationsEditable:
       with drastic scale variations.
     selected: true
 
-  - author: ["Xu Pan", "Qiyuan Ma", "Mingyue Dong", "He Chen", "Wei Ji", "Xianwei Zheng*"]
+  - author:
+      ["Xu Pan", "Zhen Pang", "Qiyuan Ma", "He Chen", "Wei Ji", "Shuhan Shen", "Xianwei Zheng*"]
     title: "SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching"
     booktitle: "CoRR abs/2606.03406"
     time: "2026"
@@ -189,7 +159,6 @@ publicationsEditable:
     venueColor: "#B31B1B"
     abstract: >-
       Public trust in generative artificial intelligence exhibits increasingly divergent patterns across national contexts, yet prevailing research largely overlooks the macro-structural forces underlying this divergence. This study argues that trust in AI is not merely a technical response to performance but a product of institutional refraction. We propose an ‘Institutional Prism’ framework to demonstrate how institutional trust shapes user trust in domestic (DeepSeek) and global (ChatGPT) large language models. Drawing on Cognitive-Affective Trust Theory, we distinguish between cognitive and affective dimensions of trust and analyze survey data from 405 Chinese users. The findings show that higher institutional trust is positively associated with stronger affective trust in domestic AI models and shifts cognitive evaluations in a more favorable direction. While under lower institutional trust, this domestic advantage weakens. These findings reveal that institutional trust has emerged as a core dimension of AI trust formation. By linking micro-level psychological judgments with macro-level governance, this research contributes a new perspective to human-machine communication.
-    selected: false
 
   - author: ["Xu Pan"]
     title: "Research on Co-Visibility Prior-Guided Image Matching under Large-Scale Disparity"
@@ -205,11 +174,6 @@ publicationsEditable:
       Extensive experiments demonstrate that the proposed method consistently outperforms existing approaches across multiple matching paradigms, particularly under large-scale variations and partial overlap scenarios. Cross-dataset evaluations further validate its strong generalization ability. Overall, by introducing explicit co-visibility priors, this work reformulates conventional point-wise matching into a unified region-constrained and semantics-consistent framework, providing a systematic solution for robust cross-view correspondence estimation in challenging large-scale disparity settings, with significant implications for high-precision 3D reconstruction and spatial intelligence applications.
 
 newsItems:
-  # - date: "Jul 2026"
-  #   html: |
-  #     Joined the <a class="cactus-link" href="https://pine-lab-ntu.github.io/" target="_blank" rel="noopener"><strong>PINE Lab</strong></a> as a Research Associate at
-  #           <a class="cactus-link" href="https://www.ntu.edu.sg/" target="_blank" rel="noopener">Nanyang Technological University</a>,
-  #           supervised by <a class="cactus-link" href="https://ziweiwangthu.github.io/" target="_blank" rel="noopener">Prof. Ziwei Wang</a>.
   - date: "Jun 2026"
     html: |
       Received my M.Sc. degree from Wuhan University with an honor of Outstanding Graduating Graduate Student.
@@ -260,40 +224,7 @@ newsItems:
             as a recommended exemption student,
             under the supervision of <a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.
 
-projectsEditable:
-  - name: "SA-VLA"
-    description: "A research project on robust RL adaptation of flow-matching–based VLA models for robotic manipulation, focusing on generalization under challenging distribution shifts."
-    tags:
-      [
-        "Vision-Language-Action Model",
-        "Robotic Manipulation",
-        "Flow-Matching",
-        "Reinforcement Learning",
-      ]
-    time: "2026"
-    repo: "https://github.com/TwSphinx54/SA-VLA"
-    site: "/projects/savla/"
-    paper: "https://arxiv.org/abs/2602.00743"
-    orgLogos: ["whu", "astar", "ntu", "nus", "cas"]
-
-  - name: "Co-visibility Guided Image Matching"
-    description: "A research project on robust image matching in robot vision, photogrammetry and remote sensing, using explicit co-visibility modeling to handle extreme scale variations."
-    tags:
-      [
-        "Co-visibility",
-        "Image Matching",
-        "3D Vision",
-        "Segmentation",
-        "Photogrammetry",
-        "SCoDe",
-        "SAMatcher",
-      ]
-    time: "2025"
-    repo: "https://github.com/Geo-Tell/SCoDe"
-    site: "/projects/scode/"
-    paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260"
-    orgLogos: ["whu", "epfl", "seu", "cas"]
-
+selectedBuilds:
   - name: "GNDAS"
     description: "The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system designed for the analysis and assessment of natural disasters."
     tags: ["Natural Disasters", "Geographic Information System (GIS)"]
@@ -468,7 +399,6 @@ homeIntroHtml: |
     investigating the <em class="highlight">spatial principles</em> that underpin robust perception, reasoning, and action in the physical world.
     I develop <em class="highlight">scalable learning frameworks</em> that enable <em class="highlight">general-purpose embodied agents</em> to adapt across diverse environments, tasks, and embodiments.
   </p>
-  <p></p>
 
 # Leave this empty (`callout:`) or remove it to hide the callout.
 callout: |

@@ -1,0 +1,111 @@
+---
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import type { ImageMetadata } from "astro";
+import { getEntry } from "astro:content";
+import { findAssetByName } from "@/utils/assets";
+
+const homeEntry = await getEntry("home", "index");
+if (!homeEntry) throw new Error("Missing content entry: src/content/home/index.yaml");
+
+const builds = homeEntry.data.selectedBuilds;
+const logoAliases: Record<string, string[]> = { whu: ["whu", "wuhan"] };
+const logoKeys = new Set(builds.flatMap((build) => build.orgLogos ?? []));
+const logoByKey: Record<string, ImageMetadata | null> = Object.fromEntries(
+	[...logoKeys].map((key) => [key, findAssetByName(logoAliases[key] ?? key)]),
+);
+
+function repoLabel(url: string): string {
+	try {
+		const parsed = new URL(url);
+		if (parsed.hostname.toLowerCase() === "github.com") {
+			return parsed.pathname.replace(/^\/+|\/+$/g, "");
+		}
+		return url;
+	} catch {
+		return url;
+	}
+}
+---
+
+<div class="builds-shell -mx-3 sm:-mx-4 md:-mx-6">
+	<div class="projects-list px-3 sm:px-4 md:px-6">
+		{
+			builds.map((build) => (
+				<article class="project-item group relative w-full py-4">
+					<div class="project-item__meta">{build.time ?? "—"}</div>
+					<div class="project-item__content min-w-0">
+						<div class="flex flex-wrap items-center gap-2">
+							<h3 class="text-lg leading-snug font-semibold tracking-tight">{build.name}</h3>
+						</div>
+
+						<p class="mt-2 text-gray-700 dark:text-gray-300">{build.description}</p>
+
+						{build.tags?.length ? (
+							<div class="mt-2 flex flex-wrap gap-2">
+								{build.tags.map((tag) => (
+									<span class="pub-badge">{tag}</span>
+								))}
+							</div>
+						) : null}
+
+						<div class="mt-3 flex items-center justify-between gap-3" aria-label="Project links">
+							<div class="flex min-w-0 flex-wrap gap-2">
+								{build.repo ? (
+									<a
+										class="ui-control inline-flex items-center gap-1.5 px-2.5 py-1"
+										href={build.repo}
+										target="_blank"
+										rel="noopener"
+										aria-label={`GitHub repo: ${repoLabel(build.repo)}`}
+									>
+										<Icon name="simple-icons:github" width="14" height="14" aria-hidden="true" />
+										<span class="truncate">{repoLabel(build.repo)}</span>
+									</a>
+								) : null}
+								{build.site ? (
+									<a
+										class="ui-control px-2.5 py-1"
+										href={build.site}
+										aria-label={`${build.name} site`}
+									>
+										SITE
+									</a>
+								) : null}
+								{build.paper ? (
+									<a
+										class="ui-control px-2.5 py-1"
+										href={build.paper}
+										target="_blank"
+										rel="noopener"
+										aria-label={`${build.name} paper`}
+									>
+										PAPER
+									</a>
+								) : null}
+							</div>
+
+							{build.orgLogos?.length ? (
+								<div class="flex shrink-0 items-center">
+									{build.orgLogos.map((key) => {
+										const src = logoByKey[key];
+										return src ? (
+											<Image
+												src={src}
+												alt={`${key} logo`}
+												width={28}
+												densities={[1, 2]}
+												loading="lazy"
+												class="ml-1 inline h-5 w-auto object-contain opacity-90"
+											/>
+										) : null;
+									})}
+								</div>
+							) : null}
+						</div>
+					</div>
+				</article>
+			))
+		}
+	</div>
+</div>

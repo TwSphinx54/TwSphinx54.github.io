@@ -1,0 +1,26 @@
+---
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import { projects } from "@/data/projects";
+---
+
+<div class="research-projects__list">
+	{
+		projects.map((project, index) => (
+			<a class="research-project" href={project.href} aria-label={`Explore ${project.name}`}>
+				<span class="research-project__index">{String(index + 1).padStart(2, "0")}</span>
+				<div class="research-project__copy">
+					<p class="research-project__eyebrow">
+						{project.topic} <span aria-hidden="true">/</span> {project.venue}
+					</p>
+					<h3>{project.name}</h3>
+					<p class="research-project__description">{project.description}</p>
+				</div>
+				<div class="research-project__visual">
+					<Image src={project.cardImage} alt="" width={420} densities={[1, 2]} loading="lazy" />
+				</div>
+				<Icon name="lucide:arrow-up-right" class="research-project__arrow" aria-hidden="true" />
+			</a>
+		))
+	}
+</div>

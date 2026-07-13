@@ -1,0 +1,918 @@
+---
+import { Image } from "astro:assets";
+import ProjectHero from "@/components/ProjectHero.astro";
+import ProjectLayout from "@/layouts/Project.astro";
+import intro from "@/assets/projects/sfm/intro.png";
+import overview from "@/assets/projects/sfm/overview.png";
+import fuser from "@/assets/projects/sfm/fuser.png";
+import pcaDelta from "@/assets/projects/sfm/pca-delta.png";
+import responseBaseline from "@/assets/projects/sfm/response-baseline.png";
+import responseSfm from "@/assets/projects/sfm/response-sfm.png";
+import noiseResidual from "@/assets/projects/sfm/noise-residual.png";
+import denseReward from "@/assets/projects/sfm/dense-reward.png";
+import training from "@/assets/projects/sfm/training.png";
+import rewardEval from "@/assets/projects/sfm/reward-eval.png";
+import noiseComparison from "@/assets/projects/sfm/noise-comparison.png";
+import qualitative from "@/assets/projects/sfm/qualitative.png";
+
+const authors = [
+	{ name: "Xu Pan", href: "/", mark: "1,2" },
+	{ name: "Zhenglin Wan", href: "https://vanzll.github.io/", mark: "3" },
+	{ name: "Xingrui Yu", href: "https://xingruiyu.github.io/", mark: "2,*" },
+	{
+		name: "Xianwei Zheng",
+		href: "https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm",
+		mark: "4",
+	},
+	{ name: "Youkai Ke", href: "https://openreview.net/profile?id=~Youkai_Ke2", mark: "4" },
+	{ name: "Ming Sun", href: "https://aaronsun2000.github.io/", mark: "5" },
+	{ name: "Rui Wang", href: "https://people.ucas.ac.cn/~wr", mark: "5" },
+	{ name: "Ziwei Wang", href: "https://ziweiwangthu.github.io/", mark: "1" },
+	{
+		name: "Ivor Tsang",
+		href: "https://www.a-star.edu.sg/cfar/about-cfar/management/prof-ivor-tsang",
+		mark: "2",
+	},
+];
+const affiliations = [
+	"School of Electrical and Electronic Engineering, Nanyang Technological University",
+	"Centre for Frontier AI Research (CFAR), Institute of High Performance Computing (IHPC), Agency for Science, Technology and Research (A*STAR)",
+	"Department of Computer Science, National University of Singapore",
+	"State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS), Wuhan University",
+	"Institute of Information Engineering, Chinese Academy of Sciences",
+];
+const links = [
+	{ label: "Code", href: "https://github.com/TwSphinx54/SA-VLA", icon: "simple-icons:github" },
+	{
+		label: "Model",
+		href: "https://huggingface.co/SSSSphinx/SA-VLA",
+		icon: "simple-icons:huggingface",
+	},
+];
+const bibtex = `@misc{pan2026sfm,
+  title={SFM: Spatially-Aware Flow Matching for Embodied Reinforcement Learning},
+  author={Xu Pan and Zhenglin Wan and Xingrui Yu and Xianwei Zheng and Youkai Ke and Ming Sun and Rui Wang and Ziwei Wang and Ivor Tsang},
+  year={2026},
+  note={Under review}
+}`;
+const cross = ["tl", "tr", "bl", "br"];
+---
+
+<ProjectLayout
+	projectName="SFM"
+	navItems={[
+		{ label: "Abstract", href: "#abstract-heading" },
+		{ label: "Method", href: "#method-heading" },
+		{ label: "Evaluation", href: "#evaluation-heading" },
+		{ label: "Results", href: "#results-heading" },
+		{ label: "Citation", href: "#citation-heading" },
+		{ label: "References", href: "#references-heading" },
+	]}
+	meta={{
+		title: "SFM",
+		description: "Spatially-Aware Flow Matching for Embodied Reinforcement Learning.",
+	}}
+>
+	<article class="project-page">
+		<ProjectHero
+			year="2026"
+			title="SFM: Spatially-Aware Flow Matching for Embodied Reinforcement Learning"
+			{authors}
+			{affiliations}
+			notes={[{ mark: "*", text: "Corresponding author" }]}
+			venue={{ label: "Under Review · 2026" }}
+			{links}
+		/>
+
+		<section class="project-section" aria-labelledby="abstract-heading">
+			<div class="section-label"><span>01</span><h2 id="abstract-heading">Abstract</h2></div>
+			<div class="abstract-layout">
+				<p class="project-copy">
+					Reinforcement learning can improve a flow-matching Vision-Language-Action policy on its
+					training distribution while making its geometry less reliable under new viewpoints and
+					scene layouts. SFM treats this as a coupled failure of representation, credit assignment,
+					and exploration. It aligns all three in a shared geometric latent space through implicit
+					spatial token fusion, Spatially Grounded Reward (SGR), and Spatially Conditioned Annealed
+					Exploration (SCAE). On LIBERO<sup class="citation-mark"><a href="#ref-3">[3]</a></sup> and LIBERO-Plus<sup
+						class="citation-mark"><a href="#ref-4">[4]</a></sup
+					>, this unified design improves robustness to spatial distribution shifts without
+					sacrificing in-distribution control.
+				</p>
+				<figure class="abstract-figure">
+					<div class="figure-media">
+						{
+							cross.map((position) => (
+								<span class={`figure-cross figure-cross--${position}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image
+							src={intro}
+							alt="Comparison of naive reinforcement learning and SFM under spatial distribution shifts"
+							loading="eager"
+						/>
+					</div>
+					<figcaption>
+						<strong>Fig. 1.</strong> Conventional RL fine-tuning can drift toward viewpoint-specific visual
+						correlations. SFM preserves spatially consistent behavior by grounding optimization in geometry.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="method-heading">
+			<div class="section-label"><span>02</span><h2 id="method-heading">Method</h2></div>
+			<figure class="wide-figure">
+				<div class="figure-media">
+					{
+						cross.map((position) => (
+							<span class={`figure-cross figure-cross--${position}`} aria-hidden="true">
+								+
+							</span>
+						))
+					}
+					<Image src={overview} alt="SFM training framework" loading="lazy" />
+				</div>
+				<figcaption>
+					<strong>Fig. 2.</strong> SFM shares a geometry-aware latent across three optimization paths:
+					spatial token fusion for observation encoding, phase-aware SGR for credit assignment, and SCAE
+					for structured action exploration.
+				</figcaption>
+			</figure>
+			<div class="method-grid">
+				<article>
+					<span>01</span><h3>Spatial token fusion</h3>
+					<p>
+						Visual Geometry Grounded Transformer features<sup class="citation-mark"
+							><a href="#ref-1">[1]</a></sup
+						> inject implicit camera and scene geometry into the VLA observation stream through cross-attention.
+					</p>
+				</article>
+				<article>
+					<span>02</span><h3>Grounded reward</h3>
+					<p>
+						SGR decomposes manipulation into approach, relation–actuation, and stabilization phases,
+						providing dense geometric progress signals beyond sparse task success.
+					</p>
+				</article>
+				<article>
+					<span>03</span><h3>Annealed exploration</h3>
+					<p>
+						SCAE conditions stochastic action perturbations on spatial state and training progress,
+						then anneals them as the policy becomes more certain.
+					</p>
+				</article>
+			</div>
+
+			<div class="method-evidence method-evidence--fusion">
+				<figure class="spatial-response">
+					<div class="figure-media spatial-response__grid">
+						{
+							cross.map((position) => (
+								<span class={`figure-cross figure-cross--${position}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image
+							src={pcaDelta}
+							alt="Principal component visualization of spatial features"
+							loading="lazy"
+						/>
+						<Image src={responseBaseline} alt="Baseline spatial response" loading="lazy" />
+						<Image src={responseSfm} alt="SFM spatial response" loading="lazy" />
+					</div>
+					<figcaption>
+						<strong>Fig. 3.</strong> Spatial features remain responsive to geometric changes after fusion;
+						SFM produces a more structured response than the RL baseline.
+					</figcaption>
+				</figure>
+				<figure class="fusion-figure">
+					<div class="figure-media">
+						{
+							cross.map((position) => (
+								<span class={`figure-cross figure-cross--${position}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image src={fuser} alt="Cross-attention spatial token fusion" loading="lazy" />
+					</div>
+					<figcaption>
+						<strong>Fig. 4.</strong> Geometry tokens are projected and fused with visual tokens through
+						cross-attention before the policy predicts an action flow.
+					</figcaption>
+				</figure>
+			</div>
+
+			<div class="method-evidence method-evidence--balanced">
+				<figure>
+					<div class="figure-media">
+						{
+							cross.map((position) => (
+								<span class={`figure-cross figure-cross--${position}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image
+							src={noiseResidual}
+							alt="Spatially conditioned exploration residuals"
+							loading="lazy"
+						/>
+					</div>
+					<figcaption>
+						<strong>Fig. 5.</strong> SCAE learns spatially structured residuals instead of applying uniform
+						action noise.
+					</figcaption>
+				</figure>
+				<figure>
+					<div class="figure-media">
+						{
+							cross.map((position) => (
+								<span class={`figure-cross figure-cross--${position}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image
+							src={denseReward}
+							alt="Three phases of spatially grounded reward"
+							loading="lazy"
+						/>
+					</div>
+					<figcaption>
+						<strong>Fig. 6.</strong> SGR changes its geometric objective across approach, relation–actuation,
+						and stabilization, matching the causal structure of manipulation.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="evaluation-heading">
+			<div class="section-label"><span>03</span><h2 id="evaluation-heading">Evaluation</h2></div>
+			<p class="project-copy">
+				SFM initializes from the frozen 7B SigLIP–Gemma backbone of π<sub>0.5</sub><sup
+					class="citation-mark"><a href="#ref-2">[2]</a></sup
+				> and is optimized with PPO and GAE in RLinf-VLA<sup class="citation-mark"
+					><a href="#ref-7">[7]</a></sup
+				>. Training uses 64 parallel environments, batches of 1,024 transitions, and a 240-step
+				episode horizon. The spatial robustness suite covers few-shot camera-view (CV) and
+				robot-initial-state (RIS) shifts, plus zero-shot background texture, lighting, layout,
+				object-location, and sensor-noise shifts.
+			</p>
+			<div class="evaluation-grid">
+				<div><strong>64</strong><span>parallel environments</span></div>
+				<div><strong>1,024</strong><span>transitions per batch</span></div>
+				<div><strong>≈38.5 h</strong><span>training on four H800 GPUs</span></div>
+			</div>
+
+			<figure class="paper-table-figure" data-sync-table-caption>
+				<div
+					class="table-scroll"
+					tabindex="0"
+					role="region"
+					aria-label="Spatial representation results"
+				>
+					<table class="paper-table">
+						<thead>
+							<tr>
+								<th scope="col">Method</th>
+								<th scope="col">CV</th>
+								<th scope="col">RIS</th>
+								<th scope="col">Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">π<sub>0.5</sub></th><td>78.47</td><td>83.77</td><td>81.00</td>
+							</tr>
+							<tr class="ours">
+								<th scope="row">SFM w/ spatial fusion</th><td><strong>82.30</strong></td><td
+									><strong>84.29</strong></td
+								><td><strong>83.25</strong></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<figcaption class="table-caption">
+					<strong>Table 1.</strong> Success rate (%) under few-shot spatial perturbations. Implicit spatial
+					representation improves both camera-view and robot-state robustness.
+				</figcaption>
+			</figure>
+
+			<div class="evaluation-figures">
+				<figure>
+					<div class="figure-media">
+						{
+							cross.map((position) => (
+								<span class={`figure-cross figure-cross--${position}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image src={training} alt="SFM training curves" loading="lazy" />
+					</div>
+					<figcaption>
+						<strong>Fig. 7.</strong> SFM improves optimization stability and converges to stronger task
+						performance than reward-only and conventional RL baselines.
+					</figcaption>
+				</figure>
+				<figure>
+					<div class="figure-media">
+						{
+							cross.map((position) => (
+								<span class={`figure-cross figure-cross--${position}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image
+							src={rewardEval}
+							alt="Evaluation of spatially grounded and sparse rewards"
+							loading="lazy"
+						/>
+					</div>
+					<figcaption>
+						<strong>Fig. 8.</strong> Spatially grounded reward provides more reliable few-shot and zero-shot
+						transfer than sparse task-level feedback.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="results-heading">
+			<div class="section-label"><span>04</span><h2 id="results-heading">Results</h2></div>
+			<p class="project-copy">
+				The complete system reaches <strong>90.14%</strong> aggregate robustness, outperforming both ReinFlow<sup
+					class="citation-mark"><a href="#ref-5">[5]</a></sup
+				> and Flow-GRPO<sup class="citation-mark"><a href="#ref-6">[6]</a></sup>. Its clearest gain
+				appears under camera-view perturbation, where success rises to 87.21%. Ablations show that
+				the three components are complementary: removing SGR is especially damaging, while spatial
+				fusion and SCAE each add robustness beyond dense reward alone.
+			</p>
+
+			<figure class="paper-table-figure paper-table-figure--wide" data-sync-table-caption>
+				<div
+					class="table-scroll"
+					tabindex="0"
+					role="region"
+					aria-label="LIBERO-Plus robustness results"
+				>
+					<table class="paper-table">
+						<thead>
+							<tr>
+								<th scope="col">Method</th><th scope="col">Total</th><th scope="col">BT</th><th
+									scope="col">CV</th
+								><th scope="col">LI</th><th scope="col">LC</th><th scope="col">OL</th><th
+									scope="col">RIS</th
+								><th scope="col">SN</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">π<sub>0.5</sub></th><td>88.96</td><td>100.00</td><td>82.16</td><td
+									>88.63</td
+								><td>98.54</td><td>100.00</td><td>83.74</td><td>87.93</td>
+							</tr>
+							<tr>
+								<th scope="row">ReinFlow</th><td>87.92±0.81</td><td>97.53±0.53</td><td
+									>84.32±0.94</td
+								><td>84.20±1.45</td><td>97.32±1.69</td><td>100.00±0.00</td><td>79.15±1.58</td><td
+									>92.72±2.32</td
+								>
+							</tr>
+							<tr>
+								<th scope="row">Flow-GRPO</th><td>89.29±0.46</td><td>99.07±0.93</td><td
+									>85.23±1.13</td
+								><td>87.20±0.47</td><td>97.81±0.73</td><td>100.00±0.00</td><td>81.12±0.28</td><td
+									>92.53±1.72</td
+								>
+							</tr>
+							<tr class="ours">
+								<th scope="row">SFM</th><td><strong>90.14±0.35</strong></td><td
+									><strong>100.00±0.00</strong></td
+								><td><strong>87.21±0.31</strong></td><td>86.10±1.52</td><td
+									><strong>98.54±1.26</strong></td
+								><td><strong>100.00±0.00</strong></td><td><strong>83.09±0.57</strong></td><td
+									><strong>93.30±1.85</strong></td
+								>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<figcaption class="table-caption">
+					<strong>Table 2.</strong> LIBERO-Plus success rate (%). BT: background texture; CV: camera view;
+					LI: lighting; LC: layout; OL: object location; RIS: robot initial state; SN: sensor noise.
+				</figcaption>
+			</figure>
+
+			<figure class="paper-table-figure ablation" data-sync-table-caption>
+				<div class="table-scroll" tabindex="0" role="region" aria-label="SFM component ablation">
+					<table class="paper-table">
+						<thead>
+							<tr>
+								<th scope="col">Variant</th><th scope="col">SCAE</th><th scope="col">SGR</th><th
+									scope="col">Fusion</th
+								><th scope="col">Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+								><th scope="row">π<sub>0.5</sub></th><td>—</td><td>—</td><td>—</td><td>81.00</td
+								></tr
+							>
+							<tr><th scope="row">w/o fusion</th><td>—</td><td>✓</td><td>—</td><td>81.75</td></tr>
+							<tr><th scope="row">w/o SGR</th><td>—</td><td>—</td><td>✓</td><td>77.50</td></tr>
+							<tr><th scope="row">w/o SCAE</th><td>—</td><td>✓</td><td>✓</td><td>83.00</td></tr>
+							<tr class="ours"
+								><th scope="row">SFM</th><td>✓</td><td>✓</td><td>✓</td><td
+									><strong>83.75</strong></td
+								></tr
+							>
+						</tbody>
+					</table>
+				</div>
+				<figcaption class="table-caption">
+					<strong>Table 3.</strong> Component ablation under few-shot CV and RIS perturbations. The full
+					geometry-aligned system performs best.
+				</figcaption>
+			</figure>
+
+			<div class="results-figures">
+				<figure>
+					<div class="figure-media">
+						{
+							cross.map((position) => (
+								<span class={`figure-cross figure-cross--${position}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image
+							src={noiseComparison}
+							alt="Comparison of learned exploration noise and stochastic differential equation noise"
+							loading="lazy"
+						/>
+					</div>
+					<figcaption>
+						<strong>Fig. 9.</strong> Learned, spatially conditioned exploration complements SGR more effectively
+						than generic SDE noise.
+					</figcaption>
+				</figure>
+				<figure class="wide">
+					<div class="figure-media figure-media--strip">
+						{
+							cross.map((position) => (
+								<span class={`figure-cross figure-cross--${position}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image
+							src={qualitative}
+							alt="Qualitative SFM robot manipulation rollout"
+							loading="lazy"
+						/>
+					</div>
+					<figcaption>
+						<strong>Fig. 10.</strong> A qualitative rollout shows stable approach, interaction, and completion
+						across the manipulation sequence.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="citation-heading">
+			<div class="section-label"><span>05</span><h2 id="citation-heading">Citation</h2></div>
+			<div class="citation">
+				<pre><code>{bibtex}</code></pre>
+				<button class="copy-button" type="button" data-copy-bibtex>Copy BibTeX</button>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="references-heading">
+			<div class="section-label"><span>06</span><h2 id="references-heading">References</h2></div>
+			<ol class="references-list">
+				<li id="ref-1">
+					<span
+						>J. Wang, M. Chen, N. Karaev, et al. “VGGT: Visual Geometry Grounded Transformer.” CVPR,
+						2025.</span
+					>
+					<a href="https://arxiv.org/abs/2503.11651">arXiv</a>
+				</li>
+				<li id="ref-2">
+					<span
+						>Physical Intelligence, K. Black, N. Brown, et al. “π<sub>0.5</sub>: a
+						Vision-Language-Action Model with Open-World Generalization.” 2025.</span
+					>
+					<a href="https://arxiv.org/abs/2504.16054">arXiv</a>
+				</li>
+				<li id="ref-3">
+					<span
+						>B. Liu, Y. Zhu, C. Gao, et al. “LIBERO: Benchmarking Knowledge Transfer for Lifelong
+						Robot Learning.” NeurIPS, 2023.</span
+					>
+					<a href="https://arxiv.org/abs/2306.03310">arXiv</a>
+				</li>
+				<li id="ref-4">
+					<span
+						>S. Fei, S. Wang, J. Shi, et al. “LIBERO-Plus: In-depth Robustness Analysis of
+						Vision-Language-Action Models.” 2025.</span
+					>
+					<a href="https://arxiv.org/abs/2510.13626">arXiv</a>
+				</li>
+				<li id="ref-5">
+					<span
+						>T. Zhang, C. Yu, S. Su, and Y. Wang. “ReinFlow: Fine-tuning Flow Matching Policy with
+						Online Reinforcement Learning.” 2025.</span
+					>
+					<a href="https://arxiv.org/abs/2505.22094">arXiv</a>
+				</li>
+				<li id="ref-6">
+					<span
+						>J. Liu, G. Liu, J. Liang, et al. “Flow-GRPO: Training Flow Matching Models via Online
+						RL.” 2025.</span
+					>
+					<a href="https://arxiv.org/abs/2505.05470">arXiv</a>
+				</li>
+				<li id="ref-7">
+					<span
+						>H. Zang, M. Wei, S. Xu, et al. “RLinf-VLA: A Unified and Efficient Framework for VLA +
+						RL Training.” 2025.</span
+					>
+					<a href="https://arxiv.org/abs/2510.06710">arXiv</a>
+				</li>
+			</ol>
+		</section>
+	</article>
+</ProjectLayout>
+
+<style>
+	.project-page {
+		width: min(100%, 760px);
+	}
+	.project-section {
+		width: 100% !important;
+		padding: clamp(58px, 6.5vw, 78px) 0 !important;
+	}
+	.project-section::before {
+		display: none;
+	}
+	.section-label {
+		position: relative;
+		margin-bottom: 26px;
+	}
+	.section-label span {
+		position: absolute;
+		top: 0.48em;
+		left: -76px;
+		color: var(--muted);
+		font: 9px var(--font-mono);
+		letter-spacing: 0.08em;
+	}
+	.section-label h2 {
+		margin: 0 !important;
+		font-family: var(--font-sans);
+		font-size: 18px !important;
+		font-weight: 400;
+		line-height: 1.3;
+	}
+	.project-copy {
+		max-width: var(--reading-width);
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: 13px;
+		line-height: 1.65;
+	}
+	.abstract-layout,
+	.wide-figure,
+	.method-evidence,
+	.evaluation-grid,
+	.evaluation-figures,
+	.paper-table-figure--wide,
+	.results-figures {
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+	}
+	.abstract-figure {
+		width: 62%;
+		margin: 38px 0 0 auto;
+	}
+	figure {
+		margin: 0;
+	}
+	.figure-media {
+		position: relative;
+	}
+	.figure-cross {
+		position: absolute;
+		z-index: 2;
+		color: var(--signal);
+		font: 18px/1 var(--font-mono);
+		opacity: 0;
+		pointer-events: none;
+	}
+	.figure-media:hover .figure-cross {
+		opacity: 1;
+	}
+	.figure-cross--tl {
+		top: -8px;
+		left: -5px;
+	}
+	.figure-cross--tr {
+		top: -8px;
+		right: -5px;
+	}
+	.figure-cross--bl {
+		bottom: -8px;
+		left: -5px;
+	}
+	.figure-cross--br {
+		right: -5px;
+		bottom: -8px;
+	}
+	figure img {
+		display: block;
+		width: 100%;
+		height: auto;
+		background: transparent;
+		mix-blend-mode: multiply;
+	}
+	:global(.dark) figure img,
+	:global([data-theme="dark"]) figure img {
+		background: white;
+		mix-blend-mode: normal;
+	}
+	figcaption {
+		margin-top: 10px;
+		color: var(--muted);
+		font-size: 9px;
+		line-height: 1.5;
+	}
+	figcaption strong {
+		color: var(--ink);
+		font-weight: 400;
+	}
+	.wide-figure {
+		width: calc(var(--reading-width) + 80px);
+		margin-top: 0;
+	}
+	.method-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		margin-top: 42px;
+		border-top: 1px solid var(--line);
+	}
+	.method-grid article {
+		min-width: 0;
+		padding: 18px 18px 0 0;
+	}
+	.method-grid article + article {
+		padding-left: 18px;
+		border-left: 1px solid var(--line);
+	}
+	.method-grid article > span {
+		color: var(--muted);
+		font: 9px var(--font-mono);
+	}
+	.method-grid h3 {
+		margin-bottom: 8px;
+		font-size: 13px;
+	}
+	.method-grid p {
+		margin: 0;
+		font-size: 10px;
+		line-height: 1.55;
+	}
+	.method-evidence,
+	.evaluation-figures {
+		display: grid;
+		grid-template-columns: 1.05fr 0.95fr;
+		align-items: start;
+		gap: 42px;
+		margin-top: 54px;
+	}
+	.method-evidence--balanced {
+		grid-template-columns: 1fr 1fr;
+	}
+	.method-evidence--fusion {
+		grid-template-columns: 1.35fr 0.65fr;
+	}
+	.spatial-response__grid {
+		display: grid;
+		grid-template-columns: 1.2fr 0.55fr 0.55fr;
+		align-items: center;
+		gap: 8px;
+	}
+	.evaluation-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1px;
+		margin-top: 34px;
+		background: var(--line);
+	}
+	.evaluation-grid div {
+		display: grid;
+		gap: 5px;
+		padding: 18px;
+		background: var(--paper);
+	}
+	.evaluation-grid strong {
+		font: 400 18px var(--font-sans);
+	}
+	.evaluation-grid span {
+		color: var(--muted);
+		font-size: 10px;
+	}
+	.paper-table-figure {
+		width: max-content;
+		max-width: 100%;
+		margin-top: 38px;
+	}
+	.paper-table-figure--wide {
+		max-width: none;
+	}
+	.table-caption {
+		visibility: hidden;
+		inline-size: 0;
+		max-inline-size: 100%;
+	}
+	.table-caption[data-sized] {
+		visibility: visible;
+	}
+	.ablation {
+		margin-top: 46px;
+	}
+	.table-scroll {
+		width: fit-content;
+		max-width: 100%;
+		overflow-x: auto;
+		scrollbar-gutter: stable;
+	}
+	.paper-table {
+		width: max-content;
+		border-collapse: collapse;
+		border-block: 1px solid var(--ink);
+		font: 10px/1.4 var(--font-sans);
+		font-variant-numeric: tabular-nums;
+		text-align: right;
+	}
+	.paper-table th,
+	.paper-table td {
+		padding: 10px 8px;
+		white-space: nowrap;
+	}
+	.paper-table thead th {
+		border-bottom: 1px solid var(--line-strong);
+		color: var(--muted);
+		font: 9px var(--font-mono);
+		text-transform: uppercase;
+	}
+	.paper-table th:first-child {
+		text-align: left;
+		background: var(--paper);
+	}
+	.paper-table tbody tr + tr {
+		border-top: 1px solid var(--line);
+	}
+	.paper-table tbody td:hover {
+		background: color-mix(in srgb, var(--ink) 7%, var(--paper));
+	}
+	.paper-table .ours {
+		background: color-mix(in srgb, var(--signal) 6%, transparent);
+	}
+	.paper-table .ours th {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper));
+	}
+	.paper-table .ours > td:hover,
+	.paper-table td:has(strong):hover {
+		background: color-mix(in srgb, var(--signal) 14%, var(--paper));
+	}
+	.paper-table tbody :is(th, td):first-child:hover {
+		background: var(--paper);
+	}
+	.paper-table tbody tr.ours :is(th, td):first-child:hover {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper));
+	}
+	.evaluation-figures {
+		margin-top: 54px;
+	}
+	.evaluation-figures .figure-media {
+		display: flex;
+		height: clamp(250px, 24vw, 330px);
+		align-items: center;
+		justify-content: center;
+	}
+	.evaluation-figures .figure-media img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+	.results-figures {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 48px 42px;
+		margin-top: 54px;
+	}
+	.results-figures .wide {
+		grid-column: 1/-1;
+	}
+	.citation {
+		position: relative;
+	}
+	.citation pre {
+		overflow-x: auto;
+		padding: 24px;
+		border: 1px solid var(--line);
+		background: color-mix(in srgb, var(--ink) 4%, transparent);
+		font: 10px/1.7 var(--font-mono);
+	}
+	.copy-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 9px 11px;
+		border: 0;
+		background: var(--ink);
+		color: var(--paper);
+		font: 9px var(--font-mono);
+	}
+	.copy-button:hover {
+		background: var(--signal);
+	}
+	.references-list {
+		max-width: var(--reading-width);
+		padding: 0;
+		counter-reset: r;
+		list-style: none;
+		font-size: 11px;
+		line-height: 1.6;
+	}
+	.references-list li {
+		position: relative;
+		padding-left: 28px;
+		counter-increment: r;
+	}
+	.references-list li + li {
+		margin-top: 10px;
+	}
+	.references-list li::before {
+		position: absolute;
+		left: 0;
+		content: "[" counter(r) "]";
+		color: var(--muted);
+		font: 9px var(--font-mono);
+	}
+	.references-list a,
+	.citation-mark a {
+		color: var(--ink);
+		text-decoration: underline;
+		text-decoration-color: var(--line-strong);
+		text-underline-offset: 3px;
+	}
+	.references-list a:hover,
+	.citation-mark a:hover {
+		color: var(--signal);
+	}
+	.citation-mark {
+		font: 8px var(--font-mono);
+	}
+	@media (max-width: 1024px) {
+		.project-page,
+		.abstract-layout,
+		.wide-figure,
+		.method-evidence,
+		.evaluation-grid,
+		.evaluation-figures,
+		.paper-table-figure--wide,
+		.results-figures {
+			width: 100%;
+			max-width: none;
+		}
+		.method-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+	@media (max-width: 560px) {
+		.abstract-figure {
+			width: 100%;
+			margin-left: 0;
+		}
+		.method-evidence,
+		.evaluation-figures,
+		.results-figures,
+		.evaluation-grid {
+			grid-template-columns: 1fr;
+		}
+		.results-figures .wide {
+			grid-column: auto;
+		}
+		.evaluation-figures .figure-media {
+			height: auto;
+		}
+		.evaluation-figures .figure-media img {
+			height: auto;
+		}
+	}
+</style>

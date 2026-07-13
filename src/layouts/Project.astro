@@ -9,19 +9,18 @@ import type { SiteMeta } from "@/types";
 
 interface Props {
 	meta: SiteMeta;
-	projectName?: string;
+	projectName: string;
 	navItems?: { label: string; href: string }[];
 }
 
 const {
 	meta: { articleDate, description = siteConfig.description, ogImage, title },
-	projectName = "SA-VLA",
+	projectName,
 	navItems = [
 		{ label: "Abstract", href: "#abstract-heading" },
 		{ label: "Method", href: "#method-heading" },
 		{ label: "Evaluation", href: "#evaluation-heading" },
 		{ label: "Results", href: "#results-heading" },
-		{ label: "In motion", href: "#video-heading" },
 		{ label: "Citation", href: "#citation-heading" },
 		{ label: "References", href: "#references-heading" },
 	],

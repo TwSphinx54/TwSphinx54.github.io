@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import { Icon } from "astro-icon/components";
+import ProjectHero from "@/components/ProjectHero.astro";
 import ProjectLayout from "@/layouts/Project.astro";
 import introImage from "@/assets/projects/savla/intro.png";
 import overviewImage from "@/assets/projects/savla/overview.png";
@@ -94,59 +94,35 @@ const bibtex = `@inproceedings{pan2026savla,
 ---
 
 <ProjectLayout
+	projectName="SA-VLA"
+	navItems={[
+		{ label: "Abstract", href: "#abstract-heading" },
+		{ label: "Method", href: "#method-heading" },
+		{ label: "Evaluation", href: "#evaluation-heading" },
+		{ label: "Results", href: "#results-heading" },
+		{ label: "In motion", href: "#video-heading" },
+		{ label: "Citation", href: "#citation-heading" },
+		{ label: "References", href: "#references-heading" },
+	]}
 	meta={{
 		title: "SA-VLA",
 		description: "Spatially-Aware Flow-Matching for Vision-Language-Action Reinforcement Learning.",
 	}}
 >
 	<article class="project-page">
-		<header class="project-hero" id="top">
-			<p class="project-kicker">Research project · 2026</p>
-			<h1>
-				SA-VLA: Spatially-Aware Flow-Matching for Vision-Language-Action Reinforcement Learning
-			</h1>
-			<div class="author-list">
-				{
-					authors.map((author) => (
-						<span>
-							<>
-								<a
-									href={author.href}
-									target={author.href.startsWith("http") ? "_blank" : undefined}
-									rel={author.href.startsWith("http") ? "noreferrer" : undefined}
-								>
-									{author.name}
-								</a>
-								<sup>{author.mark}</sup>
-							</>
-						</span>
-					))
-				}
-			</div>
-			<ol class="affiliations">
-				{affiliations.map((affiliation) => <li>{affiliation}</li>)}
-			</ol>
-			<p class="corresponding"><sup>*</sup> Corresponding author</p>
-			<p class="venue">
-				<a href="https://3d-llm-vla.github.io/" target="_blank" rel="noreferrer">
-					IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) 2026 Workshop on
-					3D-LLM/VLA
-				</a>
-			</p>
-			<div class="project-links">
-				{
-					links.map((link) => (
-						<a class="project-link" href={link.href} target="_blank" rel="noreferrer">
-							<>
-								<Icon name={link.icon} aria-hidden="true" />
-								<span>{link.label}</span>
-								<span aria-hidden="true">↗</span>
-							</>
-						</a>
-					))
-				}
-			</div>
-		</header>
+		<ProjectHero
+			year="2026"
+			title="SA-VLA: Spatially-Aware Flow-Matching for Vision-Language-Action Reinforcement Learning"
+			{authors}
+			{affiliations}
+			notes={[{ mark: "*", text: "Corresponding author" }]}
+			venue={{
+				label:
+					"IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) 2026 Workshop on 3D-LLM/VLA",
+				href: "https://3d-llm-vla.github.io/",
+			}}
+			{links}
+		/>
 
 		<section class="project-section" aria-labelledby="abstract-heading">
 			<div class="section-label"><span>01</span><h2 id="abstract-heading">Abstract</h2></div>
@@ -246,7 +222,7 @@ const bibtex = `@inproceedings{pan2026savla,
 					</p>
 				</article>
 			</div>
-			<figure class="paper-table-figure">
+			<figure class="paper-table-figure" data-sync-table-caption>
 				<div
 					class="table-scroll"
 					tabindex="0"
@@ -289,7 +265,7 @@ const bibtex = `@inproceedings{pan2026savla,
 						</tbody>
 					</table>
 				</div>
-				<figcaption>
+				<figcaption class="table-caption">
 					<strong>Table 1.</strong> Examples of unified goal modeling used by the dense reward module.
 				</figcaption>
 			</figure>
@@ -347,7 +323,7 @@ const bibtex = `@inproceedings{pan2026savla,
 							>
 						</table>
 					</div>
-					<figcaption class="evidence-caption">
+					<figcaption class="table-caption">
 						<strong>Table 2.</strong> Zero-shot success rate (%) on the LIBERO-PLUS<sup
 							class="citation-mark"><a href="#ref-4">[4]</a></sup
 						> spatial-perturbation subset, before RL adaptation.
@@ -384,7 +360,7 @@ const bibtex = `@inproceedings{pan2026savla,
 							>
 						</table>
 					</div>
-					<figcaption class="evidence-caption">
+					<figcaption class="table-caption">
 						<strong>Table 3.</strong> Leave-one-out ablation on the LIBERO-PLUS<sup
 							class="citation-mark"><a href="#ref-4">[4]</a></sup
 						> few-shot spatial-perturbation setting.
@@ -427,7 +403,7 @@ const bibtex = `@inproceedings{pan2026savla,
 						</figure>
 					))
 				}
-				<figure class="result-table-figure">
+				<figure class="result-table-figure" data-sync-table-caption>
 					<div
 						class="table-scroll"
 						tabindex="0"
@@ -474,7 +450,7 @@ const bibtex = `@inproceedings{pan2026savla,
 							</tbody>
 						</table>
 					</div>
-					<figcaption>
+					<figcaption class="table-caption">
 						<strong>Table 4.</strong> Robustness under diverse perturbations. We evaluate {
 							"$\\pi_{0.5}$"
 						}<sup class="citation-mark"><a href="#ref-1">[1]</a></sup>, ReinFlow<sup
@@ -568,10 +544,6 @@ const bibtex = `@inproceedings{pan2026savla,
 		width: min(100%, 760px);
 		margin: 0;
 	}
-	.project-hero {
-		padding-bottom: clamp(70px, 9vw, 120px);
-	}
-	.project-kicker,
 	.section-label span {
 		margin: 0 0 22px;
 		color: var(--muted);
@@ -579,105 +551,6 @@ const bibtex = `@inproceedings{pan2026savla,
 		font-size: 9px;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-	}
-	.project-hero h1 {
-		max-width: 650px;
-		margin: 0 0 52px !important;
-		font-family: var(--font-sans);
-		font-size: clamp(2rem, 2.7vw, 2.25rem) !important;
-		font-weight: 400;
-		line-height: 1.08 !important;
-		letter-spacing: -0.018em;
-	}
-	.author-list {
-		display: flex;
-		max-width: 860px;
-		flex-wrap: wrap;
-		gap: 4px 16px;
-		font-family: var(--font-sans);
-		font-size: 13px;
-	}
-	.author-list a {
-		text-decoration: underline;
-		text-decoration-color: var(--line-strong);
-		text-underline-offset: 3px;
-	}
-	.author-list a:hover {
-		color: var(--signal);
-	}
-	.author-list sup {
-		margin-left: 2px;
-		color: var(--muted);
-		font-family: var(--font-mono);
-		font-size: 8px;
-	}
-	.affiliations {
-		display: grid;
-		width: 100%;
-		max-width: none;
-		gap: 5px;
-		margin: 28px 0 0;
-		padding: 0;
-		counter-reset: affiliation;
-		color: var(--muted);
-		font-size: 11px;
-		line-height: 1.5;
-		list-style: none;
-	}
-	.affiliations li {
-		display: grid;
-		grid-template-columns: 20px minmax(0, 1fr);
-	}
-	.affiliations li::before {
-		counter-increment: affiliation;
-		content: counter(affiliation);
-		font-family: var(--font-mono);
-		font-size: 8px;
-	}
-	.corresponding {
-		margin: 8px 0 0;
-		color: var(--muted);
-		font-size: 10px;
-	}
-	.venue {
-		max-width: 720px;
-		margin: 20px 0 0;
-		color: var(--muted);
-		font-size: 12px;
-	}
-	.venue a {
-		text-decoration: underline;
-		text-decoration-color: var(--line-strong);
-		text-underline-offset: 3px;
-	}
-	.venue a:hover {
-		color: var(--signal);
-	}
-	.project-links {
-		display: flex;
-		flex-wrap: wrap;
-		margin-top: 34px;
-		border-top: 1px solid var(--line);
-		border-bottom: 1px solid var(--line);
-	}
-	.project-link {
-		display: grid;
-		grid-template-columns: 16px 1fr auto;
-		min-width: 150px;
-		align-items: center;
-		gap: 9px;
-		padding: 13px 14px;
-		border-right: 1px solid var(--line);
-		font-family: var(--font-mono);
-		font-size: 10px;
-	}
-	.project-link svg {
-		width: 14px;
-		height: 14px;
-	}
-	.project-link:hover {
-		background: var(--ink);
-		color: var(--paper);
 	}
 	.project-section {
 		--section-pad: clamp(58px, 6.5vw, 78px);
@@ -921,12 +794,12 @@ const bibtex = `@inproceedings{pan2026savla,
 		width: max-content;
 		max-width: 100%;
 	}
-	.evidence-caption {
+	.table-caption {
 		visibility: hidden;
 		inline-size: 0;
 		max-inline-size: 100%;
 	}
-	.evidence-caption[data-sized] {
+	.table-caption[data-sized] {
 		visibility: visible;
 	}
 	.evidence-tables .paper-table {
@@ -1190,15 +1063,10 @@ const bibtex = `@inproceedings{pan2026savla,
 	}
 	@media (max-width: 1024px) {
 		.project-page,
-		.project-hero,
 		.project-section {
 			width: 100% !important;
 			max-width: none;
 			min-width: 0;
-		}
-		.project-hero h1 {
-			font-size: clamp(1.8rem, 8vw, 2.1rem) !important;
-			overflow-wrap: anywhere;
 		}
 		.results-grid {
 			grid-template-columns: minmax(0, 1fr);
@@ -1211,14 +1079,6 @@ const bibtex = `@inproceedings{pan2026savla,
 			width: 100%;
 			max-width: 100%;
 			min-width: 0;
-		}
-		.project-links {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-		}
-		.project-link {
-			min-width: 0;
-			border-bottom: 1px solid var(--line);
 		}
 		.section-label {
 			padding-right: 34px;

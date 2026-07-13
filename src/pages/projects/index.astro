@@ -1,0 +1,50 @@
+---
+import { getEntry } from "astro:content";
+import ResearchProjectList from "@/components/ResearchProjectList.astro";
+import SelectedBuildsList from "@/components/SelectedBuildsList.astro";
+import { projects } from "@/data/projects";
+import PageLayout from "@/layouts/Base.astro";
+
+const homeEntry = await getEntry("home", "index");
+if (!homeEntry) throw new Error("Missing content entry: src/content/home/index.yaml");
+
+const buildCount = homeEntry.data.selectedBuilds.length;
+const meta = {
+	description: "Research projects and selected engineering builds by Xu Pan",
+	title: "Projects",
+};
+---
+
+<PageLayout meta={meta}>
+	<header class="page-heading">
+		<span class="page-heading__index" aria-hidden="true">01</span>
+		<h1 class="title">Projects</h1>
+	</header>
+
+	<section
+		id="project-research"
+		class="projects-page__research mt-10"
+		aria-label="Research Projects"
+	>
+		<h2 class="title mb-3 flex items-baseline gap-2 text-xl">
+			<span>Research Projects</span>
+			<span class="section-count">{projects.length}</span>
+		</h2>
+		<ResearchProjectList />
+	</section>
+
+	<section
+		id="project-builds"
+		class="builds-section projects-page__builds mt-10"
+		aria-label="Selected Builds"
+	>
+		<div class="builds-heading">
+			<h2 class="title mb-3 flex items-baseline gap-2 text-xl">
+				<span>Selected Builds</span>
+				<span class="section-count">{buildCount}</span>
+			</h2>
+			<p>Earlier engineering systems and open-source work.</p>
+		</div>
+		<SelectedBuildsList />
+	</section>
+</PageLayout>

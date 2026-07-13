@@ -1,0 +1,110 @@
+---
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import { getEntry } from "astro:content";
+import { projects } from "@/data/projects";
+
+const homeEntry = await getEntry("home", "index");
+if (!homeEntry) throw new Error("Missing content entry: src/content/home/index.yaml");
+const totalProjectCount = projects.length + homeEntry.data.selectedBuilds.length;
+---
+
+<div class="project-carousel" data-project-carousel>
+	<div class="project-carousel__heading">
+		<h2 class="title text-xl">Research Projects</h2>
+		<div class="project-carousel__actions">
+			<a
+				href="/projects/"
+				aria-label="View all projects"
+				class="ui-control group flex items-center gap-x-1.5 px-3 py-1.5"
+			>
+				VIEW ALL {totalProjectCount}
+				<Icon
+					name="lucide:arrow-right"
+					class="func-icon h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+					aria-hidden="true"
+				/>
+			</a>
+			<div class="project-carousel__controls" aria-label="Project carousel controls">
+				<button type="button" data-carousel-previous aria-label="Previous projects">
+					<Icon name="lucide:arrow-left" aria-hidden="true" />
+				</button>
+				<button type="button" data-carousel-next aria-label="Next projects">
+					<Icon name="lucide:arrow-right" aria-hidden="true" />
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="project-carousel__frame">
+		<div
+			class="project-carousel__viewport"
+			data-carousel-viewport
+			tabindex="0"
+			aria-label="Research project cards"
+		>
+			<div class="project-carousel__track">
+				{
+					projects.map((project, index) => (
+						<a class="project-card" href={project.href} aria-label={`Explore ${project.name}`}>
+							<div class="project-card__visual">
+								<Image
+									src={project.cardImage}
+									alt=""
+									width={440}
+									densities={[1, 2]}
+									loading="lazy"
+								/>
+							</div>
+							<div class="project-card__meta">
+								<span>{String(index + 1).padStart(2, "0")}</span>
+								<span>{project.topic}</span>
+								<span>{project.venue}</span>
+							</div>
+							<div class="project-card__title">
+								<h3>{project.name}</h3>
+								<Icon name="lucide:arrow-up-right" aria-hidden="true" />
+							</div>
+							<p>{project.description}</p>
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	function setupProjectCarousels() {
+		document.querySelectorAll<HTMLElement>("[data-project-carousel]").forEach((carousel) => {
+			if (carousel.dataset.ready === "true") return;
+			carousel.dataset.ready = "true";
+
+			const viewport = carousel.querySelector<HTMLElement>("[data-carousel-viewport]");
+			const previous = carousel.querySelector<HTMLButtonElement>("[data-carousel-previous]");
+			const next = carousel.querySelector<HTMLButtonElement>("[data-carousel-next]");
+			const firstCard = carousel.querySelector<HTMLElement>(".project-card");
+			if (!viewport || !previous || !next || !firstCard) return;
+
+			const updateControls = () => {
+				const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+				previous.disabled = viewport.scrollLeft <= 2;
+				next.disabled = viewport.scrollLeft >= maxScroll - 2;
+			};
+
+			const move = (direction: number) => {
+				const track = carousel.querySelector<HTMLElement>(".project-carousel__track");
+				const gap = track ? Number.parseFloat(getComputedStyle(track).columnGap || "0") : 0;
+				viewport.scrollBy({ left: direction * (firstCard.offsetWidth + gap), behavior: "smooth" });
+			};
+
+			previous.addEventListener("click", () => move(-1));
+			next.addEventListener("click", () => move(1));
+			viewport.addEventListener("scroll", updateControls, { passive: true });
+			window.addEventListener("resize", updateControls);
+			updateControls();
+		});
+	}
+
+	setupProjectCarousels();
+</script>

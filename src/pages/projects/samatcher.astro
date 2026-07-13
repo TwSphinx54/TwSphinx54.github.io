@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import { Icon } from "astro-icon/components";
+import ProjectHero from "@/components/ProjectHero.astro";
 import ProjectLayout from "@/layouts/Project.astro";
 import intro from "@/assets/projects/samatcher/sec1_intro.png";
 import pipeline from "@/assets/projects/samatcher/sec3_pipeline.png";
@@ -51,6 +51,35 @@ const bibtex = `@article{pan2026samatcher,
   year={2026}
 }`;
 const cross = ["tl", "tr", "bl", "br"];
+const matchingRows = [
+	["CON+NN", "None", "28.07 43.91 58.91 49.80 66.60 74.80 77.80 49.80 58.20 67.25 70.76 9.77"],
+	["CON+NN", "+OETR", "30.74 47.70 63.45 52.00 72.40 79.80 84.20 52.00 62.20 72.10 75.66 14.27"],
+	["CON+NN", "+SAMatcher", "32.97 50.46 65.79 56.80 73.40 81.20 87.00 56.80 65.10 74.60 79.84 91.31"],
+	["D2+NN", "None", "0.85 1.40 2.29 1.27 2.29 3.31 3.82 1.27 1.78 2.67 9.34 2.23"],
+	["D2+NN", "+OETR", "7.33 12.04 18.11 13.32 20.34 23.97 27.85 13.32 16.83 21.37 34.18 3.07"],
+	["D2+NN", "+SAMatcher", "11.16 19.02 28.37 20.93 31.40 37.91 42.56 20.93 26.16 33.20 49.82 89.99"],
+	["DISK+NN", "None", "5.24 7.92 10.36 8.75 11.41 12.47 14.32 8.75 10.08 11.74 18.77 0.82"],
+	["DISK+NN", "+OETR", "20.63 30.06 38.10 34.58 43.03 45.52 47.76 34.58 38.81 42.72 56.70 4.88"],
+	["DISK+NN", "+SAMatcher", "27.78 40.71 53.36 45.52 59.34 66.75 69.57 45.52 52.43 60.29 75.09 89.65"],
+	["DISK+SG", "None", "25.29 37.49 50.06 43.37 55.82 62.45 68.27 43.37 49.60 57.48 39.50 9.62"],
+	["DISK+SG", "+OETR", "29.66 44.45 58.74 50.80 66.40 73.00 78.20 50.80 58.60 67.10 69.48 15.81"],
+	["DISK+SG", "+SAMatcher", "32.27 48.14 62.79 54.60 70.80 77.20 82.80 54.60 62.70 71.35 78.39 62.82"],
+	["SIFT+NN", "None", "5.85 11.13 19.79 11.20 20.60 28.80 35.00 11.20 15.90 23.90 17.06 85.93"],
+	["SIFT+NN", "+OETR", "10.05 16.91 26.47 18.20 28.80 36.60 41.40 18.20 23.50 31.25 23.32 85.40"],
+	["SIFT+NN", "+SAMatcher", "10.64 20.64 34.02 22.60 37.80 47.20 55.20 22.60 30.20 40.70 27.62 93.61"],
+	["R2D2+NN", "None", "20.47 33.45 47.27 37.60 52.60 61.60 68.00 37.60 45.10 54.95 52.89 87.81"],
+	["R2D2+NN", "+OETR", "30.34 46.03 62.22 51.40 70.00 79.20 83.60 51.40 60.70 71.05 73.59 91.95"],
+	["R2D2+NN", "+SAMatcher", "34.12 52.54 69.07 59.80 78.60 86.00 90.00 59.80 69.20 78.60 82.59 97.23"],
+	["SP+NN", "None", "3.74 5.81 9.64 5.60 10.40 13.40 17.00 5.60 8.00 11.60 17.31 3.94"],
+	["SP+NN", "+OETR", "13.43 21.74 31.63 24.60 35.60 41.60 45.80 24.60 30.10 36.90 40.11 9.54"],
+	["SP+NN", "+SAMatcher", "22.53 36.18 50.42 40.80 56.60 65.60 70.20 40.80 48.70 58.30 60.62 90.61"],
+	["LoFTR", "None", "34.36 48.33 60.79 53.80 68.20 73.20 77.20 53.80 61.00 68.10 55.61 43.91"],
+	["LoFTR", "+OETR", "36.64 53.04 67.30 61.00 75.40 81.60 85.80 61.00 68.20 75.95 74.12 50.06"],
+	["LoFTR", "+SAMatcher", "42.34 58.93 73.74 66.20 83.40 89.00 92.60 66.20 74.80 82.80 93.34 55.11"],
+	["SP+SG", "None", "33.46 49.64 64.75 55.20 71.60 80.80 85.20 55.20 63.40 73.20 85.19 13.54"],
+	["SP+SG", "+OETR", "35.69 51.89 66.36 58.00 74.80 80.60 86.20 58.00 66.40 74.90 90.41 22.66"],
+	["SP+SG", "+SAMatcher", "36.41 54.43 69.97 62.60 79.40 85.20 90.40 62.60 71.00 79.40 94.96 79.49"],
+].map(([pipeline, prior, values]) => ({ pipeline, prior, values: values.split(" ") }));
 ---
 
 <ProjectLayout
@@ -69,53 +98,19 @@ const cross = ["tl", "tr", "bl", "br"];
 	}}
 >
 	<article class="project-page">
-		<header class="project-hero" id="top">
-			<p class="project-kicker">Research project · 2026</p>
-			<h1>SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching</h1>
-			<div class="author-list">
-				{
-					authors.map((author) => (
-						<span>
-							{author.href ? (
-								<a
-									href={author.href}
-									target={author.href.startsWith("http") ? "_blank" : undefined}
-									rel="noreferrer"
-								>
-									{author.name}
-								</a>
-							) : (
-								author.name
-							)}
-							<sup>{author.mark}</sup>
-						</span>
-					))
-				}
-			</div>
-			<ol class="affiliations">{affiliations.map((item) => <li>{item}</li>)}</ol>
-			<p class="corresponding">
-				<sup>†</sup> Equal contribution · <sup>‡</sup> Work done at LIESMARS · <sup>*</sup> Corresponding
-				author
-			</p>
-			<p class="venue">
-				<a href="https://arxiv.org/abs/2606.03406" target="_blank" rel="noreferrer"
-					>arXiv preprint, 2026</a
-				>
-			</p>
-			<div class="project-links">
-				{
-					links.map((link) => (
-						<a class="project-link" href={link.href} target="_blank" rel="noreferrer">
-							<>
-								<Icon name={link.icon} aria-hidden="true" />
-								<span>{link.label}</span>
-								<span aria-hidden="true">↗</span>
-							</>
-						</a>
-					))
-				}
-			</div>
-		</header>
+		<ProjectHero
+			year="2026"
+			title="SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching"
+			{authors}
+			{affiliations}
+			notes={[
+				{ mark: "†", text: "Equal contribution" },
+				{ mark: "‡", text: "Work done at LIESMARS" },
+				{ mark: "*", text: "Corresponding author" },
+			]}
+			venue={{ label: "arXiv preprint, 2026", href: "https://arxiv.org/abs/2606.03406" }}
+			{links}
+		/>
 
 		<section class="project-section" aria-labelledby="abstract-heading">
 			<div class="section-label"><span>01</span><h2 id="abstract-heading">Abstract</h2></div>
@@ -232,57 +227,36 @@ const cross = ["tl", "tr", "bl", "br"];
 						class="table-scroll"
 						tabindex="0"
 						role="region"
-						aria-label="Selected MegaDepth matching results"
+						aria-label="Complete MegaDepth matching results"
 					>
 						<table class="paper-table result-table">
 							<thead
 								><tr
 									><th scope="col">Pipeline</th><th scope="col">Prior</th><th scope="col">AUC@5</th
-									><th scope="col">AUC@10</th><th scope="col">AUC@20</th><th scope="col">mAA@20</th
-									><th scope="col">P</th></tr
+									><th scope="col">AUC@10</th><th scope="col">AUC@20</th><th scope="col">Acc@5</th
+									><th scope="col">Acc@10</th><th scope="col">Acc@15</th><th scope="col">Acc@20</th
+									><th scope="col">mAA@5</th><th scope="col">mAA@10</th><th scope="col">mAA@20</th
+									><th scope="col">P</th><th scope="col">MS</th></tr
 								></thead
-							><tbody>
-								<tr
-									><th scope="row">D2+NN</th><td>None</td><td>0.85</td><td>1.40</td><td>2.29</td><td
-										>2.67</td
-									><td>9.34</td></tr
-								><tr class="ours"
-									><th scope="row">D2+NN</th><td>SAMatcher</td><td><strong>11.16</strong></td><td
-										><strong>19.02</strong></td
-									><td><strong>28.37</strong></td><td><strong>33.20</strong></td><td
-										><strong>49.82</strong></td
-									></tr
-								>
-								<tr
-									><th scope="row">LoFTR</th><td>None</td><td>34.36</td><td>48.33</td><td>60.79</td
-									><td>68.10</td><td>55.61</td></tr
-								><tr class="ours"
-									><th scope="row">LoFTR</th><td>SAMatcher</td><td><strong>42.34</strong></td><td
-										><strong>58.93</strong></td
-									><td><strong>73.74</strong></td><td><strong>82.80</strong></td><td
-										><strong>93.34</strong></td
-									></tr
-								>
-								<tr
-									><th scope="row">SP+SG</th><td>None</td><td>33.46</td><td>49.64</td><td>64.75</td
-									><td>73.20</td><td>85.19</td></tr
-								><tr class="ours"
-									><th scope="row">SP+SG</th><td>SAMatcher</td><td><strong>36.41</strong></td><td
-										><strong>54.43</strong></td
-									><td><strong>69.97</strong></td><td><strong>79.40</strong></td><td
-										><strong>94.96</strong></td
-									></tr
-								>
-							</tbody>
+							><tbody
+								>{matchingRows.map((row) => (
+									<tr class={row.prior === "+SAMatcher" ? "ours" : undefined}>
+										<th scope="row">{row.pipeline}</th><td>{row.prior}</td>{row.values.map(
+											(value) => (
+												<td>{row.prior === "+SAMatcher" ? <strong>{value}</strong> : value}</td>
+											),
+										)}
+									</tr>
+								))}</tbody
+							>
 						</table>
 					</div><figcaption class="table-caption">
-						<strong>Table 1.</strong> Selected MegaDepth results (%). The full paper reports all nine
-						pipelines and additional accuracy thresholds; this compact view preserves the most representative
-						classical, dense, and graph-matching comparisons.
+						<strong>Table 1.</strong> Complete MegaDepth evaluation under large scale differences (%).
+						All nine feature–matcher pipelines are reported without a prior, with OETR, and with SAMatcher.
 					</figcaption>
 				</figure>
 				<figure class="paper-table-figure ablation" data-sync-table-caption>
-					<div class="table-scroll">
+					<div class="table-scroll" tabindex="0" role="region" aria-label="MegaDepth ablation results">
 						<table class="paper-table">
 							<thead
 								><tr
@@ -319,9 +293,11 @@ const cross = ["tl", "tr", "bl", "br"];
 			<div class="results-grid">
 				<figure class="compact paired-result">
 					<div class="figure-media">
-						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`} aria-hidden="true">+</span>)}<Image
 							src={comparison}
 							alt="Relative performance gains"
+							loading="lazy"
+							width={1200}
 						/>
 					</div><figcaption>
 						<strong>Fig. 4.</strong> Ridge-style relative gains on MegaDepth. SAMatcher improves every
@@ -330,9 +306,11 @@ const cross = ["tl", "tr", "bl", "br"];
 				</figure>
 				<figure class="paired-result">
 					<div class="figure-media">
-						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`} aria-hidden="true">+</span>)}<Image
 							src={masks}
 							alt="Co-visible masks"
+							loading="lazy"
+							width={1400}
 						/>
 					</div><figcaption>
 						<strong>Fig. 5.</strong> OETR box predictions versus SAMatcher masks. The learned masks follow
@@ -341,9 +319,11 @@ const cross = ["tl", "tr", "bl", "br"];
 				</figure>
 				<figure class="wide">
 					<div class="figure-media">
-						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`} aria-hidden="true">+</span>)}<Image
 							src={boxes}
 							alt="Region-guided matching"
+							loading="lazy"
+							width={1400}
 						/>
 					</div><figcaption>
 						<strong>Fig. 6.</strong> Region-guided correspondence comparison. Green and red lines denote
@@ -353,9 +333,11 @@ const cross = ["tl", "tr", "bl", "br"];
 				</figure>
 				<figure class="wide">
 					<div class="figure-media">
-						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`} aria-hidden="true">+</span>)}<Image
 							src={corefine}
 							alt="Mask and box co-refinement"
+							loading="lazy"
+							width={1800}
 						/>
 					</div><figcaption>
 						<strong>Fig. 7.</strong> Masks favor recall and boxes provide compact localization. Their
@@ -364,9 +346,11 @@ const cross = ["tl", "tr", "bl", "br"];
 				</figure>
 				<figure class="wide">
 					<div class="figure-media">
-						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`} aria-hidden="true">+</span>)}<Image
 							src={generalization}
 							alt="Zero-shot generalization"
+							loading="lazy"
+							width={1800}
 						/>
 					</div><figcaption>
 						<strong>Fig. 8.</strong> Zero-shot generalization on unseen GL3D (top) and ScanNet (bottom).
@@ -439,101 +423,12 @@ const cross = ["tl", "tr", "bl", "br"];
 	.project-page {
 		width: min(100%, 760px);
 	}
-	.project-hero {
-		padding-bottom: clamp(70px, 9vw, 120px);
-	}
-	.project-kicker,
 	.section-label span {
 		margin: 0 0 22px;
 		color: var(--muted);
 		font: 9px var(--font-mono);
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-	}
-	.project-hero h1 {
-		max-width: 650px;
-		margin: 0 0 52px !important;
-		font-family: var(--font-sans);
-		font-size: clamp(2rem, 2.7vw, 2.25rem) !important;
-		font-weight: 400;
-		line-height: 1.08 !important;
-		letter-spacing: -0.018em;
-	}
-	.author-list {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px 16px;
-		font-family: var(--font-sans);
-		font-size: 13px;
-	}
-	.author-list a,
-	.venue a {
-		text-decoration: underline;
-		text-decoration-color: var(--line-strong);
-		text-underline-offset: 3px;
-	}
-	.author-list a:hover,
-	.venue a:hover {
-		color: var(--signal);
-	}
-	.author-list sup {
-		margin-left: 2px;
-		color: var(--muted);
-		font: 8px var(--font-mono);
-	}
-	.affiliations {
-		display: grid;
-		gap: 5px;
-		margin: 28px 0 0;
-		padding: 0;
-		counter-reset: affiliation;
-		color: var(--muted);
-		font-size: 11px;
-		line-height: 1.5;
-		list-style: none;
-	}
-	.affiliations li {
-		display: grid;
-		grid-template-columns: 20px minmax(0, 1fr);
-	}
-	.affiliations li::before {
-		counter-increment: affiliation;
-		content: counter(affiliation);
-		font: 8px var(--font-mono);
-	}
-	.corresponding {
-		margin: 8px 0 0;
-		color: var(--muted);
-		font-size: 10px;
-	}
-	.venue {
-		margin: 20px 0 0;
-		color: var(--muted);
-		font-size: 12px;
-	}
-	.project-links {
-		display: flex;
-		flex-wrap: wrap;
-		margin-top: 34px;
-		border-block: 1px solid var(--line);
-	}
-	.project-link {
-		display: grid;
-		grid-template-columns: 16px 1fr auto;
-		min-width: 150px;
-		align-items: center;
-		gap: 9px;
-		padding: 13px 14px;
-		border-right: 1px solid var(--line);
-		font: 10px var(--font-mono);
-	}
-	.project-link svg {
-		width: 14px;
-		height: 14px;
-	}
-	.project-link:hover {
-		background: var(--ink);
-		color: var(--paper);
 	}
 	.project-section {
 		width: 100% !important;
@@ -639,7 +534,7 @@ const cross = ["tl", "tr", "bl", "br"];
 	}
 	.evaluation-tables {
 		display: grid;
-		grid-template-columns: repeat(2, max-content);
+		grid-template-columns: minmax(0, 1fr);
 		align-items: start;
 		gap: clamp(20px, 4vw, 42px);
 	}
@@ -890,10 +785,6 @@ const cross = ["tl", "tr", "bl", "br"];
 			width: max-content;
 			max-width: 100%;
 		}
-		.project-hero h1 {
-			font-size: clamp(1.8rem, 8vw, 2.1rem);
-			overflow-wrap: anywhere;
-		}
 		.abstract-figure {
 			width: 50%;
 		}
@@ -926,10 +817,6 @@ const cross = ["tl", "tr", "bl", "br"];
 		}
 		.evaluation-grid {
 			grid-template-columns: 1fr;
-		}
-		.project-links {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
 		}
 	}
 </style>

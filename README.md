@@ -18,7 +18,7 @@ pnpm check
 
 ## Content
 
-Most homepage content is maintained in [`src/content/home/index.yaml`](src/content/home/index.yaml), including publications, news, projects, experience metadata, honors, service, acknowledgements, the introduction, philosophy, and the optional homepage callout.
+Most homepage content is maintained in [`src/content/home/index.yaml`](src/content/home/index.yaml), including publications, news, selected builds, experience metadata, honors, service, acknowledgements, the introduction, philosophy, and the optional homepage callout.
 
 The callout is shown only when it contains text:
 
@@ -28,6 +28,8 @@ callout: |
 ```
 
 Set `callout:` to an empty value, or remove the field, to hide it.
+
+Research project pages and their homepage cards follow [`PROJECT_PAGE_GUIDE.md`](PROJECT_PAGE_GUIDE.md). Add research-project metadata once in `src/data/projects.ts` and use the `<slug>-card.*` naming convention; the homepage carousel, Projects page, and More Works menu update from that shared registry.
 
 ## Structure
 

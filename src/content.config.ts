@@ -37,7 +37,7 @@ const NewsItem = z.object({
 	label: z.string().optional(),
 });
 
-const ProjectEditable = z.object({
+const SelectedBuild = z.object({
 	name: z.string(),
 	description: z.string(),
 	tags: z.array(z.string()).optional(),
@@ -83,7 +83,7 @@ const home = defineCollection({
 	schema: z.object({
 		publicationsEditable: z.array(PublicationEditable).default([]),
 		newsItems: z.array(NewsItem).default([]),
-		projectsEditable: z.array(ProjectEditable).default([]),
+		selectedBuilds: z.array(SelectedBuild).default([]),
 		experienceMeta: z
 			.record(z.string(), z.object({ name: z.string(), link: z.string() }))
 			.optional()

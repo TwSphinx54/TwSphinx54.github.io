@@ -1,0 +1,214 @@
+---
+import { Icon } from "astro-icon/components";
+
+export type ProjectAuthor = {
+	name: string;
+	href?: string;
+	mark?: string;
+};
+
+export type ProjectLink = {
+	label: string;
+	href: string;
+	icon: string;
+};
+
+export type ProjectNote = {
+	mark: string;
+	text: string;
+};
+
+interface Props {
+	year: string;
+	title: string;
+	authors: ProjectAuthor[];
+	affiliations: string[];
+	notes?: ProjectNote[];
+	venue: { label: string; href?: string };
+	links: ProjectLink[];
+}
+
+const { year, title, authors, affiliations, notes = [], venue, links } = Astro.props;
+---
+
+<header class="project-hero" id="top">
+	<p class="project-kicker">Research project · {year}</p>
+	<h1>{title}</h1>
+	<div class="author-list">
+		{
+			authors.map((author) => (
+				<span>
+					{author.href ? (
+						<a
+							href={author.href}
+							target={author.href.startsWith("http") ? "_blank" : undefined}
+							rel={author.href.startsWith("http") ? "noreferrer" : undefined}
+						>
+							{author.name}
+						</a>
+					) : (
+						author.name
+					)}
+					{author.mark ? <sup>{author.mark}</sup> : null}
+				</span>
+			))
+		}
+	</div>
+	<ol class="affiliations">
+		{affiliations.map((affiliation) => <li>{affiliation}</li>)}
+	</ol>
+	{
+		notes.length ? (
+			<p class="corresponding">
+				{notes.map((note, index) => (
+					<>
+						{index > 0 ? " · " : null}
+						<sup>{note.mark}</sup> {note.text}
+					</>
+				))}
+			</p>
+		) : null
+	}
+	<p class="venue">
+		{
+			venue.href ? (
+				<a
+					href={venue.href}
+					target={venue.href.startsWith("http") ? "_blank" : undefined}
+					rel={venue.href.startsWith("http") ? "noreferrer" : undefined}
+				>
+					{venue.label}
+				</a>
+			) : (
+				venue.label
+			)
+		}
+	</p>
+	<div class="project-links">
+		{
+			links.map((link) => (
+				<a
+					class="project-link"
+					href={link.href}
+					target={link.href.startsWith("http") ? "_blank" : undefined}
+					rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+				>
+					<Icon name={link.icon} aria-hidden="true" />
+					<span>{link.label}</span>
+					<Icon name="lucide:arrow-up-right" aria-hidden="true" />
+				</a>
+			))
+		}
+	</div>
+</header>
+
+<style>
+	.project-hero {
+		padding-bottom: clamp(70px, 9vw, 120px);
+	}
+	.project-kicker {
+		margin: 0 0 22px;
+		color: var(--muted);
+		font: 9px var(--font-mono);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	h1 {
+		max-width: 650px;
+		margin: 0 0 52px !important;
+		font: 400 clamp(2rem, 2.7vw, 2.25rem) / 1.08 var(--font-sans) !important;
+		letter-spacing: -0.018em;
+	}
+	.author-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 16px;
+		font: 13px var(--font-sans);
+	}
+	.author-list a,
+	.venue a {
+		text-decoration: underline;
+		text-decoration-color: var(--line-strong);
+		text-underline-offset: 3px;
+	}
+	.author-list a:hover,
+	.venue a:hover {
+		color: var(--signal);
+	}
+	.author-list sup {
+		margin-left: 2px;
+		color: var(--muted);
+		font: 8px var(--font-mono);
+	}
+	.affiliations {
+		display: grid;
+		gap: 5px;
+		margin: 28px 0 0;
+		padding: 0;
+		counter-reset: affiliation;
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.5;
+		list-style: none;
+	}
+	.affiliations li {
+		display: grid;
+		grid-template-columns: 20px minmax(0, 1fr);
+	}
+	.affiliations li::before {
+		counter-increment: affiliation;
+		content: counter(affiliation);
+		font: 8px var(--font-mono);
+	}
+	.corresponding {
+		margin: 8px 0 0;
+		color: var(--muted);
+		font-size: 10px;
+	}
+	.venue {
+		max-width: 720px;
+		margin: 20px 0 0;
+		color: var(--muted);
+		font-size: 12px;
+	}
+	.project-links {
+		display: flex;
+		flex-wrap: wrap;
+		margin-top: 34px;
+		border-block: 1px solid var(--line);
+	}
+	.project-link {
+		display: grid;
+		grid-template-columns: 16px 1fr auto;
+		min-width: 150px;
+		align-items: center;
+		gap: 9px;
+		padding: 13px 14px;
+		border-right: 1px solid var(--line);
+		font: 10px var(--font-mono);
+	}
+	.project-link :global(svg) {
+		width: 14px;
+		height: 14px;
+	}
+	.project-link:hover {
+		background: var(--ink);
+		color: var(--paper);
+	}
+	@media (max-width: 1024px) {
+		h1 {
+			font-size: clamp(1.8rem, 8vw, 2.1rem) !important;
+			overflow-wrap: anywhere;
+		}
+	}
+	@media (max-width: 560px) {
+		.project-links {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+		.project-link {
+			min-width: 0;
+			border-bottom: 1px solid var(--line);
+		}
+	}
+</style>

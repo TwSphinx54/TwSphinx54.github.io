@@ -5,26 +5,16 @@ import PublicationItem from "@/components/PublicationItem.astro";
 import PublicationScripts from "@/components/PublicationScripts.astro";
 import { resolveAsset } from "@/utils/assets";
 
-type PublicationSource = {
-	author?: string[];
-	venueLogo?: string;
-	[key: string]: unknown;
-};
-
-// Load content
 const homeEntry = await getEntry("home", "index");
 if (!homeEntry) throw new Error("Missing content entry: src/content/home/index.yaml");
 
-const publicationsEditable = homeEntry.data.publicationsEditable as PublicationSource[];
-
-// Asset resolution logic (similar to index.astro)
-const publications = publicationsEditable.map((pub) => {
+const publications = homeEntry.data.publicationsEditable.map((pub) => {
 	const vlogo = resolveAsset(pub.venueLogo);
 	return { ...pub, venueLogo: vlogo };
 });
 
-const isFirstAuthorPublication = (pub: { author?: string[] }) => {
-	const firstAuthor = pub.author?.[0]?.replace(/\*/g, "").trim().toLowerCase();
+const isFirstAuthorPublication = (pub: (typeof publications)[number]) => {
+	const firstAuthor = pub.author[0]?.replace(/\*/g, "").trim().toLowerCase();
 	return firstAuthor === "xu pan";
 };
 

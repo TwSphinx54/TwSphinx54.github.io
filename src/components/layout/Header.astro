@@ -3,6 +3,8 @@ import { menuLinks } from "@/site-config";
 import ThemeToggle from "../ThemeToggle.astro";
 
 const url = new URL(Astro.request.url);
+const isCurrentPath = (path: string) =>
+	path === "/" ? url.pathname === "/" : url.pathname.startsWith(path);
 const socialLinks = [
 	{ label: "Email", href: "mailto:panxurs@whu.edu.cn" },
 	{ label: "X", href: "https://x.com/xupan_x" },
@@ -29,7 +31,7 @@ const socialLinks = [
 		{
 			menuLinks.map((link) => (
 				<a
-					aria-current={url.pathname === link.path ? "page" : false}
+					aria-current={isCurrentPath(link.path) ? "page" : false}
 					data-astro-prefetch
 					href={link.path}
 				>
