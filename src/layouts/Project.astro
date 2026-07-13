@@ -27,7 +27,7 @@ const {
 } = Astro.props;
 ---
 
-<html class="scroll-smooth" lang={siteConfig.lang}>
+<html class="project-document scroll-smooth" lang={siteConfig.lang}>
 	<head>
 		<BaseHead articleDate={articleDate} description={description} ogImage={ogImage} title={title} />
 		<script is:inline>
@@ -119,6 +119,27 @@ const {
 		observer.observe(table);
 		observer.observe(scroller);
 	});
+
+	const scrollTimers = new WeakMap<HTMLElement, number>();
+	const revealScrollbar = (scroller: HTMLElement) => {
+		scroller.classList.add("is-scrolling");
+		const previousTimer = scrollTimers.get(scroller);
+		if (previousTimer) window.clearTimeout(previousTimer);
+		scrollTimers.set(
+			scroller,
+			window.setTimeout(() => scroller.classList.remove("is-scrolling"), 700),
+		);
+	};
+	document
+		.querySelectorAll<HTMLElement>(".citation pre")
+		.forEach((scroller) => {
+			scroller.addEventListener(
+				"scroll",
+				() => revealScrollbar(scroller),
+				{ passive: true },
+			);
+		});
+	window.addEventListener("scroll", () => revealScrollbar(document.documentElement), { passive: true });
 </script>
 
 <style is:global>
@@ -253,6 +274,55 @@ const {
 		min-width: 0;
 		padding: var(--content-top) 0 clamp(80px, 10vw, 140px) var(--content-gutter);
 	}
+	.project-document,
+	.project-frame .citation pre {
+		scrollbar-color: transparent transparent;
+		scrollbar-gutter: stable;
+		scrollbar-width: thin;
+	}
+	.project-document::-webkit-scrollbar,
+	.project-frame .citation pre::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
+	}
+	.project-document::-webkit-scrollbar-track,
+	.project-frame .citation pre::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.project-document::-webkit-scrollbar-thumb,
+	.project-frame .citation pre::-webkit-scrollbar-thumb {
+		background: transparent;
+	}
+	.project-document.is-scrolling,
+	.project-frame .citation pre:is(:hover, :focus, :focus-within, .is-scrolling) {
+		scrollbar-color: var(--line-strong) transparent;
+	}
+	.project-document.is-scrolling::-webkit-scrollbar-thumb,
+	.project-frame
+		.citation
+		pre:is(:hover, :focus, :focus-within, .is-scrolling)::-webkit-scrollbar-thumb {
+		background: var(--line-strong);
+	}
+	.project-frame :is(.project-nav, .table-scroll) {
+		-ms-overflow-style: none;
+		scrollbar-gutter: auto !important;
+		scrollbar-width: none !important;
+	}
+	.project-frame :is(.project-nav, .table-scroll)::-webkit-scrollbar {
+		display: none;
+		width: 0;
+		height: 0;
+	}
+	.project-frame .table-scroll table :is(th, td):first-child {
+		position: sticky;
+		left: 0;
+		z-index: 1;
+		background: var(--paper);
+		background-clip: padding-box;
+	}
+	.project-frame .table-scroll table thead :is(th, td):first-child {
+		z-index: 2;
+	}
 	@media (max-width: 1024px) {
 		.project-frame {
 			display: block;
@@ -277,7 +347,6 @@ const {
 			margin: 0;
 			overflow-x: auto;
 			font-size: 12px;
-			scrollbar-width: none;
 		}
 		.project-nav a {
 			white-space: nowrap;
@@ -294,6 +363,17 @@ const {
 		}
 		.project-main {
 			padding: 54px 0 80px;
+		}
+		.project-frame
+			:is(.paper-table-figure, .result-table-figure, .main-results-table, .evaluation-tables) {
+			width: 100% !important;
+			max-width: 100% !important;
+			min-width: 0 !important;
+		}
+		.project-frame .table-scroll {
+			width: 100% !important;
+			max-width: 100% !important;
+			min-width: 0 !important;
 		}
 	}
 </style>

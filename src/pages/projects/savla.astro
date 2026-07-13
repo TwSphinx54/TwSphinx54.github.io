@@ -809,45 +809,11 @@ const bibtex = `@inproceedings{pan2026savla,
 	.table-scroll {
 		max-width: 100%;
 		overflow-x: auto;
-		scrollbar-width: thin;
-		scrollbar-color: transparent transparent;
-		scrollbar-gutter: stable;
 	}
 	.paper-table-figure .table-scroll,
 	.result-table-figure .table-scroll {
 		width: fit-content;
 		max-width: 100%;
-	}
-	.table-scroll::-webkit-scrollbar,
-	.citation pre::-webkit-scrollbar {
-		height: 6px;
-	}
-	.table-scroll:hover,
-	.table-scroll:focus,
-	.citation pre:hover,
-	.citation pre:focus {
-		scrollbar-width: thin;
-		scrollbar-color: var(--line-strong) transparent;
-	}
-	.table-scroll:hover::-webkit-scrollbar,
-	.table-scroll:focus::-webkit-scrollbar,
-	.citation pre:hover::-webkit-scrollbar,
-	.citation pre:focus::-webkit-scrollbar {
-		height: 6px;
-	}
-	.table-scroll::-webkit-scrollbar-track,
-	.citation pre::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	.table-scroll::-webkit-scrollbar-thumb,
-	.citation pre::-webkit-scrollbar-thumb {
-		background: transparent;
-	}
-	.table-scroll:hover::-webkit-scrollbar-thumb,
-	.table-scroll:focus::-webkit-scrollbar-thumb,
-	.citation pre:hover::-webkit-scrollbar-thumb,
-	.citation pre:focus::-webkit-scrollbar-thumb {
-		background: var(--line-strong);
 	}
 	.result-table {
 		width: max-content;
@@ -902,9 +868,6 @@ const bibtex = `@inproceedings{pan2026savla,
 	}
 	.result-table th:first-child,
 	.paper-table th:first-child {
-		position: sticky;
-		left: 0;
-		z-index: 1;
 		background: var(--paper);
 		color: var(--ink);
 		text-align: left;
@@ -1034,8 +997,6 @@ const bibtex = `@inproceedings{pan2026savla,
 	.citation pre {
 		margin: 0;
 		overflow-x: auto;
-		scrollbar-width: thin;
-		scrollbar-color: transparent transparent;
 		scrollbar-gutter: stable;
 		padding: 24px;
 		border: 1px solid var(--line);

@@ -296,7 +296,13 @@ Table requirements:
 - Header cells and the first column have no hover effect.
 - Ordinary data-cell hover uses a neutral gray derived from theme variables.
 - Highlighted rows/columns or emphasized values use the theme signal color on hover.
-- Horizontal table scrollbars remain visually hidden at rest and appear without changing layout height.
+- Horizontal table scrollbars are always visually hidden. Tables remain horizontally scrollable by
+  trackpad, touch, mouse wheel/shift-wheel, and keyboard focus without reserving scrollbar space.
+- Freeze the first cell of every row, whether it is a semantic `<th>` or `<td>`. Horizontal scrolling
+  begins with the second column; all non-first-column header cells move with their columns. Do not
+  freeze the entire header row.
+- First-column freezing is supplied by `ProjectLayout`; do not add page-specific `position: sticky`
+  rules for individual tables.
 
 Common table regressions to check explicitly:
 
@@ -341,7 +347,8 @@ At `max-width: 1024px`:
 - Figures, video, citations, and table wrappers cannot create document-level overflow.
 - Multi-column figure/table groups stack unless they remain genuinely readable.
 - The page title can wrap safely with `overflow-wrap: anywhere` when required.
-- The project navigation remains horizontally scrollable without a permanently visible scrollbar.
+- The project navigation remains horizontally scrollable and never displays a scrollbar, matching
+  the personal homepage navigation behavior.
 
 Do not fix mobile readability by applying an arbitrary narrow percentage width. Mobile body copy is full-width within the page padding.
 
@@ -352,7 +359,11 @@ Do not fix mobile readability by applying an arbitrary narrow percentage width. 
 - Theme switching must never change geometry or cause layout jumps.
 - Reuse the shared `ThemeToggle`; do not create project-specific theme buttons.
 - Home, More Works, and theme controls must remain exactly 30 px high and share the same top coordinate.
-- Scrollbars should remain hidden or minimal at rest and reveal themselves without changing box height or page layout.
+- Project navigation and table scrollbars stay hidden at all times while preserving scrolling.
+- Document and citation-code scrollbars are transparent at rest, appear during scrolling (and for
+  citation-code hover/focus), and disappear again without changing box size or page layout.
+- Any visible scrollbar uses the theme line color, a transparent track, and square ends; do not add
+  `border-radius` to scrollbar thumbs.
 - Interactive controls need visible hover states and useful accessible names.
 
 ## 10. Code-quality rules
