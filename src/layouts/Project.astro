@@ -1,0 +1,300 @@
+---
+import BaseHead from "@/components/BaseHead.astro";
+import SkipLink from "@/components/SkipLink.astro";
+import ThemeProvider from "@/components/ThemeProvider.astro";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import { projects } from "@/data/projects";
+import { siteConfig } from "@/site-config";
+import type { SiteMeta } from "@/types";
+
+interface Props {
+	meta: SiteMeta;
+	projectName?: string;
+	navItems?: { label: string; href: string }[];
+}
+
+const {
+	meta: { articleDate, description = siteConfig.description, ogImage, title },
+	projectName = "SA-VLA",
+	navItems = [
+		{ label: "Abstract", href: "#abstract-heading" },
+		{ label: "Method", href: "#method-heading" },
+		{ label: "Evaluation", href: "#evaluation-heading" },
+		{ label: "Results", href: "#results-heading" },
+		{ label: "In motion", href: "#video-heading" },
+		{ label: "Citation", href: "#citation-heading" },
+		{ label: "References", href: "#references-heading" },
+	],
+} = Astro.props;
+---
+
+<html class="scroll-smooth" lang={siteConfig.lang}>
+	<head>
+		<BaseHead articleDate={articleDate} description={description} ogImage={ogImage} title={title} />
+		<script is:inline>
+			window.MathJax = {
+				tex: {
+					inlineMath: [
+						["$", "$"],
+						["\\(", "\\)"],
+					],
+					displayMath: [
+						["$$", "$$"],
+						["\\[", "\\]"],
+					],
+					processEscapes: true,
+				},
+				options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"] },
+			};
+		</script>
+		<script is:inline async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+		></script>
+	</head>
+	<body>
+		<ThemeProvider />
+		<SkipLink />
+		<div class="project-frame">
+			<header class="project-sidebar">
+				<div class="project-brand">
+					<a href="#top" aria-label={`${projectName} — Back to top`}>{projectName}</a>
+				</div>
+				<nav class="project-nav" aria-label="On this page">
+					{navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+				</nav>
+				<div class="project-sidebar__actions">
+					<a class="project-sidebar__control" href="/">
+						<span aria-hidden="true">←</span>
+						<span>Home</span>
+					</a>
+					<details class="project-works">
+						<summary class="project-sidebar__control">
+							<span>More Works</span>
+							<span class="project-sidebar__chevron" aria-hidden="true"></span>
+						</summary>
+						<nav class="project-works__menu" aria-label="Project pages">
+							{
+								projects.map((project) => (
+									<a
+										href={project.href}
+										aria-current={Astro.url.pathname === project.href ? "page" : undefined}
+									>
+										<>
+											<strong>{project.name}</strong>
+											<span>{project.venue}</span>
+										</>
+									</a>
+								))
+							}
+						</nav>
+					</details>
+					<div class="project-sidebar__theme"><ThemeToggle /></div>
+				</div>
+			</header>
+			<main id="main" class="project-main"><slot /></main>
+		</div>
+	</body>
+</html>
+
+<script>
+	const copyButton = document.querySelector<HTMLButtonElement>("[data-copy-bibtex]");
+	copyButton?.addEventListener("click", async () => {
+		const code = copyButton.parentElement?.querySelector("code")?.textContent ?? "";
+		await navigator.clipboard.writeText(code);
+		copyButton.textContent = "Copied";
+		window.setTimeout(() => (copyButton.textContent = "Copy BibTeX"), 1600);
+	});
+
+	document.querySelectorAll<HTMLElement>("[data-sync-table-caption]").forEach((figure) => {
+		const table = figure.querySelector<HTMLTableElement>("table");
+		const scroller = figure.querySelector<HTMLElement>(".table-scroll");
+		const caption = figure.querySelector<HTMLElement>("figcaption");
+		if (!table || !scroller || !caption) return;
+
+		const syncCaptionWidth = () => {
+			caption.style.inlineSize = `${Math.min(table.getBoundingClientRect().width, scroller.clientWidth)}px`;
+			caption.dataset.sized = "true";
+		};
+
+		requestAnimationFrame(syncCaptionWidth);
+		const observer = new ResizeObserver(syncCaptionWidth);
+		observer.observe(table);
+		observer.observe(scroller);
+	});
+</script>
+
+<style is:global>
+	.project-frame {
+		display: grid;
+		grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+		min-height: 100vh;
+		padding: 8px var(--outer-rail) 0;
+	}
+	.project-sidebar {
+		position: sticky;
+		top: 8px;
+		display: flex;
+		height: calc(100vh - 8px);
+		flex-direction: column;
+		padding: clamp(30px, 7vh, 84px) 32px 32px 0;
+		border-right: 1px solid var(--line);
+	}
+	.project-brand a {
+		font-family: var(--font-sans);
+		font-size: 18px;
+		font-weight: 500;
+		letter-spacing: -0.01em;
+	}
+	.project-nav {
+		position: absolute;
+		top: calc(var(--content-top) + 4.32px);
+		left: 0;
+		display: grid;
+		gap: 0;
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: 14px;
+		line-height: 1;
+	}
+	.project-nav a {
+		padding-bottom: 5px;
+	}
+	.project-nav a:hover {
+		color: var(--signal);
+	}
+	.project-sidebar__actions {
+		display: flex;
+		height: 30px;
+		align-items: stretch;
+		gap: 7px;
+		margin-top: auto;
+		align-self: flex-end;
+	}
+	.project-sidebar__control {
+		display: flex;
+		height: 30px;
+		min-height: 30px;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
+		padding: 0 9px;
+		border: 1px solid var(--line-strong);
+		background: var(--paper);
+		font-family: var(--font-mono);
+		font-size: 9px;
+		cursor: pointer;
+		list-style: none;
+	}
+	.project-sidebar__control::-webkit-details-marker {
+		display: none;
+	}
+	.project-sidebar__control:hover,
+	.project-works[open] > summary {
+		background: var(--ink);
+		color: var(--paper);
+	}
+	.project-sidebar__chevron {
+		width: 5px;
+		height: 5px;
+		border-right: 1px solid currentColor;
+		border-bottom: 1px solid currentColor;
+		transform: translateY(-1px) rotate(45deg);
+	}
+	.project-works[open] .project-sidebar__chevron {
+		transform: translateY(1px) rotate(225deg);
+	}
+	.project-works {
+		position: relative;
+		height: 30px;
+	}
+	.project-sidebar__theme {
+		display: flex;
+		height: 30px;
+		align-items: center;
+	}
+	.project-sidebar__actions .theme-button {
+		flex: 0 0 30px;
+		align-self: center;
+		margin: 0;
+	}
+	.project-works__menu {
+		position: absolute;
+		right: 0;
+		bottom: calc(100% + 8px);
+		z-index: 20;
+		display: grid;
+		width: 176px;
+		border: 1px solid var(--line-strong);
+		background: var(--paper);
+		box-shadow: 0 12px 32px color-mix(in srgb, var(--ink) 12%, transparent);
+	}
+	.project-works__menu a {
+		display: grid;
+		gap: 2px;
+		padding: 10px 12px;
+		font-family: var(--font-sans);
+		font-size: 11px;
+	}
+	.project-works__menu a + a {
+		border-top: 1px solid var(--line);
+	}
+	.project-works__menu a:hover {
+		background: var(--ink);
+		color: var(--paper);
+	}
+	.project-works__menu strong {
+		font-weight: 400;
+	}
+	.project-works__menu span {
+		color: var(--muted);
+		font-family: var(--font-mono);
+		font-size: 8px;
+	}
+	.project-main {
+		width: 100%;
+		min-width: 0;
+		padding: var(--content-top) 0 clamp(80px, 10vw, 140px) var(--content-gutter);
+	}
+	@media (max-width: 1024px) {
+		.project-frame {
+			display: block;
+			padding: 0 18px;
+		}
+		.project-sidebar {
+			position: relative;
+			top: auto;
+			height: auto;
+			display: grid;
+			grid-template-columns: 1fr auto;
+			gap: 24px 12px;
+			padding: 24px 0 18px;
+			border-right: 0;
+			border-bottom: 1px solid var(--line);
+		}
+		.project-nav {
+			position: static;
+			grid-column: 1 / -1;
+			display: flex;
+			gap: 18px;
+			margin: 0;
+			overflow-x: auto;
+			font-size: 12px;
+			scrollbar-width: none;
+		}
+		.project-nav a {
+			white-space: nowrap;
+		}
+		.project-sidebar__actions {
+			grid-column: 2;
+			grid-row: 1;
+			margin: 0;
+			align-self: start;
+		}
+		.project-works__menu {
+			top: calc(100% + 8px);
+			bottom: auto;
+		}
+		.project-main {
+			padding: 54px 0 80px;
+		}
+	}
+</style>

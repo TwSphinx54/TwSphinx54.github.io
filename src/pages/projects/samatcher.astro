@@ -1,0 +1,935 @@
+---
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import ProjectLayout from "@/layouts/Project.astro";
+import intro from "@/assets/projects/samatcher/sec1_intro.png";
+import pipeline from "@/assets/projects/samatcher/sec3_pipeline.png";
+import symfuser from "@/assets/projects/samatcher/sec3_symfuser.png";
+import comparison from "@/assets/projects/samatcher/sec4_comp.png";
+import masks from "@/assets/projects/samatcher/sec4_masks.png";
+import boxes from "@/assets/projects/samatcher/sec4_bboxs.png";
+import corefine from "@/assets/projects/samatcher/sec4_corefine.png";
+import generalization from "@/assets/projects/samatcher/sec4_gen.png";
+
+const authors = [
+	{ name: "Xu Pan", href: "/", mark: "1,2,†,‡" },
+	{ name: "Zhen Pang", mark: "1,†" },
+	{ name: "Qiyuan Ma", href: "https://www.researchgate.net/profile/Qiyuan-Ma-2", mark: "1" },
+	{
+		name: "He Chen",
+		href: "https://www.researchgate.net/scientific-contributions/He-Chen-2315784007",
+		mark: "1",
+	},
+	{ name: "Wei Ji", mark: "3" },
+	{ name: "Shuhan Shen", href: "http://3dv.ac.cn/en/faculty/shs/", mark: "4" },
+	{
+		name: "Xianwei Zheng",
+		href: "https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm",
+		mark: "1,*",
+	},
+];
+const affiliations = [
+	"State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS), Wuhan University",
+	"School of Electrical and Electronic Engineering, Nanyang Technological University",
+	"National Key Laboratory of Space Target Awareness, Space Engineering University",
+	"Institute of Automation, Chinese Academy of Sciences",
+];
+const links = [
+	{ label: "Paper", href: "https://arxiv.org/pdf/2606.03406", icon: "lucide:file-text" },
+	{ label: "Code", href: "https://github.com/TwSphinx54/SAMatcher", icon: "simple-icons:github" },
+	{
+		label: "Model",
+		href: "https://huggingface.co/SSSSphinx/SAMatcher",
+		icon: "simple-icons:huggingface",
+	},
+	{ label: "arXiv", href: "https://arxiv.org/abs/2606.03406", icon: "lucide:external-link" },
+];
+const bibtex = `@article{pan2026samatcher,
+  title={SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching},
+  author={Pan, Xu and Pang, Zhen and Ma, Qiyuan and Chen, He and Ji, Wei and Shen, Shuhan and Zheng, Xianwei},
+  journal={arXiv preprint arXiv:2606.03406},
+  year={2026}
+}`;
+const cross = ["tl", "tr", "bl", "br"];
+---
+
+<ProjectLayout
+	projectName="SAMatcher"
+	navItems={[
+		{ label: "Abstract", href: "#abstract-heading" },
+		{ label: "Method", href: "#method-heading" },
+		{ label: "Evaluation", href: "#evaluation-heading" },
+		{ label: "Results", href: "#results-heading" },
+		{ label: "Citation", href: "#citation-heading" },
+		{ label: "References", href: "#references-heading" },
+	]}
+	meta={{
+		title: "SAMatcher",
+		description: "Co-Visibility Modeling with Segment Anything for Robust Feature Matching.",
+	}}
+>
+	<article class="project-page">
+		<header class="project-hero" id="top">
+			<p class="project-kicker">Research project · 2026</p>
+			<h1>SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching</h1>
+			<div class="author-list">
+				{
+					authors.map((author) => (
+						<span>
+							{author.href ? (
+								<a
+									href={author.href}
+									target={author.href.startsWith("http") ? "_blank" : undefined}
+									rel="noreferrer"
+								>
+									{author.name}
+								</a>
+							) : (
+								author.name
+							)}
+							<sup>{author.mark}</sup>
+						</span>
+					))
+				}
+			</div>
+			<ol class="affiliations">{affiliations.map((item) => <li>{item}</li>)}</ol>
+			<p class="corresponding">
+				<sup>†</sup> Equal contribution · <sup>‡</sup> Work done at LIESMARS · <sup>*</sup> Corresponding
+				author
+			</p>
+			<p class="venue">
+				<a href="https://arxiv.org/abs/2606.03406" target="_blank" rel="noreferrer"
+					>arXiv preprint, 2026</a
+				>
+			</p>
+			<div class="project-links">
+				{
+					links.map((link) => (
+						<a class="project-link" href={link.href} target="_blank" rel="noreferrer">
+							<>
+								<Icon name={link.icon} aria-hidden="true" />
+								<span>{link.label}</span>
+								<span aria-hidden="true">↗</span>
+							</>
+						</a>
+					))
+				}
+			</div>
+		</header>
+
+		<section class="project-section" aria-labelledby="abstract-heading">
+			<div class="section-label"><span>01</span><h2 id="abstract-heading">Abstract</h2></div>
+			<div class="abstract-layout">
+				<p class="project-abstract">
+					Reliable feature matching becomes brittle when two views share only partial content or
+					depict the same structure at very different scales. SAMatcher takes a region-first
+					approach<sup class="citation-mark"><a href="#ref-1">[1]</a></sup>: before estimating point
+					correspondences, it predicts consistent co-visible masks and bounding boxes in a shared
+					cross-view representation. Built on SAM-HQ<sup class="citation-mark"
+						><a href="#ref-2">[2]</a></sup
+					>, the framework combines symmetric cross-view interaction with joint mask, box, and
+					mask–box consistency supervision. The resulting semantic and geometric priors suppress
+					unsupported regions and improve classical, sparse learned, and dense matching pipelines
+					under wide baselines.
+				</p>
+				<figure class="abstract-figure">
+					<div class="figure-media">
+						{
+							cross.map((p) => (
+								<span class={`figure-cross figure-cross--${p}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}<Image src={intro} alt="Motivation for co-visible region modeling" loading="eager" />
+					</div><figcaption>
+						<strong>Fig. 1.</strong> Large scale differences create pixel-level confusion. Explicit co-visible
+						regions retain mutually supported content and constrain matching to geometrically meaningful
+						areas.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="method-heading">
+			<div class="section-label"><span>02</span><h2 id="method-heading">Method</h2></div>
+			<figure class="wide-figure">
+				<div class="figure-media">
+					{
+						cross.map((p) => (
+							<span class={`figure-cross figure-cross--${p}`} aria-hidden="true">
+								+
+							</span>
+						))
+					}<Image src={pipeline} alt="SAMatcher framework" loading="lazy" />
+				</div><figcaption>
+					<strong>Fig. 2.</strong>
+					<strong>Overview of SAMatcher.</strong> A shared encoder extracts both views; symmetric fusion
+					exposes cross-view context; prompt-driven mask and box decoders predict complementary co-visible
+					priors that guide correspondence estimation.
+				</figcaption>
+			</figure>
+			<figure class="detail-figure">
+				<div class="figure-media">
+					{
+						cross.map((p) => (
+							<span class={`figure-cross figure-cross--${p}`} aria-hidden="true">
+								+
+							</span>
+						))
+					}<Image src={symfuser} alt="Symmetric cross-view fuser" loading="lazy" />
+				</div><figcaption>
+					<strong>Fig. 3.</strong>
+					<strong>Symmetric cross-view feature interaction.</strong> Paired views are treated as interacting
+					token sequences with shared parameters and view offsets, enabling bidirectional alignment without
+					discarding view-specific structure.
+				</figcaption>
+			</figure>
+			<div class="method-grid">
+				<article>
+					<span>01</span><h3>Region first</h3><p>
+						Co-visible masks identify dense mutual support; bounding boxes provide a compact
+						geometric envelope. Both are predicted before matching rather than inferred after
+						correspondences fail.
+					</p>
+				</article>
+				<article>
+					<span>02</span><h3>Symmetric interaction</h3><p>
+						Bidirectional feature exchange aligns semantics across views while preserving their
+						distinct spatial layouts, allowing co-visibility to emerge as a relation between images.
+					</p>
+				</article>
+				<article>
+					<span>03</span><h3>Joint constraints</h3><p>
+						Point-sampled mask loss, box regression, and mask–box consistency regularize dense
+						coverage and geometric localization together.
+					</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="evaluation-heading">
+			<div class="section-label"><span>03</span><h2 id="evaluation-heading">Evaluation</h2></div>
+			<p class="project-abstract">
+				We evaluate on MegaDepth<sup class="citation-mark"><a href="#ref-3">[3]</a></sup> image pairs
+				selected for large scale differences, reporting pose AUC, accuracy, and mean Average Accuracy
+				(mAA) at multiple thresholds. SAMatcher is attached to nine representative pipelines—from SIFT
+				and nearest-neighbor matching to SuperGlue<sup class="citation-mark"
+					><a href="#ref-4">[4]</a></sup
+				> and LoFTR<sup class="citation-mark"><a href="#ref-5">[5]</a></sup>—and compared with both
+				the unmodified pipeline and OETR<sup class="citation-mark"><a href="#ref-6">[6]</a></sup> region
+				priors.
+			</p>
+			<div class="evaluation-grid">
+				<div>
+					<strong>+12.95 pp</strong><span>LoFTR AUC@20 gain over its base pipeline</span>
+				</div><div><strong>+14.70 pp</strong><span>LoFTR mAA@20 gain</span></div><div>
+					<strong>78.86 / 82.38</strong><span>full-model mask / box IoU (%)</span>
+				</div>
+			</div>
+			<div class="evaluation-tables">
+				<figure class="paper-table-figure" data-sync-table-caption>
+					<div
+						class="table-scroll"
+						tabindex="0"
+						role="region"
+						aria-label="Selected MegaDepth matching results"
+					>
+						<table class="paper-table result-table">
+							<thead
+								><tr
+									><th scope="col">Pipeline</th><th scope="col">Prior</th><th scope="col">AUC@5</th
+									><th scope="col">AUC@10</th><th scope="col">AUC@20</th><th scope="col">mAA@20</th
+									><th scope="col">P</th></tr
+								></thead
+							><tbody>
+								<tr
+									><th scope="row">D2+NN</th><td>None</td><td>0.85</td><td>1.40</td><td>2.29</td><td
+										>2.67</td
+									><td>9.34</td></tr
+								><tr class="ours"
+									><th scope="row">D2+NN</th><td>SAMatcher</td><td><strong>11.16</strong></td><td
+										><strong>19.02</strong></td
+									><td><strong>28.37</strong></td><td><strong>33.20</strong></td><td
+										><strong>49.82</strong></td
+									></tr
+								>
+								<tr
+									><th scope="row">LoFTR</th><td>None</td><td>34.36</td><td>48.33</td><td>60.79</td
+									><td>68.10</td><td>55.61</td></tr
+								><tr class="ours"
+									><th scope="row">LoFTR</th><td>SAMatcher</td><td><strong>42.34</strong></td><td
+										><strong>58.93</strong></td
+									><td><strong>73.74</strong></td><td><strong>82.80</strong></td><td
+										><strong>93.34</strong></td
+									></tr
+								>
+								<tr
+									><th scope="row">SP+SG</th><td>None</td><td>33.46</td><td>49.64</td><td>64.75</td
+									><td>73.20</td><td>85.19</td></tr
+								><tr class="ours"
+									><th scope="row">SP+SG</th><td>SAMatcher</td><td><strong>36.41</strong></td><td
+										><strong>54.43</strong></td
+									><td><strong>69.97</strong></td><td><strong>79.40</strong></td><td
+										><strong>94.96</strong></td
+									></tr
+								>
+							</tbody>
+						</table>
+					</div><figcaption class="table-caption">
+						<strong>Table 1.</strong> Selected MegaDepth results (%). The full paper reports all nine
+						pipelines and additional accuracy thresholds; this compact view preserves the most representative
+						classical, dense, and graph-matching comparisons.
+					</figcaption>
+				</figure>
+				<figure class="paper-table-figure ablation" data-sync-table-caption>
+					<div class="table-scroll">
+						<table class="paper-table">
+							<thead
+								><tr
+									><th scope="col">Variant</th><th scope="col">Mask IoU (%)</th><th scope="col"
+										>Box IoU (%)</th
+									></tr
+								></thead
+							><tbody
+								><tr><th scope="row">w/o symmetric interaction</th><td>75.06</td><td>71.90</td></tr
+								><tr><th scope="row">w/o joint constraint</th><td>76.67</td><td>80.68</td></tr><tr
+									><th scope="row">w/o view offset</th><td>77.15</td><td>80.74</td></tr
+								><tr class="ours"
+									><th scope="row">Full SAMatcher</th><td><strong>78.86</strong></td><td
+										><strong>82.38</strong></td
+									></tr
+								></tbody
+							>
+						</table>
+					</div><figcaption class="table-caption">
+						<strong>Table 2.</strong> Ablation on MegaDepth. Symmetric interaction contributes most strongly
+						to box localization, while joint constraints and view offsets provide complementary gains.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="results-heading">
+			<div class="section-label"><span>04</span><h2 id="results-heading">Results</h2></div>
+			<p class="results-intro">
+				The quantitative gains are consistent across descriptor families, but the visual evidence
+				explains why: SAMatcher learns mutual visibility rather than image saliency, then uses this
+				support to remove structurally invalid correspondences.
+			</p>
+			<div class="results-grid">
+				<figure class="compact paired-result">
+					<div class="figure-media">
+						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={comparison}
+							alt="Relative performance gains"
+						/>
+					</div><figcaption>
+						<strong>Fig. 4.</strong> Ridge-style relative gains on MegaDepth. SAMatcher improves every
+						evaluated matching configuration more consistently than the box-only OETR prior.
+					</figcaption>
+				</figure>
+				<figure class="paired-result">
+					<div class="figure-media">
+						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={masks}
+							alt="Co-visible masks"
+						/>
+					</div><figcaption>
+						<strong>Fig. 5.</strong> OETR box predictions versus SAMatcher masks. The learned masks follow
+						mutually visible content under large viewpoint changes and partial overlap.
+					</figcaption>
+				</figure>
+				<figure class="wide">
+					<div class="figure-media">
+						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={boxes}
+							alt="Region-guided matching"
+						/>
+					</div><figcaption>
+						<strong>Fig. 6.</strong> Region-guided correspondence comparison. Green and red lines denote
+						correct and incorrect matches; SAMatcher retains valid support where coarse boxes are missing
+						or inaccurate.
+					</figcaption>
+				</figure>
+				<figure class="wide">
+					<div class="figure-media">
+						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={corefine}
+							alt="Mask and box co-refinement"
+						/>
+					</div><figcaption>
+						<strong>Fig. 7.</strong> Masks favor recall and boxes provide compact localization. Their
+						intersection suppresses over-extended predictions and yields a more reliable co-visible region.
+					</figcaption>
+				</figure>
+				<figure class="wide">
+					<div class="figure-media">
+						{cross.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={generalization}
+							alt="Zero-shot generalization"
+						/>
+					</div><figcaption>
+						<strong>Fig. 8.</strong> Zero-shot generalization on unseen GL3D (top) and ScanNet (bottom).
+						The model transfers co-visibility reasoning across outdoor aerial and indoor domains without
+						fine-tuning.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="citation-heading">
+			<div class="section-label"><span>05</span><h2 id="citation-heading">Citation</h2></div><div
+				class="citation"
+			>
+				<pre><code>{bibtex}</code></pre><button class="copy-button" type="button" data-copy-bibtex
+					>Copy BibTeX</button
+				>
+			</div>
+		</section>
+		<section class="project-section" aria-labelledby="references-heading">
+			<div class="section-label"><span>06</span><h2 id="references-heading">References</h2></div><ol
+				class="references-list"
+			>
+				<li id="ref-1">
+					<span
+						>X. Pan, Z. Pang, Q. Ma, et al. “SAMatcher: Co-Visibility Modeling with Segment Anything
+						for Robust Feature Matching.” arXiv:2606.03406, 2026.</span
+					>
+					<a href="https://arxiv.org/abs/2606.03406">arXiv</a>
+				</li>
+				<li id="ref-2">
+					<span
+						>L. Ke, M. Ye, M. Danelljan, et al. “Segment Anything in High Quality.” NeurIPS, 2023.</span
+					>
+					<a href="https://arxiv.org/abs/2306.01567">arXiv</a>
+				</li>
+				<li id="ref-3">
+					<span
+						>Z. Li and N. Snavely. “MegaDepth: Learning Single-View Depth Prediction from Internet
+						Photos.” CVPR, 2018.</span
+					>
+					<a href="https://arxiv.org/abs/1804.00607">arXiv</a>
+				</li>
+				<li id="ref-4">
+					<span
+						>P.-E. Sarlin, D. DeTone, T. Malisiewicz, and A. Rabinovich. “SuperGlue.” CVPR, 2020.</span
+					>
+					<a href="https://arxiv.org/abs/1911.11763">arXiv</a>
+				</li>
+				<li id="ref-5">
+					<span
+						>J. Sun, Z. Shen, Y. Wang, et al. “LoFTR: Detector-Free Local Feature Matching with
+						Transformers.” CVPR, 2021.</span
+					>
+					<a href="https://arxiv.org/abs/2104.00680">arXiv</a>
+				</li>
+				<li id="ref-6">
+					<span
+						>H. Chen, Z. Luo, L. Zhou, et al. “A Span-Based Object-Level Region Proposal Network for
+						Scene Matching.” CVPR, 2022.</span
+					>
+					<a href="https://arxiv.org/abs/2204.06189">arXiv</a>
+				</li>
+			</ol>
+		</section>
+	</article>
+</ProjectLayout>
+
+<style>
+	.project-page {
+		width: min(100%, 760px);
+	}
+	.project-hero {
+		padding-bottom: clamp(70px, 9vw, 120px);
+	}
+	.project-kicker,
+	.section-label span {
+		margin: 0 0 22px;
+		color: var(--muted);
+		font: 9px var(--font-mono);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	.project-hero h1 {
+		max-width: 650px;
+		margin: 0 0 52px !important;
+		font-family: var(--font-sans);
+		font-size: clamp(2rem, 2.7vw, 2.25rem) !important;
+		font-weight: 400;
+		line-height: 1.08 !important;
+		letter-spacing: -0.018em;
+	}
+	.author-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 16px;
+		font-family: var(--font-sans);
+		font-size: 13px;
+	}
+	.author-list a,
+	.venue a {
+		text-decoration: underline;
+		text-decoration-color: var(--line-strong);
+		text-underline-offset: 3px;
+	}
+	.author-list a:hover,
+	.venue a:hover {
+		color: var(--signal);
+	}
+	.author-list sup {
+		margin-left: 2px;
+		color: var(--muted);
+		font: 8px var(--font-mono);
+	}
+	.affiliations {
+		display: grid;
+		gap: 5px;
+		margin: 28px 0 0;
+		padding: 0;
+		counter-reset: affiliation;
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.5;
+		list-style: none;
+	}
+	.affiliations li {
+		display: grid;
+		grid-template-columns: 20px minmax(0, 1fr);
+	}
+	.affiliations li::before {
+		counter-increment: affiliation;
+		content: counter(affiliation);
+		font: 8px var(--font-mono);
+	}
+	.corresponding {
+		margin: 8px 0 0;
+		color: var(--muted);
+		font-size: 10px;
+	}
+	.venue {
+		margin: 20px 0 0;
+		color: var(--muted);
+		font-size: 12px;
+	}
+	.project-links {
+		display: flex;
+		flex-wrap: wrap;
+		margin-top: 34px;
+		border-block: 1px solid var(--line);
+	}
+	.project-link {
+		display: grid;
+		grid-template-columns: 16px 1fr auto;
+		min-width: 150px;
+		align-items: center;
+		gap: 9px;
+		padding: 13px 14px;
+		border-right: 1px solid var(--line);
+		font: 10px var(--font-mono);
+	}
+	.project-link svg {
+		width: 14px;
+		height: 14px;
+	}
+	.project-link:hover {
+		background: var(--ink);
+		color: var(--paper);
+	}
+	.project-section {
+		width: 100% !important;
+		padding: clamp(58px, 6.5vw, 78px) 0 !important;
+	}
+	.project-section::before {
+		display: none;
+	}
+	.section-label {
+		position: relative;
+		margin-bottom: 26px;
+	}
+	.section-label span {
+		position: absolute;
+		top: 0.48em;
+		left: -76px;
+		margin: 0;
+	}
+	.section-label h2 {
+		margin: 0 !important;
+		font-family: var(--font-sans);
+		font-size: 18px !important;
+		font-weight: 400;
+		line-height: 1.3;
+	}
+	.abstract-layout {
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+	}
+	.abstract-figure {
+		width: 50%;
+		margin: 38px 0 0 auto;
+	}
+	.abstract-figure figcaption {
+		font-size: 9px;
+		text-align: right;
+	}
+	.figure-media {
+		position: relative;
+	}
+	figure {
+		margin: 0;
+	}
+	figure img {
+		display: block;
+		width: 100%;
+		height: auto;
+		background: transparent;
+		mix-blend-mode: multiply;
+	}
+	:global(.dark) figure img,
+	:global([data-theme="dark"]) figure img {
+		background: white;
+		mix-blend-mode: normal;
+	}
+	.figure-cross {
+		position: absolute;
+		z-index: 2;
+		color: var(--signal);
+		font: 18px/1 var(--font-mono);
+		opacity: 0;
+	}
+	.figure-media:hover .figure-cross {
+		opacity: 1;
+	}
+	.figure-cross--tl {
+		top: -8px;
+		left: -5px;
+	}
+	.figure-cross--tr {
+		top: -8px;
+		right: -5px;
+	}
+	.figure-cross--bl {
+		bottom: -8px;
+		left: -5px;
+	}
+	.figure-cross--br {
+		right: -5px;
+		bottom: -8px;
+	}
+	figcaption {
+		margin-top: 11px;
+		color: var(--muted);
+		font-size: 10px;
+		line-height: 1.55;
+	}
+	figcaption strong {
+		color: var(--ink);
+		font-weight: 400;
+	}
+	.project-abstract {
+		max-width: var(--reading-width);
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: 13px;
+		line-height: 1.65;
+	}
+	.wide-figure,
+	.detail-figure,
+	.evaluation-tables {
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		margin: 38px 0 0;
+	}
+	.evaluation-tables {
+		display: grid;
+		grid-template-columns: repeat(2, max-content);
+		align-items: start;
+		gap: clamp(20px, 4vw, 42px);
+	}
+	.paper-table-figure {
+		width: max-content;
+		max-width: 100%;
+		margin: 0;
+	}
+	.table-caption {
+		visibility: hidden;
+		inline-size: 0;
+		max-inline-size: 100%;
+	}
+	.table-caption[data-sized] {
+		visibility: visible;
+	}
+	.wide-figure {
+		margin-top: 0;
+		width: calc(var(--reading-width) + var(--profile-width));
+	}
+	.detail-figure {
+		width: calc(var(--reading-width) + 110px);
+	}
+	.method-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0;
+		margin-top: 42px;
+		border-top: 1px solid var(--line);
+	}
+	.method-grid article {
+		min-width: 0;
+		padding: 18px 18px 0 0;
+	}
+	.method-grid article + article {
+		padding-left: 18px;
+		border-left: 1px solid var(--line);
+	}
+	.method-grid article > span {
+		color: var(--muted);
+		font: 9px var(--font-mono);
+	}
+	.method-grid h3 {
+		font-size: 13px;
+	}
+	.method-grid p {
+		font-size: 10px;
+		line-height: 1.55;
+	}
+	.evaluation-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1px;
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		margin-top: 34px;
+		background: var(--line);
+	}
+	.evaluation-grid div {
+		display: grid;
+		gap: 5px;
+		padding: 18px;
+		background: var(--paper);
+	}
+	.evaluation-grid strong {
+		font: 400 18px var(--font-sans);
+	}
+	.evaluation-grid span {
+		color: var(--muted);
+		font-size: 10px;
+	}
+	.table-scroll {
+		width: fit-content;
+		max-width: 100%;
+		overflow-x: auto;
+		scrollbar-gutter: stable;
+	}
+	.paper-table {
+		width: max-content;
+		border-collapse: collapse;
+		border-block: 1px solid var(--ink);
+		font: 10px/1.4 var(--font-sans);
+		font-variant-numeric: tabular-nums;
+		text-align: right;
+	}
+	.paper-table th,
+	.paper-table td {
+		padding: 10px 8px;
+		white-space: nowrap;
+	}
+	.paper-table thead th {
+		border-bottom: 1px solid var(--line-strong);
+		color: var(--muted);
+		font: 9px var(--font-mono);
+		text-transform: uppercase;
+	}
+	.paper-table th:first-child {
+		text-align: left;
+		background: var(--paper);
+	}
+	.paper-table tbody tr + tr {
+		border-top: 1px solid var(--line);
+	}
+	.paper-table tbody td:hover {
+		background: color-mix(in srgb, var(--ink) 7%, var(--paper));
+	}
+	.paper-table .ours {
+		background: color-mix(in srgb, var(--signal) 6%, transparent);
+	}
+	.paper-table .ours th {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper));
+	}
+	.paper-table .ours > td:hover,
+	.paper-table td:has(strong):hover,
+	.paper-table thead th:hover {
+		background: color-mix(in srgb, var(--signal) 14%, var(--paper)) !important;
+	}
+	.paper-table thead th:hover {
+		background: var(--paper) !important;
+		color: var(--muted);
+	}
+	.paper-table tbody :is(th, td):first-child:hover {
+		background: var(--paper) !important;
+	}
+	.paper-table tbody tr.ours :is(th, td):first-child:hover {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper)) !important;
+	}
+	.ablation {
+		width: max-content;
+	}
+	.results-intro {
+		max-width: var(--reading-width);
+	}
+	.results-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 54px 42px;
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		margin-top: 34px;
+	}
+	.results-grid figure {
+		margin: 0;
+	}
+	.results-grid .wide {
+		grid-column: 1/-1;
+	}
+	.results-grid .compact {
+		width: 100%;
+	}
+	.paired-result .figure-media {
+		display: flex;
+		height: clamp(280px, 24vw, 312px);
+		align-items: center;
+		justify-content: center;
+	}
+	.paired-result .figure-media img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+	.results-grid img {
+		width: 100%;
+		height: auto;
+	}
+	.results-grid figcaption,
+	.wide-figure figcaption,
+	.detail-figure figcaption,
+	.paper-table-figure figcaption {
+		font-size: 9px;
+		line-height: 1.5;
+		margin-top: 10px;
+	}
+	.citation {
+		position: relative;
+	}
+	.citation pre {
+		overflow-x: auto;
+		padding: 24px;
+		border: 1px solid var(--line);
+		background: color-mix(in srgb, var(--ink) 4%, transparent);
+		font: 10px/1.7 var(--font-mono);
+	}
+	.copy-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 9px 11px;
+		border: 0;
+		background: var(--ink);
+		color: var(--paper);
+		font: 9px var(--font-mono);
+	}
+	.copy-button:hover {
+		background: var(--signal);
+	}
+	.references-list {
+		max-width: var(--reading-width);
+		padding: 0;
+		counter-reset: r;
+		list-style: none;
+		font-size: 11px;
+		line-height: 1.6;
+	}
+	.references-list li {
+		position: relative;
+		padding-left: 28px;
+		counter-increment: r;
+	}
+	.references-list li + li {
+		margin-top: 10px;
+	}
+	.references-list li:before {
+		content: "[" counter(r) "]";
+		position: absolute;
+		left: 0;
+		color: var(--muted);
+		font: 9px var(--font-mono);
+	}
+	.references-list a,
+	.citation-mark a {
+		color: var(--ink);
+		text-decoration: underline;
+		text-decoration-color: var(--line-strong);
+		text-underline-offset: 3px;
+	}
+	.references-list a:hover,
+	.citation-mark a:hover {
+		color: var(--signal);
+	}
+	.citation-mark {
+		font: 8px var(--font-mono);
+	}
+	@media (max-width: 1024px) {
+		.project-page,
+		.abstract-layout,
+		.wide-figure,
+		.detail-figure,
+		.paper-table-figure,
+		.evaluation-tables,
+		.evaluation-grid,
+		.results-grid {
+			width: 100%;
+			max-width: none;
+		}
+		.evaluation-tables {
+			grid-template-columns: 1fr;
+		}
+		.paper-table-figure {
+			width: max-content;
+			max-width: 100%;
+		}
+		.project-hero h1 {
+			font-size: clamp(1.8rem, 8vw, 2.1rem);
+			overflow-wrap: anywhere;
+		}
+		.abstract-figure {
+			width: 50%;
+		}
+		.method-grid {
+			grid-template-columns: 1fr;
+		}
+		.results-grid {
+			grid-template-columns: 1fr;
+		}
+		.results-grid .wide {
+			grid-column: auto;
+		}
+		.results-grid .compact {
+			width: 100%;
+		}
+		.paired-result .figure-media {
+			height: auto;
+		}
+		.paired-result .figure-media img {
+			height: auto;
+		}
+	}
+	@media (max-width: 560px) {
+		.abstract-layout {
+			display: block;
+		}
+		.abstract-figure {
+			width: 100%;
+			margin: 34px 0 0;
+		}
+		.evaluation-grid {
+			grid-template-columns: 1fr;
+		}
+		.project-links {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+</style>

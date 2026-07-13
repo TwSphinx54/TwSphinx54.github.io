@@ -14,7 +14,7 @@ publicationsEditable:
   #   # doi: "https://doi.org/10.48550/arXiv.2602.00743"
   #   # paper: "https://arxiv.org/abs/2602.00743"
   #   # code: "https://github.com/TwSphinx54/SA-VLA"
-  #   # demo: "https://xupan.top/Projects/savla"
+  #   # demo: "https://xupan.top/projects/savla"
   #   # image: "pubs/pub1_savla.gif"
   #   venueLogo: "icons/neurips.svg"
   #   # venueIcon: "simple-icons:arxiv"
@@ -22,7 +22,18 @@ publicationsEditable:
   #   abstract: >-
   #     ...
 
-  - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Youkai Ke", "Ming Sun", "Rui Wang", "Ziwei Wang", "Ivor Tsang"]
+  - author:
+      [
+        "Xu Pan",
+        "Zhenglin Wan",
+        "Xingrui Yu*",
+        "Xianwei Zheng",
+        "Youkai Ke",
+        "Ming Sun",
+        "Rui Wang",
+        "Ziwei Wang",
+        "Ivor Tsang",
+      ]
     title: "SFM: Spatially-Aware Flow Matching for Embodied Reinforcement Learning"
     # booktitle: "Conference on Robot Learning (CoRL)"
     booktitle: "Under Review"
@@ -33,7 +44,7 @@ publicationsEditable:
     paper: "https://arxiv.org/abs/2602.00743"
     code: "https://github.com/TwSphinx54/SA-VLA"
     huggingface: "https://huggingface.co/SSSSphinx/SA-VLA"
-    site: "https://xupan.top/Projects/savla"
+    site: "/projects/savla/"
     venueIcon: "simple-icons:arxiv"
     venueColor: "#B31B1B"
     abstract: >-
@@ -50,8 +61,19 @@ publicationsEditable:
       benchmarks under spatial distribution shifts, SFM improves spatial robustness, achieving 5.05% gains under 
       viewpoint perturbations while maintaining in-distribution performance.
     selected: true
-  
-  - author: ["Xu Pan", "Zhenglin Wan", "Xingrui Yu*", "Xianwei Zheng", "Youkai Ke", "Ming Sun", "Rui Wang", "Ziwei Wang", "Ivor Tsang"]
+
+  - author:
+      [
+        "Xu Pan",
+        "Zhenglin Wan",
+        "Xingrui Yu*",
+        "Xianwei Zheng",
+        "Youkai Ke",
+        "Ming Sun",
+        "Rui Wang",
+        "Ziwei Wang",
+        "Ivor Tsang",
+      ]
     title: "SA-VLA: Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models"
     booktitle: "IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)"
     time: "2026"
@@ -61,7 +83,7 @@ publicationsEditable:
     paper: "https://arxiv.org/abs/2602.00743"
     code: "https://github.com/TwSphinx54/SA-VLA"
     huggingface: "https://huggingface.co/SSSSphinx/SA-VLA"
-    site: "https://xupan.top/Projects/savla"
+    site: "/projects/savla/"
     venueIcon: "simple-icons:ieee"
     venueColor: "#00629B"
     abstract: >-
@@ -78,7 +100,17 @@ publicationsEditable:
       improves robustness while maintaining in-distribution performance.
     selected: true
 
-  - author: ["Ming Sun", "Rui Wang", "Xingrui Yu*", "Lihua Jing", "Hangyu Du", "Zhenglin Wan", "Xu Pan", "Ivor Tsang"]
+  - author:
+      [
+        "Ming Sun",
+        "Rui Wang",
+        "Xingrui Yu*",
+        "Lihua Jing",
+        "Hangyu Du",
+        "Zhenglin Wan",
+        "Xu Pan",
+        "Ivor Tsang",
+      ]
     title: "Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
     booktitle: "Under Review"
     time: "2026"
@@ -101,7 +133,7 @@ publicationsEditable:
     paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260"
     code: "https://github.com/Geo-Tell/SCoDe"
     huggingface: "https://huggingface.co/SSSSphinx/SCoDe"
-    site: "https://xupan.top/Projects/scode"
+    site: "/projects/scode/"
     venueIcon: "simple-icons:elsevier"
     venueColor: "#FF6C00"
     abstract: >-
@@ -130,7 +162,7 @@ publicationsEditable:
     paper: "https://arxiv.org/abs/2606.03406"
     code: "https://github.com/TwSphinx54/SAMatcher"
     huggingface: "https://huggingface.co/SSSSphinx/SAMatcher"
-    site: "https://xupan.top/Projects/samatcher"
+    site: "/projects/samatcher/"
     venueIcon: "simple-icons:arxiv"
     venueColor: "#B31B1B"
     abstract: >-
@@ -144,7 +176,7 @@ publicationsEditable:
       Extensive experiments on challenging benchmarks demonstrate that SAMatcher significantly improves robustness under large-scale geometric and viewpoint variations.
       These results suggest that monocular visual foundation models can be systematically extended to multi-view correspondence estimation through explicit co-visibility modeling, providing a new perspective on structured representation learning for image matching.
     selected: true
-  
+
   - author: ["Jiashen Huang*", "Yu Jia", "Xu Pan"]
     title: "Institutional Trust and the Domestic AI Advantage: Evidence from DeepSeek and ChatGPT Users in China"
     booktitle: "Chinese Journal of Communication (Under Review)"
@@ -194,12 +226,12 @@ newsItems:
   - date: "Mar 2026"
     html: |
       Our work <strong>SAMatcher</strong> is now available! 
-            <a class="cactus-link" href="https://xupan.top/Projects/samatcher" target="_blank" rel="noopener">[Project]</a> 
-            <a class="cactus-link" href="https://github.com/TwSphinx54/SAMatcher" target="_blank" rel="noopener">[GitHub]</a> 
+            <a class="cactus-link" href="/projects/samatcher/">[Project]</a>
+            <a class="cactus-link" href="https://github.com/TwSphinx54/SAMatcher" target="_blank" rel="noopener">[GitHub]</a>
   - date: "Jan 2026"
     html: |
       Our work <strong>SA-VLA</strong> is now available! 
-            <a class="cactus-link" href="https://xupan.top/Projects/savla" target="_blank" rel="noopener">[Project]</a> 
+            <a class="cactus-link" href="/projects/savla/">[Project]</a>
             <a class="cactus-link" href="https://github.com/TwSphinx54/SA-VLA" target="_blank" rel="noopener">[GitHub]</a> 
             <a class="cactus-link" href="https://arxiv.org/abs/2602.00743" target="_blank" rel="noopener">[arXiv]</a>
   - date: "Nov 2025"
@@ -221,7 +253,7 @@ newsItems:
             supervised by <a class="cactus-link" href="https://scholar.google.com/citations?user=dcakOP4AAAAJ">Dr. Yan Zhang</a>,
             exploring frontier text-to-image and text-to-video generation.
   - date: "Jul 2024"
-    html: "Began collaboration on the SCoDe project under the guidance of <a class=\"cactus-link\" href=\"https://ziminxia.github.io/\">Dr. Zimin Xia</a>."
+    html: 'Began collaboration on the SCoDe project under the guidance of <a class="cactus-link" href="https://ziminxia.github.io/">Dr. Zimin Xia</a>.'
   - date: "Sep 2023"
     html: |
       Enrolled in the Master's program at the State Key Lab. LIESMARS, Wuhan University,
@@ -231,19 +263,34 @@ newsItems:
 projectsEditable:
   - name: "SA-VLA"
     description: "A research project on robust RL adaptation of flow-matching–based VLA models for robotic manipulation, focusing on generalization under challenging distribution shifts."
-    tags: ["Vision-Language-Action Model", "Robotic Manipulation", "Flow-Matching", "Reinforcement Learning"]
+    tags:
+      [
+        "Vision-Language-Action Model",
+        "Robotic Manipulation",
+        "Flow-Matching",
+        "Reinforcement Learning",
+      ]
     time: "2026"
     repo: "https://github.com/TwSphinx54/SA-VLA"
-    site: "https://xupan.top/Projects/savla"
+    site: "/projects/savla/"
     paper: "https://arxiv.org/abs/2602.00743"
     orgLogos: ["whu", "astar", "ntu", "nus", "cas"]
 
   - name: "Co-visibility Guided Image Matching"
     description: "A research project on robust image matching in robot vision, photogrammetry and remote sensing, using explicit co-visibility modeling to handle extreme scale variations."
-    tags: ["Co-visibility", "Image Matching", "3D Vision", "Segmentation", "Photogrammetry", "SCoDe", "SAMatcher"]
+    tags:
+      [
+        "Co-visibility",
+        "Image Matching",
+        "3D Vision",
+        "Segmentation",
+        "Photogrammetry",
+        "SCoDe",
+        "SAMatcher",
+      ]
     time: "2025"
     repo: "https://github.com/Geo-Tell/SCoDe"
-    site: "https://xupan.top/Projects/scode"
+    site: "/projects/scode/"
     paper: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260"
     orgLogos: ["whu", "epfl", "seu", "cas"]
 

@@ -1,0 +1,958 @@
+---
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import ProjectLayout from "@/layouts/Project.astro";
+import intro from "@/assets/projects/scode/intro.png";
+import pipeline from "@/assets/projects/scode/pipeline.png";
+import sha from "@/assets/projects/scode/sec3_sha.png";
+import decoder from "@/assets/projects/scode/sec3_dec.png";
+import confidence from "@/assets/projects/scode/sec3_conf.png";
+import examples from "@/assets/projects/scode/test.png";
+import radarLoftr from "@/assets/projects/scode/sec4_radar_loftr2.png";
+import radarSs from "@/assets/projects/scode/sec4_radar_ss2.png";
+import rotation from "@/assets/projects/scode/sec4_rot2.png";
+import scannet from "@/assets/projects/scode/scannet.png";
+import gl3d from "@/assets/projects/scode/gl3d.png";
+
+const authors = [
+	{ name: "Xu Pan", href: "/", mark: "1" },
+	{ name: "Zimin Xia", href: "https://ziminxia.github.io/", mark: "2" },
+	{
+		name: "Xianwei Zheng",
+		href: "http://cvrs.whu.edu.cn/index.php?m=content&c=index&a=show&catid=173&id=6",
+		mark: "1,*",
+	},
+];
+const affiliations = [
+	"State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS), Wuhan University",
+	"The VITA Lab, École Polytechnique Fédérale de Lausanne (EPFL)",
+];
+const links = [
+	{
+		label: "DOI",
+		href: "https://doi.org/10.1016/j.isprsjprs.2025.08.015",
+		icon: "lucide:file-text",
+	},
+	{ label: "Code", href: "https://github.com/Geo-Tell/SCoDe", icon: "simple-icons:github" },
+	{
+		label: "Model",
+		href: "https://huggingface.co/SSSSphinx/SCoDe",
+		icon: "simple-icons:huggingface",
+	},
+	{
+		label: "Dataset",
+		href: "https://huggingface.co/datasets/SSSSphinx/SCoDe",
+		icon: "lucide:database",
+	},
+	{
+		label: "Paper",
+		href: "https://www.sciencedirect.com/science/article/abs/pii/S0924271625003260",
+		icon: "lucide:book-open",
+	},
+];
+const corners = ["tl", "tr", "bl", "br"];
+const bibtex = `@article{pan2025scode,
+  title={Scale-aware Co-visible Region Detection for Image Matching},
+  author={Pan, Xu and Xia, Zimin and Zheng, Xianwei},
+  journal={ISPRS Journal of Photogrammetry and Remote Sensing},
+  year={2025},
+  doi={10.1016/j.isprsjprs.2025.08.015}
+}`;
+const matchingRows = [
+	["SP+NN", "–", "2.26 3.81 5.91 3.91 6.15 7.64 9.90 3.91 5.03 6.90 11.54 3.13"],
+	["SP+NN", "+OETR", "10.16 16.54 23.55 18.52 26.24 30.77 33.49 18.52 22.38 27.26 31.29 7.92"],
+	["SP+NN", "+SCoDe", "13.75 22.57 32.33 24.49 35.81 42.27 46.34 24.49 30.15 37.23 41.30 10.21"],
+	["DISK+NN", "–", "3.30 4.95 6.70 5.31 7.12 8.29 9.19 5.31 6.22 7.48 16.89 0.52"],
+	["DISK+NN", "+OETR", "21.04 33.35 46.19 37.36 51.80 59.41 64.15 37.36 44.58 53.18 60.88 12.11"],
+	["DISK+NN", "+SCoDe", "23.10 35.81 48.81 40.15 54.67 61.97 67.02 40.15 47.41 55.95 63.72 14.05"],
+	["D2+NN", "–", "0.36 0.61 1.35 0.53 1.05 1.76 2.80 0.53 0.79 1.53 6.12 2.68"],
+	["D2+NN", "+OETR", "4.17 6.73 10.18 7.26 10.90 13.38 16.00 7.26 9.08 11.89 23.10 2.87"],
+	["D2+NN", "+SCoDe", "5.70 9.54 14.53 10.59 15.32 19.38 22.79 10.59 12.95 17.02 29.86 3.23"],
+	["CON+NN", "–", "20.43 32.56 46.10 36.19 51.86 60.08 64.77 36.19 44.03 53.23 61.69 7.68"],
+	["CON+NN", "+OETR", "23.32 37.10 51.29 41.75 57.81 65.78 70.62 41.75 49.78 58.99 67.45 11.21"],
+	["CON+NN", "+SCoDe", "25.63 39.72 53.90 44.58 60.77 68.56 72.94 44.58 52.67 61.71 68.80 12.32"],
+	["ASL+NN", "–", "11.44 19.21 28.79 20.67 31.46 38.67 43.73 20.67 26.07 33.64 38.68 18.40"],
+	["ASL+NN", "+OETR", "21.95 35.94 50.88 40.25 57.20 66.22 71.17 40.25 48.73 58.71 60.89 34.55"],
+	["ASL+NN", "+SCoDe", "23.83 38.28 53.41 42.87 60.39 68.97 73.52 42.87 51.63 61.44 64.55 38.17"],
+	["LoFTR", "–", "25.37 37.82 49.61 42.86 55.44 61.45 66.17 42.86 49.15 56.48 48.21 40.76"],
+	["LoFTR", "+OETR", "31.70 47.14 60.55 53.71 68.73 74.24 77.75 53.71 61.22 68.61 71.22 46.70"],
+	["LoFTR", "+SCoDe", "34.11 50.14 64.35 57.55 72.63 78.72 82.16 57.55 65.09 72.76 76.54 48.42"],
+	["R2D2+NN", "–", "12.86 22.46 33.22 25.34 36.81 44.52 49.13 25.34 31.08 38.95 39.60 85.15"],
+	["R2D2+NN", "+OETR", "24.96 39.90 55.20 44.52 61.85 71.19 75.42 44.52 53.19 63.24 65.09 88.39"],
+	["R2D2+NN", "+SCoDe", "27.20 42.96 58.25 48.60 66.18 74.26 77.99 48.60 57.39 66.76 68.84 88.64"],
+	["DISK+SG", "–", "15.69 25.91 37.27 28.88 42.00 48.79 53.40 28.88 35.44 43.27 35.45 6.98"],
+	["DISK+SG", "+OETR", "21.04 33.35 46.19 37.36 51.80 59.41 64.15 37.36 44.58 53.18 60.88 12.11"],
+	["DISK+SG", "+SCoDe", "23.10 35.81 48.81 40.15 54.67 61.97 67.02 40.15 47.41 55.95 63.72 14.05"],
+	["SP+SG", "–", "25.11 39.23 54.03 44.23 60.33 69.44 74.86 44.23 52.28 62.21 79.14 9.88"],
+	["SP+SG", "+OETR", "29.32 45.56 61.37 51.02 69.02 77.99 82.07 51.02 60.02 70.03 86.17 19.00"],
+	["SP+SG", "+SCoDe", "31.18 48.27 63.77 55.06 72.38 79.85 83.87 55.06 63.72 72.79 87.55 21.51"],
+].map(([pipeline, prior, values]) => ({ pipeline, prior, values: values.split(" ") }));
+---
+
+<ProjectLayout
+	projectName="SCoDe"
+	navItems={[
+		{ label: "Abstract", href: "#abstract-heading" },
+		{ label: "Method", href: "#method-heading" },
+		{ label: "Evaluation", href: "#evaluation-heading" },
+		{ label: "Results", href: "#results-heading" },
+		{ label: "Citation", href: "#citation-heading" },
+		{ label: "References", href: "#references-heading" },
+	]}
+	meta={{
+		title: "SCoDe",
+		description: "Scale-aware Co-visible Region Detection for Image Matching.",
+	}}
+>
+	<article class="project-page">
+		<header class="project-hero" id="top">
+			<p class="project-kicker">Research project · 2025</p>
+			<h1>Scale-aware Co-visible Region Detection for Image Matching</h1>
+			<div class="author-list">
+				{
+					authors.map((author) => (
+						<span>
+							<>
+								<a
+									href={author.href}
+									target={author.href.startsWith("http") ? "_blank" : undefined}
+									rel="noreferrer"
+								>
+									{author.name}
+								</a>
+								<sup>{author.mark}</sup>
+							</>
+						</span>
+					))
+				}
+			</div>
+			<ol class="affiliations">{affiliations.map((affiliation) => <li>{affiliation}</li>)}</ol>
+			<p class="corresponding"><sup>*</sup> Corresponding author</p>
+			<p class="venue">
+				<a
+					href="https://www.sciencedirect.com/journal/isprs-journal-of-photogrammetry-and-remote-sensing"
+					target="_blank"
+					rel="noreferrer">ISPRS Journal of Photogrammetry and Remote Sensing</a
+				>
+			</p>
+			<div class="project-links">
+				{
+					links.map((link) => (
+						<a class="project-link" href={link.href} target="_blank" rel="noreferrer">
+							<>
+								<Icon name={link.icon} aria-hidden="true" />
+								<span>{link.label}</span>
+								<span aria-hidden="true">↗</span>
+							</>
+						</a>
+					))
+				}
+			</div>
+		</header>
+
+		<section class="project-section" aria-labelledby="abstract-heading">
+			<div class="section-label"><span>01</span><h2 id="abstract-heading">Abstract</h2></div>
+			<div class="abstract-layout">
+				<p class="project-abstract">
+					Large scale differences weaken appearance consistency and make keypoint localization
+					uncertain. SCoDe<sup><a href="#ref-1">[1]</a></sup>—Scale-aware Co-visible Region
+					Detector—introduces an intermediate region-level correspondence before point matching: it
+					detects the content jointly visible in both images, aligns those regions in scale, and
+					then confines fine correspondence estimation to them. Scale Head Attention correlates
+					features across multiple scale subspaces, while learnable queries aggregate evidence from
+					both views. This coarse-to-fine formulation improves matching precision by up to 8.41% and
+					remains effective across different matching backbones.
+				</p>
+				<figure class="abstract-figure">
+					<div class="figure-media">
+						{corners.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={intro}
+							alt="Direct point matching and hierarchical SCoDe matching"
+							loading="eager"
+						/>
+					</div><figcaption>
+						<strong>Fig. 1.</strong> Direct point matching remains ambiguous under drastic scale variation.
+						SCoDe first detects and rescales co-visible regions, then establishes fine correspondences
+						within aligned support.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="method-heading">
+			<div class="section-label"><span>02</span><h2 id="method-heading">Method</h2></div>
+			<figure class="pipeline-figure">
+				<div class="figure-media">
+					{corners.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+						src={pipeline}
+						alt="SCoDe architecture"
+					/>
+				</div><figcaption>
+					<strong>Fig. 2.</strong>
+					<strong>SCoDe architecture.</strong> A shared CNN encoder produces paired features; Scale Head
+					Attention exchanges information across scale subspaces; learnable queries decode anchor points,
+					border offsets, and confidence for the co-visible regions.
+				</figcaption>
+			</figure>
+			<figure class="sha-figure">
+				<div class="figure-media">
+					{corners.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+						src={sha}
+						alt="Scale Head Attention"
+					/>
+				</div><figcaption>
+					<strong>Fig. 3.</strong> Scale Head Cross-Attention alternates the query view and projects features
+					through convolution groups with different receptive-field scales.
+				</figcaption>
+			</figure>
+			<div class="method-pair">
+				<figure>
+					<div class="figure-media equal-method">
+						{corners.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={decoder}
+							alt="Learnable query decoder"
+						/>
+					</div><figcaption>
+						<strong>Fig. 4.</strong> The decoder combines self-correlation among learnable queries with
+						cross-attention to scale-aware paired features.
+					</figcaption>
+				</figure>
+				<figure>
+					<div class="figure-media equal-method">
+						{corners.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={confidence}
+							alt="Co-visible confidence head"
+						/>
+					</div><figcaption>
+						<strong>Fig. 5.</strong> Co-visible confidence combines pseudo-cosine similarity with a learnable
+						binary regression branch, allowing the model to reject image pairs without valid shared content.
+					</figcaption>
+				</figure>
+			</div>
+			<div class="method-grid">
+				<article>
+					<span>01</span><h3>Hierarchical matching</h3><p>
+						Region alignment reduces scale and semantic ambiguity before local descriptors establish
+						point correspondences.
+					</p>
+				</article><article>
+					<span>02</span><h3>Scale Head Attention</h3><p>
+						Multiple scale-specific subspaces model correlations that conventional same-scale
+						attention can miss.
+					</p>
+				</article><article>
+					<span>03</span><h3>Validity-aware prediction</h3><p>
+						Anchors, border offsets, and confidence jointly describe where co-visible support exists
+						and whether a valid region should be returned.
+					</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="evaluation-heading">
+			<div class="section-label"><span>03</span><h2 id="evaluation-heading">Evaluation</h2></div>
+			<p class="project-abstract">
+				Training and primary evaluation use MegaDepth<sup><a href="#ref-2">[2]</a></sup>, with 3,000
+				test pairs selected from ten scenes and ray-cast co-visible ground truth. Region detection
+				is measured with confidence recall, IoU recall, overlap IoU (OIoU), and mean IoU. Downstream
+				matching uses pose AUC, accuracy, mAA, precision, and matching score across classical,
+				sparse learned, SuperGlue<sup><a href="#ref-4">[4]</a></sup>, and dense LoFTR<sup
+					><a href="#ref-5">[5]</a></sup
+				> pipelines. We compare region guidance against OETR<sup><a href="#ref-3">[3]</a></sup>.
+				ScanNet<sup><a href="#ref-6">[6]</a></sup> and GL3D<sup><a href="#ref-7">[7]</a></sup> provide
+				qualitative cross-domain tests.
+			</p>
+			<div class="evaluation-grid">
+				<div><strong>81.98%</strong><span>mIoU for co-visible region detection</span></div><div>
+					<strong>99%+</strong><span>confidence recall at all reported thresholds</span>
+				</div><div>
+					<strong>+8.41%</strong><span>maximum downstream matching precision gain</span>
+				</div>
+			</div>
+			<div class="evaluation-tables">
+				<figure class="paper-table-figure" data-sync-table-caption>
+					<div class="table-scroll">
+						<table class="paper-table">
+							<thead
+								><tr><th>Method</th><th>IoU@.5</th><th>IoU@.75</th><th>OIoU@.9</th><th>mIoU</th></tr
+								></thead
+							><tbody
+								><tr><th>OETR*</th><td>87.40</td><td>60.71</td><td>70.90</td><td>76.71</td></tr><tr
+									><th>OETR (cyclecenter)</th><td>90.71</td><td>59.03</td><td>52.36</td><td
+										>77.29</td
+									></tr
+								><tr class="ours"
+									><th>SCoDe</th><td><strong>94.69</strong></td><td><strong>71.43</strong></td><td
+										><strong>74.82</strong></td
+									><td><strong>81.98</strong></td></tr
+								></tbody
+							>
+						</table>
+					</div><figcaption class="table-caption">
+						<strong>Table 1.</strong> Co-visible region detection on MegaDepth (%). OETR* is retrained
+						under the same conditions.
+					</figcaption>
+				</figure>
+				<figure class="paper-table-figure" data-sync-table-caption>
+					<div class="table-scroll">
+						<table class="paper-table">
+							<thead
+								><tr><th>Variant</th><th>mIoU</th><th>Conf</th><th>IoU</th><th>OIoU</th></tr></thead
+							><tbody
+								><tr
+									><th>w/o ScaleHead</th><td>77.29</td><td>98.69</td><td>62.42</td><td>88.61</td
+									></tr
+								><tr><th>w/o DWConv</th><td>78.41</td><td>98.74</td><td>64.03</td><td>87.19</td></tr
+								><tr
+									><th>w/o confidence</th><td>79.86</td><td>–</td><td>66.53</td><td
+										><strong>89.18</strong></td
+									></tr
+								><tr class="ours"
+									><th>SCoDe</th><td><strong>82.02</strong></td><td><strong>99.62</strong></td><td
+										><strong>69.82</strong></td
+									><td>87.66</td></tr
+								></tbody
+							>
+						</table>
+					</div><figcaption class="table-caption">
+						<strong>Table 2.</strong> MegaDepth ablation (%). Recall columns report the mean across their
+						respective thresholds.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="results-heading">
+			<div class="section-label"><span>04</span><h2 id="results-heading">Results</h2></div>
+			<p class="results-intro">
+				SCoDe’s gains grow as scale ratios become more severe: accurate region boundaries remove
+				unrelated content, aligned crops reduce repetitive-pattern ambiguity, and the same prior
+				improves otherwise very different local matching architectures.
+			</p>
+			<figure class="main-results-table" data-sync-table-caption>
+				<div
+					class="table-scroll"
+					tabindex="0"
+					role="region"
+					aria-label="MegaDepth large-scale image matching results"
+				>
+					<table class="paper-table">
+						<thead
+							><tr
+								><th>Pipeline</th><th>Prior</th><th>AUC@5</th><th>AUC@10</th><th>AUC@20</th><th
+									>Acc@5</th
+								><th>Acc@10</th><th>Acc@15</th><th>Acc@20</th><th>mAA@5</th><th>mAA@10</th><th
+									>mAA@20</th
+								><th>P</th><th>MS</th></tr
+							></thead
+						>
+						<tbody
+							>{
+								matchingRows.map((row) => (
+									<tr class={row.prior === "+SCoDe" ? "ours" : undefined}>
+										<th scope="row">{row.pipeline}</th>
+										<td>{row.prior}</td>
+										{row.values.map((value) => (
+											<td>{row.prior === "+SCoDe" ? <strong>{value}</strong> : value}</td>
+										))}
+									</tr>
+								))
+							}</tbody
+						>
+					</table>
+				</div>
+				<figcaption class="table-caption">
+					<strong>Table 3.</strong> Complete MegaDepth evaluation for image pairs with scale ratio greater
+					than 2 (%). Each feature–matcher pipeline is evaluated without a region prior, with OETR, and
+					with SCoDe. SCoDe consistently improves pose estimation, matching precision, and matching score
+					across sparse, graph-based, and dense paradigms.
+				</figcaption>
+			</figure>
+			<div class="results-grid">
+				<figure class="wide">
+					<div class="figure-media">
+						{corners.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={examples}
+							alt="Qualitative MegaDepth comparisons"
+						/>
+					</div><figcaption>
+						<strong>Fig. 6.</strong> MegaDepth qualitative comparison. SCoDe remains accurate when OETR
+						misses small shared regions, shifts the detected area, or returns overly broad support.
+					</figcaption>
+				</figure>
+				<figure>
+					<div class="figure-media square-media">
+						{corners.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={radarLoftr}
+							alt="LoFTR resolution-aware gains"
+						/>
+					</div><figcaption>
+						<strong>Fig. 7.</strong> Relative gains for LoFTR at 480² and 640² input resolutions.
+					</figcaption>
+				</figure>
+				<figure>
+					<div class="figure-media square-media">
+						{corners.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={radarSs}
+							alt="SuperPoint SuperGlue resolution-aware gains"
+						/>
+					</div><figcaption>
+						<strong>Fig. 8.</strong> Relative gains for SuperPoint + SuperGlue. SCoDe remains stable when
+						the input resolution changes.
+					</figcaption>
+				</figure>
+				<figure class="wide">
+					<div class="figure-media">
+						{corners.map((p) => <span class={`figure-cross figure-cross--${p}`}>+</span>)}<Image
+							src={rotation}
+							alt="Rotation robustness"
+						/>
+					</div><figcaption>
+						<strong>Fig. 9.</strong> Correct-match ratio under 0°–50° in-plane rotation. Region constraints
+						improve DISK, R2D2, D2-Net, and SuperPoint without explicit orientation modeling.
+					</figcaption>
+				</figure>
+				<figure class="wide">
+					<div class="domain-pair">
+						<Image src={scannet} alt="ScanNet generalization" /><Image
+							src={gl3d}
+							alt="GL3D generalization"
+						/>
+					</div><figcaption>
+						<strong>Fig. 10.</strong> Generalization to ScanNet indoor scenes (top) and GL3D outdoor/aerial
+						scenes (bottom). Blue boxes are accurate regions; red boxes mark failure cases under extreme
+						scale, viewpoint, or rotation changes.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="citation-heading">
+			<div class="section-label"><span>05</span><h2 id="citation-heading">Citation</h2></div><div
+				class="citation"
+			>
+				<pre><code>{bibtex}</code></pre><button data-copy-bibtex>Copy BibTeX</button>
+			</div>
+		</section>
+		<section class="project-section" aria-labelledby="references-heading">
+			<div class="section-label"><span>06</span><h2 id="references-heading">References</h2></div><ol
+				class="references-list"
+			>
+				<li id="ref-1">
+					X. Pan, Z. Xia, and X. Zheng. “Scale-aware Co-visible Region Detection for Image
+					Matching.” ISPRS JPRS, 2025. <a href="https://doi.org/10.1016/j.isprsjprs.2025.08.015"
+						>DOI</a
+					>
+				</li><li id="ref-2">
+					Z. Li and N. Snavely. “MegaDepth.” CVPR, 2018. <a href="https://arxiv.org/abs/1804.00607"
+						>arXiv</a
+					>
+				</li><li id="ref-3">
+					H. Chen et al. “A Span-Based Object-Level Region Proposal Network for Scene Matching.”
+					CVPR, 2022. <a href="https://arxiv.org/abs/2204.06189">arXiv</a>
+				</li><li id="ref-4">
+					P.-E. Sarlin et al. “SuperGlue.” CVPR, 2020. <a href="https://arxiv.org/abs/1911.11763"
+						>arXiv</a
+					>
+				</li><li id="ref-5">
+					J. Sun et al. “LoFTR.” CVPR, 2021. <a href="https://arxiv.org/abs/2104.00680">arXiv</a>
+				</li><li id="ref-6">
+					A. Dai et al. “ScanNet.” CVPR, 2017. <a href="https://arxiv.org/abs/1702.04405">arXiv</a>
+				</li><li id="ref-7">
+					T. Shen et al. “Matchable Image Retrieval by Learning from Surface Reconstruction.” ACCV,
+					2018. <a href="https://arxiv.org/abs/1811.10343">arXiv</a>
+				</li>
+			</ol>
+		</section>
+	</article>
+</ProjectLayout>
+
+<style>
+	.project-page {
+		width: min(100%, 760px);
+	}
+	.project-hero {
+		padding-bottom: clamp(70px, 9vw, 120px);
+	}
+	.project-kicker,
+	.section-label span {
+		margin: 0 0 22px;
+		color: var(--muted);
+		font: 9px var(--font-mono);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	.project-hero h1 {
+		max-width: 650px;
+		margin: 0 0 52px !important;
+		font: 400 clamp(2rem, 2.7vw, 2.25rem)/1.08 var(--font-sans) !important;
+		letter-spacing: -0.018em;
+	}
+	.author-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 16px;
+		font: 13px var(--font-sans);
+	}
+	.author-list a,
+	.venue a {
+		text-decoration: underline;
+		text-decoration-color: var(--line-strong);
+		text-underline-offset: 3px;
+	}
+	.author-list a:hover,
+	.venue a:hover {
+		color: var(--signal);
+	}
+	.author-list sup {
+		margin-left: 2px;
+		color: var(--muted);
+		font: 8px var(--font-mono);
+	}
+	.affiliations {
+		display: grid;
+		gap: 5px;
+		margin: 28px 0 0;
+		padding: 0;
+		counter-reset: a;
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.5;
+		list-style: none;
+	}
+	.affiliations li {
+		display: grid;
+		grid-template-columns: 20px 1fr;
+	}
+	.affiliations li:before {
+		counter-increment: a;
+		content: counter(a);
+		font: 8px var(--font-mono);
+	}
+	.corresponding {
+		margin: 8px 0 0;
+		color: var(--muted);
+		font-size: 10px;
+	}
+	.venue {
+		margin: 20px 0 0;
+		color: var(--muted);
+		font-size: 12px;
+	}
+	.project-links {
+		display: flex;
+		flex-wrap: wrap;
+		margin-top: 34px;
+		border-block: 1px solid var(--line);
+	}
+	.project-link {
+		display: grid;
+		grid-template-columns: 16px 1fr auto;
+		min-width: 145px;
+		align-items: center;
+		gap: 9px;
+		padding: 13px 14px;
+		border-right: 1px solid var(--line);
+		font: 10px var(--font-mono);
+	}
+	.project-link svg {
+		width: 14px;
+	}
+	.project-link:hover {
+		background: var(--ink);
+		color: var(--paper);
+	}
+	.project-section {
+		width: 100% !important;
+		padding: clamp(58px, 6.5vw, 78px) 0 !important;
+	}
+	.project-section:before {
+		display: none;
+	}
+	.section-label {
+		position: relative;
+		margin-bottom: 26px;
+	}
+	.section-label span {
+		position: absolute;
+		top: 0.48em;
+		left: -76px;
+		margin: 0;
+	}
+	.section-label h2 {
+		margin: 0 !important;
+		font: 400 18px/1.3 var(--font-sans) !important;
+	}
+	.project-abstract {
+		max-width: var(--reading-width);
+		margin: 0;
+		font: 13px/1.65 var(--font-serif);
+	}
+	figure {
+		margin: 0;
+	}
+	figure img {
+		display: block;
+		width: 100%;
+		height: auto;
+		background: transparent;
+		mix-blend-mode: multiply;
+	}
+	:global(.dark) figure img,
+	:global([data-theme="dark"]) figure img {
+		background: #fff;
+		mix-blend-mode: normal;
+	}
+	.figure-media {
+		position: relative;
+	}
+	.figure-cross {
+		position: absolute;
+		z-index: 2;
+		color: var(--signal);
+		font: 15px/1 var(--font-mono);
+		opacity: 0;
+		pointer-events: none;
+	}
+	.figure-cross--tl {
+		top: -7px;
+		left: -6px;
+	}
+	.figure-cross--tr {
+		top: -7px;
+		right: -6px;
+	}
+	.figure-cross--bl {
+		bottom: -7px;
+		left: -6px;
+	}
+	.figure-cross--br {
+		right: -6px;
+		bottom: -7px;
+	}
+	figure:hover .figure-cross {
+		opacity: 1;
+	}
+	figcaption {
+		margin-top: 11px;
+		color: var(--muted);
+		font-size: 10px;
+		line-height: 1.55;
+	}
+	figcaption strong {
+		color: var(--ink);
+		font-weight: 400;
+	}
+	.abstract-layout {
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+	}
+	.abstract-figure {
+		width: 50%;
+		margin: 38px 0 0 auto;
+	}
+	.abstract-figure figcaption {
+		font-size: 9px;
+		text-align: right;
+	}
+	.pipeline-figure {
+		width: calc(var(--reading-width) + var(--profile-width));
+	}
+	.sha-figure {
+		width: calc(var(--reading-width) + var(--profile-width));
+		margin-top: 42px;
+	}
+	.method-pair {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 36px;
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		margin-top: 42px;
+	}
+	.equal-method {
+		display: flex;
+		height: 230px;
+		align-items: center;
+		justify-content: center;
+	}
+	.equal-method img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+	.method-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		margin-top: 38px;
+		border-top: 1px solid var(--line);
+	}
+	.method-grid article {
+		padding: 18px 18px 0 0;
+	}
+	.method-grid article + article {
+		padding-left: 18px;
+		border-left: 1px solid var(--line);
+	}
+	.method-grid article > span {
+		color: var(--muted);
+		font: 9px var(--font-mono);
+	}
+	.method-grid h3 {
+		font: 400 14px var(--font-sans);
+	}
+	.method-grid p {
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.6;
+	}
+	.evaluation-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		max-width: var(--reading-width);
+		margin-top: 34px;
+		border-block: 1px solid var(--line);
+	}
+	.evaluation-grid div {
+		display: grid;
+		gap: 7px;
+		padding: 16px 16px 16px 0;
+	}
+	.evaluation-grid div + div {
+		padding-left: 16px;
+		border-left: 1px solid var(--line);
+	}
+	.evaluation-grid strong {
+		font: 400 18px var(--font-sans);
+	}
+	.evaluation-grid span {
+		color: var(--muted);
+		font-size: 10px;
+	}
+	.evaluation-tables {
+		display: grid;
+		grid-template-columns: repeat(2, max-content);
+		gap: 36px;
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		margin-top: 42px;
+	}
+	.paper-table-figure {
+		width: max-content;
+		max-width: 100%;
+	}
+	.table-scroll {
+		width: fit-content;
+		max-width: 100%;
+		overflow-x: auto;
+		scrollbar-gutter: stable;
+	}
+	.paper-table {
+		width: max-content;
+		border-collapse: collapse;
+		border-block: 1px solid var(--ink);
+		font: 10px/1.4 var(--font-sans);
+		font-variant-numeric: tabular-nums;
+		text-align: right;
+	}
+	.paper-table th,
+	.paper-table td {
+		padding: 10px 8px;
+		white-space: nowrap;
+	}
+	.paper-table thead th {
+		border-bottom: 1px solid var(--line-strong);
+		color: var(--muted);
+		font: 9px var(--font-mono);
+		text-transform: uppercase;
+	}
+	.paper-table th:first-child {
+		text-align: left;
+		background: var(--paper);
+	}
+	.paper-table tbody tr + tr {
+		border-top: 1px solid var(--line);
+	}
+	.paper-table tbody td:hover {
+		background: color-mix(in srgb, var(--ink) 7%, var(--paper));
+	}
+	.paper-table .ours {
+		background: color-mix(in srgb, var(--signal) 6%, transparent);
+	}
+	.paper-table .ours th {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper));
+	}
+	.paper-table .ours > td:hover,
+	.paper-table td:has(strong):hover {
+		background: color-mix(in srgb, var(--signal) 14%, var(--paper)) !important;
+	}
+	.paper-table thead th:hover,
+	.paper-table tbody :is(th, td):first-child:hover {
+		background: var(--paper) !important;
+	}
+	.paper-table tbody tr.ours :first-child:hover {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper)) !important;
+	}
+	.table-caption {
+		visibility: hidden;
+		inline-size: 0;
+		max-inline-size: 100%;
+	}
+	.table-caption[data-sized] {
+		visibility: visible;
+	}
+	.main-results-table {
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		margin-top: 48px;
+	}
+	.main-results-table .paper-table {
+		font-size: 9px;
+	}
+	.main-results-table .paper-table th,
+	.main-results-table .paper-table td {
+		padding: 8px 7px;
+	}
+	.results-intro {
+		max-width: var(--reading-width);
+	}
+	.results-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 54px 42px;
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		margin-top: 34px;
+	}
+	.results-grid .wide {
+		grid-column: 1/-1;
+	}
+	.square-media {
+		display: flex;
+		height: 390px;
+		align-items: center;
+	}
+	.square-media img {
+		height: 100%;
+		object-fit: contain;
+	}
+	.domain-pair {
+		display: grid;
+		gap: 18px;
+	}
+	.citation {
+		position: relative;
+	}
+	.citation pre {
+		overflow: auto;
+		padding: 24px;
+		border: 1px solid var(--line);
+		background: color-mix(in srgb, var(--ink) 4%, transparent);
+		font: 10px/1.7 var(--font-mono);
+	}
+	.citation button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 9px 11px;
+		border: 0;
+		background: var(--ink);
+		color: var(--paper);
+		font: 9px var(--font-mono);
+	}
+	.references-list {
+		max-width: var(--reading-width);
+		padding: 0;
+		counter-reset: r;
+		list-style: none;
+		font-size: 11px;
+		line-height: 1.6;
+	}
+	.references-list li {
+		position: relative;
+		padding-left: 28px;
+		counter-increment: r;
+	}
+	.references-list li + li {
+		margin-top: 10px;
+	}
+	.references-list li:before {
+		content: "[" counter(r) "]";
+		position: absolute;
+		left: 0;
+		color: var(--muted);
+		font: 9px var(--font-mono);
+	}
+	.references-list a,
+	.project-abstract sup a {
+		color: var(--ink);
+		text-decoration: underline;
+		text-decoration-color: var(--line-strong);
+		text-underline-offset: 3px;
+	}
+	@media (max-width: 1024px) {
+		.project-page,
+		.abstract-layout,
+		.pipeline-figure,
+		.sha-figure,
+		.method-pair,
+		.evaluation-tables,
+		.main-results-table,
+		.results-grid {
+			width: 100%;
+			max-width: none;
+		}
+		.project-hero h1 {
+			font-size: clamp(1.8rem, 8vw, 2.1rem) !important;
+		}
+		.abstract-figure {
+			width: 100%;
+			margin-left: 0;
+		}
+		.evaluation-tables,
+		.results-grid {
+			grid-template-columns: 1fr;
+		}
+		.results-grid .wide {
+			grid-column: auto;
+		}
+		.paper-table-figure {
+			width: max-content;
+			max-width: 100%;
+		}
+		.section-label {
+			padding-right: 34px;
+		}
+		.section-label span {
+			left: auto;
+			right: 0;
+		}
+		.square-media,
+		.equal-method {
+			height: auto;
+		}
+		.square-media img,
+		.equal-method img {
+			height: auto;
+		}
+	}
+	@media (max-width: 560px) {
+		.abstract-layout {
+			display: block;
+		}
+		.abstract-figure {
+			width: 100%;
+			margin: 34px 0 0;
+		}
+		.method-pair,
+		.method-grid,
+		.evaluation-grid {
+			grid-template-columns: 1fr;
+		}
+		.method-grid article + article,
+		.evaluation-grid div + div {
+			padding-left: 0;
+			border-left: 0;
+			border-top: 1px solid var(--line);
+		}
+		.project-links {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+</style>

@@ -13,6 +13,10 @@ const meta = {
 <html class="scroll-smooth" lang={siteConfig.lang}>
 	<head>
 		<BaseHead description={meta.description} title={meta.title} />
+		<script is:inline>
+			const legacyProject = window.location.pathname.match(/^\/Projects\/([^/]+)\/?$/);
+			if (legacyProject) window.location.replace(`/projects/${legacyProject[1].toLowerCase()}/`);
+		</script>
 	</head>
 	<body class="error-page">
 		<ThemeProvider />

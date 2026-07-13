@@ -1,0 +1,1295 @@
+---
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import ProjectLayout from "@/layouts/Project.astro";
+import introImage from "@/assets/projects/savla/intro.png";
+import overviewImage from "@/assets/projects/savla/overview.png";
+import fusionImage from "@/assets/projects/savla/fusion.png";
+import evalNoiseImage from "@/assets/projects/savla/eval-noise.png";
+import evalRewardImage from "@/assets/projects/savla/eval-reward.png";
+import radarImage from "@/assets/projects/savla/radar.png";
+import rewardImage from "@/assets/projects/savla/reward.png";
+import trainingImage from "@/assets/projects/savla/training.png";
+
+const authors = [
+	{ name: "Xu Pan", href: "/", mark: "1,2" },
+	{ name: "Zhenglin Wan", href: "https://vanzll.github.io/", mark: "3" },
+	{ name: "Xingrui Yu", href: "https://xingruiyu.github.io/", mark: "2,*" },
+	{
+		name: "Xianwei Zheng",
+		href: "https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm",
+		mark: "1",
+	},
+	{ name: "Youkai Ke", href: "https://openreview.net/profile?id=~Youkai_Ke2", mark: "1" },
+	{ name: "Ming Sun", href: "https://aaronsun2000.github.io/", mark: "4" },
+	{ name: "Rui Wang", href: "https://people.ucas.ac.cn/~wr", mark: "4" },
+	{ name: "Ziwei Wang", href: "https://ziweiwangthu.github.io/", mark: "5" },
+	{
+		name: "Ivor Tsang",
+		href: "https://www.a-star.edu.sg/cfar/about-cfar/management/prof-ivor-tsang",
+		mark: "2",
+	},
+];
+
+const links = [
+	{ label: "Paper", href: "https://arxiv.org/pdf/2602.00743.pdf", icon: "lucide:file-text" },
+	{ label: "Code", href: "https://github.com/TwSphinx54/SA-VLA", icon: "simple-icons:github" },
+	{
+		label: "Model",
+		href: "https://huggingface.co/SSSSphinx/SA-VLA",
+		icon: "simple-icons:huggingface",
+	},
+	{ label: "arXiv", href: "https://arxiv.org/abs/2602.00743", icon: "lucide:external-link" },
+];
+
+const affiliations = [
+	"State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS), Wuhan University",
+	"Centre for Frontier AI Research (CFAR), Institute of High Performance Computing (IHPC), Agency for Science, Technology and Research (A*STAR)",
+	"Department of Computer Science, National University of Singapore",
+	"Institute of Information Engineering, Chinese Academy of Sciences",
+	"School of Electrical and Electronic Engineering, Nanyang Technological University",
+];
+const corners = ["tl", "tr", "bl", "br"];
+
+const results = [
+	{
+		image: evalRewardImage,
+		alt: "Training dynamics on the spatial-perturbation subset",
+		caption:
+			"Training dynamics on the LIBERO-PLUS spatial-perturbation subset. Dense rewards improve convergence stability and generalization under both few-shot (solid) and zero-shot (dashed) evaluation compared with sparse supervision.",
+	},
+	{
+		image: trainingImage,
+		alt: "Training dynamics under limited spatial coverage",
+		caption:
+			"Training dynamics under limited spatial coverage. Dense rewards stabilize optimization, while SCAN further improves performance with reduced variance. Shaded regions denote standard deviation over three seeds.",
+	},
+	{
+		image: evalNoiseImage,
+		alt: "Few-shot evaluation on LIBERO-PLUS",
+		caption:
+			"Few-shot evaluation on LIBERO-PLUS comparing SDE-based and learned exploration noise under sparse and dense rewards. Learned, policy-dependent noise achieves higher success rates with lower variance.",
+	},
+	{
+		image: radarImage,
+		alt: "Robustness improvement over pi 0.5",
+		caption:
+			"Robustness improvement over $\\pi_{0.5}$ in percentage points. CV and RIS are few-shot spatial shifts; the other conditions are zero-shot. SA-VLA provides consistent gains with minimal regressions.",
+	},
+	{
+		image: rewardImage,
+		alt: "Phase-wise dense reward visualization",
+		caption:
+			"Phase-wise dense reward visualization during execution. Reward rises with geometric progress toward the object or target region and falls when actions depart from the intended spatial trajectory.",
+	},
+];
+
+const bibtex = `@inproceedings{pan2026savla,
+  title={SA-VLA: Spatially-Aware Flow-Matching for Vision-Language-Action Reinforcement Learning},
+  author={Xu Pan and Zhenglin Wan and Xingrui Yu and Xianwei Zheng and Youkai Ke and Ming Sun and Rui Wang and Ziwei Wang and Ivor Tsang},
+  booktitle={IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)},
+  year={2026},
+  url={https://arxiv.org/abs/2602.00743}
+}`;
+---
+
+<ProjectLayout
+	meta={{
+		title: "SA-VLA",
+		description: "Spatially-Aware Flow-Matching for Vision-Language-Action Reinforcement Learning.",
+	}}
+>
+	<article class="project-page">
+		<header class="project-hero" id="top">
+			<p class="project-kicker">Research project · 2026</p>
+			<h1>
+				SA-VLA: Spatially-Aware Flow-Matching for Vision-Language-Action Reinforcement Learning
+			</h1>
+			<div class="author-list">
+				{
+					authors.map((author) => (
+						<span>
+							<>
+								<a
+									href={author.href}
+									target={author.href.startsWith("http") ? "_blank" : undefined}
+									rel={author.href.startsWith("http") ? "noreferrer" : undefined}
+								>
+									{author.name}
+								</a>
+								<sup>{author.mark}</sup>
+							</>
+						</span>
+					))
+				}
+			</div>
+			<ol class="affiliations">
+				{affiliations.map((affiliation) => <li>{affiliation}</li>)}
+			</ol>
+			<p class="corresponding"><sup>*</sup> Corresponding author</p>
+			<p class="venue">
+				<a href="https://3d-llm-vla.github.io/" target="_blank" rel="noreferrer">
+					IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) 2026 Workshop on
+					3D-LLM/VLA
+				</a>
+			</p>
+			<div class="project-links">
+				{
+					links.map((link) => (
+						<a class="project-link" href={link.href} target="_blank" rel="noreferrer">
+							<>
+								<Icon name={link.icon} aria-hidden="true" />
+								<span>{link.label}</span>
+								<span aria-hidden="true">↗</span>
+							</>
+						</a>
+					))
+				}
+			</div>
+		</header>
+
+		<section class="project-section" aria-labelledby="abstract-heading">
+			<div class="section-label"><span>01</span><h2 id="abstract-heading">Abstract</h2></div>
+			<div class="abstract-layout">
+				<p class="project-abstract">
+					RL fine-tuning can improve the in-distribution performance of flow-matching
+					Vision-Language-Action policies while eroding their spatial generalization under viewpoint
+					and layout shifts. We trace this failure to representation drift, sparse step-level
+					supervision, and spatially unstructured exploration. SA-VLA restores spatial inductive
+					bias by aligning implicit spatial representations, geometry-consistent dense rewards, and
+					SCAN—spatially-conditioned annealed noise—in a shared latent space. Across cluttered
+					manipulation benchmarks, it improves robustness under spatial shifts while maintaining
+					in-distribution performance.
+				</p>
+				<figure class="abstract-figure">
+					<div class="figure-media">
+						{
+							corners.map((corner) => (
+								<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image
+							src={introImage}
+							alt="Spatial inductive bias collapse and preservation in SA-VLA"
+							loading="eager"
+						/>
+					</div>
+					<figcaption>
+						<strong>Fig. 1.</strong> Naive RL collapses spatial grounding; SA-VLA preserves it under identical
+						perturbations.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="method-heading">
+			<div class="section-label"><span>02</span><h2 id="method-heading">Method</h2></div>
+			<div class="method-figures">
+				<figure class="method-figure method-figure--overview">
+					<div class="figure-media">
+						{
+							corners.map((corner) => (
+								<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image src={overviewImage} alt="Overview of the SA-VLA framework" loading="lazy" />
+					</div>
+					<figcaption>
+						<strong>Fig. 2.</strong>
+						<strong>Overview of SA-VLA.</strong> Visual and spatial tokens are fused into geometry-aware
+						embeddings, then optimized through step-level dense rewards and spatially-conditioned exploration
+						(SCAN) to preserve spatial inductive bias during RL adaptation.
+					</figcaption>
+				</figure>
+				<figure class="method-figure">
+					<div class="figure-media">
+						{
+							corners.map((corner) => (
+								<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+									+
+								</span>
+							))
+						}
+						<Image src={fusionImage} alt="Spatial token fusion module" loading="lazy" />
+					</div>
+					<figcaption>
+						<strong>Fig. 3.</strong> Visual tokens attend to multi-view spatial tokens through unidirectional
+						cross-attention. A learnable channel-wise gate controls the injection of geometry before the
+						frozen VLM backbone.
+					</figcaption>
+				</figure>
+			</div>
+			<div class="method-grid">
+				<article>
+					<span>01</span><h3>Spatial token fusion</h3><p>
+						Implicit multi-view spatial tokens are projected into the visual embedding space and
+						fused before the frozen VLM. The asymmetric attention path and gated residual preserve
+						pretrained semantics while adding layout and view cues.
+					</p>
+				</article>
+				<article>
+					<span>02</span><h3>SCAN exploration</h3><p>
+						SCAN predicts action-noise scale from the geometry-aware latent and maintains an
+						annealed lower bound. It explores uncertain, contact-sensitive states without letting
+						stochasticity collapse during training.
+					</p>
+				</article>
+				<article>
+					<span>03</span><h3>Dense spatial reward</h3><p>
+						A phase-conditioned reward decomposes manipulation into Approach, Relation–Actuation,
+						and Stabilize. It provides geometric credit assignment from relative distances, contact
+						state, and task progress.
+					</p>
+				</article>
+			</div>
+			<figure class="paper-table-figure">
+				<div
+					class="table-scroll"
+					tabindex="0"
+					role="region"
+					aria-label="Unified goal modeling examples"
+				>
+					<table class="paper-table goal-table">
+						<thead
+							><tr
+								><th scope="col">Instruction example</th><th scope="col">Family</th><th scope="col"
+									>Goal specification</th
+								></tr
+							></thead
+						>
+						<tbody>
+							<tr
+								><td
+									>Pick the akita black bowl between the plate and ramekin and place it on the
+									plate.</td
+								><td>place</td><td><code>place[On](akita_black_bowl_1 → plate_1)</code></td></tr
+							>
+							<tr
+								><td>Open the middle layer of the drawer.</td><td>interact</td><td
+									><code>interact[Open](wooden_cabinet_1_middle_region)</code></td
+								></tr
+							>
+							<tr
+								><td>Turn on the stove.</td><td>interact</td><td
+									><code>interact[TurnOn](flat_stove_1)</code></td
+								></tr
+							>
+							<tr
+								><td>Turn on the stove and put the moka pot on it.</td><td>multi-goal</td><td
+									><code
+										>interact[TurnOn](flat_stove_1); place[On](moka_pot_1 →
+										flat_stove_1_cook_region)</code
+									></td
+								></tr
+							>
+						</tbody>
+					</table>
+				</div>
+				<figcaption>
+					<strong>Table 1.</strong> Examples of unified goal modeling used by the dense reward module.
+				</figcaption>
+			</figure>
+		</section>
+
+		<section class="project-section" aria-labelledby="evaluation-heading">
+			<div class="section-label"><span>03</span><h2 id="evaluation-heading">Evaluation</h2></div>
+			<p class="project-abstract">
+				We evaluate on LIBERO<sup class="citation-mark"><a href="#ref-3">[3]</a></sup> and LIBERO-PLUS<sup
+					class="citation-mark"><a href="#ref-4">[4]</a></sup
+				>, with camera-view (CV) and robot-initial-state (RIS) shifts that respectively alter
+				observation geometry and action feasibility. Few-shot adaptation uses three demonstrations
+				per task-shift pair, yielding 60 evaluation configurations. All models are initialized from
+				a {"$\\pi_{0.5}$"} flow-matching policy and optimized with PPO; the VLM backbone remains frozen.
+			</p>
+			<div class="evaluation-grid">
+				<div>
+					<strong>+2.25 pp</strong><span
+						>zero-shot total gain from spatial token fusion before RL</span
+					>
+				</div>
+				<div>
+					<strong>90.14%</strong><span>overall robustness for SA-VLA across perturbations</span>
+				</div>
+				<div>
+					<strong>83.75%</strong><span>few-shot success in the full-model ablation setting</span>
+				</div>
+			</div>
+			<div class="evidence-tables">
+				<figure class="paper-table-figure" data-sync-table-caption>
+					<div
+						class="table-scroll"
+						tabindex="0"
+						role="region"
+						aria-label="Spatial representation results"
+					>
+						<table class="paper-table">
+							<thead
+								><tr
+									><th scope="col">Method</th><th scope="col">CV</th><th scope="col">RIS</th><th
+										scope="col">Total</th
+									></tr
+								></thead
+							>
+							<tbody
+								><tr
+									><th scope="row">{"$\\pi_{0.5}$"} baseline</th><td>78.47</td><td>83.77</td><td
+										>81.00</td
+									></tr
+								><tr class="paper-table__ours"
+									><th scope="row">SA-VLA w/ spatial fusion</th><td><strong>82.30</strong></td><td
+										><strong>84.29</strong></td
+									><td><strong>83.25</strong></td></tr
+								></tbody
+							>
+						</table>
+					</div>
+					<figcaption class="evidence-caption">
+						<strong>Table 2.</strong> Zero-shot success rate (%) on the LIBERO-PLUS<sup
+							class="citation-mark"><a href="#ref-4">[4]</a></sup
+						> spatial-perturbation subset, before RL adaptation.
+					</figcaption>
+				</figure>
+				<figure class="paper-table-figure" data-sync-table-caption>
+					<div
+						class="table-scroll"
+						tabindex="0"
+						role="region"
+						aria-label="Leave-one-out ablation results"
+					>
+						<table class="paper-table">
+							<thead
+								><tr
+									><th scope="col">Method</th><th scope="col">SCAN</th><th scope="col">DR</th><th
+										scope="col">Fusion</th
+									><th scope="col">SR (%)</th></tr
+								></thead
+							>
+							<tbody
+								><tr
+									><th scope="row">{"$\\pi_{0.5}$"} baseline</th><td>–</td><td>–</td><td>–</td><td
+										>81.00</td
+									></tr
+								><tr><th scope="row">w/o Fusion</th><td>–</td><td>✓</td><td>–</td><td>81.75</td></tr
+								><tr><th scope="row">w/o DR</th><td>–</td><td>–</td><td>✓</td><td>77.50</td></tr><tr
+									><th scope="row">w/o SCAN</th><td>–</td><td>✓</td><td>✓</td><td>83.00</td></tr
+								><tr class="paper-table__ours"
+									><th scope="row">SA-VLA</th><td>✓</td><td>✓</td><td>✓</td><td
+										><strong>83.75</strong></td
+									></tr
+								></tbody
+							>
+						</table>
+					</div>
+					<figcaption class="evidence-caption">
+						<strong>Table 3.</strong> Leave-one-out ablation on the LIBERO-PLUS<sup
+							class="citation-mark"><a href="#ref-4">[4]</a></sup
+						> few-shot spatial-perturbation setting.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="results-heading">
+			<div class="section-label"><span>04</span><h2 id="results-heading">Results</h2></div>
+			<div class="results-intro">
+				<p>
+					We separate three questions: whether dense feedback stabilizes optimization, whether
+					structured noise improves coverage under sparse data, and whether the resulting policy
+					transfers across heterogeneous perturbations. The sequence below follows that progression.
+				</p>
+			</div>
+			<div class="results-grid">
+				{
+					results.slice(0, 4).map((result, index) => (
+						<figure class={`result-card result-card--${index}`}>
+							<>
+								<div class="figure-media">
+									{corners.map((corner) => (
+										<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+											+
+										</span>
+									))}
+									<Image src={result.image} alt={result.alt} loading="lazy" />
+								</div>
+								<figcaption>
+									<strong>Fig. {index + 4}.</strong> {result.caption}
+									{index === 3 && (
+										<sup class="citation-mark">
+											<a href="#ref-1">[1]</a>
+										</sup>
+									)}
+								</figcaption>
+							</>
+						</figure>
+					))
+				}
+				<figure class="result-table-figure">
+					<div
+						class="table-scroll"
+						tabindex="0"
+						role="region"
+						aria-label="Robustness results table"
+					>
+						<table class="result-table">
+							<thead
+								><tr
+									><th scope="col">Methods</th><th scope="col">Total</th><th scope="col">BT</th><th
+										scope="col">CV<sup>†</sup></th
+									><th scope="col">LI</th><th scope="col">LC</th><th scope="col">OL</th><th
+										scope="col">RIS<sup>†</sup></th
+									><th scope="col">SN</th></tr
+								></thead
+							>
+							<tbody>
+								<tr
+									><th scope="row">{"$\\pi_{0.5}$"}</th><td><u>88.96</u></td><td><u>100.0</u></td
+									><td>82.16</td><td><strong>88.63</strong></td><td><u>98.54</u></td><td
+										><u>100.0</u></td
+									><td><strong>83.74</strong></td><td>87.93</td></tr
+								>
+								<tr
+									><th scope="row">ReinFlow</th><td>87.92 <span>± 0.81</span></td><td
+										>97.53 <span>± 0.53</span></td
+									><td><u>84.32</u> <span>± 0.94</span></td><td
+										>84.20 <span>± <strong>1.45</strong></span></td
+									><td>97.32 <span>± 1.69</span></td><td>100.0 <span>± 0.00</span></td><td
+										>79.15 <span>± 1.58</span></td
+									><td><u>92.72</u> <span>± 2.32</span></td></tr
+								>
+								<tr class="result-table__ours"
+									><th scope="row">SA-VLA</th><td
+										><strong>90.14</strong> <span>± <strong>0.35</strong></span></td
+									><td><strong>100.0</strong> <span>± <strong>0.00</strong></span></td><td
+										><strong>87.21</strong> <span>± <strong>0.31</strong></span></td
+									><td><u>86.10</u> <span>± 1.52</span></td><td
+										><strong>98.54</strong> <span>± <strong>1.26</strong></span></td
+									><td><strong>100.0</strong> <span>± <strong>0.00</strong></span></td><td
+										><u>83.09</u> <span>± <strong>0.57</strong></span></td
+									><td><strong>93.30</strong> <span>± <strong>1.85</strong></span></td></tr
+								>
+							</tbody>
+						</table>
+					</div>
+					<figcaption>
+						<strong>Table 4.</strong> Robustness under diverse perturbations. We evaluate {
+							"$\\pi_{0.5}$"
+						}<sup class="citation-mark"><a href="#ref-1">[1]</a></sup>, ReinFlow<sup
+							class="citation-mark"><a href="#ref-2">[2]</a></sup
+						>, and SA-VLA. Results report success rate in % (mean {"$\\pm$"} std). CV and RIS are few-shot
+						spatial shifts; others are zero-shot. Total is averaged across all conditions. <span
+							class="table-note"><sup>†</sup> Few-shot spatial shift.</span
+						>
+					</figcaption>
+				</figure>
+				{
+					results.slice(4).map((result) => (
+						<figure class="result-card result-card--reward">
+							<div class="figure-media">
+								{corners.map((corner) => (
+									<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+										+
+									</span>
+								))}
+								<Image src={result.image} alt={result.alt} loading="lazy" />
+							</div>
+							<figcaption>
+								<strong>Fig. 8.</strong> {result.caption}
+							</figcaption>
+						</figure>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="video-heading">
+			<div class="section-label"><span>05</span><h2 id="video-heading">In motion</h2></div>
+			<figure class="video-figure">
+				<video controls muted loop playsinline preload="metadata"
+					><source src="/projects/savla/video.mp4" type="video/mp4" /></video
+				><figcaption>
+					Representative rollouts under spatial perturbations. Eight keyframes are uniformly sampled
+					from each successful episode; despite camera-view and robot-initial-state variation, the
+					policy maintains coherent task progression and completes the intended manipulation.
+				</figcaption>
+			</figure>
+		</section>
+
+		<section class="project-section" aria-labelledby="citation-heading">
+			<div class="section-label"><span>06</span><h2 id="citation-heading">Citation</h2></div>
+			<div class="citation">
+				<pre><code>{bibtex}</code></pre><button class="copy-button" type="button" data-copy-bibtex
+					>Copy BibTeX</button
+				>
+			</div>
+		</section>
+
+		<section class="project-section references-section" aria-labelledby="references-heading">
+			<div class="section-label"><span>07</span><h2 id="references-heading">References</h2></div>
+			<ol class="references-list">
+				<li id="ref-1">
+					<span
+						>Physical Intelligence, K. Black, N. Brown, et al. “{"$\\pi_{0.5}$"}: A
+						Vision-Language-Action Model with Open-World Generalization.” arXiv:2504.16054, 2025.</span
+					>
+					<a href="https://arxiv.org/abs/2504.16054" target="_blank" rel="noreferrer">arXiv</a>
+				</li>
+				<li id="ref-2">
+					<span
+						>T. Zhang, C. Yu, S. Su, and Y. Wang. “ReinFlow: Fine-tuning Flow Matching Policy with
+						Online Reinforcement Learning.” NeurIPS, 2025.</span
+					>
+					<a href="https://arxiv.org/abs/2505.22094" target="_blank" rel="noreferrer">arXiv</a>
+				</li>
+				<li id="ref-3">
+					<span
+						>B. Liu, Y. Zhu, C. Gao, et al. “LIBERO: Benchmarking Knowledge Transfer for Lifelong
+						Robot Learning.” NeurIPS, 2023.</span
+					>
+					<a href="https://arxiv.org/abs/2306.03310" target="_blank" rel="noreferrer">arXiv</a>
+				</li>
+				<li id="ref-4">
+					<span
+						>S. Fei, S. Wang, J. Shi, et al. “LIBERO-Plus: In-depth Robustness Analysis of
+						Vision-Language-Action Models.” arXiv:2510.13626, 2025.</span
+					>
+					<a href="https://arxiv.org/abs/2510.13626" target="_blank" rel="noreferrer">arXiv</a>
+				</li>
+			</ol>
+		</section>
+	</article>
+</ProjectLayout>
+
+<style>
+	.project-page {
+		width: min(100%, 760px);
+		margin: 0;
+	}
+	.project-hero {
+		padding-bottom: clamp(70px, 9vw, 120px);
+	}
+	.project-kicker,
+	.section-label span {
+		margin: 0 0 22px;
+		color: var(--muted);
+		font-family: var(--font-mono);
+		font-size: 9px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	.project-hero h1 {
+		max-width: 650px;
+		margin: 0 0 52px !important;
+		font-family: var(--font-sans);
+		font-size: clamp(2rem, 2.7vw, 2.25rem) !important;
+		font-weight: 400;
+		line-height: 1.08 !important;
+		letter-spacing: -0.018em;
+	}
+	.author-list {
+		display: flex;
+		max-width: 860px;
+		flex-wrap: wrap;
+		gap: 4px 16px;
+		font-family: var(--font-sans);
+		font-size: 13px;
+	}
+	.author-list a {
+		text-decoration: underline;
+		text-decoration-color: var(--line-strong);
+		text-underline-offset: 3px;
+	}
+	.author-list a:hover {
+		color: var(--signal);
+	}
+	.author-list sup {
+		margin-left: 2px;
+		color: var(--muted);
+		font-family: var(--font-mono);
+		font-size: 8px;
+	}
+	.affiliations {
+		display: grid;
+		width: 100%;
+		max-width: none;
+		gap: 5px;
+		margin: 28px 0 0;
+		padding: 0;
+		counter-reset: affiliation;
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.5;
+		list-style: none;
+	}
+	.affiliations li {
+		display: grid;
+		grid-template-columns: 20px minmax(0, 1fr);
+	}
+	.affiliations li::before {
+		counter-increment: affiliation;
+		content: counter(affiliation);
+		font-family: var(--font-mono);
+		font-size: 8px;
+	}
+	.corresponding {
+		margin: 8px 0 0;
+		color: var(--muted);
+		font-size: 10px;
+	}
+	.venue {
+		max-width: 720px;
+		margin: 20px 0 0;
+		color: var(--muted);
+		font-size: 12px;
+	}
+	.venue a {
+		text-decoration: underline;
+		text-decoration-color: var(--line-strong);
+		text-underline-offset: 3px;
+	}
+	.venue a:hover {
+		color: var(--signal);
+	}
+	.project-links {
+		display: flex;
+		flex-wrap: wrap;
+		margin-top: 34px;
+		border-top: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+	}
+	.project-link {
+		display: grid;
+		grid-template-columns: 16px 1fr auto;
+		min-width: 150px;
+		align-items: center;
+		gap: 9px;
+		padding: 13px 14px;
+		border-right: 1px solid var(--line);
+		font-family: var(--font-mono);
+		font-size: 10px;
+	}
+	.project-link svg {
+		width: 14px;
+		height: 14px;
+	}
+	.project-link:hover {
+		background: var(--ink);
+		color: var(--paper);
+	}
+	.project-section {
+		--section-pad: clamp(58px, 6.5vw, 78px);
+		width: 100% !important;
+		padding: var(--section-pad) 0 !important;
+	}
+	.project-section::before {
+		display: none;
+	}
+	.section-label {
+		position: relative;
+		margin-bottom: 26px;
+	}
+	.section-label span {
+		position: absolute;
+		top: 0.48em;
+		left: -76px;
+		margin: 0;
+		line-height: 1;
+	}
+	.section-label h2 {
+		margin: 0 !important;
+		font-family: var(--font-sans);
+		font-size: 18px !important;
+		font-weight: 400;
+		line-height: 1.3;
+		letter-spacing: -0.01em;
+	}
+	figure {
+		margin: 0;
+	}
+	.figure-media {
+		position: relative;
+	}
+	figure img,
+	video {
+		display: block;
+		width: 100%;
+		height: auto;
+		background: transparent;
+	}
+	figure img {
+		mix-blend-mode: multiply;
+	}
+	.figure-cross {
+		position: absolute;
+		z-index: 2;
+		color: var(--signal);
+		font-family: var(--font-mono);
+		font-size: 15px;
+		line-height: 1;
+		opacity: 0;
+		pointer-events: none;
+	}
+	.figure-cross--tl {
+		top: -7px;
+		left: -6px;
+	}
+	.figure-cross--tr {
+		top: -7px;
+		right: -6px;
+	}
+	.figure-cross--bl {
+		bottom: -7px;
+		left: -6px;
+	}
+	.figure-cross--br {
+		right: -6px;
+		bottom: -7px;
+	}
+	figure:hover .figure-cross {
+		opacity: 1;
+	}
+	:global(.dark) figure img,
+	:global([data-theme="dark"]) figure img {
+		background: white;
+		mix-blend-mode: normal;
+	}
+	figcaption {
+		margin-top: 11px;
+		color: var(--muted);
+		font-size: 10px;
+		line-height: 1.55;
+	}
+	figcaption strong {
+		color: var(--ink);
+		font-weight: 400;
+	}
+	.project-abstract {
+		max-width: var(--reading-width);
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: 13px;
+		line-height: 1.65;
+	}
+	.abstract-layout {
+		display: grid;
+		grid-template-columns: minmax(0, var(--reading-width)) var(--profile-width);
+		justify-content: space-between;
+		gap: var(--intro-gap);
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		max-width: none;
+	}
+	.abstract-figure {
+		width: 100%;
+		margin: 0;
+	}
+	.abstract-figure figcaption {
+		font-size: 9px;
+		text-align: right;
+	}
+	.method-figures {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-items: start;
+		gap: clamp(18px, 3vw, 36px);
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		max-width: none;
+	}
+	.method-figure {
+		width: 100%;
+	}
+	.method-figures .figure-media {
+		display: flex;
+		height: clamp(210px, 24vw, 260px);
+		align-items: center;
+		justify-content: center;
+	}
+	.method-figures .figure-media img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+	.method-figure--overview {
+		margin: 0;
+	}
+	.method-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		margin-top: 34px;
+		border-top: 1px solid var(--line);
+	}
+	.method-grid article {
+		min-width: 0;
+		padding: 18px 18px 0 0;
+	}
+	.method-grid article + article {
+		padding-left: 18px;
+		border-left: 1px solid var(--line);
+	}
+	.method-grid span {
+		color: var(--muted);
+		font-family: var(--font-mono);
+		font-size: 9px;
+		letter-spacing: 0.06em;
+	}
+	.method-grid h3 {
+		margin: 12px 0 8px;
+		font-family: var(--font-sans);
+		font-size: 14px;
+		font-weight: 400;
+		line-height: 1.3;
+	}
+	.method-grid p {
+		margin: 0;
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.6;
+	}
+	.evaluation-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		max-width: var(--reading-width);
+		margin-top: 34px;
+		border-top: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+	}
+	.evaluation-grid div {
+		display: grid;
+		gap: 7px;
+		padding: 16px 16px 16px 0;
+	}
+	.evaluation-grid div + div {
+		padding-left: 16px;
+		border-left: 1px solid var(--line);
+	}
+	.evaluation-grid strong {
+		font-family: var(--font-sans);
+		font-size: 18px;
+		font-weight: 400;
+		letter-spacing: -0.01em;
+	}
+	.evaluation-grid span {
+		color: var(--muted);
+		font-size: 10px;
+		line-height: 1.45;
+	}
+	.evidence-tables {
+		display: grid;
+		grid-template-columns: repeat(2, max-content);
+		gap: clamp(20px, 4vw, 42px);
+		margin-top: 42px;
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+	}
+	.results-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 54px clamp(20px, 4vw, 54px);
+	}
+	.results-intro {
+		max-width: var(--reading-width);
+		margin: 0 0 34px;
+	}
+	.results-intro p {
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.result-card {
+		position: relative;
+	}
+	.result-card--reward {
+		grid-column: 1 / -1;
+		order: 4;
+	}
+	.result-card img {
+		object-fit: contain;
+	}
+	.result-table-figure {
+		grid-column: 1 / -1;
+		order: 3;
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+	}
+	.paper-table-figure {
+		margin: 42px 0 0;
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+	}
+	.evidence-tables .paper-table-figure {
+		margin: 0;
+		width: max-content;
+		max-width: 100%;
+	}
+	.evidence-caption {
+		visibility: hidden;
+		inline-size: 0;
+		max-inline-size: 100%;
+	}
+	.evidence-caption[data-sized] {
+		visibility: visible;
+	}
+	.evidence-tables .paper-table {
+		width: max-content;
+		min-width: 0;
+	}
+	.table-scroll {
+		max-width: 100%;
+		overflow-x: auto;
+		scrollbar-width: thin;
+		scrollbar-color: transparent transparent;
+		scrollbar-gutter: stable;
+	}
+	.paper-table-figure .table-scroll,
+	.result-table-figure .table-scroll {
+		width: fit-content;
+		max-width: 100%;
+	}
+	.table-scroll::-webkit-scrollbar,
+	.citation pre::-webkit-scrollbar {
+		height: 6px;
+	}
+	.table-scroll:hover,
+	.table-scroll:focus,
+	.citation pre:hover,
+	.citation pre:focus {
+		scrollbar-width: thin;
+		scrollbar-color: var(--line-strong) transparent;
+	}
+	.table-scroll:hover::-webkit-scrollbar,
+	.table-scroll:focus::-webkit-scrollbar,
+	.citation pre:hover::-webkit-scrollbar,
+	.citation pre:focus::-webkit-scrollbar {
+		height: 6px;
+	}
+	.table-scroll::-webkit-scrollbar-track,
+	.citation pre::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.table-scroll::-webkit-scrollbar-thumb,
+	.citation pre::-webkit-scrollbar-thumb {
+		background: transparent;
+	}
+	.table-scroll:hover::-webkit-scrollbar-thumb,
+	.table-scroll:focus::-webkit-scrollbar-thumb,
+	.citation pre:hover::-webkit-scrollbar-thumb,
+	.citation pre:focus::-webkit-scrollbar-thumb {
+		background: var(--line-strong);
+	}
+	.result-table {
+		width: max-content;
+		min-width: 900px;
+		border-collapse: collapse;
+		border-top: 1px solid var(--ink);
+		border-bottom: 1px solid var(--ink);
+		font-family: var(--font-sans);
+		font-size: 10px;
+		font-variant-numeric: tabular-nums;
+		line-height: 1.4;
+		text-align: right;
+	}
+	.paper-table {
+		width: max-content;
+		min-width: 480px;
+		border-collapse: collapse;
+		border-top: 1px solid var(--ink);
+		border-bottom: 1px solid var(--ink);
+		font-family: var(--font-sans);
+		font-size: 10px;
+		font-variant-numeric: tabular-nums;
+		line-height: 1.45;
+		text-align: right;
+	}
+	.result-table th,
+	.result-table td,
+	.paper-table th,
+	.paper-table td {
+		padding: 11px 8px;
+		border: 0;
+	}
+	.result-table th,
+	.result-table td {
+		white-space: nowrap;
+	}
+	.paper-table th,
+	.paper-table td {
+		width: auto;
+		min-width: 0;
+		white-space: nowrap;
+	}
+	.result-table thead th,
+	.paper-table thead th {
+		border-bottom: 1px solid var(--line-strong);
+		color: var(--muted);
+		font-family: var(--font-mono);
+		font-size: 9px;
+		font-weight: 400;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+	.result-table th:first-child,
+	.paper-table th:first-child {
+		position: sticky;
+		left: 0;
+		z-index: 1;
+		background: var(--paper);
+		color: var(--ink);
+		text-align: left;
+	}
+	.result-table tbody tr + tr,
+	.paper-table tbody tr + tr {
+		border-top: 1px solid var(--line);
+	}
+	:is(.result-table, .paper-table) tbody :is(th, td):hover {
+		background: color-mix(in srgb, var(--ink) 7%, var(--paper));
+		color: var(--ink);
+	}
+	.paper-table td:first-child,
+	.paper-table th:first-child {
+		text-align: left;
+	}
+	.paper-table td {
+		vertical-align: top;
+	}
+	.paper-table code {
+		font-family: var(--font-mono);
+		font-size: 8px;
+		white-space: nowrap;
+	}
+	.goal-table {
+		min-width: 0;
+	}
+	.goal-table td:first-child {
+		width: auto;
+		min-width: 0;
+	}
+	.paper-table__ours {
+		background: color-mix(in srgb, var(--signal) 6%, transparent);
+	}
+	.paper-table__ours th:first-child {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper));
+	}
+	.result-table td span {
+		color: var(--muted);
+	}
+	.result-table__ours {
+		background: color-mix(in srgb, var(--signal) 6%, transparent);
+	}
+	.result-table__ours th:first-child {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper));
+	}
+	:is(.result-table, .paper-table) thead th:hover,
+	:is(.result-table, .paper-table) tbody tr.result-table__ours > :is(th, td):hover,
+	:is(.result-table, .paper-table) tbody tr.paper-table__ours > :is(th, td):hover,
+	:is(.result-table, .paper-table) td:has(strong):hover,
+	:is(.result-table, .paper-table) td:has(u):hover {
+		background: color-mix(in srgb, var(--signal) 14%, var(--paper)) !important;
+		color: var(--ink);
+	}
+	:is(.result-table, .paper-table) thead th:hover {
+		background: var(--paper) !important;
+		color: var(--muted);
+	}
+	:is(.result-table, .paper-table) tbody :is(th, td):first-child:hover {
+		background: var(--paper) !important;
+		color: var(--ink);
+	}
+	:is(.result-table, .paper-table) tbody tr.result-table__ours :is(th, td):first-child:hover,
+	:is(.result-table, .paper-table) tbody tr.paper-table__ours :is(th, td):first-child:hover {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper)) !important;
+	}
+	.table-note {
+		display: block;
+		margin-top: 5px;
+	}
+	.citation-mark {
+		margin-left: 2px;
+		font-family: var(--font-mono);
+		font-size: 8px;
+	}
+	.citation-mark a,
+	.references-list a {
+		color: var(--ink);
+		text-decoration: underline;
+		text-decoration-color: var(--line-strong);
+		text-underline-offset: 3px;
+	}
+	.citation-mark a:hover,
+	.references-list a:hover {
+		color: var(--signal);
+		text-decoration-color: var(--signal);
+	}
+	.references-list {
+		max-width: var(--reading-width);
+		margin: 0;
+		padding: 0;
+		counter-reset: references;
+		font-size: 11px;
+		line-height: 1.6;
+		list-style: none;
+	}
+	.references-list li {
+		position: relative;
+		padding-left: 28px;
+		counter-increment: references;
+	}
+	.references-list li + li {
+		margin-top: 10px;
+	}
+	.references-list li::before {
+		content: "[" counter(references) "]";
+		position: absolute;
+		left: 0;
+		top: 0.18em;
+		color: var(--muted);
+		font-family: var(--font-mono);
+		font-size: 9px;
+	}
+	.references-list li > a {
+		margin-left: 4px;
+	}
+	.video-figure {
+		margin-left: 0;
+	}
+	.video-figure video {
+		background: #0c0c0c;
+	}
+	.citation {
+		position: relative;
+		margin-left: 0;
+	}
+	.citation pre {
+		margin: 0;
+		overflow-x: auto;
+		scrollbar-width: thin;
+		scrollbar-color: transparent transparent;
+		scrollbar-gutter: stable;
+		padding: 24px;
+		border: 1px solid var(--line);
+		background: color-mix(in srgb, var(--ink) 4%, transparent);
+		font-family: var(--font-mono);
+		font-size: 10px;
+		line-height: 1.7;
+		white-space: pre;
+	}
+	.copy-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		min-height: 32px;
+		padding: 0 11px;
+		border: 0;
+		background: var(--ink);
+		color: var(--paper);
+		font-family: var(--font-mono);
+		font-size: 9px;
+		cursor: pointer;
+	}
+	.copy-button:hover {
+		background: var(--signal);
+	}
+	@media (max-width: 1024px) {
+		.project-page,
+		.project-hero,
+		.project-section {
+			width: 100% !important;
+			max-width: none;
+			min-width: 0;
+		}
+		.project-hero h1 {
+			font-size: clamp(1.8rem, 8vw, 2.1rem) !important;
+			overflow-wrap: anywhere;
+		}
+		.results-grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.figure-media,
+		.figure-media img,
+		.video-figure,
+		.video-figure video,
+		.citation {
+			width: 100%;
+			max-width: 100%;
+			min-width: 0;
+		}
+		.project-links {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+		.project-link {
+			min-width: 0;
+			border-bottom: 1px solid var(--line);
+		}
+		.section-label {
+			padding-right: 34px;
+		}
+		.section-label span {
+			left: auto;
+			right: 0;
+		}
+		.project-abstract,
+		.video-figure,
+		.citation {
+			max-width: none;
+			margin-inline: 0;
+		}
+		.method-figure,
+		.method-figures,
+		.evaluation-grid,
+		.results-intro,
+		.abstract-layout,
+		.evidence-tables,
+		.paper-table-figure,
+		.result-table-figure {
+			max-width: none;
+			width: 100%;
+		}
+		.abstract-layout {
+			grid-template-columns: minmax(0, 1fr) var(--profile-width);
+		}
+		.evidence-tables {
+			grid-template-columns: 1fr;
+		}
+		.citation pre {
+			max-width: 100%;
+		}
+		.figure-cross--tl,
+		.figure-cross--bl {
+			left: 2px;
+		}
+		.figure-cross--tr,
+		.figure-cross--br {
+			right: 2px;
+		}
+	}
+	@media (max-width: 560px) {
+		.abstract-layout {
+			display: block;
+		}
+		.abstract-figure {
+			width: 220px;
+			margin: 34px 0 0 auto;
+		}
+		.method-figures {
+			grid-template-columns: 1fr;
+		}
+		.method-grid,
+		.evaluation-grid {
+			grid-template-columns: 1fr;
+		}
+		.method-grid article,
+		.method-grid article + article,
+		.evaluation-grid div,
+		.evaluation-grid div + div {
+			padding: 16px 0;
+			border-left: 0;
+		}
+		.method-grid article + article,
+		.evaluation-grid div + div {
+			border-top: 1px solid var(--line);
+		}
+		.citation pre {
+			padding: 54px 16px 18px;
+		}
+	}
+</style>

@@ -244,6 +244,12 @@ summary:focus-visible {
 .theme-button {
 	align-self: flex-end;
 }
+theme-toggle {
+	display: block;
+	width: 30px;
+	height: 30px;
+	line-height: 0;
+}
 .theme-button {
 	position: relative;
 	width: 30px;
@@ -1078,9 +1084,44 @@ details summary {
 	stroke-linecap: square;
 }
 
-@media (max-width: 800px) {
-	:root {
+@media (max-width: 1024px) {
+	:root,
+	:root[data-theme="light"],
+	:root[data-theme="dark"] {
 		--reading-width: 100%;
+		--profile-width: 100%;
+		--intro-gap: 0px;
+		--content-gutter: 0px;
+		--content-top: 70px;
+	}
+	.site-content,
+	main,
+	.page-heading,
+	main > section,
+	main > section:not(#intro),
+	.rich-content,
+	.home-callout,
+	.acknowledgements,
+	.contact-intro,
+	.contact-materials {
+		width: 100%;
+		max-width: none;
+		min-width: 0;
+	}
+	.site-content > main,
+	.site-content > main > *,
+	.site-content > main > section > * {
+		max-width: none;
+	}
+	main > h1,
+	main > section:first-of-type h1,
+	#intro > h1,
+	#contact h1 {
+		max-width: none;
+	}
+	.abstract-collapse {
+		width: 100% !important;
+		margin-left: 0;
 	}
 	.site-frame {
 		display: block;
