@@ -6,10 +6,11 @@ type ProjectDefinition = {
 	topic: string;
 	venue: string;
 	description: string;
+	href?: string | null;
 };
 
 export type ResearchProject = ProjectDefinition & {
-	href: string;
+	href: string | null;
 	cardImage: ImageMetadata;
 };
 
@@ -31,6 +32,14 @@ function getCardImage(slug: string): ImageMetadata {
 }
 
 const projectDefinitions: ProjectDefinition[] = [
+	{
+		slug: "pi-fs",
+		name: "Pi-FS",
+		topic: "Embodied AI",
+		venue: "Ongoing · 2026",
+		description:
+			"Temporally coupled latent distributions shorten the flow transport path for few- or single-step action generation within an asynchronous fast–slow policy.",
+	},
 	{
 		slug: "sfm",
 		name: "SFM",
@@ -67,6 +76,6 @@ const projectDefinitions: ProjectDefinition[] = [
 
 export const projects: ResearchProject[] = projectDefinitions.map((project) => ({
 	...project,
-	href: `/projects/${project.slug}/`,
+	href: project.href ?? (project.slug === "pi-fs" ? null : `/projects/${project.slug}/`),
 	cardImage: getCardImage(project.slug),
 }));

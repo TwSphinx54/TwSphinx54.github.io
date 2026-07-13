@@ -843,6 +843,10 @@ details summary {
 .research-project:hover .research-project__arrow {
 	transform: translate(2px, -2px);
 }
+.research-project--static {
+	grid-template-columns: 48px minmax(0, 1fr) clamp(150px, 25vw, 230px) 20px;
+	cursor: default;
+}
 
 .project-carousel__heading {
 	display: flex;
@@ -907,6 +911,11 @@ details summary {
 	width: clamp(42px, 5vw, 72px);
 	pointer-events: none;
 	background: linear-gradient(90deg, transparent, var(--paper));
+	opacity: 1;
+	transition: opacity 160ms ease;
+}
+.project-carousel[data-carousel-end] .project-carousel__frame::after {
+	opacity: 0;
 }
 .project-carousel__viewport {
 	overflow-x: auto;
@@ -998,6 +1007,9 @@ details summary {
 }
 .project-card:hover .project-card__title h3 {
 	color: var(--signal);
+}
+.project-card--static {
+	cursor: default;
 }
 .project-card > p {
 	margin: auto 0 1px;

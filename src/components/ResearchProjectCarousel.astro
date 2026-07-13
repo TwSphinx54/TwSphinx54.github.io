@@ -45,29 +45,36 @@ const totalProjectCount = projects.length + homeEntry.data.selectedBuilds.length
 		>
 			<div class="project-carousel__track">
 				{
-					projects.map((project, index) => (
-						<a class="project-card" href={project.href} aria-label={`Explore ${project.name}`}>
-							<div class="project-card__visual">
-								<Image
-									src={project.cardImage}
-									alt=""
-									width={440}
-									densities={[1, 2]}
-									loading="lazy"
-								/>
-							</div>
-							<div class="project-card__meta">
-								<span>{String(index + 1).padStart(2, "0")}</span>
-								<span>{project.topic}</span>
-								<span>{project.venue}</span>
-							</div>
-							<div class="project-card__title">
-								<h3>{project.name}</h3>
-								<Icon name="lucide:arrow-up-right" aria-hidden="true" />
-							</div>
-							<p>{project.description}</p>
-						</a>
-					))
+					projects.map((project, index) => {
+						const Card = project.href ? "a" : "article";
+						return (
+							<Card
+								class:list={["project-card", { "project-card--static": !project.href }]}
+								href={project.href ?? undefined}
+								aria-label={project.href ? `Explore ${project.name}` : undefined}
+							>
+								<div class="project-card__visual">
+									<Image
+										src={project.cardImage}
+										alt=""
+										width={440}
+										densities={[1, 2]}
+										loading="lazy"
+									/>
+								</div>
+								<div class="project-card__meta">
+									<span>{String(index + 1).padStart(2, "0")}</span>
+									<span>{project.topic}</span>
+									<span>{project.venue}</span>
+								</div>
+								<div class="project-card__title">
+									<h3>{project.name}</h3>
+									{project.href && <Icon name="lucide:arrow-up-right" aria-hidden="true" />}
+								</div>
+								<p>{project.description}</p>
+							</Card>
+						);
+					})
 				}
 			</div>
 		</div>
@@ -88,8 +95,10 @@ const totalProjectCount = projects.length + homeEntry.data.selectedBuilds.length
 
 			const updateControls = () => {
 				const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+				const atEnd = viewport.scrollLeft >= maxScroll - 2;
 				previous.disabled = viewport.scrollLeft <= 2;
-				next.disabled = viewport.scrollLeft >= maxScroll - 2;
+				next.disabled = atEnd;
+				carousel.toggleAttribute("data-carousel-end", atEnd);
 			};
 
 			const move = (direction: number) => {
