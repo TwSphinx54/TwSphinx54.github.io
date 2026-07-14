@@ -6,6 +6,7 @@
 		"dev": "astro dev",
 		"start": "astro dev",
 		"build": "astro build",
+		"social-cards": "node scripts/generate-social-cards.mjs",
 		"preview": "astro preview",
 		"lint": "biome lint .",
 		"format": "biome check --write . && prettier --write \"src/**/*.astro\" \"README.md\"",
