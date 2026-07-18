@@ -389,8 +389,11 @@ main > section::before {
 #service::before {
 	content: "07";
 }
-#philosophy::before {
+#tools::before {
 	content: "08";
+}
+#philosophy::before {
+	content: "09";
 }
 #project-research::before {
 	content: "02";
@@ -684,6 +687,69 @@ details summary {
 	line-height: 1.65;
 }
 
+.tool-strip {
+	display: flex;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	gap: 2px;
+	margin: 0;
+	padding: 4px 0 12px;
+	list-style: none;
+}
+.tool-item {
+	position: relative;
+	display: grid;
+	flex: 0 0 28px;
+	width: 28px;
+	height: 34px;
+	place-items: center;
+}
+.tool-link {
+	display: grid;
+	width: 100%;
+	height: 100%;
+	place-items: center;
+}
+.tool-item img {
+	display: block;
+	width: 20px;
+	height: 20px;
+	object-fit: contain;
+	filter: grayscale(1);
+	opacity: 0.68;
+	transition:
+		filter 160ms ease,
+		opacity 160ms ease;
+}
+:root[data-theme="dark"] .tool-item img,
+.dark .tool-item img {
+	filter: grayscale(1) invert(1);
+	opacity: 0.76;
+}
+.tool-item:hover img,
+.tool-item:focus-within img,
+:root[data-theme="dark"] .tool-item:hover img,
+:root[data-theme="dark"] .tool-item:focus-within img,
+.dark .tool-item:hover img,
+.dark .tool-item:focus-within img {
+	filter: none;
+	opacity: 1;
+}
+:root[data-theme="dark"] .tool-item:hover .tool-icon--monochrome,
+:root[data-theme="dark"] .tool-item:focus-within .tool-icon--monochrome,
+.dark .tool-item:hover .tool-icon--monochrome,
+.dark .tool-item:focus-within .tool-icon--monochrome {
+	filter: invert(1);
+}
+.tool-item .experience-tooltip {
+	transition: opacity 140ms ease;
+	transform: translateX(-50%);
+}
+.tool-item:hover .experience-tooltip,
+.tool-item:focus-within .experience-tooltip {
+	opacity: 1;
+	transform: translateX(-50%);
+}
 .pub-article {
 	position: relative;
 	padding: 26px 0 !important;

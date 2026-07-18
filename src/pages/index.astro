@@ -97,6 +97,151 @@ const honorsRest = honors.slice(HONORS_PREVIEW_COUNT);
 const NEWS_PREVIEW_COUNT = 5;
 const newsPreview = newsItems.slice(0, NEWS_PREVIEW_COUNT);
 const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
+
+const tools = [
+	{ name: "Visual Studio Code", icon: "/tools/vscode.svg", href: "https://code.visualstudio.com/" },
+	{
+		name: "Visual Studio",
+		icon: "/tools/visual-studio.svg",
+		href: "https://visualstudio.microsoft.com/",
+	},
+	{ name: "PyCharm", icon: "/tools/pycharm.svg", href: "https://www.jetbrains.com/pycharm/" },
+	{ name: "WebStorm", icon: "/tools/webstorm.svg", href: "https://www.jetbrains.com/webstorm/" },
+	{ name: "IntelliJ IDEA", icon: "/tools/intellij.svg", href: "https://www.jetbrains.com/idea/" },
+	{ name: "Zed", icon: "/tools/zed.svg", href: "https://zed.dev/" },
+	{ name: "Ghostty", icon: "/tools/ghostty.svg", href: "https://ghostty.org/" },
+	{ name: "Warp", icon: "/tools/warp.svg", href: "https://www.warp.dev/" },
+	{ name: "Termius", icon: "/tools/termius.svg", href: "https://termius.com/" },
+	{ name: "Git", icon: "/tools/git.svg", href: "https://git-scm.com/" },
+	{ name: "GitHub", icon: "/tools/github.svg", href: "https://github.com/" },
+	{
+		name: "GitHub Copilot",
+		icon: "/tools/github-copilot.svg",
+		href: "https://github.com/features/copilot",
+	},
+	{ name: "Docker", icon: "/tools/docker.svg", href: "https://www.docker.com/" },
+	{ name: "Homebrew", icon: "/tools/homebrew.svg", href: "https://brew.sh/" },
+	{ name: "Ubuntu", icon: "/tools/ubuntu.svg", href: "https://ubuntu.com/" },
+	{ name: "Conda", icon: "/tools/conda.svg", href: "https://docs.conda.io/" },
+	{ name: "uv", icon: "/tools/uv.svg", href: "https://docs.astral.sh/uv/" },
+	{ name: "pip", icon: "/tools/pip.svg", href: "https://pip.pypa.io/" },
+	{ name: "pnpm", icon: "/tools/pnpm.svg", href: "https://pnpm.io/" },
+	{ name: "Python", icon: "/tools/python.svg", href: "https://www.python.org/" },
+	{ name: "Java", icon: "/tools/java.svg", href: "https://dev.java/" },
+	{
+		name: "JavaScript",
+		icon: "/tools/javascript.svg",
+		href: "https://developer.mozilla.org/docs/Web/JavaScript",
+	},
+	{ name: "TypeScript", icon: "/tools/typescript.svg", href: "https://www.typescriptlang.org/" },
+	{ name: "C++", icon: "/tools/cplusplus.svg", href: "https://isocpp.org/" },
+	{ name: "C#", icon: "/tools/csharp.svg", href: "https://learn.microsoft.com/dotnet/csharp/" },
+	{ name: "Pascal", icon: "/tools/pascal.svg", href: "https://www.freepascal.org/" },
+	{
+		name: "MATLAB",
+		icon: "/tools/matlab.svg",
+		href: "https://www.mathworks.com/products/matlab.html",
+	},
+	{ name: "HTML", icon: "/tools/html.svg", href: "https://html.spec.whatwg.org/" },
+	{ name: "CSS", icon: "/tools/css.svg", href: "https://www.w3.org/Style/CSS/" },
+	{ name: "Markdown", icon: "/tools/markdown.svg", href: "https://commonmark.org/" },
+	{ name: "LaTeX", icon: "/tools/latex.svg", href: "https://www.latex-project.org/" },
+	{ name: "Flask", icon: "/tools/flask.svg", href: "https://flask.palletsprojects.com/" },
+	{ name: "Astro", icon: "/tools/astro.svg", href: "https://astro.build/" },
+	{ name: "PyTorch", icon: "/tools/pytorch.svg", href: "https://pytorch.org/" },
+	{ name: "TensorFlow", icon: "/tools/tensorflow.svg", href: "https://www.tensorflow.org/" },
+	{ name: "CUDA", icon: "/tools/cuda.svg", href: "https://developer.nvidia.com/cuda-zone" },
+	{ name: "Godot", icon: "/tools/godot.svg", href: "https://godotengine.org/" },
+	{ name: "ChatGPT", icon: "/tools/chatgpt.svg", href: "https://chatgpt.com/" },
+	{ name: "Gemini", icon: "/tools/gemini.svg", href: "https://gemini.google.com/" },
+	{ name: "Grok", icon: "/tools/grok.svg", href: "https://grok.com/" },
+	{
+		name: "Hugging Face",
+		icon: "/tools/huggingface.svg",
+		href: "https://huggingface.co/SSSSphinx",
+	},
+	{ name: "arXiv", icon: "/tools/arxiv.svg", href: "https://arxiv.org/" },
+	{
+		name: "Google Scholar",
+		icon: "/tools/google-scholar.svg",
+		href: "https://scholar.google.com/citations?user=IuCPqLcAAAAJ",
+	},
+	{
+		name: "Semantic Scholar",
+		icon: "/tools/semantic-scholar.svg",
+		href: "https://www.semanticscholar.org/author/Xu-Pan/2387896133",
+	},
+	{
+		name: "ResearchGate",
+		icon: "/tools/researchgate.svg",
+		href: "https://www.researchgate.net/profile/Xu-Pan-10",
+	},
+	{ name: "ORCID", icon: "/tools/orcid.svg", href: "https://orcid.org/0009-0007-3297-0385" },
+	{
+		name: "ArcGIS",
+		icon: "/tools/arcgis.svg",
+		href: "https://www.esri.com/en-us/arcgis/products/index",
+	},
+	{ name: "Overleaf", icon: "/tools/overleaf.svg", href: "https://www.overleaf.com/" },
+	{ name: "Notion", icon: "/tools/notion.svg", href: "https://www.notion.com/" },
+	{ name: "LinkedIn", icon: "/tools/linkedin.svg", href: "https://linkedin.com/in/x-pan" },
+	{ name: "X", icon: "/tools/x.svg", href: "https://x.com/xupan_x" },
+	{
+		name: "Bluesky",
+		icon: "/tools/bluesky.svg",
+		href: "https://bsky.app/profile/xu-pan.bsky.social",
+	},
+	{
+		name: "Microsoft Office",
+		icon: "/tools/microsoft-office.svg",
+		href: "https://www.microsoft.com/microsoft-365",
+	},
+	{ name: "Apple iWork", icon: "/tools/apple-iwork.svg", href: "https://www.apple.com/iwork/" },
+	{ name: "Figma", icon: "/tools/figma.svg", href: "https://www.figma.com/" },
+	{ name: "Affinity", icon: "/tools/affinity.svg", href: "https://affinity.serif.com/" },
+	{
+		name: "Adobe Illustrator",
+		icon: "/tools/adobe-illustrator.svg",
+		href: "https://www.adobe.com/products/illustrator.html",
+	},
+	{
+		name: "Adobe Photoshop",
+		icon: "/tools/photoshop.svg",
+		href: "https://www.adobe.com/products/photoshop.html",
+	},
+	{
+		name: "Adobe After Effects",
+		icon: "/tools/after-effects.svg",
+		href: "https://www.adobe.com/products/aftereffects.html",
+	},
+	{
+		name: "Adobe Premiere Pro",
+		icon: "/tools/premiere-pro.svg",
+		href: "https://www.adobe.com/products/premiere.html",
+	},
+	{
+		name: "Adobe Audition",
+		icon: "/tools/adobe-audition.svg",
+		href: "https://www.adobe.com/products/audition.html",
+	},
+	{
+		name: "Adobe Animate",
+		icon: "/tools/adobe-animate.svg",
+		href: "https://www.adobe.com/products/animate.html",
+	},
+] as const;
+
+const darkMonochromeIcons = new Set([
+	"/tools/apple-iwork.svg",
+	"/tools/chatgpt.svg",
+	"/tools/flask.svg",
+	"/tools/github.svg",
+	"/tools/grok.svg",
+	"/tools/markdown.svg",
+	"/tools/notion.svg",
+	"/tools/termius.svg",
+	"/tools/x.svg",
+]);
 ---
 
 <PageLayout meta={{ title: "Home" }}>
@@ -387,6 +532,37 @@ const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
 				</div>
 			) : null
 		}
+	</section>
+
+	<section id="tools" class="mt-8" aria-labelledby="tools-heading">
+		<h2 id="tools-heading" class="title text-xl">Tools I Use</h2>
+		<ul class="tool-strip" role="list">
+			{
+				tools.map((tool) => (
+					<li class="tool-item">
+						<a
+							class="tool-link"
+							href={tool.href}
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label={`Open ${tool.name}`}
+						>
+							<img
+								src={tool.icon}
+								alt=""
+								width="28"
+								height="28"
+								loading="lazy"
+								class:list={{ "tool-icon--monochrome": darkMonochromeIcons.has(tool.icon) }}
+							/>
+							<span class="experience-tooltip" aria-hidden="true">
+								{tool.name}
+							</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
 	</section>
 
 	{
