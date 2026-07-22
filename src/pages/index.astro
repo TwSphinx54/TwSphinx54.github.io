@@ -109,6 +109,7 @@ const tools = [
 	{ name: "WebStorm", icon: "/tools/webstorm.svg", href: "https://www.jetbrains.com/webstorm/" },
 	{ name: "IntelliJ IDEA", icon: "/tools/intellij.svg", href: "https://www.jetbrains.com/idea/" },
 	{ name: "Zed", icon: "/tools/zed.svg", href: "https://zed.dev/" },
+	{ name: "Cursor", icon: "/tools/cursor.svg", href: "https://cursor.com/" },
 	{ name: "Ghostty", icon: "/tools/ghostty.svg", href: "https://ghostty.org/" },
 	{ name: "Warp", icon: "/tools/warp.svg", href: "https://www.warp.dev/" },
 	{ name: "Termius", icon: "/tools/termius.svg", href: "https://termius.com/" },
@@ -127,13 +128,13 @@ const tools = [
 	{ name: "pip", icon: "/tools/pip.svg", href: "https://pip.pypa.io/" },
 	{ name: "pnpm", icon: "/tools/pnpm.svg", href: "https://pnpm.io/" },
 	{ name: "Python", icon: "/tools/python.svg", href: "https://www.python.org/" },
-	{ name: "Java", icon: "/tools/java.svg", href: "https://dev.java/" },
 	{
 		name: "JavaScript",
 		icon: "/tools/javascript.svg",
 		href: "https://developer.mozilla.org/docs/Web/JavaScript",
 	},
 	{ name: "TypeScript", icon: "/tools/typescript.svg", href: "https://www.typescriptlang.org/" },
+	{ name: "Java", icon: "/tools/java.svg", href: "https://dev.java/" },
 	{ name: "C++", icon: "/tools/cplusplus.svg", href: "https://isocpp.org/" },
 	{ name: "C#", icon: "/tools/csharp.svg", href: "https://learn.microsoft.com/dotnet/csharp/" },
 	{ name: "Pascal", icon: "/tools/pascal.svg", href: "https://www.freepascal.org/" },
@@ -142,6 +143,8 @@ const tools = [
 		icon: "/tools/matlab.svg",
 		href: "https://www.mathworks.com/products/matlab.html",
 	},
+	{ name: "R", icon: "/tools/r.svg", href: "https://www.r-project.org/" },
+	{ name: "SQLite", icon: "/tools/sqlite.svg", href: "https://www.sqlite.org/" },
 	{ name: "HTML", icon: "/tools/html.svg", href: "https://html.spec.whatwg.org/" },
 	{ name: "CSS", icon: "/tools/css.svg", href: "https://www.w3.org/Style/CSS/" },
 	{ name: "Markdown", icon: "/tools/markdown.svg", href: "https://commonmark.org/" },
@@ -152,6 +155,16 @@ const tools = [
 	{ name: "TensorFlow", icon: "/tools/tensorflow.svg", href: "https://www.tensorflow.org/" },
 	{ name: "CUDA", icon: "/tools/cuda.svg", href: "https://developer.nvidia.com/cuda-zone" },
 	{ name: "Godot", icon: "/tools/godot.svg", href: "https://godotengine.org/" },
+	{
+		name: "SPSS",
+		icon: "/tools/spss.svg",
+		href: "https://www.ibm.com/products/spss-statistics",
+	},
+	{
+		name: "ArcGIS",
+		icon: "/tools/arcgis.svg",
+		href: "https://www.esri.com/en-us/arcgis/products/index",
+	},
 	{ name: "ChatGPT", icon: "/tools/chatgpt.svg", href: "https://chatgpt.com/" },
 	{ name: "Gemini", icon: "/tools/gemini.svg", href: "https://gemini.google.com/" },
 	{ name: "Grok", icon: "/tools/grok.svg", href: "https://grok.com/" },
@@ -177,13 +190,15 @@ const tools = [
 		href: "https://www.researchgate.net/profile/Xu-Pan-10",
 	},
 	{ name: "ORCID", icon: "/tools/orcid.svg", href: "https://orcid.org/0009-0007-3297-0385" },
-	{
-		name: "ArcGIS",
-		icon: "/tools/arcgis.svg",
-		href: "https://www.esri.com/en-us/arcgis/products/index",
-	},
 	{ name: "Overleaf", icon: "/tools/overleaf.svg", href: "https://www.overleaf.com/" },
+	{ name: "Feishu", icon: "/tools/feishu.svg", href: "https://www.feishu.cn/" },
 	{ name: "Notion", icon: "/tools/notion.svg", href: "https://www.notion.com/" },
+	{
+		name: "Microsoft Office",
+		icon: "/tools/microsoft-office.svg",
+		href: "https://www.microsoft.com/microsoft-365",
+	},
+	{ name: "Apple iWork", icon: "/tools/apple-iwork.svg", href: "https://www.apple.com/iwork/" },
 	{ name: "LinkedIn", icon: "/tools/linkedin.svg", href: "https://linkedin.com/in/x-pan" },
 	{ name: "X", icon: "/tools/x.svg", href: "https://x.com/xupan_x" },
 	{
@@ -191,12 +206,6 @@ const tools = [
 		icon: "/tools/bluesky.svg",
 		href: "https://bsky.app/profile/xu-pan.bsky.social",
 	},
-	{
-		name: "Microsoft Office",
-		icon: "/tools/microsoft-office.svg",
-		href: "https://www.microsoft.com/microsoft-365",
-	},
-	{ name: "Apple iWork", icon: "/tools/apple-iwork.svg", href: "https://www.apple.com/iwork/" },
 	{ name: "Figma", icon: "/tools/figma.svg", href: "https://www.figma.com/" },
 	{ name: "Affinity", icon: "/tools/affinity.svg", href: "https://affinity.serif.com/" },
 	{
@@ -229,17 +238,18 @@ const tools = [
 		icon: "/tools/adobe-animate.svg",
 		href: "https://www.adobe.com/products/animate.html",
 	},
+	{ name: "Aegisub", icon: "/tools/aegisub.svg", href: "https://aegisub.org/" },
 ] as const;
 
 const darkMonochromeIcons = new Set([
 	"/tools/apple-iwork.svg",
 	"/tools/chatgpt.svg",
+	"/tools/cursor.svg",
 	"/tools/flask.svg",
 	"/tools/github.svg",
 	"/tools/grok.svg",
 	"/tools/markdown.svg",
 	"/tools/notion.svg",
-	"/tools/termius.svg",
 	"/tools/x.svg",
 ]);
 ---
