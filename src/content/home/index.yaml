@@ -225,6 +225,12 @@ newsItems:
             under the supervision of <a class="cactus-link" href="https://jszy.whu.edu.cn/zhengxianwei/zh_CN/index.htm">Prof. Xianwei Zheng</a>.
 
 selectedBuilds:
+  - name: "TwannyPet"
+    description: "A native desktop companion starring Tuanzi, a pixel-art Pomeranian with animated behaviors, lightweight reminders, and transparent always-on-top integration for macOS and Windows."
+    tags: ["Desktop Companion", "Godot", "Pixel Art"]
+    time: "2026"
+    repo: "https://github.com/TwSphinx54/TwannyPet"
+
   - name: "GNDAS"
     description: "The GNDASystem (Global Natural Disaster Assessment System) is a web-based geographic information system designed for the analysis and assessment of natural disasters."
     tags: ["Natural Disasters", "Geographic Information System (GIS)"]
