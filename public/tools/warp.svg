@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0.1444 0.1444 15.7266 15.7266"><g fill="#cfd8dc"><path d="M8.443 2h5.064C14.362 2 15 2.716 15 3.6v6.8c0 .884-.718 1.6-1.573 1.6H6.224z"/><path d="M7 4H2.533C1.686 4 1 4.715 1 5.599v6.802C1 13.284 1.717 14 2.563 14H7.79L8 13H5z"/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g transform="translate(2.2 4) scale(.062)">
+    <title>Graphic Copy</title>
+    <g id="Graphic-Copy" stroke="none" fill="none" fill-rule="evenodd" stroke-width="1">
+        <g id="Group" transform="translate(0, 2.921)" fill="#000000">
+            <path d="M161.804673,0 L281.137743,0 C300.454337,0 316.114376,16.181684 316.114376,36.142777 L316.114376,176.461193 C316.114376,196.422856 300.454337,212.604401 281.137743,212.604401 L110.368317,212.604401 L161.804673,0 Z" id="Path" fill-rule="nonzero"></path>
+            <path d="M130.80903,40.2777473 L34.6788119,40.2777473 C15.5262099,40.2777473 0,56.4592919 0,76.4203216 L0,216.739054 C0,236.700401 15.5262099,252.881945 34.6788119,252.881945 L152.994218,252.881945 L157.738772,233.102777 L84.5554059,233.102777 L130.80903,40.2777473 Z" id="Path" fill-rule="nonzero"></path>
+        </g>
+    </g>
+
+    </g>
+</svg>

@@ -9,6 +9,7 @@ import PublicationScripts from "@/components/PublicationScripts.astro";
 import ResearchProjectCarousel from "@/components/ResearchProjectCarousel.astro";
 import { resolveAsset } from "@/utils/assets";
 import figureImage from "../assets/figure.jpg";
+import hermesIcon from "../assets/tools/hermes.svg";
 
 const homeEntry = await getEntry("home", "index");
 if (!homeEntry) throw new Error("Missing content entry: src/content/home/index.yaml");
@@ -171,7 +172,7 @@ const tools = [
 	{ name: "DeepSeek", icon: "/tools/deepseek.svg", href: "https://chat.deepseek.com/" },
 	{
 		name: "Hermes Agent",
-		icon: "/tools/hermes.png",
+		icon: "/tools/hermes.svg",
 		href: "https://hermes-agent.nousresearch.com/",
 	},
 	{
@@ -180,6 +181,7 @@ const tools = [
 		href: "https://huggingface.co/SSSSphinx",
 	},
 	{ name: "arXiv", icon: "/tools/arxiv.svg", href: "https://arxiv.org/" },
+	{ name: "SSRN", icon: "/tools/ssrn.svg", href: "https://www.ssrn.com/" },
 	{
 		name: "Google Scholar",
 		icon: "/tools/google-scholar.svg",
@@ -196,8 +198,10 @@ const tools = [
 		href: "https://www.researchgate.net/profile/Xu-Pan-10",
 	},
 	{ name: "ORCID", icon: "/tools/orcid.svg", href: "https://orcid.org/0009-0007-3297-0385" },
+	{ name: "Zotero", icon: "/tools/zotero.svg", href: "https://www.zotero.org/" },
 	{ name: "Overleaf", icon: "/tools/overleaf.svg", href: "https://www.overleaf.com/" },
 	{ name: "Feishu", icon: "/tools/feishu.svg", href: "https://www.feishu.cn/" },
+	{ name: "Obsidian", icon: "/tools/obsidian.svg", href: "https://obsidian.md/" },
 	{ name: "Notion", icon: "/tools/notion.svg", href: "https://www.notion.com/" },
 	{
 		name: "Microsoft Office",
@@ -254,7 +258,7 @@ const darkMonochromeIcons = new Set([
 	"/tools/flask.svg",
 	"/tools/github.svg",
 	"/tools/grok.svg",
-	"/tools/hermes.png",
+	"/tools/hermes.svg",
 	"/tools/markdown.svg",
 	"/tools/notion.svg",
 	"/tools/x.svg",
@@ -274,7 +278,7 @@ const darkMonochromeIcons = new Set([
 				loading="eager"
 				fetchpriority="high"
 			/>
-			<figcaption>Fig. 1. Taken before graduation, 2026.</figcaption>
+			<figcaption>Fig. 1. Taken before graduation w/ Jessiya, 2026.</figcaption>
 		</figure>
 		{
 			homeIntroBodyHtml.trim() && (
@@ -564,14 +568,25 @@ const darkMonochromeIcons = new Set([
 							rel="noopener noreferrer"
 							aria-label={`Open ${tool.name}`}
 						>
-							<img
-								src={tool.icon}
-								alt=""
-								width="28"
-								height="28"
-								loading="lazy"
-								class:list={{ "tool-icon--monochrome": darkMonochromeIcons.has(tool.icon) }}
-							/>
+							{tool.name === "Hermes Agent" ? (
+								<Image
+									src={hermesIcon}
+									alt=""
+									width={28}
+									height={28}
+									loading="lazy"
+									class:list={{ "tool-icon--monochrome": darkMonochromeIcons.has(tool.icon) }}
+								/>
+							) : (
+								<img
+									src={tool.icon}
+									alt=""
+									width="28"
+									height="28"
+									loading="lazy"
+									class:list={{ "tool-icon--monochrome": darkMonochromeIcons.has(tool.icon) }}
+								/>
+							)}
 							<span class="experience-tooltip" aria-hidden="true">
 								{tool.name}
 							</span>
