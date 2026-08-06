@@ -305,6 +305,9 @@ main > section:not(#intro) {
 main > section#research-projects {
 	width: 100%;
 }
+main > section.creative-archive {
+	width: 100%;
+}
 
 main > h1,
 main > section:first-of-type h1,
@@ -400,6 +403,12 @@ main > section::before {
 }
 #project-builds::before {
 	content: "03";
+}
+#visual-works::before {
+	content: "03";
+}
+#photography::before {
+	content: "02";
 }
 #contact::before {
 	content: "01";
@@ -1346,6 +1355,91 @@ details summary {
 	opacity: 0;
 	transition: none;
 }
+
+.creative-heading {
+	display: block;
+}
+.creative-heading .creative-statement {
+	max-width: var(--reading-width);
+	margin-top: 52px;
+}
+.creative-archive__heading {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 24px;
+	margin-bottom: 28px;
+}
+.creative-archive__heading h2 {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	margin: 0 !important;
+}
+.creative-collage {
+	columns: 3;
+	column-gap: clamp(12px, 2vw, 24px);
+}
+.creative-work {
+	display: inline-block;
+	width: 100%;
+	margin: 0 0 clamp(24px, 3.5vw, 40px);
+	break-inside: avoid;
+	vertical-align: top;
+}
+.creative-work__image {
+	position: relative;
+	display: block;
+	overflow: hidden;
+	background: color-mix(in srgb, var(--ink) 5%, transparent);
+}
+.creative-work__image::after {
+	content: "↗";
+	position: absolute;
+	right: 8px;
+	bottom: 8px;
+	display: grid;
+	width: 24px;
+	height: 24px;
+	place-items: center;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-mono);
+	font-size: 10px;
+	opacity: 0;
+	transition: opacity 160ms ease;
+}
+.creative-work__image:hover::after,
+.creative-work__image:focus-visible::after {
+	opacity: 1;
+}
+.creative-work img {
+	display: block;
+	width: 100%;
+	height: auto;
+	transition: transform 260ms ease;
+}
+.creative-work__image:hover img {
+	transform: scale(1.008);
+}
+.creative-work figcaption {
+	display: grid;
+	grid-template-columns: 28px minmax(0, 1fr) auto;
+	gap: 8px;
+	align-items: baseline;
+	margin-top: 8px;
+	font-family: var(--font-mono);
+	font-size: 8px;
+	letter-spacing: 0.035em;
+	line-height: 1.35;
+	text-transform: uppercase;
+}
+.creative-work figcaption span {
+	color: var(--muted);
+}
+.creative-work figcaption strong {
+	font-weight: 400;
+}
 .contact-materials .material-link:hover .func-icon {
 	color: var(--signal);
 	opacity: 1;
@@ -1454,6 +1548,9 @@ details summary {
 		width: 100%;
 		max-width: none;
 		min-width: 0;
+	}
+	.creative-collage {
+		columns: 2;
 	}
 	.site-content > main,
 	.site-content > main > *,
@@ -1658,6 +1755,12 @@ details summary {
 }
 
 @media (max-width: 480px) {
+	.creative-collage {
+		columns: 1;
+	}
+	.creative-work {
+		margin-bottom: 32px;
+	}
 	.site-mark__name em {
 		display: none;
 	}

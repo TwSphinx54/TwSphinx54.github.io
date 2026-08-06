@@ -22,6 +22,10 @@ export const menuLinks: { path: string; title: string }[] = [
 		title: "Publications",
 	},
 	{
+		path: "/creative/",
+		title: "Creative",
+	},
+	{
 		path: "/contact/",
 		title: "Contact",
 	},

@@ -1,0 +1,56 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+export interface CreativeWork {
+	title: string;
+	image: ImageMetadata;
+	alt?: string;
+	href?: string;
+	type: "Video" | "Poster" | "Photograph";
+}
+
+interface Props {
+	works: CreativeWork[];
+	eagerCount?: number;
+}
+
+const { works, eagerCount = 0 } = Astro.props;
+---
+
+<div class="creative-collage">
+	{
+		works.map((work, index) => (
+			<figure class="creative-work">
+				<a
+					class="creative-work__image"
+					href={work.href ?? work.image.src}
+					target="_blank"
+					rel="noreferrer"
+					aria-label={
+						work.href ? `Watch ${work.title} on Bilibili` : `View ${work.title} at full size`
+					}
+				>
+					<Image
+						src={work.image}
+						alt={work.alt ?? work.title}
+						widths={[320, 480, 640, 960]}
+						sizes="(max-width: 480px) calc(100vw - 36px), (max-width: 1024px) calc((100vw - 60px) / 2), 33vw"
+						format="webp"
+						quality={85}
+						loading={index < eagerCount ? "eager" : "lazy"}
+						decoding="async"
+					/>
+				</a>
+				<figcaption>
+					<span>{String(index + 1).padStart(2, "0")}</span>
+					<strong>{work.title}</strong>
+					<span>
+						{work.type}
+						{work.href ? " ↗" : ""}
+					</span>
+				</figcaption>
+			</figure>
+		))
+	}
+</div>

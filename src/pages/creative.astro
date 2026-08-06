@@ -1,0 +1,159 @@
+---
+import CreativeGallery from "@/components/CreativeGallery.astro";
+import dreamFaded from "@/assets/creative/visual/dream-faded.png";
+import evaAct from "@/assets/creative/visual/eva-act.png";
+import fogHill from "@/assets/creative/visual/fog-hill.png";
+import loveSyndrome from "@/assets/creative/visual/love-syndrome.png";
+import malfunction from "@/assets/creative/visual/malfunction.png";
+import mao from "@/assets/creative/visual/mao.png";
+import radio1 from "@/assets/creative/visual/radio-1.png";
+import radio2 from "@/assets/creative/visual/radio-2.png";
+import radio3 from "@/assets/creative/visual/radio-3.png";
+import cangshan from "@/assets/creative/photography/cangshan.jpg";
+import dianchiLake from "@/assets/creative/photography/dianchi-lake.jpg";
+import erhaiLake from "@/assets/creative/photography/erhai-lake.jpg";
+import ganzhou from "@/assets/creative/photography/ganzhou.jpg";
+import hongKong from "@/assets/creative/photography/hong-kong.jpg";
+import liesmarsClouds from "@/assets/creative/photography/liesmars-clouds.jpg";
+import macao from "@/assets/creative/photography/macao.jpg";
+import shenzhenBay from "@/assets/creative/photography/shenzhen-bay.jpg";
+import whuAutumn from "@/assets/creative/photography/whu-autumn.jpg";
+import whuSky from "@/assets/creative/photography/whu-sky.jpg";
+import PageLayout from "@/layouts/Base.astro";
+import type { CreativeWork } from "@/components/CreativeGallery.astro";
+
+const visualWorks: CreativeWork[] = [
+	{
+		title: "Fog Hill",
+		image: fogHill,
+		type: "Video",
+		href: "https://www.bilibili.com/video/BV19p4y1v7fp/",
+	},
+	{
+		title: "Mao",
+		image: mao,
+		type: "Video",
+		href: "https://www.bilibili.com/video/BV1PK411P71E/",
+	},
+	{
+		title: "EVA — ACT",
+		image: evaAct,
+		type: "Video",
+		href: "https://www.bilibili.com/video/BV1GC4y1h7Q4/",
+	},
+	{ title: "Malfunction", image: malfunction, type: "Poster" },
+	{
+		title: "Dream Faded",
+		image: dreamFaded,
+		type: "Video",
+		href: "https://www.bilibili.com/video/BV1iz4y1U7cc/",
+	},
+	{
+		title: "Love Syndrome",
+		image: loveSyndrome,
+		type: "Video",
+		href: "https://www.bilibili.com/video/BV1Vh411d7XV/",
+	},
+	{
+		title: "HUMAN RADIO I — Midnight Blue",
+		image: radio1,
+		type: "Video",
+		href: "https://www.bilibili.com/video/BV1pt4y1X7kS/",
+	},
+	{
+		title: "HUMAN RADIO II — She Used to Say",
+		image: radio2,
+		type: "Video",
+		href: "https://www.bilibili.com/video/BV1kv411C7T7/",
+	},
+	{
+		title: "HUMAN RADIO III — I'm Not Lonely, I'm Alone",
+		image: radio3,
+		type: "Video",
+		href: "https://www.bilibili.com/video/BV1JP4y1y7c1/",
+	},
+];
+
+const photographs: CreativeWork[] = [
+	{
+		title: "Erhai Lake — Dali, Yunnan",
+		image: erhaiLake,
+		type: "Photograph",
+		alt: "Erhai Lake in Dali, Yunnan",
+	},
+	{
+		title: "Cangshan — Dali, Yunnan",
+		image: cangshan,
+		type: "Photograph",
+		alt: "Cangshan mountain in Dali, Yunnan",
+	},
+	{
+		title: "Dianchi Lake — Kunming, Yunnan",
+		image: dianchiLake,
+		type: "Photograph",
+		alt: "Dianchi Lake in Kunming, Yunnan",
+	},
+	{
+		title: "Sky Above Wuhan University",
+		image: whuSky,
+		type: "Photograph",
+	},
+	{ title: "Hong Kong", image: hongKong, type: "Photograph" },
+	{ title: "Macao", image: macao, type: "Photograph" },
+	{
+		title: "Trees by Shenzhen Bay",
+		image: shenzhenBay,
+		type: "Photograph",
+		alt: "Trees by Shenzhen Bay in Shenzhen",
+	},
+	{
+		title: "Clouds on the Way Home — LIESMARS",
+		image: liesmarsClouds,
+		type: "Photograph",
+	},
+	{ title: "Ganzhou, Jiangxi", image: ganzhou, type: "Photograph" },
+	{
+		title: "Autumn at Wuhan University",
+		image: whuAutumn,
+		type: "Photograph",
+	},
+];
+
+const meta = {
+	description: "Moving images, posters, and photography by Xu Pan.",
+	title: "Creative",
+};
+---
+
+<PageLayout meta={meta}>
+	<header class="page-heading creative-heading">
+		<span class="page-heading__index" aria-hidden="true">01</span>
+		<h1 class="title">Creative</h1>
+		<div class="rich-content creative-statement">
+			<p>
+				I use image, sound, and motion to turn rhythm, atmosphere, and fragments of narrative into
+				visual work.
+			</p>
+		</div>
+	</header>
+
+	<section id="photography" class="creative-archive" aria-labelledby="photography-title">
+		<div class="creative-archive__heading">
+			<h2 id="photography-title" class="title">
+				<span>Photography</span>
+				<span class="section-count">{photographs.length}</span>
+			</h2>
+		</div>
+		<CreativeGallery works={photographs} eagerCount={3} />
+	</section>
+
+	<section id="visual-works" class="creative-archive" aria-labelledby="visual-works-title">
+		<div class="creative-archive__heading">
+			<h2 id="visual-works-title" class="title">
+				<span>Visual Works</span>
+				<span class="section-count">{visualWorks.length}</span>
+			</h2>
+		</div>
+		<CreativeGallery works={visualWorks} />
+	</section>
+</PageLayout>
