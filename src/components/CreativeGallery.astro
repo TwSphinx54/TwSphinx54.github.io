@@ -12,10 +12,11 @@ export interface CreativeWork {
 
 interface Props {
 	works: CreativeWork[];
-	eagerCount?: number;
+	eagerIndexes?: number[];
 }
 
-const { works, eagerCount = 0 } = Astro.props;
+const { works, eagerIndexes = [] } = Astro.props;
+const eagerSet = new Set(eagerIndexes);
 ---
 
 <div class="creative-collage">
@@ -38,7 +39,7 @@ const { works, eagerCount = 0 } = Astro.props;
 						sizes="(max-width: 480px) calc(100vw - 36px), (max-width: 1024px) calc((100vw - 60px) / 2), 33vw"
 						format="webp"
 						quality={85}
-						loading={index < eagerCount ? "eager" : "lazy"}
+						loading={eagerSet.has(index) ? "eager" : "lazy"}
 						decoding="async"
 					/>
 				</a>

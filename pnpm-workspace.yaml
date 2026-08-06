@@ -1,9 +1,5 @@
-packages:
-  - '.'
 allowBuilds:
   esbuild: true
   sharp: true
-onlyBuiltDependencies:
-  - '@biomejs/biome'
-  - esbuild
-  - sharp
+minimumReleaseAgeExclude:
+  - astro@7.2.0

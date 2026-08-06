@@ -10,31 +10,27 @@ permissions:
   contents: read
 
 jobs:
-  lint:
-    name: Check for build and type issues
+  validate:
+    name: Validate project
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v7
 
-      - name: install node
-        uses: actions/setup-node@v5
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11.20.0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v7
         with:
           node-version: 24
-
-      - name: install pnpm
-        uses: pnpm/action-setup@v5
-        with:
-          version: 9
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-        # use astro check for issues
-      - name: Run check
-        run: pnpm astro check
-
-        # ensure build works
-      - name: Run build
-        run: pnpm build
+      - name: Validate project
+        run: pnpm run validate

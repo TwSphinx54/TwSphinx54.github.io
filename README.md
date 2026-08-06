@@ -2,6 +2,11 @@
 
 Astro-based academic portfolio for publications, projects, experience, honors, service, and contact information.
 
+## Requirements
+
+- Node.js 22.12 or newer
+- pnpm 11.x (the project pins pnpm 11.20.0)
+
 ## Development
 
 ```bash
@@ -9,12 +14,35 @@ pnpm install
 pnpm dev
 ```
 
-Before publishing, run:
+Before publishing, run the complete validation suite:
 
 ```bash
-pnpm build
-pnpm check
+pnpm validate
 ```
+
+The validation command runs Biome linting, Astro type checks, and a production build in sequence.
+
+## Dependency overview
+
+- `astro` — static site framework, routing, content collections, and image optimization
+- `astro-icon` with the Lucide and Simple Icons datasets — build-time SVG icons used throughout the site
+- `astro-robots-txt` — generated crawler policy
+- `sharp` — Astro image processing and the social-card/tool-icon scripts
+- Tailwind CSS — utility generation alongside the custom global design system
+- Biome, Prettier, and TypeScript — linting, formatting, and type checking
+
+Routine dependency maintenance:
+
+```bash
+pnpm outdated --include-github-actions
+pnpm update
+pnpm audit
+pnpm validate
+```
+
+The pnpm build-script allowlist and temporary release-age exceptions are documented in
+[`pnpm-workspace.yaml`](pnpm-workspace.yaml). Avoid forcing transitive dependency overrides unless an
+upstream-compatible fix has been verified.
 
 ## Content
 
