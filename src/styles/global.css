@@ -1417,10 +1417,6 @@ details summary {
 	display: block;
 	width: 100%;
 	height: auto;
-	transition: transform 260ms ease;
-}
-.creative-work__image:hover img {
-	transform: scale(1.008);
 }
 .creative-work figcaption {
 	display: grid;
