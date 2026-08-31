@@ -411,7 +411,7 @@ const bibtex = `@inproceedings{pan2026savla,
 						role="region"
 						aria-label="Robustness results table"
 					>
-						<table class="result-table">
+						<table class="paper-table result-table">
 							<thead
 								><tr
 									><th scope="col">Methods</th><th scope="col">Total</th><th scope="col">BT</th><th
@@ -437,7 +437,7 @@ const bibtex = `@inproceedings{pan2026savla,
 										>79.15 <span>± 1.58</span></td
 									><td><u>92.72</u> <span>± 2.32</span></td></tr
 								>
-								<tr class="result-table__ours"
+								<tr class="paper-table__ours"
 									><th scope="row">SA-VLA</th><td
 										><strong>90.14</strong> <span>± <strong>0.35</strong></span></td
 									><td><strong>100.0</strong> <span>± <strong>0.00</strong></span></td><td
@@ -541,112 +541,6 @@ const bibtex = `@inproceedings{pan2026savla,
 </ProjectLayout>
 
 <style>
-	.project-page {
-		width: min(100%, 760px);
-		margin: 0;
-	}
-	.section-label span {
-		margin: 0 0 22px;
-		color: var(--muted);
-		font-family: var(--font-mono);
-		font-size: 9px;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-	}
-	.project-section {
-		--section-pad: clamp(58px, 6.5vw, 78px);
-		width: 100% !important;
-		padding: var(--section-pad) 0 !important;
-	}
-	.project-section::before {
-		display: none;
-	}
-	.section-label {
-		position: relative;
-		margin-bottom: 26px;
-	}
-	.section-label span {
-		position: absolute;
-		top: 0.48em;
-		left: -76px;
-		margin: 0;
-		line-height: 1;
-	}
-	.section-label h2 {
-		margin: 0 !important;
-		font-family: var(--font-sans);
-		font-size: 18px !important;
-		font-weight: 400;
-		line-height: 1.3;
-		letter-spacing: -0.01em;
-	}
-	figure {
-		margin: 0;
-	}
-	.figure-media {
-		position: relative;
-	}
-	figure img,
-	video {
-		display: block;
-		width: 100%;
-		height: auto;
-		background: transparent;
-	}
-	figure img {
-		mix-blend-mode: multiply;
-	}
-	.figure-cross {
-		position: absolute;
-		z-index: 2;
-		color: var(--signal);
-		font-family: var(--font-mono);
-		font-size: 15px;
-		line-height: 1;
-		opacity: 0;
-		pointer-events: none;
-	}
-	.figure-cross--tl {
-		top: -7px;
-		left: -6px;
-	}
-	.figure-cross--tr {
-		top: -7px;
-		right: -6px;
-	}
-	.figure-cross--bl {
-		bottom: -7px;
-		left: -6px;
-	}
-	.figure-cross--br {
-		right: -6px;
-		bottom: -7px;
-	}
-	figure:hover .figure-cross {
-		opacity: 1;
-	}
-	:global(.dark) figure img,
-	:global([data-theme="dark"]) figure img {
-		background: white;
-		mix-blend-mode: normal;
-	}
-	figcaption {
-		margin-top: 11px;
-		color: var(--muted);
-		font-size: 10px;
-		line-height: 1.55;
-	}
-	figcaption strong {
-		color: var(--ink);
-		font-weight: 400;
-	}
-	.project-abstract {
-		max-width: var(--reading-width);
-		margin: 0;
-		font-family: var(--font-serif);
-		font-size: 13px;
-		line-height: 1.65;
-	}
 	.abstract-layout {
 		display: grid;
 		grid-template-columns: minmax(0, var(--reading-width)) var(--profile-width);
@@ -658,10 +552,6 @@ const bibtex = `@inproceedings{pan2026savla,
 	.abstract-figure {
 		width: 100%;
 		margin: 0;
-	}
-	.abstract-figure figcaption {
-		font-size: 9px;
-		text-align: right;
 	}
 	.method-figures {
 		display: grid;
@@ -795,95 +685,20 @@ const bibtex = `@inproceedings{pan2026savla,
 		width: max-content;
 		max-width: 100%;
 	}
-	.table-caption {
-		visibility: hidden;
-		inline-size: 0;
-		max-inline-size: 100%;
-	}
-	.table-caption[data-sized] {
-		visibility: visible;
-	}
 	.evidence-tables .paper-table {
 		width: max-content;
 		min-width: 0;
 	}
-	.table-scroll {
-		max-width: 100%;
-		overflow-x: auto;
-	}
-	.paper-table-figure .table-scroll,
-	.result-table-figure .table-scroll {
-		width: fit-content;
-		max-width: 100%;
-	}
 	.result-table {
-		width: max-content;
 		min-width: 900px;
-		border-collapse: collapse;
-		border-top: 1px solid var(--ink);
-		border-bottom: 1px solid var(--ink);
-		font-family: var(--font-sans);
-		font-size: 10px;
-		font-variant-numeric: tabular-nums;
-		line-height: 1.4;
-		text-align: right;
 	}
 	.paper-table {
-		width: max-content;
 		min-width: 480px;
-		border-collapse: collapse;
-		border-top: 1px solid var(--ink);
-		border-bottom: 1px solid var(--ink);
-		font-family: var(--font-sans);
-		font-size: 10px;
-		font-variant-numeric: tabular-nums;
-		line-height: 1.45;
-		text-align: right;
-	}
-	.result-table th,
-	.result-table td,
-	.paper-table th,
-	.paper-table td {
-		padding: 11px 8px;
-		border: 0;
-	}
-	.result-table th,
-	.result-table td {
-		white-space: nowrap;
 	}
 	.paper-table th,
 	.paper-table td {
 		width: auto;
 		min-width: 0;
-		white-space: nowrap;
-	}
-	.result-table thead th,
-	.paper-table thead th {
-		border-bottom: 1px solid var(--line-strong);
-		color: var(--muted);
-		font-family: var(--font-mono);
-		font-size: 9px;
-		font-weight: 400;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
-	}
-	.result-table th:first-child,
-	.paper-table th:first-child {
-		background: var(--paper);
-		color: var(--ink);
-		text-align: left;
-	}
-	.result-table tbody tr + tr,
-	.paper-table tbody tr + tr {
-		border-top: 1px solid var(--line);
-	}
-	:is(.result-table, .paper-table) tbody :is(th, td):hover {
-		background: color-mix(in srgb, var(--ink) 7%, var(--paper));
-		color: var(--ink);
-	}
-	.paper-table td:first-child,
-	.paper-table th:first-child {
-		text-align: left;
 	}
 	.paper-table td {
 		vertical-align: top;
@@ -900,90 +715,12 @@ const bibtex = `@inproceedings{pan2026savla,
 		width: auto;
 		min-width: 0;
 	}
-	.paper-table__ours {
-		background: color-mix(in srgb, var(--signal) 6%, transparent);
-	}
-	.paper-table__ours th:first-child {
-		background: color-mix(in srgb, var(--signal) 6%, var(--paper));
-	}
 	.result-table td span {
 		color: var(--muted);
-	}
-	.result-table__ours {
-		background: color-mix(in srgb, var(--signal) 6%, transparent);
-	}
-	.result-table__ours th:first-child {
-		background: color-mix(in srgb, var(--signal) 6%, var(--paper));
-	}
-	:is(.result-table, .paper-table) thead th:hover,
-	:is(.result-table, .paper-table) tbody tr.result-table__ours > :is(th, td):hover,
-	:is(.result-table, .paper-table) tbody tr.paper-table__ours > :is(th, td):hover,
-	:is(.result-table, .paper-table) td:has(strong):hover,
-	:is(.result-table, .paper-table) td:has(u):hover {
-		background: color-mix(in srgb, var(--signal) 14%, var(--paper)) !important;
-		color: var(--ink);
-	}
-	:is(.result-table, .paper-table) thead th:hover {
-		background: var(--paper) !important;
-		color: var(--muted);
-	}
-	:is(.result-table, .paper-table) tbody :is(th, td):first-child:hover {
-		background: var(--paper) !important;
-		color: var(--ink);
-	}
-	:is(.result-table, .paper-table) tbody tr.result-table__ours :is(th, td):first-child:hover,
-	:is(.result-table, .paper-table) tbody tr.paper-table__ours :is(th, td):first-child:hover {
-		background: color-mix(in srgb, var(--signal) 6%, var(--paper)) !important;
 	}
 	.table-note {
 		display: block;
 		margin-top: 5px;
-	}
-	.citation-mark {
-		margin-left: 2px;
-		font-family: var(--font-mono);
-		font-size: 8px;
-	}
-	.citation-mark a,
-	.references-list a {
-		color: var(--ink);
-		text-decoration: underline;
-		text-decoration-color: var(--line-strong);
-		text-underline-offset: 3px;
-	}
-	.citation-mark a:hover,
-	.references-list a:hover {
-		color: var(--signal);
-		text-decoration-color: var(--signal);
-	}
-	.references-list {
-		max-width: var(--reading-width);
-		margin: 0;
-		padding: 0;
-		counter-reset: references;
-		font-size: 11px;
-		line-height: 1.6;
-		list-style: none;
-	}
-	.references-list li {
-		position: relative;
-		padding-left: 28px;
-		counter-increment: references;
-	}
-	.references-list li + li {
-		margin-top: 10px;
-	}
-	.references-list li::before {
-		content: "[" counter(references) "]";
-		position: absolute;
-		left: 0;
-		top: 0.18em;
-		color: var(--muted);
-		font-family: var(--font-mono);
-		font-size: 9px;
-	}
-	.references-list li > a {
-		margin-left: 4px;
 	}
 	.video-figure {
 		margin-left: 0;
@@ -991,45 +728,7 @@ const bibtex = `@inproceedings{pan2026savla,
 	.video-figure video {
 		background: #0c0c0c;
 	}
-	.citation {
-		position: relative;
-		margin-left: 0;
-	}
-	.citation pre {
-		margin: 0;
-		overflow-x: auto;
-		scrollbar-gutter: stable;
-		padding: 24px;
-		border: 1px solid var(--line);
-		background: color-mix(in srgb, var(--ink) 4%, transparent);
-		font-family: var(--font-mono);
-		font-size: 10px;
-		line-height: 1.7;
-		white-space: pre;
-	}
-	.copy-button {
-		position: absolute;
-		top: 0;
-		right: 0;
-		min-height: 32px;
-		padding: 0 11px;
-		border: 0;
-		background: var(--ink);
-		color: var(--paper);
-		font-family: var(--font-mono);
-		font-size: 9px;
-		cursor: pointer;
-	}
-	.copy-button:hover {
-		background: var(--signal);
-	}
 	@media (max-width: 1024px) {
-		.project-page,
-		.project-section {
-			width: 100% !important;
-			max-width: none;
-			min-width: 0;
-		}
 		.results-grid {
 			grid-template-columns: minmax(0, 1fr);
 		}
@@ -1041,13 +740,6 @@ const bibtex = `@inproceedings{pan2026savla,
 			width: 100%;
 			max-width: 100%;
 			min-width: 0;
-		}
-		.section-label {
-			padding-right: 34px;
-		}
-		.section-label span {
-			left: auto;
-			right: 0;
 		}
 		.project-abstract,
 		.video-figure,
@@ -1071,17 +763,6 @@ const bibtex = `@inproceedings{pan2026savla,
 		}
 		.evidence-tables {
 			grid-template-columns: 1fr;
-		}
-		.citation pre {
-			max-width: 100%;
-		}
-		.figure-cross--tl,
-		.figure-cross--bl {
-			left: 2px;
-		}
-		.figure-cross--tr,
-		.figure-cross--br {
-			right: 2px;
 		}
 	}
 	@media (max-width: 560px) {
@@ -1109,9 +790,6 @@ const bibtex = `@inproceedings{pan2026savla,
 		.method-grid article + article,
 		.evaluation-grid div + div {
 			border-top: 1px solid var(--line);
-		}
-		.citation pre {
-			padding: 54px 16px 18px;
 		}
 	}
 </style>

@@ -27,6 +27,11 @@ const slug = title
 	.replace(/[^a-z0-9\-]/g, "");
 
 const isArxivLink = (url: string) => url.includes("arxiv.org");
+
+const parseAuthorName = (authorName: string) => {
+	const match = authorName.match(/^(.*?)([*†‡]+)$/);
+	return match ? { name: match[1].trim(), marks: match[2] } : { name: authorName, marks: "" };
+};
 ---
 
 <article
@@ -38,18 +43,18 @@ const isArxivLink = (url: string) => url.includes("arxiv.org");
 			<h3 class="text-lg leading-snug font-semibold tracking-tight">{title}</h3>
 			<p class="mt-1 text-gray-700 dark:text-gray-300">
 				{
-					author.map((name: string, index: number) => (
-						<>
-							<span
-								class={
-									name.replaceAll("*", "").trim() === "Xu Pan" ? "author-highlight" : undefined
-								}
-							>
-								{name}
-							</span>
-							{index < author.length - 1 && ", "}
-						</>
-					))
+					author.map((authorName: string, index: number) => {
+						const { name, marks } = parseAuthorName(authorName);
+						return (
+							<>
+								<span class={name === "Xu Pan" ? "author-highlight" : undefined}>
+									{name}
+									{marks && <sup class="ml-px text-[0.72em] leading-none">{marks}</sup>}
+								</span>
+								{index < author.length - 1 && ", "}
+							</>
+						);
+					})
 				}
 			</p>
 			<div class="mt-2 flex flex-wrap gap-2">

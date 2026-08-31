@@ -22,6 +22,16 @@ pnpm validate
 
 The validation command runs Biome linting, Astro type checks, and a production build in sequence.
 
+Asset maintenance commands:
+
+```bash
+pnpm normalize-icons
+pnpm social-cards
+```
+
+Production deployment is handled exclusively by the GitHub Pages workflow after changes reach
+`main`; the validation workflow remains separate so pull requests can be checked without deploying.
+
 ## Dependency overview
 
 - `astro` — static site framework, routing, content collections, and image optimization
@@ -67,5 +77,18 @@ Research project pages and their homepage cards follow [`PROJECT_PAGE_GUIDE.md`]
 - `src/content/` — validated YAML content
 - `src/styles/` — global design system and responsive styles
 - `src/utils/` — shared DOM and asset helpers
-- `src/assets/` — source images and organization logos
-- `public/` — downloadable resumes and favicon
+- `src/assets/` — imported images processed by Astro
+  - `creative/` — photography and visual works
+  - `home/` — homepage-only profile and experience images
+  - `organizations/` — organization logos referenced by content keys
+  - `projects/` — project figures plus shared card artwork
+  - `social/` — source artwork for generated social cards
+  - `tools/` — tool icons rendered through Astro Image
+- `public/` — files that require stable, unchanged URLs
+  - root files — `CNAME`, favicon, resumes, and the default generated social card
+  - `projects/<slug>/` — videos or downloads served without processing
+  - `social/projects/` — generated project social cards
+
+Keep imported visual assets in `src/assets/`. Use `public/` only when a file must retain its original
+filename or be addressed by a stable public URL. Avoid adding page images directly to either directory
+root; place them in the closest semantic subdirectory instead.

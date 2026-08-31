@@ -6,7 +6,7 @@ const url = new URL(Astro.request.url);
 const isCurrentPath = (path: string) =>
 	path === "/" ? url.pathname === "/" : url.pathname.startsWith(path);
 const socialLinks = [
-	{ label: "Email", href: "mailto:panxurs@whu.edu.cn" },
+	{ label: "Email", href: "mailto:xu.pan@ntu.edu.sg" },
 	{ label: "X", href: "https://x.com/xupan_x" },
 	{ label: "Google Scholar", href: "https://scholar.google.com/citations?user=IuCPqLcAAAAJ" },
 	{ label: "Bluesky", href: "https://bsky.app/profile/xu-pan.bsky.social" },
@@ -24,7 +24,7 @@ const socialLinks = [
 		<a href="/" class="site-mark" aria-label="Xu Pan — Home">
 			<span class="site-mark__name">Xu Pan <em>潘旭</em></span>
 		</a>
-		<p class="site-role">Incoming Research Associate at Nanyang Technological University</p>
+		<p class="site-role">Research Associate at<br />Nanyang Technological University</p>
 	</div>
 
 	<nav aria-label="Main menu" class="site-nav" id="navigation-menu">

@@ -14,7 +14,7 @@ const publications = homeEntry.data.publicationsEditable.map((pub) => {
 });
 
 const isFirstAuthorPublication = (pub: (typeof publications)[number]) => {
-	const firstAuthor = pub.author[0]?.replace(/\*/g, "").trim().toLowerCase();
+	const firstAuthor = pub.author[0]?.replace(/[*†‡]/g, "").trim().toLowerCase();
 	return firstAuthor === "xu pan";
 };
 
@@ -31,6 +31,9 @@ const meta = {
 	<header class="page-heading">
 		<span class="page-heading__index" aria-hidden="true">01</span>
 		<h1 class="title">Publications</h1>
+		<div class="rich-content page-statement">
+			<p>† Equal contribution; * Corresponding author.</p>
+		</div>
 	</header>
 	<section id="lead" class="mt-10">
 		<h2 class="title mb-3 flex items-baseline gap-2 text-xl">

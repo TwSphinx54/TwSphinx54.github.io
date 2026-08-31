@@ -17,6 +17,7 @@ interface Props {
 
 const { works, eagerIndexes = [] } = Astro.props;
 const eagerSet = new Set(eagerIndexes);
+const corners = ["tl", "tr", "bl", "br"];
 ---
 
 <div class="creative-collage">
@@ -32,6 +33,11 @@ const eagerSet = new Set(eagerIndexes);
 						work.href ? `Watch ${work.title} on Bilibili` : `View ${work.title} at full size`
 					}
 				>
+					{corners.map((corner) => (
+						<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+							+
+						</span>
+					))}
 					<Image
 						src={work.image}
 						alt={work.alt ?? work.title}

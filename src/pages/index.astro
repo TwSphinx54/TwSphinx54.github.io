@@ -8,8 +8,7 @@ import PublicationItem from "@/components/PublicationItem.astro";
 import PublicationScripts from "@/components/PublicationScripts.astro";
 import ResearchProjectCarousel from "@/components/ResearchProjectCarousel.astro";
 import { resolveAsset } from "@/utils/assets";
-import figureImage from "../assets/figure.jpg";
-import hermesIcon from "../assets/tools/hermes.svg";
+import figureImage from "../assets/home/profile.jpg";
 
 const homeEntry = await getEntry("home", "index");
 if (!homeEntry) throw new Error("Missing content entry: src/content/home/index.yaml");
@@ -44,10 +43,13 @@ const cactusTech: PublicationResolved[] = publicationsEditable
 	})
 	.filter((p) => p.selected === true);
 
-const expImages = import.meta.glob<ImageMetadata>("../assets/exps/*.{png,jpg,jpeg,svg,webp}", {
-	eager: true,
-	import: "default",
-});
+const expImages = import.meta.glob<ImageMetadata>(
+	"../assets/home/experiences/*.{png,jpg,jpeg,svg,webp}",
+	{
+		eager: true,
+		import: "default",
+	},
+);
 
 function expNumericOrder(file: string): number | null {
 	const m = file.match(/^exp(\d+)\./i);
@@ -98,6 +100,18 @@ const honorsRest = honors.slice(HONORS_PREVIEW_COUNT);
 const NEWS_PREVIEW_COUNT = 5;
 const newsPreview = newsItems.slice(0, NEWS_PREVIEW_COUNT);
 const newsRest = newsItems.slice(NEWS_PREVIEW_COUNT);
+
+const toolIcons = import.meta.glob<ImageMetadata>("../assets/tools/*.svg", {
+	eager: true,
+	import: "default",
+});
+
+function getToolIcon(logicalPath: string): ImageMetadata {
+	const fileName = logicalPath.replace(/^\/tools\//, "");
+	const icon = toolIcons["../assets/tools/" + fileName];
+	if (!icon) throw new Error("Missing tool icon: " + fileName);
+	return icon;
+}
 
 const tools = [
 	{ name: "Visual Studio Code", icon: "/tools/vscode.svg", href: "https://code.visualstudio.com/" },
@@ -278,7 +292,7 @@ const darkMonochromeIcons = new Set([
 				loading="eager"
 				fetchpriority="high"
 			/>
-			<figcaption>Fig. 1. Taken before graduation w/ Jessiya, 2026.</figcaption>
+			<figcaption><strong>Fig. 1.</strong> Taken before graduation w/ Jessiya, 2026.</figcaption>
 		</figure>
 		{
 			homeIntroBodyHtml.trim() && (
@@ -568,25 +582,14 @@ const darkMonochromeIcons = new Set([
 							rel="noopener noreferrer"
 							aria-label={`Open ${tool.name}`}
 						>
-							{tool.name === "Hermes Agent" ? (
-								<Image
-									src={hermesIcon}
-									alt=""
-									width={28}
-									height={28}
-									loading="lazy"
-									class:list={{ "tool-icon--monochrome": darkMonochromeIcons.has(tool.icon) }}
-								/>
-							) : (
-								<img
-									src={tool.icon}
-									alt=""
-									width="28"
-									height="28"
-									loading="lazy"
-									class:list={{ "tool-icon--monochrome": darkMonochromeIcons.has(tool.icon) }}
-								/>
-							)}
+							<Image
+								src={getToolIcon(tool.icon)}
+								alt=""
+								width={28}
+								height={28}
+								loading="lazy"
+								class:list={{ "tool-icon--monochrome": darkMonochromeIcons.has(tool.icon) }}
+							/>
 							<span class="experience-tooltip" aria-hidden="true">
 								{tool.name}
 							</span>

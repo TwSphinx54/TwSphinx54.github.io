@@ -4,8 +4,7 @@ import SkipLink from "@/components/SkipLink.astro";
 import ThemeProvider from "@/components/ThemeProvider.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 import { projects } from "@/data/projects";
-import { siteConfig } from "@/site-config";
-import type { SiteMeta } from "@/types";
+import { siteConfig, type SiteMeta } from "@/site-config";
 
 interface Props {
 	meta: SiteMeta;
@@ -130,16 +129,12 @@ const {
 			window.setTimeout(() => scroller.classList.remove("is-scrolling"), 700),
 		);
 	};
-	document
-		.querySelectorAll<HTMLElement>(".citation pre")
-		.forEach((scroller) => {
-			scroller.addEventListener(
-				"scroll",
-				() => revealScrollbar(scroller),
-				{ passive: true },
-			);
-		});
-	window.addEventListener("scroll", () => revealScrollbar(document.documentElement), { passive: true });
+	document.querySelectorAll<HTMLElement>(".citation pre, .table-scroll").forEach((scroller) => {
+		scroller.addEventListener("scroll", () => revealScrollbar(scroller), { passive: true });
+	});
+	window.addEventListener("scroll", () => revealScrollbar(document.documentElement), {
+		passive: true,
+	});
 </script>
 
 <style is:global>
@@ -274,41 +269,262 @@ const {
 		min-width: 0;
 		padding: var(--content-top) 0 clamp(80px, 10vw, 140px) var(--content-gutter);
 	}
+	.project-page {
+		width: min(100%, 760px);
+		margin: 0;
+	}
+	.project-section {
+		width: 100% !important;
+		padding: clamp(58px, 6.5vw, 78px) 0 !important;
+	}
+	.project-section::before {
+		display: none;
+	}
+	.section-label {
+		position: relative;
+		margin-bottom: 26px;
+	}
+	.section-label span {
+		position: absolute;
+		top: 0.48em;
+		left: -76px;
+		margin: 0;
+		color: var(--muted);
+		font-family: var(--font-mono);
+		font-size: 9px;
+		line-height: 1;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	.section-label h2 {
+		margin: 0 !important;
+		font-family: var(--font-sans);
+		font-size: 18px !important;
+		font-weight: 400;
+		line-height: 1.3;
+		letter-spacing: -0.01em;
+	}
+	.project-document figure {
+		margin: 0;
+	}
+	.project-document .figure-media {
+		position: relative;
+	}
+	.project-document figure img,
+	.project-document figure video {
+		display: block;
+		width: 100%;
+		height: auto;
+		background: transparent;
+	}
+	.project-document figure img {
+		mix-blend-mode: multiply;
+	}
+	.project-document:is(.dark, [data-theme="dark"]) figure img {
+		background: white;
+		mix-blend-mode: normal;
+	}
+	:is(.project-abstract, .project-copy) {
+		max-width: var(--reading-width);
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: 13px;
+		line-height: 1.65;
+	}
+	.paper-table-figure {
+		width: max-content;
+		max-width: 100%;
+	}
+	.table-caption {
+		visibility: hidden;
+		inline-size: 0;
+		max-inline-size: 100%;
+	}
+	.table-caption[data-sized] {
+		visibility: visible;
+	}
+	.table-scroll {
+		width: fit-content;
+		max-width: 100%;
+		overflow-x: auto;
+		overscroll-behavior-inline: contain;
+	}
+	.paper-table {
+		width: max-content;
+		border-collapse: collapse;
+		border-block: 1px solid var(--ink);
+		font-family: var(--font-sans);
+		font-size: 10px;
+		font-variant-numeric: tabular-nums;
+		line-height: 1.4;
+		text-align: right;
+	}
+	.paper-table :is(th, td) {
+		padding: 10px 8px;
+		white-space: nowrap;
+	}
+	.paper-table thead th {
+		border-bottom: 1px solid var(--line-strong);
+		color: var(--muted);
+		font-family: var(--font-mono);
+		font-size: 9px;
+		font-weight: 400;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+	.paper-table :is(th, td):first-child {
+		text-align: left;
+	}
+	.paper-table th:first-child {
+		background: var(--paper);
+		color: var(--ink);
+	}
+	.paper-table tbody tr + tr {
+		border-top: 1px solid var(--line);
+	}
+	.paper-table tbody :is(th, td):hover {
+		background: color-mix(in srgb, var(--ink) 7%, var(--paper));
+		color: var(--ink);
+	}
+	.paper-table :is(.ours, .paper-table__ours) {
+		background: color-mix(in srgb, var(--signal) 6%, transparent);
+	}
+	.paper-table :is(.ours, .paper-table__ours) th:first-child {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper));
+	}
+	.paper-table tbody tr:is(.ours, .paper-table__ours) > :is(th, td):hover,
+	.paper-table td:has(:is(strong, u)):hover {
+		background: color-mix(in srgb, var(--signal) 14%, var(--paper)) !important;
+	}
+	.paper-table thead th:hover,
+	.paper-table tbody :is(th, td):first-child:hover {
+		background: var(--paper) !important;
+	}
+	.paper-table tbody tr:is(.ours, .paper-table__ours) > :first-child:hover {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper)) !important;
+	}
+	.citation {
+		position: relative;
+		margin-left: 0;
+	}
+	.citation pre {
+		margin: 0;
+		overflow-x: auto;
+		padding: 24px;
+		border: 1px solid var(--line);
+		background: color-mix(in srgb, var(--ink) 4%, transparent);
+		font-family: var(--font-mono);
+		font-size: 10px;
+		line-height: 1.7;
+		white-space: pre;
+	}
+	.copy-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		min-height: 32px;
+		padding: 0 11px;
+		border: 0;
+		background: var(--ink);
+		color: var(--paper);
+		font-family: var(--font-mono);
+		font-size: 9px;
+		cursor: pointer;
+	}
+	.copy-button:hover {
+		background: var(--signal);
+	}
+	.references-list {
+		max-width: var(--reading-width);
+		margin: 0;
+		padding: 0;
+		counter-reset: references;
+		font-size: 11px;
+		line-height: 1.6;
+		list-style: none;
+	}
+	.references-list li {
+		position: relative;
+		padding-left: 28px;
+		counter-increment: references;
+	}
+	.references-list li + li {
+		margin-top: 10px;
+	}
+	.references-list li::before {
+		position: absolute;
+		top: 0.18em;
+		left: 0;
+		content: "[" counter(references) "]";
+		color: var(--muted);
+		font-family: var(--font-mono);
+		font-size: 9px;
+	}
+	.references-list li > a {
+		margin-left: 4px;
+	}
+	.citation-mark {
+		margin-left: 2px;
+		font-family: var(--font-mono);
+		font-size: 8px;
+	}
+	:is(.references-list, .citation-mark) a {
+		color: var(--ink);
+		text-decoration: underline;
+		text-decoration-color: var(--line-strong);
+		text-underline-offset: 3px;
+	}
+	:is(.references-list, .citation-mark) a:hover {
+		color: var(--signal);
+		text-decoration-color: var(--signal);
+	}
 	.project-document,
-	.project-frame .citation pre {
+	.project-frame :is(.citation pre, .table-scroll) {
 		scrollbar-color: transparent transparent;
 		scrollbar-gutter: stable;
 		scrollbar-width: thin;
 	}
 	.project-document::-webkit-scrollbar,
-	.project-frame .citation pre::-webkit-scrollbar {
+	.project-frame :is(.citation pre, .table-scroll)::-webkit-scrollbar {
 		width: 6px;
 		height: 6px;
 	}
 	.project-document::-webkit-scrollbar-track,
-	.project-frame .citation pre::-webkit-scrollbar-track {
+	.project-frame :is(.citation pre, .table-scroll)::-webkit-scrollbar-track {
+		border-radius: 0;
 		background: transparent;
 	}
 	.project-document::-webkit-scrollbar-thumb,
-	.project-frame .citation pre::-webkit-scrollbar-thumb {
+	.project-frame :is(.citation pre, .table-scroll)::-webkit-scrollbar-thumb {
+		border-radius: 0;
+		background: transparent;
+	}
+	.project-document::-webkit-scrollbar-corner,
+	.project-frame :is(.citation pre, .table-scroll)::-webkit-scrollbar-corner {
+		border-radius: 0;
 		background: transparent;
 	}
 	.project-document.is-scrolling,
-	.project-frame .citation pre:is(:hover, :focus, :focus-within, .is-scrolling) {
+	.project-frame
+		:is(.citation pre, .table-scroll):is(:hover, :focus, :focus-within, .is-scrolling) {
 		scrollbar-color: var(--line-strong) transparent;
 	}
 	.project-document.is-scrolling::-webkit-scrollbar-thumb,
 	.project-frame
-		.citation
-		pre:is(:hover, :focus, :focus-within, .is-scrolling)::-webkit-scrollbar-thumb {
+		:is(.citation pre, .table-scroll):is(
+			:hover,
+			:focus,
+			:focus-within,
+			.is-scrolling
+		)::-webkit-scrollbar-thumb {
 		background: var(--line-strong);
 	}
-	.project-frame :is(.project-nav, .table-scroll) {
+	.project-frame .project-nav {
 		-ms-overflow-style: none;
 		scrollbar-gutter: auto !important;
 		scrollbar-width: none !important;
 	}
-	.project-frame :is(.project-nav, .table-scroll)::-webkit-scrollbar {
+	.project-frame .project-nav::-webkit-scrollbar {
 		display: none;
 		width: 0;
 		height: 0;
@@ -322,6 +538,14 @@ const {
 	}
 	.project-frame .table-scroll table thead :is(th, td):first-child {
 		z-index: 2;
+	}
+	.project-frame
+		.table-scroll
+		table
+		tbody
+		tr:is(.ours, .paper-table__ours)
+		> :is(th, td):first-child {
+		background: color-mix(in srgb, var(--signal) 6%, var(--paper));
 	}
 	@media (max-width: 1024px) {
 		.project-frame {
@@ -364,6 +588,28 @@ const {
 		.project-main {
 			padding: 54px 0 80px;
 		}
+		.project-page,
+		.project-section {
+			width: 100% !important;
+			max-width: none;
+			min-width: 0;
+		}
+		.section-label {
+			padding-right: 34px;
+		}
+		.section-label span {
+			right: 0;
+			left: auto;
+		}
+		.citation {
+			width: 100%;
+			max-width: none;
+			min-width: 0;
+			margin-inline: 0;
+		}
+		.citation pre {
+			max-width: 100%;
+		}
 		.project-frame
 			:is(.paper-table-figure, .result-table-figure, .main-results-table, .evaluation-tables) {
 			width: 100% !important;
@@ -374,6 +620,11 @@ const {
 			width: 100% !important;
 			max-width: 100% !important;
 			min-width: 0 !important;
+		}
+	}
+	@media (max-width: 560px) {
+		.citation pre {
+			padding: 54px 16px 18px;
 		}
 	}
 </style>

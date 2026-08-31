@@ -70,7 +70,7 @@ const siteOverlay = svg(`
 	<text x="72" y="568" class="sans" fill="${muted}" font-size="15">Research, publications, and selected projects</text>
 `);
 
-await sharp(path.join(root, "src", "assets", "social", "social-card-background.png"))
+await sharp(path.join(root, "src", "assets", "social", "background.png"))
 	.resize(width, height, { fit: "cover" })
 	.composite([{ input: siteOverlay }])
 	.png({ compressionLevel: 9, palette: true, quality: 92 })

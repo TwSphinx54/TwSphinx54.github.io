@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@config "../../tailwind.config.ts";
 
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
@@ -25,8 +24,13 @@
 	--reading-width: min(
 		620px,
 		calc(
-			100vw - var(--outer-rail) - var(--outer-rail) - var(--sidebar-width) - var(--content-gutter) -
-				var(--profile-width) - var(--intro-gap)
+			100vw -
+			var(--outer-rail) -
+			var(--outer-rail) -
+			var(--sidebar-width) -
+			var(--content-gutter) -
+			var(--profile-width) -
+			var(--intro-gap)
 		)
 	);
 }
@@ -509,13 +513,19 @@ main section > div > h2 {
 	box-shadow: none !important;
 	filter: saturate(0.72) contrast(1.04);
 }
-.profile-figure figcaption {
-	margin-top: 7px;
+.profile-figure figcaption,
+.project-document figure figcaption {
+	margin-top: 9px;
 	color: var(--muted);
 	font-family: var(--font-serif);
 	font-size: 9px;
-	line-height: 1.45;
-	text-align: right;
+	line-height: 1.5;
+	text-align: left;
+}
+.profile-figure figcaption strong,
+.project-document figure figcaption strong {
+	color: var(--ink);
+	font-weight: 400;
 }
 
 .home-callout {
@@ -1359,7 +1369,7 @@ details summary {
 .creative-heading {
 	display: block;
 }
-.creative-heading .creative-statement {
+.page-heading .page-statement {
 	max-width: var(--reading-width);
 	margin-top: 52px;
 }
@@ -1393,24 +1403,39 @@ details summary {
 	overflow: hidden;
 	background: color-mix(in srgb, var(--ink) 5%, transparent);
 }
-.creative-work__image::after {
-	content: "↗";
+
+.figure-cross {
 	position: absolute;
-	right: 8px;
-	bottom: 8px;
-	display: grid;
-	width: 24px;
-	height: 24px;
-	place-items: center;
-	background: var(--paper);
-	color: var(--ink);
-	font-family: var(--font-mono);
-	font-size: 10px;
+	z-index: 2;
+	display: block;
+	width: 6px;
+	height: 8px;
+	background: var(--ink);
+	color: transparent;
+	font-size: 0;
 	opacity: 0;
-	transition: opacity 160ms ease;
+	pointer-events: none;
 }
-.creative-work__image:hover::after,
-.creative-work__image:focus-visible::after {
+.figure-cross--tl {
+	top: 0;
+	left: 0;
+}
+.figure-cross--tr {
+	top: 0;
+	right: 0;
+}
+.figure-cross--bl {
+	bottom: 0;
+	left: 0;
+}
+.figure-cross--br {
+	right: 0;
+	bottom: 0;
+}
+.figure-media:hover .figure-cross,
+.figure-media:focus-within .figure-cross,
+.creative-work__image:hover .figure-cross,
+.creative-work__image:focus-visible .figure-cross {
 	opacity: 1;
 }
 .creative-work img {

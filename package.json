@@ -17,26 +17,26 @@
 	"type": "module",
 	"scripts": {
 		"dev": "astro dev",
-		"start": "astro dev",
 		"build": "astro build",
 		"social-cards": "node scripts/generate-social-cards.mjs",
+		"normalize-icons": "node scripts/normalize-tool-icons.mjs",
 		"preview": "astro preview",
-		"lint": "biome lint .",
+		"lint": "biome check . && prettier --check \"src/**/*.astro\" \"README.md\"",
 		"format": "biome check --write . && prettier --write \"src/**/*.astro\" \"README.md\"",
 		"check": "astro check",
 		"validate": "pnpm run lint && pnpm run check && pnpm run build"
 	},
 	"dependencies": {
-		"astro": "^7.2.0",
-		"astro-icon": "^1.1.5",
+		"astro": "^7.2.9",
+		"astro-icon": "^1.2.0",
 		"astro-robots-txt": "^1.0.0",
-		"sharp": "^0.35.3"
+		"sharp": "^0.35.4"
 	},
 	"devDependencies": {
 		"@astrojs/check": "^0.9.10",
-		"@biomejs/biome": "^2.5.7",
-		"@iconify-json/lucide": "^1.2.121",
-		"@iconify-json/simple-icons": "^1.2.93",
+		"@biomejs/biome": "^2.5.11",
+		"@iconify-json/lucide": "^1.2.127",
+		"@iconify-json/simple-icons": "^1.2.94",
 		"@tailwindcss/vite": "^4.3.3",
 		"prettier": "^3.9.6",
 		"prettier-plugin-astro": "0.14.1",

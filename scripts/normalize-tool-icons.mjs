@@ -1,7 +1,7 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import sharp from "sharp";
 
-const iconDirectory = new URL("../public/tools/", import.meta.url);
+const iconDirectory = new URL("../src/assets/tools/", import.meta.url);
 const canvasSize = 1024;
 const alphaThreshold = 8;
 const paddingRatio = 0.06;
