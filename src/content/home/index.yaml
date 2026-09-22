@@ -123,9 +123,10 @@ publicationsEditable:
     selected: true
 
   - author:
-      ["Xu Pan†", "Zhen Pang†", "Qiyuan Ma", "He Chen", "Wei Ji", "Shuhan Shen", "Xianwei Zheng*"]
-    title: "SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching"
-    booktitle: "CoRR abs/2606.03406"
+      ["Xu Pan†", "Zhen Pang†", "Qiyuan Ma", "Wei Ji", "Shuhan Shen", "Xianwei Zheng*"]
+    title: "SAMatcher: Dense Co-Visibility Modeling via Cross-View Fusion for Scale-Imbalance Image Matching"
+    # booktitle: "CoRR abs/2606.03406"
+    booktitle: "Information Fusion (Under Review)"
     time: "2026"
     semantic_scholar_id: "5c3da4ff4f4a6dca9d9b061613f3ac2a53887d1d"
     doi: "https://doi.org/10.48550/arXiv.2606.03406"
@@ -133,8 +134,10 @@ publicationsEditable:
     code: "https://github.com/TwSphinx54/SAMatcher"
     huggingface: "https://huggingface.co/SSSSphinx/SAMatcher"
     site: "/projects/samatcher/"
-    venueIcon: "simple-icons:arxiv"
-    venueColor: "#B31B1B"
+    # venueIcon: "simple-icons:arxiv"
+    # venueColor: "#B31B1B"
+    venueIcon: "simple-icons:elsevier"
+    venueColor: "#FF6C00"
     abstract: >-
       Reliable correspondence estimation is a fundamental problem in image processing, underpinning a wide range of applications such as Structure from Motion, visual localization, and image registration.
       While recent learning-based approaches have substantially improved the representation capability of local features, most methods still operate primarily at the pixel or patch level.

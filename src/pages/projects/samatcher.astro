@@ -15,11 +15,6 @@ const authors = [
 	{ name: "Xu Pan", href: "/", mark: "1,2,†,‡" },
 	{ name: "Zhen Pang", mark: "1,†" },
 	{ name: "Qiyuan Ma", href: "https://www.researchgate.net/profile/Qiyuan-Ma-2", mark: "1" },
-	{
-		name: "He Chen",
-		href: "https://www.researchgate.net/scientific-contributions/He-Chen-2315784007",
-		mark: "1",
-	},
 	{ name: "Wei Ji", mark: "3" },
 	{ name: "Shuhan Shen", href: "http://3dv.ac.cn/en/faculty/shs/", mark: "4" },
 	{
@@ -45,8 +40,8 @@ const links = [
 	{ label: "arXiv", href: "https://arxiv.org/abs/2606.03406", icon: "lucide:external-link" },
 ];
 const bibtex = `@article{pan2026samatcher,
-  title={SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching},
-  author={Pan, Xu and Pang, Zhen and Ma, Qiyuan and Chen, He and Ji, Wei and Shen, Shuhan and Zheng, Xianwei},
+  title={SAMatcher: Dense Co-Visibility Modeling via Cross-View Fusion for Scale-Imbalance Image Matching},
+  author={Pan, Xu and Pang, Zhen and Ma, Qiyuan and Ji, Wei and Shen, Shuhan and Zheng, Xianwei},
   journal={arXiv preprint arXiv:2606.03406},
   year={2026}
 }`;
@@ -115,6 +110,9 @@ const matchingRows = [
 		"+SAMatcher",
 		"36.41 54.43 69.97 62.60 79.40 85.20 90.40 62.60 71.00 79.40 94.96 79.49",
 	],
+	["RoMa", "None", "50.22 64.25 77.76 72.40 81.48 85.46 91.44 72.40 76.94 82.69 96.03 93.50"],
+	["RoMa", "+OETR", "44.91 62.17 76.51 67.99 86.14 90.15 92.70 67.99 77.07 84.25 81.37 98.97"],
+	["RoMa", "+SAMatcher", "55.80 70.06 80.36 77.37 87.42 90.82 91.47 77.37 82.39 86.75 97.63 99.57"],
 ].map(([pipeline, prior, values]) => ({ pipeline, prior, values: values.split(" ") }));
 ---
 
@@ -130,14 +128,15 @@ const matchingRows = [
 	]}
 	meta={{
 		title: "SAMatcher",
-		description: "Co-Visibility Modeling with Segment Anything for Robust Feature Matching.",
+		description:
+			"Dense co-visibility modeling via cross-view fusion for scale-imbalanced image matching.",
 		ogImage: "/social/projects/samatcher.png",
 	}}
 >
 	<article class="project-page">
 		<ProjectHero
 			year="2026"
-			title="SAMatcher: Co-Visibility Modeling with Segment Anything for Robust Feature Matching"
+			title="SAMatcher: Dense Co-Visibility Modeling via Cross-View Fusion for Scale-Imbalance Image Matching"
 			{authors}
 			{affiliations}
 			notes={[
@@ -145,7 +144,7 @@ const matchingRows = [
 				{ mark: "‡", text: "Work done at LIESMARS" },
 				{ mark: "*", text: "Corresponding author" },
 			]}
-			venue={{ label: "arXiv preprint, 2026", href: "https://arxiv.org/abs/2606.03406" }}
+			venue={{ label: "Information Fusion (Under Review)" }}
 			{links}
 		/>
 
@@ -153,16 +152,17 @@ const matchingRows = [
 			<div class="section-label"><span>01</span><h2 id="abstract-heading">Abstract</h2></div>
 			<div class="abstract-layout">
 				<p class="project-abstract">
-					Reliable feature matching becomes brittle when two views share only partial content or
-					depict the same structure at very different scales. SAMatcher takes a region-first
-					approach<sup class="citation-mark"><a href="#ref-1">[1]</a></sup>: before estimating point
-					correspondences, it predicts consistent co-visible masks and bounding boxes in a shared
-					cross-view representation. Built on SAM-HQ<sup class="citation-mark"
+					Reliable correspondence estimation becomes difficult under cross-view scale imbalance: the
+					same content occupies unequal spatial extents, so paired images provide different amounts
+					of usable evidence. SAMatcher takes a region-first approach<sup class="citation-mark"
+						><a href="#ref-1">[1]</a></sup
+					>: it fuses paired features to predict dense co-visible masks and bounding boxes before
+					downstream matching. Built on SAM-HQ<sup class="citation-mark"
 						><a href="#ref-2">[2]</a></sup
-					>, the framework combines symmetric cross-view interaction with joint mask, box, and
-					mask–box consistency supervision. The resulting semantic and geometric priors suppress
-					unsupported regions and improve classical, sparse learned, and dense matching pipelines
-					under wide baselines.
+					>, the framework combines symmetric cross-view interaction, shared learnable prompts, and
+					joint mask–box supervision to produce view-specific cropping priors. Across classical,
+					sparse learned, and dense matchers, SAMatcher improves robustness; with RoMa, it raises
+					AUC@5 and mAA@5 by 5.58 and 4.97 percentage points, respectively.
 				</p>
 				<figure class="abstract-figure">
 					<div class="figure-media">
@@ -242,19 +242,22 @@ const matchingRows = [
 		<section class="project-section" aria-labelledby="evaluation-heading">
 			<div class="section-label"><span>03</span><h2 id="evaluation-heading">Evaluation</h2></div>
 			<p class="project-abstract">
-				We evaluate on MegaDepth<sup class="citation-mark"><a href="#ref-3">[3]</a></sup> image pairs
-				selected for large scale differences, reporting pose AUC, accuracy, and mean Average Accuracy
-				(mAA) at multiple thresholds. SAMatcher is attached to nine representative pipelines—from SIFT
-				and nearest-neighbor matching to SuperGlue<sup class="citation-mark"
+				We evaluate on MegaDepth<sup class="citation-mark"><a href="#ref-3">[3]</a></sup> using the cross-view
+				scale-imbalance protocol: 10 test scenes and 500 image pairs with sufficient co-visible regions.
+				We report pose AUC, accuracy, and mean Average Accuracy (mAA) at multiple thresholds, alongside
+				precision (P) and matching score (MS). SAMatcher is attached to ten representative pipelines—from
+				SIFT and nearest-neighbor matching to SuperGlue<sup class="citation-mark"
 					><a href="#ref-4">[4]</a></sup
-				> and LoFTR<sup class="citation-mark"><a href="#ref-5">[5]</a></sup>—and compared with both
-				the unmodified pipeline and OETR<sup class="citation-mark"><a href="#ref-6">[6]</a></sup> region
-				priors.
+				> and LoFTR<sup class="citation-mark"><a href="#ref-5">[5]</a></sup>—plus RoMa<sup
+					class="citation-mark"><a href="#ref-7">[7]</a></sup
+				>, and compared with both the unmodified pipeline and OETR<sup class="citation-mark"
+					><a href="#ref-6">[6]</a></sup
+				> region priors.
 			</p>
 			<div class="evaluation-grid">
 				<div>
-					<strong>+12.95 pp</strong><span>LoFTR AUC@20 gain over its base pipeline</span>
-				</div><div><strong>+14.70 pp</strong><span>LoFTR mAA@20 gain</span></div><div>
+					<strong>+5.58 pp</strong><span>RoMa AUC@5 gain over its base pipeline</span>
+				</div><div><strong>+4.97 pp</strong><span>RoMa mAA@5 gain</span></div><div>
 					<strong>78.86 / 82.38</strong><span>full-model mask / box IoU (%)</span>
 				</div>
 			</div>
@@ -279,6 +282,7 @@ const matchingRows = [
 								>{
 									matchingRows.map((row) => (
 										<tr class={row.prior === "+SAMatcher" ? "ours" : undefined}>
+											<td>{row.pipeline}</td>
 											<td>{row.prior}</td>
 											{row.values.map((value) => (
 												<td>{row.prior === "+SAMatcher" ? <strong>{value}</strong> : value}</td>
@@ -289,8 +293,8 @@ const matchingRows = [
 							>
 						</table>
 					</div><figcaption class="table-caption">
-						<strong>Table 1.</strong> Complete MegaDepth evaluation under large scale differences (%).
-						All nine feature–matcher pipelines are reported without a prior, with OETR, and with SAMatcher.
+						<strong>Table 1.</strong> Complete MegaDepth evaluation under cross-view scale imbalance (%).
+						All ten feature–matcher pipelines are reported without a prior, with OETR, and with SAMatcher.
 					</figcaption>
 				</figure>
 				<figure class="paper-table-figure ablation" data-sync-table-caption>
@@ -429,8 +433,8 @@ const matchingRows = [
 			>
 				<li id="ref-1">
 					<span
-						>X. Pan, Z. Pang, Q. Ma, et al. “SAMatcher: Co-Visibility Modeling with Segment Anything
-						for Robust Feature Matching.” arXiv:2606.03406, 2026.</span
+						>X. Pan, Z. Pang, Q. Ma, et al. “SAMatcher: Dense Co-Visibility Modeling via Cross-View
+						Fusion for Scale-Imbalance Image Matching.” arXiv:2606.03406, 2026.</span
 					>
 					<a href="https://arxiv.org/abs/2606.03406">arXiv</a>
 				</li>
@@ -466,6 +470,13 @@ const matchingRows = [
 						Scene Matching.” CVPR, 2022.</span
 					>
 					<a href="https://arxiv.org/abs/2204.06189">arXiv</a>
+				</li>
+				<li id="ref-7">
+					<span
+						>J. Edstedt, Q. Sun, G. Bökman, M. Wadenbäck, and M. Felsberg. “RoMa: Robust Dense
+						Feature Matching.” CVPR, 2024.</span
+					>
+					<a href="https://arxiv.org/abs/2305.15404">arXiv</a>
 				</li>
 			</ol>
 		</section>

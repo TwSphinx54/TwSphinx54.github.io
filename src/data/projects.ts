@@ -60,9 +60,9 @@ const projectDefinitions: ProjectDefinition[] = [
 		slug: "samatcher",
 		name: "SAMatcher",
 		topic: "3D Vision",
-		venue: "arXiv · 2026",
+		venue: "Information Fusion (Under Review)",
 		description:
-			"Explicit co-visibility modeling with Segment Anything for robust cross-view feature matching.",
+			"Dense co-visibility modeling via cross-view fusion for scale-imbalanced image matching.",
 	},
 	{
 		slug: "scode",
