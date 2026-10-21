@@ -82,13 +82,13 @@ publicationsEditable:
         "Ivor Tsang",
       ]
     title: "Towards Backdoor-Based Ownership Verification for Vision-Language-Action Models"
-    booktitle: "Under Review"
+    booktitle: "IEEE Transactions on Pattern Analysis and Machine Intelligence (Under Review)"
     time: "2026"
     semantic_scholar_id: "16be0b88eb7efe2253582a5012ec4013550981ce"
     doi: "https://doi.org/10.48550/arXiv.2605.09005"
     paper: "https://arxiv.org/abs/2605.09005"
-    venueIcon: "simple-icons:arxiv"
-    venueColor: "#B31B1B"
+    venueIcon: "simple-icons:ieee"
+    venueColor: "#00629B"
     abstract: >-
       Vision-Language-Action models (VLAs) support generalist robotic control by enabling end-to-end decision policies directly from multi-modal inputs. As trained VLAs are increasingly shared and adapted, protecting model ownership becomes essential for secure deployment and responsible open-source usage. In this paper, we present GuardVLA, the first backdoor-based ownership verification framework specifically designed for VLAs. GuardVLA embeds a stealthy and harmless backdoor watermark into the protected model during training by injecting secret messages into embodied visual data. For post-release verification, we propose a swap-and-detect mechanism, in which the trigger projector and an external classifier head are used to activate and detect the embedded backdoor based on prediction probabilities. Extensive experiments across multiple datasets, model architectures, and adaptation settings demonstrate that GuardVLA enables reliable ownership verification while preserving benign task performance. Further results show that the embedded watermark remains detectable under post-release model adaptation.
 
@@ -126,7 +126,7 @@ publicationsEditable:
       ["Xu Pan†", "Zhen Pang†", "Qiyuan Ma", "Wei Ji", "Shuhan Shen", "Xianwei Zheng*"]
     title: "SAMatcher: Dense Co-Visibility Modeling via Cross-View Fusion for Scale-Imbalance Image Matching"
     # booktitle: "CoRR abs/2606.03406"
-    booktitle: "Information Fusion (Under Review)"
+    booktitle: "IEEE Transactions on Circuits and Systems for Video Technology (Under Review)"
     time: "2026"
     semantic_scholar_id: "5c3da4ff4f4a6dca9d9b061613f3ac2a53887d1d"
     doi: "https://doi.org/10.48550/arXiv.2606.03406"
@@ -134,10 +134,8 @@ publicationsEditable:
     code: "https://github.com/TwSphinx54/SAMatcher"
     huggingface: "https://huggingface.co/SSSSphinx/SAMatcher"
     site: "/projects/samatcher/"
-    # venueIcon: "simple-icons:arxiv"
-    # venueColor: "#B31B1B"
-    venueIcon: "simple-icons:elsevier"
-    venueColor: "#FF6C00"
+    venueIcon: "simple-icons:ieee"
+    venueColor: "#00629B"
     abstract: >-
       Reliable correspondence estimation is a fundamental problem in image processing, underpinning a wide range of applications such as Structure from Motion, visual localization, and image registration.
       While recent learning-based approaches have substantially improved the representation capability of local features, most methods still operate primarily at the pixel or patch level.

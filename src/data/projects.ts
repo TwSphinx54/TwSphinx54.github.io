@@ -5,6 +5,7 @@ type ProjectDefinition = {
 	name: string;
 	topic: string;
 	venue: string;
+	menuVenue?: string;
 	description: string;
 	href?: string | null;
 };
@@ -60,7 +61,8 @@ const projectDefinitions: ProjectDefinition[] = [
 		slug: "samatcher",
 		name: "SAMatcher",
 		topic: "3D Vision",
-		venue: "Information Fusion (Under Review)",
+		venue: "IEEE Transactions on Circuits and Systems for Video Technology (Under Review)",
+		menuVenue: "TCSVT",
 		description:
 			"Dense co-visibility modeling via cross-view fusion for scale-imbalanced image matching.",
 	},
