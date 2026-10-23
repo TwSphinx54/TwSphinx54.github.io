@@ -6,6 +6,10 @@ const meta = {
 	description: "Contact — download my resume, get in touch, or schedule a meeting.",
 	title: "Contact",
 };
+const ntuMapUrl =
+	"https://use.mazemap.com/?utm_medium=longurl#v=1&config=ntu-sg&zlevel=-2&center=103.680922,1.343206&zoom=17.5&campusid=2123&sharepoitype=poi&sharepoi=1003281510&sharemode=false&positioning=disabled";
+const ntuMapPage =
+	"https://maps.ntu.edu.sg/?mazemap_share_url=https%3A%2F%2Fuse.mazemap.com%2F%3Futm_medium%3Dlongurl%23v%3D1%26config%3Dntu-sg%26zlevel%3D-2%26center%3D103.680922%2C1.343206%26zoom%3D19.7%26campusid%3D2123%26sharepoitype%3Dpoi%26sharepoi%3D1003281510";
 ---
 
 <PageLayout meta={meta}>
@@ -30,6 +34,39 @@ const meta = {
 					<Icon name="lucide:mail" class="func-icon" />
 					Send email
 				</a>
+			</div>
+		</div>
+
+		<div class="contact-location-map">
+			<div class="contact-location">
+				<h2>Office address</h2>
+				<address>
+					RSO 3, Room 3 (S2.2-B2-03)<br />
+					School of Electrical and Electronic Engineering<br />
+					Nanyang Technological University<br />
+					50 Nanyang Avenue<br />
+					Singapore 639798
+				</address>
+			</div>
+
+			<div class="contact-map" aria-labelledby="contact-map-heading">
+				<div class="contact-map__header">
+					<h3 id="contact-map-heading">Find me at NTU</h3>
+					<a class="ui-control" href={ntuMapPage} target="_blank" rel="noopener">
+						Open NTU Maps <Icon name="lucide:arrow-up-right" class="func-icon" />
+					</a>
+				</div>
+				<div class="contact-map__frame">
+					<iframe
+						title="NTU campus map showing S2.2-B2-03"
+						src={ntuMapUrl}
+						loading="lazy"
+						referrerpolicy="strict-origin-when-cross-origin"></iframe>
+				</div>
+				<p class="contact-map__note">
+					The map opens directly at <span>S2.2-B2-03</span>. Use the full NTU Maps view for indoor
+					navigation.
+				</p>
 			</div>
 		</div>
 
