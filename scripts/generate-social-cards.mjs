@@ -27,13 +27,6 @@ const svg = (body) =>
 
 const projectCards = [
 	{
-		slug: "sfm",
-		name: "SFM",
-		year: "2026",
-		line1: "Spatially-Aware Flow Matching",
-		line2: "for Embodied Reinforcement Learning",
-	},
-	{
 		slug: "savla",
 		name: "SA-VLA",
 		year: "2026",

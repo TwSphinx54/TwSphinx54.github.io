@@ -42,14 +42,6 @@ const projectDefinitions: ProjectDefinition[] = [
 			"Temporally coupled latent distributions shorten the flow transport path for few- or single-step action generation within an asynchronous fast–slow policy.",
 	},
 	{
-		slug: "sfm",
-		name: "SFM",
-		topic: "Embodied AI",
-		venue: "Under Review · 2026",
-		description:
-			"Geometry-aware representation, grounded reward, and annealed exploration for robust flow-matching VLA reinforcement learning.",
-	},
-	{
 		slug: "savla",
 		name: "SA-VLA",
 		topic: "Embodied AI",

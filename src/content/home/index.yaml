@@ -16,34 +16,6 @@ publicationsEditable:
         "Ziwei Wang",
         "Ivor Tsang",
       ]
-    title: "SFM: Spatially-Aware Flow Matching for Embodied Reinforcement Learning"
-    booktitle: "Under Review"
-    time: "2026"
-    code: "https://github.com/TwSphinx54/SA-VLA"
-    huggingface: "https://huggingface.co/SSSSphinx/SA-VLA"
-    site: "/projects/sfm/"
-    abstract: >-
-      Reinforcement learning fine-tuning of flow-matching Vision-Language-Action policies can improve
-      in-distribution performance while degrading spatial generalization. SFM addresses this coupled failure
-      by aligning representation, reward, and exploration in a shared geometric latent space. It combines
-      implicit spatial token fusion, Spatially Grounded Reward for phase-aware geometric credit assignment,
-      and Spatially Conditioned Annealed Exploration for geometry-aware stochastic exploration. Across
-      LIBERO and LIBERO-Plus, SFM improves robustness under spatial distribution shifts while retaining
-      in-distribution task performance.
-    selected: true
-
-  - author:
-      [
-        "Xu Pan",
-        "Zhenglin Wan",
-        "Xingrui Yu*",
-        "Xianwei Zheng",
-        "Youkai Ke",
-        "Ming Sun",
-        "Rui Wang",
-        "Ziwei Wang",
-        "Ivor Tsang",
-      ]
     title: "SA-VLA: Spatially-Aware Reinforcement Learning for Flow-Matching Vision-Language-Action Models"
     booktitle: "IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)"
     time: "2026"
@@ -310,6 +282,10 @@ acknowledgements:
   outro: "and others I’ve had the pleasure to work with."
 
 academicServices:
+  - role: "Reviewer"
+    venue: "2027 IEEE International Conference on Robotics and Automation (ICRA'27)"
+    venueLink: "https://2027.ieee-icra.org/"
+    year: "2026"
   - role: "Reviewer"
     venue: "2027 International Joint Conference on Neural Networks (IJCNN'27)"
     venueLink: "https://ijcnn.org/2027"
