@@ -3,6 +3,7 @@ import PageLayout from "@/layouts/Base.astro";
 import { getEntry } from "astro:content";
 import PublicationItem from "@/components/PublicationItem.astro";
 import PublicationScripts from "@/components/PublicationScripts.astro";
+import CitationTrend from "@/components/CitationTrend.astro";
 import { resolveAsset } from "@/utils/assets";
 
 const homeEntry = await getEntry("home", "index");
@@ -35,6 +36,10 @@ const meta = {
 			<p>† Equal contribution; * Corresponding author.</p>
 		</div>
 	</header>
+	<CitationTrend
+		dois={publications.flatMap((pub) => (pub.doi ? [pub.doi] : []))}
+		publicationCount={publications.length}
+	/>
 	<section id="lead" class="mt-10">
 		<h2 class="title mb-3 flex items-baseline gap-2 text-xl">
 			<span>Lead Publications</span>

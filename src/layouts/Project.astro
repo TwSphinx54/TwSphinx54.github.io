@@ -42,7 +42,10 @@ const {
 					],
 					processEscapes: true,
 				},
-				options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"] },
+				options: {
+					enableMenu: false,
+					skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+				},
 			};
 		</script>
 		<script is:inline async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"

@@ -172,9 +172,7 @@ Represent authors, links, and affiliations as named data objects/arrays rather t
 ```ts
 const authors = [{ name: "Xu Pan", href: "/", mark: "1,*" }];
 const affiliations = ["Full institution name"];
-const links = [
-	{ label: "Paper", href: "https://...", icon: "lucide:file-text" },
-];
+const links = [{ label: "Paper", href: "https://...", icon: "lucide:file-text" }];
 ```
 
 Author links should come from verified existing HTML, the paper source, or an authoritative profile. Internal author links stay in the same tab; external links use `target="_blank"` and `rel="noreferrer"`.

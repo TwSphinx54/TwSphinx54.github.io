@@ -34,12 +34,12 @@ function getCardImage(slug: string): ImageMetadata {
 
 const projectDefinitions: ProjectDefinition[] = [
 	{
-		slug: "pi-fs",
-		name: "Pi-FS",
+		slug: "causyncvla",
+		name: "CauSyncVLA",
 		topic: "Embodied AI",
-		venue: "Ongoing · 2026",
+		venue: "Under Review · 2026",
 		description:
-			"Temporally coupled latent distributions shorten the flow transport path for few- or single-step action generation within an asynchronous fast–slow policy.",
+			"Execution-grounded latent memory prediction and trajectory correction for asynchronous robot control.",
 	},
 	{
 		slug: "savla",
@@ -53,8 +53,8 @@ const projectDefinitions: ProjectDefinition[] = [
 		slug: "samatcher",
 		name: "SAMatcher",
 		topic: "3D Vision",
-		venue: "IEEE Transactions on Circuits and Systems for Video Technology (Under Review)",
-		menuVenue: "TCSVT",
+		venue: "arXiv:2606.03406 · 2026",
+		menuVenue: "arXiv:2606.03406",
 		description:
 			"Dense co-visibility modeling via cross-view fusion for scale-imbalanced image matching.",
 	},
@@ -70,6 +70,6 @@ const projectDefinitions: ProjectDefinition[] = [
 
 export const projects: ResearchProject[] = projectDefinitions.map((project) => ({
 	...project,
-	href: project.href ?? (project.slug === "pi-fs" ? null : `/projects/${project.slug}/`),
+	href: project.href ?? `/projects/${project.slug}/`,
 	cardImage: getCardImage(project.slug),
 }));

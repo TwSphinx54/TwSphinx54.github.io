@@ -1,0 +1,1130 @@
+---
+import { Image } from "astro:assets";
+import ProjectHero, { type ProjectLink } from "@/components/ProjectHero.astro";
+import ProjectLayout from "@/layouts/Project.astro";
+import teaserImage from "@/assets/projects/causyncvla/teaser.png";
+import methodImage from "@/assets/projects/causyncvla/method.png";
+import capacityImage from "@/assets/projects/causyncvla/expert12k_capacity.png";
+import ageImage from "@/assets/projects/causyncvla/expert12k_age.png";
+import flowImage from "@/assets/projects/causyncvla/pfws_flow_paths.png";
+import plusImage from "@/assets/projects/causyncvla/plus_effect.png";
+import baseline1 from "@/assets/projects/causyncvla/fr3_baseline_phase1.png";
+import baseline2 from "@/assets/projects/causyncvla/fr3_baseline_phase2.png";
+import baseline3 from "@/assets/projects/causyncvla/fr3_baseline_phase3.png";
+import baseline4 from "@/assets/projects/causyncvla/fr3_baseline_phase4.png";
+import ours1 from "@/assets/projects/causyncvla/fr3_ours_phase1.png";
+import ours2 from "@/assets/projects/causyncvla/fr3_ours_phase2.png";
+import ours3 from "@/assets/projects/causyncvla/fr3_ours_phase3.png";
+import ours4 from "@/assets/projects/causyncvla/fr3_ours_phase4.png";
+
+const authors = [
+	{ name: "Xu Pan", href: "/", mark: "1" },
+	{ name: "Chubin Zhang", href: "https://bennidict23.github.io/", mark: "2" },
+	{ name: "Xingrui Yu", href: "https://xingruiyu.github.io/", mark: "3" },
+	{ name: "Runmin Lan", mark: "2" },
+	{ name: "Zihao Wang", mark: "1" },
+	{ name: "Wenkai Guo", href: "https://wkguo.github.io/", mark: "1" },
+	{ name: "Bofang Jia", href: "https://bofangjia.github.io/", mark: "1" },
+	{ name: "Bo An", href: "https://www3.ntu.edu.sg/home/boan/", mark: "2" },
+	{ name: "Ziwei Wang", href: "https://ziweiwangthu.github.io/", mark: "1,*" },
+];
+const affiliations = [
+	"School of Electrical and Electronic Engineering, Nanyang Technological University",
+	"College of Computing and Data Science, Nanyang Technological University",
+	"Centre for Frontier AI Research (CFAR) and Institute of High Performance Computing (IHPC), Agency for Science, Technology and Research (A*STAR)",
+];
+const links: ProjectLink[] = [
+	{ label: "Code", href: "https://github.com/TwSphinx54/CauSyncVLA", icon: "simple-icons:github" },
+	{
+		label: "Model",
+		href: "https://huggingface.co/SSSSphinx/CauSyncVLA",
+		icon: "simple-icons:huggingface",
+	},
+];
+const corners = ["tl", "tr", "bl", "br"];
+const equations = {
+	control: String.raw`$$A_t=\mathcal R_\psi\!\left(\mathcal Q_t,W_\theta(z_a,\mathcal H_{a:t})\right),\qquad \hat z_t=z_a+\mathbb I[k>0]\,\delta z_t.$$`,
+	warm: String.raw`$$\begin{aligned}x_\rho&=(1-\rho)\mathcal Q_t+\rho\epsilon,\quad \epsilon\sim\mathcal N(0,I),\\ A_t&=x_\rho-\rho\,v_\psi(x_\rho,\rho\mid\hat z_t).\end{aligned}$$`,
+	loss: String.raw`$$\mathcal L(\theta)=\underbrace{\left\|\frac{\hat z_t-z_t}{\sigma^\Delta}\right\|_m^2}_{\mathcal L_{\mathrm{KV}}}+\lambda\underbrace{\left\|\hat A-A^\star\right\|_w^2}_{\mathcal L_{\mathrm{act}}}.$$`,
+};
+const physicalPhases = [
+	{ label: "Grasp 1", baseline: baseline1, ours: ours1 },
+	{ label: "Place 1", baseline: baseline2, ours: ours2 },
+	{ label: "Grasp 2", baseline: baseline3, ours: ours3 },
+	{ label: "Place 2", baseline: baseline4, ours: ours4 },
+];
+const rows = [
+	{
+		name: "$\\pi_{0.5}$",
+		decoder: "10-step flow",
+		horizon: "10/5",
+		success: "91.20",
+		mean: "60.01",
+		p95: "60.20",
+		plans: "16.66",
+		actions: "83.32",
+	},
+	{
+		name: "$\\pi_{0.5}$",
+		decoder: "1-step flow",
+		horizon: "10/5",
+		success: "90.80",
+		mean: "36.00",
+		p95: "36.32",
+		plans: "27.78",
+		actions: "138.88",
+	},
+	{
+		name: "$\\pi_{0.5}$ + PFWS",
+		decoder: "1-step flow",
+		horizon: "10/5",
+		success: "93.00",
+		mean: "35.54",
+		p95: "35.94",
+		plans: "28.14",
+		actions: "140.70",
+	},
+	{
+		name: "GR00T N1.7",
+		decoder: "4-step flow",
+		horizon: "16/5",
+		success: "85.80",
+		mean: "59.37",
+		p95: "59.90",
+		plans: "16.84",
+		actions: "84.21",
+		ref: 7,
+	},
+	{
+		name: "OpenVLA-OFT",
+		decoder: "Parallel L1",
+		horizon: "8/5",
+		success: "89.20",
+		mean: "62.71",
+		p95: "62.91",
+		plans: "15.95",
+		actions: "79.73",
+		ref: 8,
+	},
+	{
+		name: "RTC",
+		decoder: "10-step + guidance",
+		horizon: "10/5",
+		success: "91.80",
+		mean: "179.82",
+		p95: "182.66",
+		plans: "5.56",
+		actions: "27.81",
+		ref: 4,
+	},
+	{
+		name: "Latent Bridge R0",
+		decoder: "2-step + bridge",
+		horizon: "10/5",
+		success: "91.80",
+		mean: "63.06",
+		p95: "78.29",
+		plans: "15.86",
+		actions: "79.29",
+		ref: 5,
+	},
+	{
+		name: "VLA-Rolling",
+		decoder: "Adaptive 1–10",
+		horizon: "50/10",
+		success: "93.40",
+		mean: "166.47",
+		p95: "202.06",
+		plans: "6.01",
+		actions: "60.07",
+		ref: 6,
+	},
+	{
+		name: "CauSyncVLA",
+		decoder: "1-step flow",
+		horizon: "10/5",
+		success: "93.80",
+		mean: "11.91",
+		p95: "13.38",
+		plans: "83.96",
+		actions: "419.82",
+		ours: true,
+	},
+];
+const physicalRows = [
+	{
+		task: "Cup stacking",
+		baseline: ["73.91", "20.00", "9.98", "72.34", "75.03", "0.530", "0.390", "28.97"],
+		ours: ["82.61", "43.22", "21.67", "13.30", "25.50", "0.453", "0.289", "19.63"],
+	},
+	{
+		task: "Fruit placement",
+		baseline: ["69.57", "20.08", "10.07", "72.30", "73.42", "0.487", "0.348", "22.87"],
+		ours: ["95.65", "42.41", "21.27", "14.28", "31.75", "0.433", "0.289", "16.62"],
+	},
+	{
+		task: "Vegetable sorting",
+		baseline: ["73.91", "20.04", "10.03", "72.26", "73.28", "0.659", "0.405", "23.50"],
+		ours: ["82.61", "43.26", "21.66", "12.82", "23.54", "0.525", "0.332", "17.75"],
+	},
+	{
+		task: "All tasks",
+		baseline: ["72.46", "20.06", "10.03", "72.30", "73.47", "0.531", "0.387", "25.16"],
+		ours: ["86.96", "43.13", "21.60", "13.17", "25.53", "0.462", "0.296", "17.93"],
+	},
+];
+const bibtex = `@unpublished{pan2026causyncvla,
+  title={CauSyncVLA: Causal Latent World Modeling for Asynchronous Robot Control},
+  author={Xu Pan and Chubin Zhang and Xingrui Yu and Runmin Lan and Zihao Wang and Wenkai Guo and Bofang Jia and Bo An and Ziwei Wang},
+  year={2026},
+  note={Under review}
+}`;
+---
+
+<ProjectLayout
+	projectName="CauSyncVLA"
+	navItems={[
+		{ label: "Abstract", href: "#abstract-heading" },
+		{ label: "In motion", href: "#video-heading" },
+		{ label: "Method", href: "#method-heading" },
+		{ label: "Evaluation", href: "#evaluation-heading" },
+		{ label: "Results", href: "#results-heading" },
+		{ label: "Citation", href: "#citation-heading" },
+		{ label: "References", href: "#references-heading" },
+	]}
+	meta={{
+		title: "CauSyncVLA",
+		ogImage: "/social/projects/causyncvla.png",
+		description:
+			"Causal latent world modeling and predictive flow warm-starting for asynchronous robot control.",
+	}}
+>
+	<article class="project-page">
+		<ProjectHero
+			year="2026"
+			title="CauSyncVLA: Causal Latent World Modeling for Asynchronous Robot Control"
+			{authors}
+			{affiliations}
+			notes={[{ mark: "*", text: "Corresponding author" }]}
+			venue={{ label: "Under review" }}
+			{links}
+		/>
+
+		<section class="project-section" aria-labelledby="abstract-heading">
+			<div class="section-label"><span>01</span><h2 id="abstract-heading">Abstract</h2></div>
+			<p class="project-abstract">
+				Vision–language–action policies must react while visual inference is still running.
+				Overlapping inference and execution reduces waiting, but leaves perceptual memory stale and
+				successive action chunks disconnected. CauSyncVLA couples a causal latent world model, which
+				updates delayed perceptual memory from executed state–action history, with predictive flow
+				warm-starting, which refines the unexecuted plan in one step. On LIBERO-10, it reaches 93.8%
+				success with 5.04× the model replanning capacity of a ten-step synchronous baseline on a
+				shared GPU.
+			</p>
+			<figure class="wide-figure">
+				<div class="figure-media">
+					{
+						corners.map((corner) => (
+							<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+								+
+							</span>
+						))
+					}
+					<Image
+						src={teaserImage}
+						alt="Synchronous and naive asynchronous control compared with CauSyncVLA's coupled perceptual-memory prediction and action correction"
+						loading="eager"
+					/>
+				</div>
+				<figcaption>
+					<strong>Fig. 1.</strong> CauSyncVLA aligns fast feedback control with slower visual updates,
+					using execution history to predict perceptual memory and an unexecuted plan to warm-start trajectory
+					correction.
+				</figcaption>
+			</figure>
+		</section>
+
+		<section class="project-section" aria-labelledby="video-heading">
+			<div class="section-label"><span>02</span><h2 id="video-heading">In motion</h2></div>
+			<figure class="video-figure">
+				<video
+					controls
+					playsinline
+					preload="metadata"
+					aria-label="Real-robot demonstrations comparing pi 0.5 and CauSyncVLA"
+				>
+					<source src="/projects/causyncvla/real-robot.mp4" type="video/mp4" />
+					Your browser does not support embedded video.
+				</video>
+				<figcaption>
+					Real-robot rollouts compare synchronous {"$\\pi_{0.5}$"} and CauSyncVLA on three-cup stacking,
+					fruit placement, and vegetable sorting. The trials have independently reset scenes.
+				</figcaption>
+			</figure>
+		</section>
+
+		<section class="project-section" aria-labelledby="method-heading">
+			<div class="section-label"><span>03</span><h2 id="method-heading">Method</h2></div>
+			<p class="project-abstract">
+				A slow visual stream publishes key–value (KV) memory anchors, while a fast control stream
+				propagates those anchors to the current execution time and refines the action horizon. The
+				backbone and action expert remain frozen; only the lightweight latent predictor is trained.
+			</p>
+			<figure class="wide-figure">
+				<div class="figure-media">
+					{
+						corners.map((corner) => (
+							<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+								+
+							</span>
+						))
+					}
+					<Image
+						src={methodImage}
+						alt="CauSyncVLA architecture showing the causal latent world model, action-sensitive distillation, and predictive flow warm-starting"
+						loading="lazy"
+					/>
+				</div>
+				<figcaption>
+					<strong>Fig. 2.</strong> Architecture and training: executed state–action history conditions
+					KV-memory prediction, and a shifted, rebased action tail initializes single-step flow refinement.
+				</figcaption>
+			</figure>
+			<div class="method-grid">
+				<article>
+					<span>01</span><h3>Causal latent world model</h3><p>
+						A predictor updates delayed KV anchors using the state transitions and commands actually
+						executed since the anchor was captured.
+					</p>
+				</article>
+				<article>
+					<span>02</span><h3>Action-sensitive distillation</h3><p>
+						In addition to KV reconstruction, the frozen expert's response supervises the predictor
+						to preserve memory features that matter for control.
+					</p>
+				</article>
+				<article>
+					<span>03</span><h3>Predictive flow warm-starting</h3><p>
+						The unexecuted action tail is aligned to the current state and refined in one flow step,
+						without training the action expert again.
+					</p>
+				</article>
+			</div>
+			<div class="method-explanation">
+				<h3>Execution-grounded control</h3>
+				<p>
+					At a replanning boundary, the latest visual anchor {"$z_a$"} was captured at time {"$a$"},
+					while the robot is now at {"$t$"}. The history {"$\\mathcal H_{a:t}$"} contains realized state
+					transitions and executed commands; {"$\\mathcal Q_t$"} is the unexecuted tail of the preceding
+					plan, shifted past consumed commands and rebased to the current state. Both records therefore
+					refer to actual execution.
+				</p>
+				<div class="equation" tabindex="0">{equations.control}</div>
+				<p>
+					The latent model predicts a residual to the delayed KV anchor; the age gate leaves a
+					freshly captured anchor unchanged. Causality here means using information available by the
+					decision time. It does not imply prediction of future pixels, or identification of
+					external physical dynamics.
+				</p>
+				<h3>Predictive flow warm-starting</h3>
+				<p>
+					Instead of drawing a new trajectory from pure noise, PFWS mixes the shifted prior with
+					Gaussian noise at flow time {"$\\rho$"}, then applies one Euler step of the frozen action
+					expert:
+				</p>
+				<div class="equation" tabindex="0">{equations.warm}</div>
+				<p>
+					Smaller {"$\\rho$"} retains more of the prior trajectory, while {"$\\rho=1$"} recovers cold-start
+					sampling. The experiments use {"$\\rho=0.5$"}; no additional action-expert training is
+					required.
+				</p>
+				<h3>Action-sensitive distillation</h3>
+				<p>
+					During training, the fresh anchor {"$z_t$"} is a teacher for the prediction {
+						"$\\hat z_t$"
+					}. Both query the same frozen expert with identical noise, flow time and state. KV
+					reconstruction preserves the representation, and the action term prioritizes errors that
+					change the expert's output:
+				</p>
+				<div class="equation" tabindex="0">{equations.loss}</div>
+				<p>
+					Here {"$\\hat A$"} and {"$A^\\star$"} are the student and detached teacher outputs; {
+						"$m$"
+					} masks valid KV entries and {"$w$"} weights action coordinates. Only the latent predictor is
+					updated.
+				</p>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="evaluation-heading">
+			<div class="section-label"><span>04</span><h2 id="evaluation-heading">Evaluation</h2></div>
+			<p class="project-abstract">
+				The controller builds on a frozen {"$\\pi_{0.5}$"}<sup class="citation-mark"
+					><a href="#ref-1">[1]</a></sup
+				> backbone. We evaluate 500 official starts on LIBERO-10<sup class="citation-mark"
+					><a href="#ref-2">[2]</a></sup
+				>, 2,519 paired perturbation variants on LIBERO-Plus<sup class="citation-mark"
+					><a href="#ref-3">[3]</a></sup
+				>, and 100 shared starts under a 20 Hz, 26-second closed-loop budget. Physical evaluation
+				uses a Franka FR3 arm with two cameras on cup stacking, held-out fruit placement, and
+				vegetable sorting. Model-only throughput and timed closed-loop response measure different
+				aspects of performance. The 24.27M-parameter predictor is trained for 12,000 updates;
+				simulation uses horizon 10 and stride 5, while the FR3 experiments use horizon 10 and stride
+				2 with live 30 Hz perception. Model capacity excludes simulator and robot execution.
+			</p>
+			<div class="evaluation-grid">
+				<div><strong>93.8%</strong><span>LIBERO-10 success across 500 starts</span></div><div>
+					<strong>5.04×</strong><span>shared-GPU model capacity vs. synchronous baseline</span>
+				</div><div>
+					<strong>86.96%</strong><span>pooled real-robot success across 69 trials</span>
+				</div>
+			</div>
+		</section>
+
+		<section class="project-section" aria-labelledby="results-heading">
+			<div class="section-label"><span>05</span><h2 id="results-heading">Results</h2></div>
+			<p class="project-abstract">
+				CauSyncVLA reaches 93.8% native success while reducing mean batch-one model latency from
+				60.01 ms to 11.91 ms against the ten-step synchronous baseline. Under the separate timed
+				closed-loop protocol, mean per-episode median observation-to-first-action response drops
+				from 176.73 ms to 83.04 ms. PFWS improves continuity, but its benefits under perturbation
+				depend on the type of shift: large viewpoint or layout changes can favor cold starts.
+			</p>
+			<figure class="paper-table-figure" data-sync-table-caption>
+				<div
+					class="table-scroll"
+					tabindex="0"
+					role="region"
+					aria-label="LIBERO-10 task competence and model inference capacity"
+				>
+					<table class="paper-table">
+						<thead
+							><tr
+								><th scope="col">Controller</th><th scope="col">Decoder</th><th scope="col">H/C</th
+								><th scope="col">Success (%) ↑</th><th scope="col">Mean (ms) ↓</th><th scope="col"
+									>P95 (ms) ↓</th
+								><th scope="col">Plans/s ↑</th><th scope="col">Actions/s ↑</th></tr
+							></thead
+						>
+						<tbody
+							>{
+								rows.map((row) => (
+									<tr class={row.ours ? "paper-table__ours" : undefined}>
+										<>
+											<th scope="row">
+												{row.name}
+												{row.ref && (
+													<sup class="citation-mark">
+														<a href={`#ref-${row.ref}`}>[{row.ref}]</a>
+													</sup>
+												)}
+											</th>
+											<td>{row.decoder}</td>
+											<td>{row.horizon}</td>
+											<td>
+												{row.ours ? (
+													<strong>{row.success}</strong>
+												) : row.name === "VLA-Rolling" ? (
+													<u>{row.success}</u>
+												) : (
+													row.success
+												)}
+											</td>
+											<td>
+												{row.ours ? (
+													<strong>{row.mean}</strong>
+												) : row.name.includes("+ PFWS") ? (
+													<u>{row.mean}</u>
+												) : (
+													row.mean
+												)}
+											</td>
+											<td>
+												{row.ours ? (
+													<strong>{row.p95}</strong>
+												) : row.name.includes("+ PFWS") ? (
+													<u>{row.p95}</u>
+												) : (
+													row.p95
+												)}
+											</td>
+											<td>
+												{row.ours ? (
+													<strong>{row.plans}</strong>
+												) : row.name.includes("+ PFWS") ? (
+													<u>{row.plans}</u>
+												) : (
+													row.plans
+												)}
+											</td>
+											<td>
+												{row.ours ? (
+													<strong>{row.actions}</strong>
+												) : row.name.includes("+ PFWS") ? (
+													<u>{row.actions}</u>
+												) : (
+													row.actions
+												)}
+											</td>
+										</>
+									</tr>
+								))
+							}</tbody
+						>
+					</table>
+				</div>
+				<figcaption class="table-caption">
+					<strong>Table 1.</strong> LIBERO-10 task competence and batch-one model inference capacity.
+					Success uses 500 starts and a 520-action budget; timing measures model inference rather than
+					timed closed-loop execution. Bold and underline mark the best and second-best values; H is the
+					action horizon and C is the replanning stride.
+				</figcaption>
+			</figure>
+			<h3 class="result-heading">Model capacity and closed-loop response</h3>
+			<p class="project-abstract">
+				Reducing the synchronous expert from ten flow steps to one lowers mean latency from 60.01 ms
+				to 36.00 ms. Moving visual encoding off the fast path reduces the shared-GPU measurement
+				further to 11.91 ms. The resulting 5.04× is model replanning capacity, not a measured
+				fivefold increase in robot dispatch. Under the separate 20 Hz timed protocol, measured
+				replans rise from 2.57 to 3.28 per second and completion rises from 86% to 91% across 100
+				shared starts.
+			</p>
+			<figure class="result-figure">
+				<div class="figure-media">
+					{
+						corners.map((corner) => (
+							<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+								+
+							</span>
+						))
+					}<Image
+						src={capacityImage}
+						alt="Normalized model replanning capacity for synchronous and asynchronous configurations"
+						loading="lazy"
+					/>
+				</div>
+				<figcaption>
+					<strong>Fig. 3.</strong> Batch-one model replanning capacity normalized to ten-step synchronous
+					{"$\\pi_{0.5}$"}, at stride 5. Shared GPU runs visual encoding concurrently; isolated
+					System 1 removes this contention.
+				</figcaption>
+			</figure>
+			<figure class="paper-table-figure" data-sync-table-caption>
+				<div
+					class="table-scroll"
+					tabindex="0"
+					role="region"
+					aria-label="Single GPU timed closed-loop execution"
+				>
+					<table class="paper-table">
+						<thead
+							><tr
+								><th scope="col">Controller</th><th scope="col">Success (%) ↑</th><th scope="col"
+									>Response P50 / P95 (ms) ↓</th
+								><th scope="col">Replans/s ↑</th><th scope="col">Actions/s ↑</th></tr
+							></thead
+						>
+						<tbody>
+							<tr
+								><th scope="row">{"$\\pi_{0.5}$"}</th><td>86.00</td><td><u>176.73</u> / 189.97</td
+								><td><u>2.57</u></td><td>13.02</td></tr
+							>
+							<tr
+								><th scope="row">Latent Bridge R0</th><td>82.00</td><td>183.88 / <u>189.79</u></td
+								><td>2.48</td><td>12.58</td></tr
+							>
+							<tr
+								><th scope="row">VLA-Rolling</th><td><u>87.00</u></td><td>295.21 / 345.94</td><td
+									>1.28</td
+								><td><u>13.20</u></td></tr
+							>
+							<tr class="paper-table__ours"
+								><th scope="row">CauSyncVLA</th><td><strong>91.00</strong></td><td
+									><strong>83.04 / 90.53</strong></td
+								><td><strong>3.28</strong></td><td><strong>16.60</strong></td></tr
+							>
+						</tbody>
+					</table>
+				</div>
+				<figcaption class="table-caption">
+					<strong>Table 2.</strong> Timed execution over 100 shared starts at 20 Hz with a 26-second budget.
+					Policy inference and rendering share one RTX 5090; response values are means of per-episode
+					P50 and P95.
+				</figcaption>
+			</figure>
+			<h3 class="result-heading">Does execution history preserve useful memory?</h3>
+			<p class="project-abstract">
+				On 320 held-out windows, stale anchors yield action MSE 0.10355 against fresh-anchor expert
+				outputs. Conditioning on ordered execution history reduces it to 0.00983. Age and endpoints
+				help, but lose intermediate motion; shuffling state–action pairs retains much of the
+				geometric signal while degrading the ordered model. These are prediction errors within the
+				frozen expert, not a direct test of physical dynamics.
+			</p>
+			<figure class="result-figure">
+				<div class="figure-media">
+					{
+						corners.map((corner) => (
+							<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+								+
+							</span>
+						))
+					}<Image
+						src={ageImage}
+						alt="Downstream action mean squared error versus visual anchor staleness for stale and predicted memory"
+						loading="lazy"
+					/>
+				</div>
+				<figcaption>
+					<strong>Fig. 4.</strong> Action error relative to fresh-anchor outputs across 320 held-out windows;
+					the vertical axis is logarithmic. The predictor maintains lower error across sampled staleness
+					horizons up to 45 steps.
+				</figcaption>
+			</figure>
+			<figure class="paper-table-figure" data-sync-table-caption>
+				<div
+					class="table-scroll"
+					tabindex="0"
+					role="region"
+					aria-label="Execution-history ablation in latent memory prediction"
+				>
+					<table class="paper-table">
+						<thead
+							><tr
+								><th scope="col">History conditioning</th><th scope="col">KV error ↓</th><th
+									scope="col">Action MSE ↓</th
+								></tr
+							></thead
+						>
+						<tbody
+							><tr><th scope="row">Stale anchor (no update)</th><td>0.42430</td><td>0.10355</td></tr
+							><tr><th scope="row">Age only</th><td>0.37217</td><td>0.07221</td></tr><tr
+								><th scope="row">Age + endpoint states</th><td>0.35669</td><td>0.04602</td></tr
+							><tr
+								><th scope="row">Shuffled history</th><td><u>0.32037</u></td><td><u>0.01107</u></td
+								></tr
+							><tr class="paper-table__ours"
+								><th scope="row">Full causal history</th><td><strong>0.31958</strong></td><td
+									><strong>0.00983</strong></td
+								></tr
+							></tbody
+						>
+					</table>
+				</div><figcaption class="table-caption">
+					<strong>Table 3.</strong> Execution-history ablations across 320 held-out windows. Masked or
+					permuted inputs preserve state–action pairings; bold and underline mark the best and second-best
+					values.
+				</figcaption>
+			</figure>
+			<h3 class="result-heading">Why warm-start the action trajectory?</h3>
+			<p class="project-abstract">
+				With fresh synchronous vision, PFWS lowers episode-averaged boundary flips from 2.57% to
+				1.36% over 500 paired starts, and boundary excess from +0.88 to −0.03 percentage points. The
+				paper finds its clearest contribution in continuity; the paired evidence for native success
+				gains is inconclusive. In a shared PCA projection, warm-started paths begin closer to the
+				endpoint, reducing one-step endpoint error by 19.7% without changing the expert.
+			</p>
+			<figure class="result-figure">
+				<div class="figure-media">
+					{
+						corners.map((corner) => (
+							<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+								+
+							</span>
+						))
+					}<Image
+						src={flowImage}
+						alt="Projected cold and warm-started flow trajectories across eight matched seeds"
+						loading="lazy"
+					/>
+				</div>
+				<figcaption>
+					<strong>Fig. 5.</strong> Frozen-expert flow paths projected into a shared PCA basis for eight
+					matched seeds. Circles mark initial latents and squares mark dense endpoints; these are projections
+					rather than physical robot trajectories.
+				</figcaption>
+			</figure>
+			<h3 class="result-heading">Robustness and component ablations</h3>
+			<p class="project-abstract">
+				Across 2,519 LIBERO-Plus variants, PFWS increases overall success from 76.38% to 78.09%
+				within CauSyncVLA, but it does not help every shift. Noise and robot-state changes benefit
+				from trajectory reuse; viewpoint and layout changes can favor cold starts. The synchronous
+				PFWS reference achieves 80.15% overall, so these results do not establish unconditional
+				robustness over fresh vision.
+			</p>
+			<figure class="result-figure">
+				<div class="figure-media">
+					{
+						corners.map((corner) => (
+							<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+								+
+							</span>
+						))
+					}<Image
+						src={plusImage}
+						alt="Change in success rate from predictive flow warm-starting across LIBERO-Plus perturbations"
+						loading="lazy"
+					/>
+				</div>
+				<figcaption>
+					<strong>Fig. 6.</strong> PFWS success differences versus cold starts, in percentage points,
+					across LIBERO-Plus perturbations for synchronous vision and CauSyncVLA with a fixed world model.
+				</figcaption>
+			</figure>
+			<p class="project-abstract result-copy">
+				In matched module ablations, removing the world model lowers success to 80.20%, while
+				removing PFWS increases pooled flips to 3.69%. The full matched control reaches 93.40% with
+				1.86% flips. In a separate matched objective comparison, adding action distillation reduces
+				action MSE from 0.02018 to 0.00983 and raises success from 85.60% to 92.80%, despite a
+				higher KV error. This supports supervising control-relevant memory directions, not just
+				minimizing uniform KV distance. These matched cohorts differ from the 93.80% main-result
+				run.
+			</p>
+			<figure class="paper-table-figure" data-sync-table-caption>
+				<div
+					class="table-scroll"
+					tabindex="0"
+					role="region"
+					aria-label="Component and objective ablations on LIBERO-10"
+				>
+					<table class="paper-table">
+						<thead
+							><tr
+								><th scope="col">Controller</th><th scope="col">Success (%) ↑</th><th scope="col"
+									>Pooled flips (%) ↓</th
+								></tr
+							></thead
+						><tbody
+							><tr><th scope="row">Without latent world model</th><td>80.20</td><td>2.30</td></tr
+							><tr><th scope="row">Without PFWS</th><td>92.00</td><td>3.69</td></tr><tr
+								><th scope="row">Synchronous PFWS (fresh KV)</th><td>92.00</td><td
+									><strong>1.26</strong></td
+								></tr
+							><tr class="paper-table__ours"
+								><th scope="row">Full model</th><td><strong>93.40</strong></td><td><u>1.86</u></td
+								></tr
+							></tbody
+						>
+					</table>
+				</div><figcaption class="table-caption">
+					<strong>Table 4.</strong> Matched module ablations over 500 starts; pooled flip rates are distinct
+					from episode-averaged boundary flips above.
+				</figcaption>
+			</figure>
+			<figure class="paper-table-figure" data-sync-table-caption>
+				<div
+					class="table-scroll"
+					tabindex="0"
+					role="region"
+					aria-label="Objective ablations on LIBERO-10"
+				>
+					<table class="paper-table">
+						<thead
+							><tr
+								><th scope="col">Objective</th><th scope="col">Success (%) ↑</th><th scope="col"
+									>KV error ↓</th
+								><th scope="col">Action MSE ↓</th></tr
+							></thead
+						>
+						<tbody>
+							<tr
+								><th scope="row">Without action distillation</th><td>85.60</td><td
+									><strong>0.28461</strong></td
+								><td>0.02018</td></tr
+							>
+							<tr class="paper-table__ours"
+								><th scope="row">With action distillation</th><td><strong>92.80</strong></td><td
+									>0.31958</td
+								><td><strong>0.00983</strong></td></tr
+							>
+						</tbody>
+					</table>
+				</div>
+				<figcaption class="table-caption">
+					<strong>Table 5.</strong> Matched 12,000-update predictors, comparing uniform KV reconstruction
+					with action-sensitive distillation.
+				</figcaption>
+			</figure>
+			<h3 class="result-heading">Physical robot evaluation</h3>
+			<p class="project-abstract result-copy">
+				On the physical robot, pooled success rises from 72.46% to 86.96%, with median response
+				falling from 72.30 ms to 13.17 ms. These are whole-system comparisons: active dispatch rates
+				differ and both controllers pause at shared gripper barriers.
+			</p>
+			<figure class="paper-table-figure" data-sync-table-caption>
+				<div
+					class="table-scroll"
+					tabindex="0"
+					role="region"
+					aria-label="Physical robot performance across all tasks"
+				>
+					<table class="paper-table">
+						<thead
+							><tr
+								><th scope="col">Task</th><th scope="col">Controller</th><th scope="col"
+									>Success (%) ↑</th
+								><th scope="col">Active actions/s ↑</th><th scope="col">Active plans/s ↑</th><th
+									scope="col">Response P50 (ms) ↓</th
+								><th scope="col">Response P95 (ms) ↓</th><th scope="col">Speed CV ↓</th><th
+									scope="col">Accel. (m/s²) ↓</th
+								><th scope="col">Time (s) ↓</th></tr
+							></thead
+						>
+						<tbody
+							>{
+								physicalRows.map((row) => (
+									<>
+										<tr>
+											<th scope="row">{row.task}</th>
+											<td>{"$\\pi_{0.5}$"}</td>
+											{row.baseline.map((value) => (
+												<td>{value}</td>
+											))}
+										</tr>
+										<tr class="paper-table__ours">
+											<th scope="row">{row.task}</th>
+											<td>CauSyncVLA</td>
+											{row.ours.map((value) => (
+												<td>
+													<strong>{value}</strong>
+												</td>
+											))}
+										</tr>
+									</>
+								))
+							}</tbody
+						>
+					</table>
+				</div>
+				<figcaption class="table-caption">
+					<strong>Table 6.</strong> Franka FR3 results by task and pooled across the three task suites.
+					Dispatch, latency, and end-effector motion are all-trial medians; time is the mean over solved
+					trials. Active rates exclude synchronization waits.
+				</figcaption>
+			</figure>
+			<figure class="wide-figure physical-figure">
+				<div class="figure-media">
+					{
+						corners.map((corner) => (
+							<span class={`figure-cross figure-cross--${corner}`} aria-hidden="true">
+								+
+							</span>
+						))
+					}
+					<div class="physical-rows">
+						<div class="physical-label">{"$\\pi_{0.5}$"}</div><div class="phase-grid">
+							{
+								physicalPhases.map((phase) => (
+									<div>
+										<>
+											<Image
+												src={phase.baseline}
+												alt={`Synchronous baseline cup stacking: ${phase.label}`}
+												loading="lazy"
+											/>
+											<span>{phase.label}</span>
+										</>
+									</div>
+								))
+							}
+						</div>
+						<div class="physical-label">CauSyncVLA</div><div class="phase-grid">
+							{
+								physicalPhases.map((phase) => (
+									<div>
+										<>
+											<Image
+												src={phase.ours}
+												alt={`CauSyncVLA cup stacking: ${phase.label}`}
+												loading="lazy"
+											/>
+											<span>{phase.label}</span>
+										</>
+									</div>
+								))
+							}
+						</div>
+					</div>
+				</div>
+				<figcaption>
+					<strong>Fig. 7.</strong> Stage-aligned cup stacking on Franka FR3: synchronous {
+						"$\\pi_{0.5}$"
+					} above and CauSyncVLA below. Trails follow the visible gripper housing through four grasp–place
+					phases. The two successful trials use independently reset object layouts; the illustrations
+					do not establish a matched initial state or replace the quantitative results.
+				</figcaption>
+			</figure>
+			<p class="project-abstract result-copy">
+				Physical trials compare deployed systems with independently reset scenes and different
+				active dispatch rates; both pause at shared gripper barriers. They do not isolate a
+				fixed-frequency module effect. The experiments use one frozen {"$\\pi_{0.5}$"} backbone, and unobserved
+				scene changes between visual anchors remain a limitation; multi-backbone physical validation and
+				event-triggered refresh remain future work.
+			</p>
+		</section>
+
+		<section class="project-section" aria-labelledby="citation-heading">
+			<div class="section-label"><span>06</span><h2 id="citation-heading">Citation</h2></div><div
+				class="citation"
+			>
+				<pre><code>{bibtex}</code></pre><button class="copy-button" type="button" data-copy-bibtex
+					>Copy BibTeX</button
+				>
+			</div>
+		</section>
+		<section class="project-section references-section" aria-labelledby="references-heading">
+			<div class="section-label"><span>07</span><h2 id="references-heading">References</h2></div><ol
+				class="references-list"
+			>
+				<li id="ref-1">
+					<span
+						>K. Black, N. Brown, J. Darpinian, et al. “{"$\\pi_{0.5}$"}: A Vision-Language-Action
+						Model with Open-World Generalization.” CoRL, 2025.</span
+					><a
+						href="https://proceedings.mlr.press/v305/black25a.html"
+						target="_blank"
+						rel="noreferrer">Paper</a
+					>
+				</li>
+				<li id="ref-2">
+					<span
+						>B. Liu, Y. Zhu, C. Gao, et al. “LIBERO: Benchmarking Knowledge Transfer for Lifelong
+						Robot Learning.” NeurIPS, 2023.</span
+					><a
+						href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/8c3c666820ea055a77726d66fc7d447f-Abstract-Datasets_and_Benchmarks.html"
+						target="_blank"
+						rel="noreferrer">Paper</a
+					>
+				</li>
+				<li id="ref-3">
+					<span
+						>S. Fei, S. Wang, J. Shi, et al. “LIBERO-Plus: A Progressive Robustness Benchmark for
+						Visual-Language-Action Models.” CVPR, 2026.</span
+					><a
+						href="https://openaccess.thecvf.com/content/CVPR2026/html/Fei_LIBERO-Plus_A_Progressive_Robustness_Benchmark_for_Visual-Language-Action_Models_CVPR_2026_paper.html"
+						target="_blank"
+						rel="noreferrer">Paper</a
+					>
+				</li>
+				<li id="ref-4">
+					<span
+						>K. Black, M. Y. Galliker, and S. Levine. “Real-Time Execution of Action Chunking Flow
+						Policies.” NeurIPS, 2025.</span
+					><a href="https://arxiv.org/abs/2506.07339" target="_blank" rel="noreferrer">arXiv</a>
+				</li>
+				<li id="ref-5">
+					<span
+						>Y. Liu, Y. Li, Z. Tang, et al. “Latent Bridge: Feature Delta Prediction for Efficient
+						Dual-System Vision-Language-Action Model Inference.” arXiv:2605.02739, 2026.</span
+					><a href="https://arxiv.org/abs/2605.02739" target="_blank" rel="noreferrer">arXiv</a>
+				</li>
+				<li id="ref-6">
+					<span
+						>S. He, Y. Pan, Q. Yu, et al. “VLA-Rolling: Fewer Denoising Steps, Better Control via
+						Adaptive Action Reuse.” arXiv:2610.25043, 2026.</span
+					><a href="https://arxiv.org/abs/2610.25043" target="_blank" rel="noreferrer">arXiv</a>
+				</li>
+				<li id="ref-7">
+					<span>NVIDIA. “GR00T N1.7 LIBERO: Official policy checkpoints.” 2026.</span><a
+						href="https://huggingface.co/nvidia/GR00T-N1.7-LIBERO"
+						target="_blank"
+						rel="noreferrer">Model</a
+					>
+				</li>
+				<li id="ref-8">
+					<span
+						>M. J. Kim, C. Finn, and P. Liang. “Fine-Tuning Vision-Language-Action Models:
+						Optimizing Speed and Success.” RSS, 2025.</span
+					><a
+						href="https://roboticsproceedings.org/rss21/p017.html"
+						target="_blank"
+						rel="noreferrer">Paper</a
+					>
+				</li>
+			</ol>
+		</section>
+	</article>
+</ProjectLayout>
+
+<style>
+	.method-explanation {
+		max-width: var(--reading-width);
+		margin-top: 42px;
+	}
+	.method-explanation h3,
+	.result-heading {
+		margin: 44px 0 15px;
+		font: 500 17px/1.35 var(--font-sans);
+	}
+	.method-explanation p {
+		margin: 0 0 18px;
+		font: 13px/1.7 var(--font-serif);
+	}
+	.equation {
+		max-width: 100%;
+		overflow-x: auto;
+		padding: 4px 0;
+	}
+	.result-figure {
+		width: min(100%, 640px);
+		margin: 34px 0 0;
+	}
+	.result-figure figcaption,
+	.physical-figure figcaption {
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.55;
+		margin-top: 10px;
+	}
+	.physical-rows {
+		padding: 16px 0;
+		background: transparent;
+		color: var(--ink);
+	}
+	.physical-label {
+		margin: 8px 0;
+		font: 500 12px var(--font-sans);
+	}
+	.phase-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 6px;
+	}
+	.phase-grid img {
+		width: 100%;
+		height: auto;
+	}
+	.phase-grid span {
+		display: block;
+		text-align: center;
+		font: 10px var(--font-sans);
+		margin: 5px 0 9px;
+	}
+	@media (max-width: 560px) {
+		.phase-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		.physical-rows {
+			padding: 8px 0;
+		}
+	}
+	.video-figure {
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		max-width: 100%;
+		margin: 0;
+	}
+	.video-figure video {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+	.video-figure figcaption {
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.55;
+		margin-top: 10px;
+	}
+	.wide-figure,
+	.paper-table-figure {
+		width: calc(var(--reading-width) + var(--profile-width) + var(--intro-gap));
+		max-width: none;
+		margin: 36px 0 0;
+	}
+	.method-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		margin-top: 34px;
+		border-top: 1px solid var(--line);
+	}
+	.method-grid article {
+		min-width: 0;
+		padding: 18px 18px 0 0;
+	}
+	.method-grid article + article {
+		padding-left: 18px;
+		border-left: 1px solid var(--line);
+	}
+	.method-grid span {
+		color: var(--muted);
+		font: 9px var(--font-mono);
+		letter-spacing: 0.06em;
+	}
+	.method-grid h3 {
+		margin: 12px 0 8px;
+		font: 400 14px/1.3 var(--font-sans);
+	}
+	.method-grid p {
+		margin: 0;
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.6;
+	}
+	.evaluation-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		max-width: var(--reading-width);
+		margin-top: 34px;
+		border-block: 1px solid var(--line);
+	}
+	.evaluation-grid div {
+		display: grid;
+		gap: 7px;
+		padding: 16px 16px 16px 0;
+	}
+	.evaluation-grid div + div {
+		padding-left: 16px;
+		border-left: 1px solid var(--line);
+	}
+	.evaluation-grid strong {
+		font: 400 18px var(--font-sans);
+	}
+	.evaluation-grid span {
+		color: var(--muted);
+		font-size: 10px;
+		line-height: 1.45;
+	}
+	.paper-table {
+		width: max-content;
+		min-width: 0;
+	}
+	.paper-table th,
+	.paper-table td {
+		white-space: nowrap;
+	}
+	.result-copy {
+		margin-top: 44px;
+	}
+	@media (max-width: 1024px) {
+		.wide-figure,
+		.paper-table-figure {
+			width: 100%;
+			max-width: none;
+		}
+		.figure-media,
+		.figure-media img,
+		.citation {
+			width: 100%;
+			max-width: 100%;
+			min-width: 0;
+		}
+		.project-abstract {
+			max-width: none;
+		}
+	}
+	@media (max-width: 560px) {
+		.method-grid,
+		.evaluation-grid {
+			grid-template-columns: 1fr;
+		}
+		.method-grid article,
+		.method-grid article + article,
+		.evaluation-grid div,
+		.evaluation-grid div + div {
+			padding: 16px 0;
+			border-left: 0;
+		}
+		.method-grid article + article,
+		.evaluation-grid div + div {
+			border-top: 1px solid var(--line);
+		}
+	}
+</style>

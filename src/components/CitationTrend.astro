@@ -1,0 +1,500 @@
+---
+interface Props {
+	dois: string[];
+	publicationCount: number;
+}
+
+const { dois, publicationCount } = Astro.props;
+// DOI-matched OpenAlex snapshot in the markup was retrieved on 2026-11-18.
+---
+
+<section
+	class="citation-trend mt-10"
+	aria-labelledby="citation-trend-title"
+	data-citation-trend
+	data-dois={JSON.stringify(dois)}
+	data-publication-count={publicationCount}
+>
+	<div class="citation-trend__heading">
+		<h2 id="citation-trend-title" class="title text-xl">Citation trend</h2>
+		<a
+			class="citation-trend__source"
+			href="https://help.openalex.org/data/works/attributes/#counts_by_year"
+			target="_blank"
+			rel="noreferrer">OpenAlex ↗</a
+		>
+	</div>
+	<figure class="citation-trend__figure">
+		<div class="citation-trend__readout" aria-live="polite" aria-atomic="true">
+			<span data-selected-year>2026</span><strong data-selected-value>12</strong><span
+				>citations</span
+			>
+		</div>
+		<svg
+			class="citation-trend__chart"
+			viewBox="0 0 400 105"
+			role="group"
+			aria-labelledby="citation-trend-chart-title"
+			aria-describedby="citation-trend-help"
+		>
+			<title id="citation-trend-chart-title">
+				Citations to five indexed publications: 2025, 0; 2026, 12.
+			</title>
+			<line class="citation-trend__baseline" x1="24" y1="72" x2="376" y2="72"></line>
+			<path class="citation-trend__line" d="M30 72 L370 15" pathLength="1"></path>
+			<g data-chart-points>
+				<line class="citation-trend__tick" x1="30" y1="72" x2="30" y2="65"></line>
+				<circle class="citation-trend__dot" cx="30" cy="72" r="3"></circle>
+				<text class="citation-trend__value" x="30" y="62" text-anchor="middle">0</text>
+				<text class="citation-trend__year" x="30" y="95" text-anchor="middle">2025</text>
+				<line class="citation-trend__tick" x1="370" y1="72" x2="370" y2="65"></line>
+				<circle class="citation-trend__dot" cx="370" cy="15" r="3"></circle>
+				<text class="citation-trend__value" x="370" y="7" text-anchor="middle">12</text>
+				<text class="citation-trend__year" x="370" y="95" text-anchor="middle">2026</text>
+			</g>
+		</svg>
+		<span class="citation-trend__sr-only" id="citation-trend-help"
+			>Focus, hover, or tap a year to inspect its citation count; use the arrow keys to move between
+			years. Click the chart background to replay the animation.</span
+		>
+		<figcaption class="citation-trend__caption">
+			<span data-citation-coverage>5 of {publicationCount} works matched by DOI</span>
+			<span data-citation-updated>Snapshot · 18 Nov 2026</span>
+			<span data-citation-year>2026 in progress</span>
+		</figcaption>
+	</figure>
+</section>
+
+<script>
+	type YearCount = { year: number; cited_by_count: number };
+	type Work = {
+		id: string;
+		doi: string | null;
+		publication_year: number;
+		counts_by_year: YearCount[];
+	};
+	const section = document.querySelector<HTMLElement>("[data-citation-trend]");
+	const ttl = 6 * 60 * 60 * 1000;
+
+	function normalizeDoi(value: string): string {
+		return value
+			.trim()
+			.toLowerCase()
+			.replace(/^https?:\/\/(?:dx\.)?doi\.org\//, "");
+	}
+
+	type Point = { year: number; count: number; x: number; y: number };
+	const svg = section?.querySelector<SVGSVGElement>(".citation-trend__chart");
+	const ns = "http://www.w3.org/2000/svg";
+	let points: Point[] = [];
+	let pinnedYear: number | null = null;
+
+	// F2 Hairline Line: calendar ticks, a hairline path and one dot per real observation.
+	function drawChart(rows: { year: number; count: number }[]) {
+		if (!section || !svg || rows.length === 0) return;
+		const path = svg.querySelector<SVGPathElement>(".citation-trend__line");
+		const group = svg.querySelector<SVGGElement>("[data-chart-points]");
+		if (!path || !group) return;
+		const focusedPoint = group.contains(document.activeElement)
+			? document.activeElement?.getAttribute("data-year")
+			: null;
+		const max = Math.max(1, ...rows.map((row) => row.count));
+		points = rows.map((row, index) => ({
+			...row,
+			x: rows.length === 1 ? 200 : 30 + (340 * index) / (rows.length - 1),
+			y: 72 - (57 * row.count) / max,
+		}));
+		if (!points.some((point) => point.year === pinnedYear)) pinnedYear = null;
+		path.setAttribute(
+			"d",
+			points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x} ${point.y}`).join(" "),
+		);
+		group.replaceChildren();
+		const create = (name: string, attributes: Record<string, string | number>) => {
+			const element = document.createElementNS(ns, name);
+			for (const [key, value] of Object.entries(attributes))
+				element.setAttribute(key, String(value));
+			return element;
+		};
+		for (let index = 0; index < points.length; index++) {
+			const point = points[index];
+			const leftBoundary = index === 0 ? 0 : (points[index - 1].x + point.x) / 2;
+			const rightBoundary = index === points.length - 1 ? 400 : (point.x + points[index + 1].x) / 2;
+			const left = Math.max(leftBoundary, point.x - 25);
+			const right = Math.min(rightBoundary, point.x + 25);
+			const yearGroup = create("g", {
+				class: "citation-trend__point",
+				tabindex: 0,
+				role: "button",
+				"aria-label": `${point.year}: ${point.count} citation${point.count === 1 ? "" : "s"}`,
+				"aria-pressed": String(point.year === pinnedYear),
+				"data-year": point.year,
+			});
+			yearGroup.append(
+				create("rect", {
+					x: left,
+					y: 2,
+					width: right - left,
+					height: 88,
+					class: "citation-trend__hit",
+				}),
+			);
+			yearGroup.append(
+				create("line", { x1: point.x, y1: 72, x2: point.x, y2: 65, class: "citation-trend__tick" }),
+			);
+			yearGroup.append(
+				create("line", {
+					x1: point.x,
+					y1: point.y,
+					x2: point.x,
+					y2: 72,
+					class: "citation-trend__guide",
+				}),
+			);
+			yearGroup.append(
+				create("circle", { cx: point.x, cy: point.y, r: 3.2, class: "citation-trend__dot" }),
+			);
+			const value = create("text", {
+				x: point.x,
+				y: Math.max(9, point.y - 9),
+				"text-anchor": "middle",
+				class: "citation-trend__value",
+			});
+			value.textContent = String(point.count);
+			yearGroup.append(value);
+			const year = create("text", {
+				x: point.x,
+				y: 95,
+				"text-anchor": "middle",
+				class: "citation-trend__year",
+			});
+			year.textContent = String(point.year);
+			yearGroup.append(year);
+			yearGroup.addEventListener("pointerenter", () => setActive(point.year));
+			yearGroup.addEventListener("pointerleave", () => {
+				const focusedYear = group.contains(document.activeElement)
+					? Number(document.activeElement?.getAttribute("data-year"))
+					: NaN;
+				const focusedPoint = points.find((item) => item.year === focusedYear);
+				setActive(focusedPoint?.year ?? pinnedYear ?? points.at(-1)?.year);
+			});
+			yearGroup.addEventListener("focus", () => setActive(point.year));
+			yearGroup.addEventListener("blur", () => setActive(pinnedYear ?? points.at(-1)?.year));
+			yearGroup.addEventListener("click", (event) => {
+				event.stopPropagation();
+				pinnedYear = pinnedYear === point.year ? null : point.year;
+				setActive(point.year);
+			});
+			yearGroup.addEventListener("keydown", (event) => {
+				const key = (event as KeyboardEvent).key;
+				if (key === "Enter" || key === " ") {
+					event.preventDefault();
+					pinnedYear = pinnedYear === point.year ? null : point.year;
+					setActive(point.year);
+				} else if (key === "Escape") {
+					pinnedYear = null;
+					setActive(point.year);
+				} else if (key === "ArrowRight" || key === "ArrowLeft") {
+					event.preventDefault();
+					const next = Math.max(
+						0,
+						Math.min(points.length - 1, index + (key === "ArrowRight" ? 1 : -1)),
+					);
+					group.querySelector<SVGElement>(`[data-year="${points[next].year}"]`)?.focus();
+				}
+			});
+			group.append(yearGroup);
+		}
+		const focusedYear =
+			focusedPoint === null || focusedPoint === undefined ? null : Number(focusedPoint);
+		const focusTarget =
+			focusedYear === null || !Number.isFinite(focusedYear)
+				? null
+				: points.reduce((nearest, point) =>
+						Math.abs(point.year - focusedYear) < Math.abs(nearest.year - focusedYear)
+							? point
+							: nearest,
+					).year;
+		setActive(focusTarget ?? pinnedYear ?? points.at(-1)?.year);
+		if (focusTarget !== null)
+			group
+				.querySelector<SVGElement>(`[data-year="${focusTarget}"]`)
+				?.focus({ preventScroll: true });
+	}
+
+	function setActive(year: number | undefined) {
+		if (!section || !svg || year === undefined) return;
+		const selected = points.find((point) => point.year === year);
+		if (!selected) return;
+		const yearLabel = section.querySelector("[data-selected-year]");
+		const valueLabel = section.querySelector("[data-selected-value]");
+		if (yearLabel) yearLabel.textContent = String(selected.year);
+		if (valueLabel) valueLabel.textContent = String(selected.count);
+		for (const point of svg.querySelectorAll<SVGElement>("[data-year]")) {
+			const pointYear = Number(point.dataset.year);
+			point.classList.toggle("is-active", pointYear === year);
+			point.setAttribute("aria-pressed", String(pointYear === pinnedYear));
+		}
+	}
+
+	function render(works: Work[], total: number, timestamp: number) {
+		if (!section || !svg || works.length === 0) return;
+		const nowYear = new Date(timestamp).getFullYear();
+		const firstYear = Math.max(
+			nowYear - 9,
+			Math.min(...works.map((work) => work.publication_year)),
+		);
+		if (!Number.isInteger(firstYear) || firstYear > nowYear) return;
+		const rows = Array.from({ length: nowYear - firstYear + 1 }, (_, index) => {
+			const year = firstYear + index;
+			return {
+				year,
+				count: works.reduce(
+					(sum, work) =>
+						sum + (work.counts_by_year.find((row) => row.year === year)?.cited_by_count ?? 0),
+					0,
+				),
+			};
+		});
+		drawChart(rows);
+		const title = svg.querySelector("title");
+		if (title)
+			title.textContent = `Citations to ${works.length} indexed publications: ${rows.map((point) => `${point.year}, ${point.count}`).join("; ")}.`;
+		const coverage = section.querySelector("[data-citation-coverage]");
+		const updated = section.querySelector("[data-citation-updated]");
+		const yearNote = section.querySelector("[data-citation-year]");
+		if (coverage) coverage.textContent = `${works.length} of ${total} works matched by DOI`;
+		if (updated)
+			updated.textContent = `Retrieved · ${new Date(timestamp).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}`;
+		if (yearNote) yearNote.textContent = `${nowYear} in progress`;
+	}
+
+	async function refresh() {
+		if (!section) return;
+		try {
+			const dois = [
+				...new Set(
+					(JSON.parse(section.dataset.dois ?? "[]") as string[]).map(normalizeDoi).filter(Boolean),
+				),
+			];
+			const total = Number(section.dataset.publicationCount);
+			if (dois.length === 0 || !Number.isFinite(total)) return;
+			const cacheKey = `citation-trend:${dois.slice().sort().join("|")}`;
+			try {
+				const cached = JSON.parse(localStorage.getItem(cacheKey) ?? "null");
+				if (cached && Date.now() - cached.timestamp < ttl && Array.isArray(cached.works)) {
+					render(cached.works, total, cached.timestamp);
+					return;
+				}
+			} catch {
+				/* Storage is optional. */
+			}
+			const chunks = Array.from({ length: Math.ceil(dois.length / 25) }, (_, index) =>
+				dois.slice(index * 25, (index + 1) * 25),
+			);
+			const results = await Promise.all(
+				chunks.map(async (chunk) => {
+					const url = new URL("https://api.openalex.org/works");
+					url.searchParams.set("filter", `doi:${chunk.join("|")}`);
+					url.searchParams.set("select", "id,doi,publication_year,counts_by_year");
+					url.searchParams.set("per-page", "50");
+					const response = await fetch(url);
+					if (!response.ok) throw new Error("OpenAlex unavailable");
+					const data = await response.json();
+					if (!Array.isArray(data.results)) throw new Error("Invalid OpenAlex response");
+					return data.results as Work[];
+				}),
+			);
+			const allowed = new Set(dois);
+			const seen = new Set<string>();
+			const works = results.flat().filter((work) => {
+				const doi = typeof work.doi === "string" ? normalizeDoi(work.doi) : "";
+				if (
+					!allowed.has(doi) ||
+					typeof work.id !== "string" ||
+					seen.has(work.id) ||
+					!Number.isInteger(work.publication_year) ||
+					!Array.isArray(work.counts_by_year) ||
+					!work.counts_by_year.every(
+						(row) =>
+							Number.isInteger(row.year) &&
+							Number.isFinite(row.cited_by_count) &&
+							row.cited_by_count >= 0,
+					)
+				)
+					return false;
+				seen.add(work.id);
+				return true;
+			});
+			if (works.length === 0) return;
+			const timestamp = Date.now();
+			render(works, total, timestamp);
+			try {
+				localStorage.setItem(cacheKey, JSON.stringify({ works, timestamp }));
+			} catch {
+				/* Storage is optional. */
+			}
+		} catch {
+			/* The dated, verified snapshot remains visible when the API is unavailable. */
+		}
+	}
+	let replayFrame: number | null = null;
+	svg?.addEventListener("click", () => {
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+		if (replayFrame !== null) cancelAnimationFrame(replayFrame);
+		svg.classList.remove("is-revealed");
+		replayFrame = requestAnimationFrame(() => {
+			svg.classList.add("is-revealed");
+			replayFrame = null;
+		});
+	});
+	drawChart([
+		{ year: 2025, count: 0 },
+		{ year: 2026, count: 12 },
+	]);
+	if (svg && "IntersectionObserver" in window) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) {
+					svg.classList.add("is-revealed");
+					observer.disconnect();
+				}
+			},
+			{ threshold: 0.3 },
+		);
+		observer.observe(svg);
+	} else svg?.classList.add("is-revealed");
+	refresh();
+</script>
+
+<style>
+	.citation-trend {
+		max-width: var(--reading-width);
+	}
+	.citation-trend__heading {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 8px 20px;
+	}
+	.citation-trend__source {
+		color: var(--muted);
+		font: 9px var(--font-mono);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		text-decoration: none;
+	}
+	.citation-trend__source:hover {
+		color: var(--signal);
+	}
+	.citation-trend__figure {
+		margin: 18px 0 0;
+	}
+	.citation-trend__readout {
+		display: flex;
+		align-items: baseline;
+		gap: 8px;
+		color: var(--muted);
+		font: 10px var(--font-mono);
+	}
+	.citation-trend__readout strong {
+		color: var(--ink);
+		font: 500 17px var(--font-sans);
+	}
+	.citation-trend__chart {
+		display: block;
+		width: 100%;
+		height: auto;
+		overflow: visible;
+	}
+	.citation-trend__baseline,
+	.citation-trend__chart :global(.citation-trend__tick) {
+		stroke: var(--line-strong);
+		stroke-width: 0.7;
+	}
+	.citation-trend__line {
+		stroke: var(--ink);
+		stroke-width: 1;
+		fill: none;
+	}
+	.citation-trend__chart.is-revealed .citation-trend__line {
+		animation: citation-draw 1.2s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+	}
+	@keyframes citation-draw {
+		from {
+			stroke-dasharray: 1;
+			stroke-dashoffset: 1;
+		}
+		to {
+			stroke-dasharray: 1;
+			stroke-dashoffset: 0;
+		}
+	}
+	.citation-trend__chart :global(.citation-trend__point) {
+		cursor: pointer;
+		outline: none;
+	}
+	.citation-trend__chart :global(.citation-trend__hit) {
+		fill: transparent;
+		pointer-events: all;
+	}
+	.citation-trend__chart :global(.citation-trend__guide) {
+		stroke: var(--signal);
+		stroke-width: 0.7;
+		opacity: 0;
+		pointer-events: none;
+	}
+	.citation-trend__chart :global(.citation-trend__dot) {
+		fill: var(--ink);
+		stroke: var(--paper);
+		stroke-width: 1;
+		pointer-events: none;
+	}
+	.citation-trend__chart :global(.citation-trend__value) {
+		fill: var(--ink);
+		font: 11px var(--font-mono);
+		pointer-events: none;
+	}
+	.citation-trend__chart :global(.citation-trend__year) {
+		fill: var(--muted);
+		font: 10px var(--font-mono);
+		pointer-events: none;
+	}
+	.citation-trend__chart :global(.citation-trend__point.is-active .citation-trend__guide) {
+		opacity: 1;
+	}
+	.citation-trend__chart :global(.citation-trend__point.is-active .citation-trend__dot) {
+		fill: var(--signal);
+		r: 4.2px;
+	}
+	.citation-trend__chart :global(.citation-trend__point:focus-visible .citation-trend__dot) {
+		stroke: var(--signal);
+		stroke-width: 2.5;
+	}
+	.citation-trend__sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.citation-trend__chart.is-revealed .citation-trend__line {
+			animation: none;
+		}
+	}
+
+	.citation-trend__caption {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 14px;
+		color: var(--muted);
+		font: 9px var(--font-mono);
+		line-height: 1.5;
+	}
+</style>

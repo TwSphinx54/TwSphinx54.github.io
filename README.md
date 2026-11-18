@@ -4,7 +4,7 @@ Astro-based academic portfolio for publications, projects, experience, honors, s
 
 ## Requirements
 
-- Node.js 22.12 or newer
+- Node.js 22.23.4 or newer
 - pnpm 11.x (the project pins pnpm 11.20.0)
 
 ## Development

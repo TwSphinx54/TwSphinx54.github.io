@@ -27,6 +27,14 @@ const svg = (body) =>
 
 const projectCards = [
 	{
+		slug: "causyncvla",
+		name: "CauSyncVLA",
+		year: "2026",
+		line1: "Causal Latent World Modeling",
+		line2: "for Asynchronous Robot Control",
+		copySize: 18,
+	},
+	{
 		slug: "savla",
 		name: "SA-VLA",
 		year: "2026",

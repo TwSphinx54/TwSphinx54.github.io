@@ -7,6 +7,35 @@ publicationsEditable:
   - author:
       [
         "Xu Pan",
+        "Chubin Zhang",
+        "Xingrui Yu",
+        "Runmin Lan",
+        "Zihao Wang",
+        "Wenkai Guo",
+        "Bofang Jia",
+        "Bo An",
+        "Ziwei Wang*",
+      ]
+    title: "CauSyncVLA: Causal Latent World Modeling for Asynchronous Robot Control"
+    booktitle: "Under Review"
+    time: "2026"
+    code: "https://github.com/TwSphinx54/CauSyncVLA"
+    huggingface: "https://huggingface.co/SSSSphinx/CauSyncVLA"
+    site: "/projects/causyncvla/"
+    abstract: >-
+      Vision-language-action policies must react while visual inference is still running. Overlapping computation
+      and execution reduces waiting, but can leave perceptual memory stale and successive action chunks disconnected.
+      CauSyncVLA is an asynchronous dual-system controller that aligns perceptual-memory prediction and trajectory
+      correction with actual robot execution. A Causal Latent World Model predicts current perceptual memory from
+      delayed visual anchors and executed state-action history, using action-sensitive distillation to retain the
+      frozen expert's control response. Predictive Flow Warm-Starting aligns the unexecuted action horizon for
+      single-step flow correction without extra training. On LIBERO-10, CauSyncVLA reaches 93.8% success and 5.04×
+      higher model replanning capacity on a shared GPU than the ten-step synchronous policy.
+    selected: true
+
+  - author:
+      [
+        "Xu Pan",
         "Zhenglin Wan",
         "Xingrui Yu*",
         "Xianwei Zheng",
@@ -97,8 +126,7 @@ publicationsEditable:
   - author:
       ["Xu Pan†", "Zhen Pang†", "Qiyuan Ma", "Wei Ji", "Shuhan Shen", "Xianwei Zheng*"]
     title: "SAMatcher: Dense Co-Visibility Modeling via Cross-View Fusion for Scale-Imbalance Image Matching"
-    # booktitle: "CoRR abs/2606.03406"
-    booktitle: "IEEE Transactions on Circuits and Systems for Video Technology (Under Review)"
+    booktitle: "arXiv:2606.03406"
     time: "2026"
     semantic_scholar_id: "5c3da4ff4f4a6dca9d9b061613f3ac2a53887d1d"
     doi: "https://doi.org/10.48550/arXiv.2606.03406"
@@ -106,8 +134,8 @@ publicationsEditable:
     code: "https://github.com/TwSphinx54/SAMatcher"
     huggingface: "https://huggingface.co/SSSSphinx/SAMatcher"
     site: "/projects/samatcher/"
-    venueIcon: "simple-icons:ieee"
-    venueColor: "#00629B"
+    venueIcon: "simple-icons:arxiv"
+    venueColor: "#B31B1B"
     abstract: >-
       Reliable correspondence estimation is a fundamental problem in image processing, underpinning a wide range of applications such as Structure from Motion, visual localization, and image registration.
       While recent learning-based approaches have substantially improved the representation capability of local features, most methods still operate primarily at the pixel or patch level.
@@ -389,7 +417,7 @@ homeIntroHtml: |
 
 # Leave this empty (`callout:`) or remove it to hide the callout.
 callout: |
-  I am actively seeking Ph.D. opportunities. <a class="cactus-link" href="/contact/">Connect with me</a>.
+  I am actively seeking Ph.D. opportunities, as well as industry internships and full-time roles. <a class="cactus-link" href="/contact/">Connect with me</a>.
 
 personalPhilosophyHtml: |
   <p>
