@@ -312,6 +312,10 @@ acknowledgements:
 
 academicServices:
   - role: "Reviewer"
+    venue: "2027 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR'27)"
+    venueLink: "https://cvpr.thecvf.com/Conferences/2027"
+    year: "2026"
+  - role: "Reviewer"
     venue: "2027 IEEE International Conference on Robotics and Automation (ICRA'27)"
     venueLink: "https://2027.ieee-icra.org/"
     year: "2026"
