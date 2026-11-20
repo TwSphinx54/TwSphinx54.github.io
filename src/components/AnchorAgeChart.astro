@@ -1,0 +1,289 @@
+---
+// Data: DualSys/data/final_expert12k.json, validation keys val/ages_*/{stale,pred,pairs}.
+// plot_final_model.py labels the 40–48 bucket 40–45. Validation age counts for 45–48 are all zero.
+const rows = [
+	{ age: "1–4", stale: 0.017109606559166594, predicted: 0.002496700026261221, pairs: 105 },
+	{ age: "5–9", stale: 0.07016630846177692, predicted: 0.007211783168410572, pairs: 126 },
+	{ age: "10–19", stale: 0.11252025122521445, predicted: 0.012128098006360232, pairs: 40 },
+	{ age: "20–29", stale: 0.32084599798101754, predicted: 0.028356711103004358, pairs: 21 },
+	{ age: "30–39", stale: 0.32526499970949124, predicted: 0.037256702315062284, pairs: 21 },
+	{ age: "40–45", stale: 0.6329794994422367, predicted: 0.01605737754809005, pairs: 7 },
+];
+const ticks = [0.003, 0.01, 0.03, 0.1, 0.3, 1];
+const x = (i: number) => 68 + i * 100;
+const y = (value: number) =>
+	252 - ((Math.log10(value) - Math.log10(0.002)) / (Math.log10(1.35) - Math.log10(0.002))) * 194;
+const line = (key: "stale" | "predicted") =>
+	rows.map((row, i) => `${i ? "L" : "M"}${x(i)},${y(row[key])}`).join(" ");
+const fmt = (value: number) => value.toFixed(5);
+---
+
+<!-- Lieflat Lupi Basics F2 / Hairline Line: floor ticks, hairline paths, and one dot per sample. -->
+<div class="age-chart" data-age-chart>
+	<div class="age-chart__legend" aria-hidden="true">
+		<span><i class="age-chart__key age-chart__key--stale"></i>Stale anchor</span>
+		<span><i class="age-chart__key age-chart__key--predicted"></i>CauSyncVLA</span>
+	</div>
+	<svg viewBox="0 0 600 310" role="group" aria-labelledby="age-chart-title age-chart-desc">
+		<title id="age-chart-title">Action error by visual anchor age</title>
+		<desc id="age-chart-desc"
+			>A logarithmic line chart of downstream action mean squared error across six age ranges. Focus
+			or tap a range to read the values, or use the data table below.</desc
+		>
+		<text x="68" y="28" class="age-chart__axis-title">Downstream action MSE · log scale</text>
+		{
+			ticks.map((tick) => (
+				<g aria-hidden="true">
+					<line x1="68" x2="568" y1={y(tick)} y2={y(tick)} class="age-chart__grid" />
+					<text x="56" y={y(tick) + 4} text-anchor="end" class="age-chart__tick">
+						{tick}
+					</text>
+				</g>
+			))
+		}
+		<line x1="68" x2="568" y1="252" y2="252" class="age-chart__baseline" aria-hidden="true"></line>
+		<path d={line("stale")} class="age-chart__line age-chart__line--stale" aria-hidden="true"
+		></path>
+		<path
+			d={line("predicted")}
+			class="age-chart__line age-chart__line--predicted"
+			aria-hidden="true"></path>
+		{
+			rows.map((row, i) => (
+				<g
+					class="age-chart__point"
+					tabindex="0"
+					role="button"
+					data-age={row.age}
+					data-stale={fmt(row.stale)}
+					data-predicted={fmt(row.predicted)}
+					data-pairs={row.pairs}
+					aria-label={`${row.age} steps: stale anchor ${fmt(row.stale)} MSE; CauSyncVLA ${fmt(row.predicted)} MSE; ${row.pairs} windows`}
+				>
+					<rect x={x(i) - 42} y="46" width="84" height="214" fill="transparent" />
+					<line x1={x(i)} x2={x(i)} y1="252" y2="244" class="age-chart__floor-tick" />
+					<circle
+						cx={x(i)}
+						cy={y(row.stale)}
+						r="4.5"
+						class="age-chart__dot age-chart__dot--stale"
+					/>
+					<circle
+						cx={x(i)}
+						cy={y(row.predicted)}
+						r="4.5"
+						class="age-chart__dot age-chart__dot--predicted"
+					/>
+					<text x={x(i)} y="273" text-anchor="middle" class="age-chart__tick">
+						{row.age}
+					</text>
+				</g>
+			))
+		}
+		<text x="318" y="300" text-anchor="middle" class="age-chart__axis-title"
+			>Visual anchor age (steps)</text
+		>
+	</svg>
+	<p class="age-chart__readout" aria-live="polite" data-age-readout>
+		Open the data table to compare values.
+	</p>
+	<details class="age-chart__details">
+		<summary>View data table</summary>
+		<table>
+			<thead
+				><tr
+					><th scope="col">Age (steps)</th><th scope="col">Stale anchor MSE</th><th scope="col"
+						>CauSyncVLA MSE</th
+					><th scope="col">Windows</th></tr
+				></thead
+			>
+			<tbody
+				>{
+					rows.map((row) => (
+						<tr>
+							<>
+								<th scope="row">{row.age}</th>
+								<td>{fmt(row.stale)}</td>
+								<td>{fmt(row.predicted)}</td>
+								<td>{row.pairs}</td>
+							</>
+						</tr>
+					))
+				}</tbody
+			>
+		</table>
+	</details>
+</div>
+
+<script>
+	for (const chart of document.querySelectorAll<HTMLElement>("[data-age-chart]")) {
+		const readout = chart.querySelector<HTMLElement>("[data-age-readout]");
+		if (readout) readout.textContent = "Hover, focus or tap an age range to compare its values.";
+		for (const point of chart.querySelectorAll<SVGGElement>("[data-age]")) {
+			const show = () => {
+				if (readout)
+					readout.textContent = `${point.dataset.age} steps · Stale ${point.dataset.stale} · CauSyncVLA ${point.dataset.predicted} MSE · ${point.dataset.pairs} windows`;
+				chart
+					.querySelectorAll("[data-age]")
+					.forEach((item) => item.classList.toggle("is-active", item === point));
+			};
+			point.addEventListener("pointerenter", show);
+			point.addEventListener("focus", show);
+			point.addEventListener("click", show);
+			point.addEventListener("keydown", (event) => {
+				if (event.key === "Enter" || event.key === " ") {
+					event.preventDefault();
+					show();
+				}
+			});
+		}
+	}
+</script>
+
+<style>
+	.age-chart {
+		width: 100%;
+		color: var(--ink);
+		font-family: var(--font-sans);
+		container-type: inline-size;
+	}
+	.age-chart__legend {
+		display: flex;
+		gap: 24px;
+		justify-content: center;
+		align-items: center;
+		font-size: 11px;
+		padding-top: 8px;
+	}
+	.age-chart__legend span {
+		display: inline-flex;
+		align-items: center;
+		gap: 7px;
+	}
+	.age-chart__key {
+		display: inline-block;
+		width: 22px;
+		border-top: 2px solid var(--ink);
+	}
+	.age-chart__key--stale {
+		border-top: 2px dashed var(--muted);
+	}
+	.age-chart__key--predicted {
+		border-color: var(--signal);
+	}
+	svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		overflow: visible;
+	}
+	.age-chart__grid {
+		stroke: var(--line);
+		stroke-width: 1;
+	}
+	.age-chart__baseline,
+	.age-chart__floor-tick {
+		stroke: var(--line-strong);
+		stroke-width: 1;
+	}
+	.age-chart__tick {
+		fill: var(--muted);
+		font-size: 12px;
+		font-weight: 600;
+	}
+	.age-chart__axis-title {
+		fill: var(--muted);
+		font-size: 12px;
+		font-weight: 600;
+	}
+	.age-chart__line {
+		fill: none;
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.age-chart__line--stale {
+		stroke: var(--muted);
+		stroke-dasharray: 5 5;
+	}
+	.age-chart__line--predicted {
+		stroke: var(--signal);
+	}
+	.age-chart__dot {
+		stroke-width: 2;
+	}
+	.age-chart__dot--stale {
+		fill: var(--paper);
+		stroke: var(--muted);
+	}
+	.age-chart__dot--predicted {
+		fill: var(--signal);
+		stroke: var(--paper);
+	}
+	.age-chart__point {
+		cursor: pointer;
+		outline: none;
+	}
+	.age-chart__point:hover .age-chart__dot,
+	.age-chart__point.is-active .age-chart__dot,
+	.age-chart__point:focus-visible .age-chart__dot {
+		stroke-width: 3;
+		r: 6;
+	}
+	.age-chart__point:focus-visible .age-chart__dot {
+		outline: 2px solid var(--ink);
+		outline-offset: 2px;
+	}
+	.age-chart__readout {
+		min-height: 2.8em;
+		margin: 0;
+		padding: 0 2px;
+		font-size: 11px;
+		color: var(--muted);
+		line-height: 1.4;
+	}
+	.age-chart__details {
+		color: var(--muted);
+		font-size: 11px;
+	}
+	.age-chart__details summary {
+		cursor: pointer;
+		width: fit-content;
+	}
+	.age-chart__details table {
+		border-collapse: collapse;
+		width: 100%;
+		margin-top: 12px;
+		text-align: right;
+		font-size: 11px;
+		font-variant-numeric: tabular-nums;
+	}
+	.age-chart__details th,
+	.age-chart__details td {
+		border-bottom: 1px solid var(--line);
+		padding: 6px 3px;
+	}
+	.age-chart__details th:first-child {
+		text-align: left;
+	}
+	.age-chart__details th {
+		font-weight: 600;
+	}
+	@container (max-width: 440px) {
+		.age-chart__tick,
+		.age-chart__axis-title {
+			font-size: 20px;
+		}
+	}
+	@media (max-width: 480px) {
+		.age-chart__legend {
+			gap: 16px;
+			font-size: 10px;
+		}
+		.age-chart__readout,
+		.age-chart__details,
+		.age-chart__details table {
+			font-size: 10px;
+		}
+	}
+</style>

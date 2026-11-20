@@ -1,0 +1,208 @@
+---
+// Data: DualSys/data/expert12k_timing.json, as plotted by scripts/plot_capacity.py.
+// Each capacity is the 10-step baseline mean divided by the configuration mean.
+const rows = [
+	{ name: "Baseline · 10-step", latency: 60.00914233, group: "Synchronous baseline" },
+	{ name: "Baseline · 1-step", latency: 36.00149772, group: "Synchronous baseline" },
+	{ name: "CauSyncVLA · shared", latency: 11.9098831, group: "Ours" },
+	{ name: "CauSyncVLA · isolated", latency: 4.79376471, group: "Ours" },
+].map((row) => ({ ...row, ratio: 60.00914233 / row.latency }));
+const scale = 300 / 13;
+---
+
+<!-- Lieflat Basics F5 Tick Rows: one row per configuration, one tick per 0.25×. -->
+<div class="capacity-chart" data-capacity-chart>
+	<div class="capacity-chart__topline">
+		<span>Replanning capacity · baseline = 1×</span>
+		<span>1 tick = 0.25×</span>
+	</div>
+	<div class="capacity-chart__rows" aria-label="Compare model replanning capacity">
+		{
+			rows.map((row, index) => (
+				<button
+					class:list={["capacity-chart__row", { "is-active": index === 2 }]}
+					type="button"
+					data-capacity-row
+					data-name={row.name}
+					data-ratio={row.ratio.toFixed(2)}
+					data-latency={row.latency.toFixed(2)}
+					aria-label={`${row.name}: ${row.ratio.toFixed(2)} times baseline, ${row.latency.toFixed(2)} milliseconds mean latency`}
+					aria-pressed={index === 2 ? "true" : "false"}
+				>
+					<span class="capacity-chart__label">{row.name}</span>
+					<svg viewBox="0 0 304 26" preserveAspectRatio="none" aria-hidden="true">
+						<line class="capacity-chart__guide" x1="1" y1="22" x2="301" y2="22" />
+						{Array.from({ length: Math.floor(row.ratio * 4) }, (_, k) => (
+							<line
+								class:list={["capacity-chart__tick", { "capacity-chart__tick--ours": index >= 2 }]}
+								x1={((k + 1) * scale) / 4}
+								x2={((k + 1) * scale) / 4}
+								y1={k % 4 === 3 ? 5 : 9}
+								y2="21"
+							/>
+						))}
+						<circle
+							class:list={[
+								"capacity-chart__endpoint",
+								{ "capacity-chart__endpoint--ours": index >= 2 },
+							]}
+							cx={row.ratio * scale}
+							cy="5"
+							r="2.3"
+						/>
+					</svg>
+					<strong>{row.ratio.toFixed(2)}×</strong>
+				</button>
+			))
+		}
+	</div>
+	<p class="capacity-chart__readout" aria-live="polite" aria-atomic="true" data-capacity-readout>
+		<span>CauSyncVLA · shared</span><span><strong>11.91 ms</strong> mean model latency</span>
+	</p>
+	<noscript>
+		<p class="capacity-chart__noscript">
+			Mean latency: 60.01 ms, 36.00 ms, 11.91 ms, and 4.79 ms, respectively.
+		</p>
+	</noscript>
+</div>
+
+<script>
+	for (const chart of document.querySelectorAll<HTMLElement>("[data-capacity-chart]")) {
+		const rows = Array.from(chart.querySelectorAll<HTMLButtonElement>("[data-capacity-row]"));
+		const readout = chart.querySelector<HTMLElement>("[data-capacity-readout]");
+		let selected = rows[2];
+		const show = (row: HTMLButtonElement) => {
+			if (!readout) return;
+			const label = document.createElement("span");
+			label.textContent = row.dataset.name ?? "";
+			const latency = document.createElement("span");
+			const value = document.createElement("strong");
+			value.textContent = `${row.dataset.latency ?? ""} ms`;
+			latency.append(value, " mean model latency");
+			readout.replaceChildren(label, latency);
+			for (const item of rows) item.classList.toggle("is-active", item === row);
+		};
+		for (const row of rows) {
+			row.addEventListener("pointerenter", () => show(row));
+			row.addEventListener("pointerleave", () => {
+				const focused = rows.find((item) => item === document.activeElement);
+				show(focused ?? selected);
+			});
+			row.addEventListener("focus", () => show(row));
+			row.addEventListener("blur", () => show(selected));
+			row.addEventListener("click", () => {
+				selected = row;
+				for (const item of rows) item.setAttribute("aria-pressed", String(item === row));
+				show(row);
+			});
+		}
+	}
+</script>
+
+<style>
+	.capacity-chart {
+		width: 100%;
+		padding: 1.25rem 0.25rem 0.5rem;
+		color: var(--ink);
+	}
+	.capacity-chart__topline,
+	.capacity-chart__readout {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.75rem;
+		color: var(--muted);
+		font-size: 0.72rem;
+	}
+	.capacity-chart__topline {
+		margin-bottom: 0.7rem;
+	}
+	.capacity-chart__rows {
+		display: grid;
+		gap: 0.15rem;
+	}
+	.capacity-chart__row {
+		display: grid;
+		grid-template-columns: minmax(8rem, 1fr) minmax(0, 2fr) 3.3rem;
+		align-items: center;
+		gap: 0.55rem;
+		width: 100%;
+		min-height: 2.7rem;
+		padding: 0.3rem 0.25rem;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		text-align: left;
+		cursor: pointer;
+	}
+	.capacity-chart__row:hover,
+	.capacity-chart__row:focus-visible,
+	.capacity-chart__row.is-active {
+		background: color-mix(in srgb, var(--signal) 8%, transparent);
+	}
+	.capacity-chart__row:focus-visible {
+		outline: 2px solid var(--signal);
+		outline-offset: 1px;
+	}
+	.capacity-chart__row svg {
+		display: block;
+		width: 100%;
+		height: 1.625rem;
+		overflow: visible;
+	}
+	.capacity-chart__label {
+		font-size: 0.76rem;
+		line-height: 1.2;
+	}
+	.capacity-chart__row strong {
+		text-align: right;
+		font-size: 0.82rem;
+		font-variant-numeric: tabular-nums;
+	}
+	.capacity-chart__guide {
+		stroke: var(--line-strong);
+		stroke-width: 0.8;
+	}
+	.capacity-chart__tick {
+		stroke: var(--muted);
+		stroke-width: 1.1;
+	}
+	.capacity-chart__tick--ours {
+		stroke: var(--signal);
+	}
+	.capacity-chart__endpoint {
+		fill: var(--muted);
+	}
+	.capacity-chart__endpoint--ours {
+		fill: var(--signal);
+	}
+	.capacity-chart__readout {
+		margin: 0.8rem 0 0;
+		padding-top: 0.55rem;
+		border-top: 1px solid var(--line);
+	}
+	.capacity-chart__readout strong {
+		color: var(--ink);
+		font-variant-numeric: tabular-nums;
+	}
+	.capacity-chart__noscript {
+		color: var(--muted);
+		font-size: 0.72rem;
+	}
+	@media (max-width: 480px) {
+		.capacity-chart__row {
+			grid-template-columns: minmax(6.5rem, 1fr) minmax(0, 1.2fr) 3rem;
+			gap: 0.35rem;
+		}
+		.capacity-chart__label {
+			font-size: 0.68rem;
+		}
+		.capacity-chart__row strong {
+			font-size: 0.73rem;
+		}
+		.capacity-chart__topline,
+		.capacity-chart__readout {
+			font-size: 0.66rem;
+		}
+	}
+</style>

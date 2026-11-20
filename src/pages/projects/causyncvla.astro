@@ -4,10 +4,10 @@ import ProjectHero, { type ProjectLink } from "@/components/ProjectHero.astro";
 import ProjectLayout from "@/layouts/Project.astro";
 import teaserImage from "@/assets/projects/causyncvla/teaser.png";
 import methodImage from "@/assets/projects/causyncvla/method.png";
-import capacityImage from "@/assets/projects/causyncvla/expert12k_capacity.png";
-import ageImage from "@/assets/projects/causyncvla/expert12k_age.png";
-import flowImage from "@/assets/projects/causyncvla/pfws_flow_paths.png";
-import plusImage from "@/assets/projects/causyncvla/plus_effect.png";
+import CapacityChart from "@/components/projects/CapacityChart.astro";
+import AnchorAgeChart from "@/components/AnchorAgeChart.astro";
+import FlowChart from "@/components/projects/FlowChart.astro";
+import PlusEffectChart from "@/components/PlusEffectChart.astro";
 import baseline1 from "@/assets/projects/causyncvla/fr3_baseline_phase1.png";
 import baseline2 from "@/assets/projects/causyncvla/fr3_baseline_phase2.png";
 import baseline3 from "@/assets/projects/causyncvla/fr3_baseline_phase3.png";
@@ -21,25 +21,28 @@ const authors = [
 	{ name: "Xu Pan", href: "/", mark: "1" },
 	{ name: "Chubin Zhang", href: "https://bennidict23.github.io/", mark: "2" },
 	{ name: "Xingrui Yu", href: "https://xingruiyu.github.io/", mark: "3" },
-	{ name: "Runmin Lan", mark: "2" },
+	{ name: "Runmin Lan", mark: "1" },
 	{ name: "Zihao Wang", mark: "1" },
 	{ name: "Wenkai Guo", href: "https://wkguo.github.io/", mark: "1" },
 	{ name: "Bofang Jia", href: "https://bofangjia.github.io/", mark: "1" },
 	{ name: "Bo An", href: "https://www3.ntu.edu.sg/home/boan/", mark: "2" },
-	{ name: "Ziwei Wang", href: "https://ziweiwangthu.github.io/", mark: "1,*" },
+	{ name: "Ziwei Wang", href: "https://ziweiwangthu.github.io/", mark: "1,4,*" },
 ];
 const affiliations = [
-	"School of Electrical and Electronic Engineering, Nanyang Technological University",
+	"Perception and Embodied Intelligence (PINE) Lab, School of Electrical and Electronic Engineering, Nanyang Technological University",
 	"College of Computing and Data Science, Nanyang Technological University",
 	"Centre for Frontier AI Research (CFAR) and Institute of High Performance Computing (IHPC), Agency for Science, Technology and Research (A*STAR)",
+	"Embodied AI Center, Singapore",
 ];
 const links: ProjectLink[] = [
+	{ label: "Paper", href: "https://arxiv.org/pdf/2611.25667", icon: "lucide:file-text" },
 	{ label: "Code", href: "https://github.com/TwSphinx54/CauSyncVLA", icon: "simple-icons:github" },
 	{
 		label: "Model",
 		href: "https://huggingface.co/SSSSphinx/CauSyncVLA",
 		icon: "simple-icons:huggingface",
 	},
+	{ label: "arXiv", href: "https://arxiv.org/abs/2611.25667", icon: "lucide:external-link" },
 ];
 const corners = ["tl", "tr", "bl", "br"];
 const equations = {
@@ -177,6 +180,9 @@ const bibtex = `@unpublished{pan2026causyncvla,
   title={CauSyncVLA: Causal Latent World Modeling for Asynchronous Robot Control},
   author={Xu Pan and Chubin Zhang and Xingrui Yu and Runmin Lan and Zihao Wang and Wenkai Guo and Bofang Jia and Bo An and Ziwei Wang},
   year={2026},
+  eprint={2611.25667},
+  archivePrefix={arXiv},
+  primaryClass={cs.RO},
   note={Under review}
 }`;
 ---
@@ -497,11 +503,7 @@ const bibtex = `@unpublished{pan2026causyncvla,
 								+
 							</span>
 						))
-					}<Image
-						src={capacityImage}
-						alt="Normalized model replanning capacity for synchronous and asynchronous configurations"
-						loading="lazy"
-					/>
+					}<CapacityChart />
 				</div>
 				<figcaption>
 					<strong>Fig. 3.</strong> Batch-one model replanning capacity normalized to ten-step synchronous
@@ -568,16 +570,12 @@ const bibtex = `@unpublished{pan2026causyncvla,
 								+
 							</span>
 						))
-					}<Image
-						src={ageImage}
-						alt="Downstream action mean squared error versus visual anchor staleness for stale and predicted memory"
-						loading="lazy"
-					/>
+					}<AnchorAgeChart />
 				</div>
 				<figcaption>
 					<strong>Fig. 4.</strong> Action error relative to fresh-anchor outputs across 320 held-out windows;
-					the vertical axis is logarithmic. The predictor maintains lower error across sampled staleness
-					horizons up to 45 steps.
+					the vertical axis is logarithmic. The predictor maintains lower error across all six sampled
+					age ranges, including the sparsely sampled 40–45-step range.
 				</figcaption>
 			</figure>
 			<figure class="paper-table-figure" data-sync-table-caption>
@@ -631,11 +629,7 @@ const bibtex = `@unpublished{pan2026causyncvla,
 								+
 							</span>
 						))
-					}<Image
-						src={flowImage}
-						alt="Projected cold and warm-started flow trajectories across eight matched seeds"
-						loading="lazy"
-					/>
+					}<FlowChart />
 				</div>
 				<figcaption>
 					<strong>Fig. 5.</strong> Frozen-expert flow paths projected into a shared PCA basis for eight
@@ -659,11 +653,7 @@ const bibtex = `@unpublished{pan2026causyncvla,
 								+
 							</span>
 						))
-					}<Image
-						src={plusImage}
-						alt="Change in success rate from predictive flow warm-starting across LIBERO-Plus perturbations"
-						loading="lazy"
-					/>
+					}<PlusEffectChart />
 				</div>
 				<figcaption>
 					<strong>Fig. 6.</strong> PFWS success differences versus cold starts, in percentage points,
@@ -801,7 +791,7 @@ const bibtex = `@unpublished{pan2026causyncvla,
 					trials. Active rates exclude synchronization waits.
 				</figcaption>
 			</figure>
-			<figure class="wide-figure physical-figure">
+			<figure class="result-figure physical-figure">
 				<div class="figure-media">
 					{
 						corners.map((corner) => (
@@ -965,7 +955,7 @@ const bibtex = `@unpublished{pan2026causyncvla,
 		padding: 4px 0;
 	}
 	.result-figure {
-		width: min(100%, 640px);
+		width: min(100%, var(--reading-width));
 		margin: 34px 0 0;
 	}
 	.result-figure figcaption,

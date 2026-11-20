@@ -1,0 +1,388 @@
+---
+import flow from "@/data/causyncvla/flow-projection.json";
+
+// Shared PCA coordinates retain the paper's plot limits and axes aspect ratio.
+const x = (value: number) => 54 + ((value + 7.2) / 14.4) * 345;
+const y = (value: number) => 175 - ((value + 6.6) / 11.8) * 139.488940838;
+const xTicks = [-6, -3, 0, 3, 6];
+const yTicks = [-6, -3, 0, 3];
+const paths = flow.paths.map((path) => ({
+	...path,
+	d: path.points
+		.map(([px, py], index) => `${index ? "L" : "M"}${x(px).toFixed(3)} ${y(py).toFixed(3)}`)
+		.join(" "),
+}));
+---
+
+<!-- Lieflat Interactive B3 Threads: actual paths with transparent hit paths for hover and pin. -->
+<div class="flow-chart" data-flow-chart>
+	<div class="flow-chart__legend" aria-label="Path types and endpoints">
+		<span><i class="flow-chart__key flow-chart__key--cold"></i>Cold · ρ 1 → 0</span>
+		<span><i class="flow-chart__key flow-chart__key--warm"></i>PFWS · ρ 0.5 → 0</span>
+		<span><i class="flow-chart__start"></i>Start</span>
+		<span><i class="flow-chart__end"></i>Endpoint</span>
+		<span><i class="flow-chart__arrow-key">→</i>Projected velocity</span>
+	</div>
+	<svg
+		class="flow-chart__svg"
+		viewBox="0 0 430 205"
+		role="group"
+		aria-label="Cold and PFWS model flow trajectories in a shared PCA projection"
+		aria-describedby="flow-chart-description"
+	>
+		<defs>
+			<marker
+				id="flow-arrow-cold"
+				markerWidth="4.5"
+				markerHeight="4.5"
+				refX="4"
+				refY="2.25"
+				orient="auto"
+				markerUnits="userSpaceOnUse"
+				><path d="M0 0 L4.5 2.25 L0 4.5 Z" class="flow-chart__arrowhead flow-chart__arrowhead--cold"
+				></path></marker
+			>
+			<marker
+				id="flow-arrow-warm"
+				markerWidth="4.5"
+				markerHeight="4.5"
+				refX="4"
+				refY="2.25"
+				orient="auto"
+				markerUnits="userSpaceOnUse"
+				><path d="M0 0 L4.5 2.25 L0 4.5 Z" class="flow-chart__arrowhead flow-chart__arrowhead--warm"
+				></path></marker
+			>
+		</defs>
+		{
+			yTicks.map((tick) => (
+				<line class="flow-chart__grid" x1="54" y1={y(tick)} x2="399" y2={y(tick)} />
+			))
+		}
+		{
+			xTicks.map((tick) => (
+				<line class="flow-chart__grid" x1={x(tick)} y1="35.511" x2={x(tick)} y2="175" />
+			))
+		}
+		<line class="flow-chart__axis" x1="54" y1="175" x2="399" y2="175"></line>
+		<line class="flow-chart__axis" x1="54" y1="35.511" x2="54" y2="175"></line>
+		{
+			xTicks.map((tick) => (
+				<text class="flow-chart__tick-label" x={x(tick)} y="187" text-anchor="middle">
+					{tick}
+				</text>
+			))
+		}
+		{
+			yTicks.map((tick) => (
+				<text class="flow-chart__tick-label" x="47" y={y(tick) + 3} text-anchor="end">
+					{tick}
+				</text>
+			))
+		}
+		<text class="flow-chart__axis-label" x="226" y="203" text-anchor="middle"
+			>Shared action PC1</text
+		>
+		<text
+			class="flow-chart__axis-label"
+			x="12"
+			y="105"
+			text-anchor="middle"
+			transform="rotate(-90 12 105)">Shared action PC2</text
+		>
+		{
+			paths.map((path) => (
+				<g
+					class:list={["flow-chart__path", `flow-chart__path--${path.arm}`]}
+					data-flow-path
+					data-arm={path.arm}
+					data-seed={path.seed}
+					aria-label={`${path.arm === "cold" ? "Cold" : "PFWS"}, seed ${path.seed}, ${path.points.length} projected points`}
+				>
+					<path class="flow-chart__trace" d={path.d} />
+					{path.arrows.map((arrow) => (
+						<line
+							class="flow-chart__velocity"
+							x1={x(path.points[arrow.index][0])}
+							y1={y(path.points[arrow.index][1])}
+							x2={x(path.points[arrow.index][0] + arrow.vector[0])}
+							y2={y(path.points[arrow.index][1] + arrow.vector[1])}
+							marker-end={`url(#flow-arrow-${path.arm})`}
+						/>
+					))}
+					<circle
+						class="flow-chart__marker flow-chart__marker--start"
+						cx={x(path.points[0][0])}
+						cy={y(path.points[0][1])}
+						r="2.6"
+					/>
+					<rect
+						class="flow-chart__marker flow-chart__marker--end"
+						x={x(path.points.at(-1)![0]) - 2.2}
+						y={y(path.points.at(-1)![1]) - 2.2}
+						width="4.4"
+						height="4.4"
+					/>
+					<path class="flow-chart__hit" d={path.d} />
+				</g>
+			))
+		}
+	</svg>
+	<p class="flow-chart__description" id="flow-chart-description">
+		Eight matched seeds, projected from 70 action coordinates. Arrows show projected velocity scaled
+		by −0.1; these are not physical robot paths.
+	</p>
+	<div class="flow-chart__controls" data-flow-controls hidden>
+		<label
+			>Condition
+			<select data-flow-arm aria-label="Choose flow condition">
+				<option value="all">All paths</option>
+				<option value="cold">Cold</option>
+				<option value="warm">PFWS</option>
+			</select>
+		</label>
+		<label
+			>Seed
+			<select data-flow-seed aria-label="Choose flow seed" disabled>
+				{Array.from({ length: 8 }, (_, seed) => <option value={seed}>Seed {seed}</option>)}
+			</select>
+		</label>
+		<span data-flow-status aria-live="polite">Choose a path to highlight</span>
+	</div>
+</div>
+
+<script>
+	for (const chart of document.querySelectorAll<HTMLElement>("[data-flow-chart]")) {
+		const svg = chart.querySelector<SVGSVGElement>(".flow-chart__svg");
+		const paths = Array.from(chart.querySelectorAll<SVGGElement>("[data-flow-path]"));
+		const controls = chart.querySelector<HTMLElement>("[data-flow-controls]");
+		const arm = chart.querySelector<HTMLSelectElement>("[data-flow-arm]");
+		const seed = chart.querySelector<HTMLSelectElement>("[data-flow-seed]");
+		const status = chart.querySelector<HTMLElement>("[data-flow-status]");
+		if (!svg || !controls || !arm || !seed || !status) continue;
+		controls.hidden = false;
+		let pinned: SVGGElement | null = null;
+		const show = (path: SVGGElement | null) => {
+			svg.classList.toggle("has-selection", !!path);
+			for (const candidate of paths) candidate.classList.toggle("is-hot", candidate === path);
+			status.textContent = path
+				? `${path.dataset.arm === "cold" ? "Cold" : "PFWS"} · seed ${path.dataset.seed}`
+				: "Choose a path to highlight";
+		};
+		const pin = (path: SVGGElement | null) => {
+			pinned = path;
+			for (const candidate of paths)
+				candidate.setAttribute("aria-pressed", String(candidate === path));
+			arm.value = path?.dataset.arm ?? "all";
+			seed.disabled = !path;
+			if (path) seed.value = path.dataset.seed ?? "0";
+			show(path);
+		};
+		for (const path of paths) {
+			path.setAttribute("role", "button");
+			path.setAttribute("tabindex", "0");
+			path.setAttribute("aria-pressed", "false");
+			path.addEventListener("pointerenter", () => show(path));
+			path.addEventListener("pointerleave", () => show(pinned));
+			path.addEventListener("focus", () => show(path));
+			path.addEventListener("blur", () => show(pinned));
+			path.addEventListener("click", () => pin(pinned === path ? null : path));
+			path.addEventListener("keydown", (event) => {
+				if (event.key === "Enter" || event.key === " ") {
+					event.preventDefault();
+					pin(pinned === path ? null : path);
+				} else if (event.key === "Escape") pin(null);
+			});
+		}
+		const update = () =>
+			pin(
+				arm.value === "all"
+					? null
+					: (paths.find(
+							(path) => path.dataset.arm === arm.value && path.dataset.seed === seed.value,
+						) ?? null),
+			);
+		arm.addEventListener("change", update);
+		seed.addEventListener("change", update);
+	}
+</script>
+
+<style>
+	.flow-chart {
+		width: 100%;
+		padding: 1rem 0.25rem 0.4rem;
+		color: var(--ink);
+	}
+	.flow-chart__legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem 1.1rem;
+		color: var(--muted);
+		font-size: 0.72rem;
+	}
+	.flow-chart__legend span {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		white-space: nowrap;
+	}
+	.flow-chart__key {
+		display: inline-block;
+		width: 1.2rem;
+		border-top: 2px solid var(--muted);
+	}
+	.flow-chart__key--cold {
+		border-top-style: dashed;
+	}
+	.flow-chart__key--warm {
+		border-color: var(--signal);
+	}
+	.flow-chart__start,
+	.flow-chart__end {
+		width: 0.48rem;
+		height: 0.48rem;
+		border: 1px solid var(--ink);
+	}
+	.flow-chart__start {
+		border-radius: 50%;
+	}
+	.flow-chart__end {
+		background: var(--ink);
+	}
+	.flow-chart__svg {
+		width: 100%;
+		height: auto;
+		display: block;
+		overflow: visible;
+	}
+	.flow-chart__grid {
+		stroke: var(--line);
+		stroke-width: 0.6;
+	}
+	.flow-chart__axis {
+		stroke: var(--line-strong);
+		stroke-width: 0.8;
+	}
+	.flow-chart__tick-label,
+	.flow-chart__axis-label {
+		fill: var(--muted);
+		font-family: inherit;
+		font-size: 8px;
+	}
+	.flow-chart__axis-label {
+		fill: var(--ink);
+		font-size: 8.5px;
+	}
+	.flow-chart__trace {
+		fill: none;
+		stroke: var(--muted);
+		stroke-width: 1.2;
+	}
+	.flow-chart__path--cold .flow-chart__trace {
+		stroke-dasharray: 4 2;
+	}
+	.flow-chart__path--warm .flow-chart__trace {
+		stroke: var(--signal);
+		stroke-width: 1.4;
+	}
+	.flow-chart__velocity {
+		stroke: var(--muted);
+		stroke-width: 1.15;
+	}
+	.flow-chart__path--warm .flow-chart__velocity {
+		stroke: var(--signal);
+	}
+	.flow-chart__arrowhead--cold {
+		fill: var(--muted);
+	}
+	.flow-chart__arrowhead--warm {
+		fill: var(--signal);
+	}
+	.flow-chart__arrow-key {
+		font-style: normal;
+		font-weight: bold;
+		font-size: 1rem;
+		line-height: 0.7;
+	}
+	.flow-chart__marker {
+		stroke: var(--muted);
+		stroke-width: 1;
+	}
+	.flow-chart__marker--start {
+		fill: var(--paper);
+	}
+	.flow-chart__marker--end {
+		fill: var(--muted);
+	}
+	.flow-chart__path--warm .flow-chart__marker {
+		stroke: var(--signal);
+	}
+	.flow-chart__path--warm .flow-chart__marker--end {
+		fill: var(--signal);
+	}
+	.flow-chart__hit {
+		fill: none;
+		stroke: transparent;
+		stroke-width: 9;
+		cursor: pointer;
+	}
+	.flow-chart__svg.has-selection .flow-chart__path:not(.is-hot) {
+		opacity: 0.16;
+	}
+	.flow-chart__path.is-hot .flow-chart__trace {
+		stroke-width: 2.8;
+	}
+	.flow-chart__path:focus-visible {
+		outline: none;
+	}
+	.flow-chart__path:focus-visible .flow-chart__trace {
+		stroke-width: 3.2;
+	}
+	.flow-chart__description {
+		margin: 0.1rem 0 0.6rem;
+		color: var(--muted);
+		font-size: 0.72rem;
+	}
+	.flow-chart__controls {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 0.8rem;
+		padding-top: 0.55rem;
+		border-top: 1px solid var(--line);
+		color: var(--muted);
+		font-size: 0.72rem;
+	}
+	.flow-chart__controls[hidden] {
+		display: none;
+	}
+	.flow-chart__controls label {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+	}
+	.flow-chart__controls select {
+		max-width: 8rem;
+		padding: 0.2rem;
+		background: var(--paper);
+		border: 1px solid var(--line-strong);
+		border-radius: 0;
+		color: var(--ink);
+		font: inherit;
+	}
+	.flow-chart__controls select:focus-visible {
+		outline: 2px solid var(--signal);
+		outline-offset: 2px;
+	}
+	@media (max-width: 480px) {
+		.flow-chart__tick-label,
+		.flow-chart__axis-label {
+			font-size: 12px;
+		}
+		.flow-chart__legend,
+		.flow-chart__description,
+		.flow-chart__controls {
+			font-size: 0.66rem;
+		}
+	}
+</style>

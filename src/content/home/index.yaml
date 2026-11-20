@@ -19,6 +19,7 @@ publicationsEditable:
     title: "CauSyncVLA: Causal Latent World Modeling for Asynchronous Robot Control"
     booktitle: "Under Review"
     time: "2026"
+    paper: "https://arxiv.org/abs/2611.25667"
     code: "https://github.com/TwSphinx54/CauSyncVLA"
     huggingface: "https://huggingface.co/SSSSphinx/CauSyncVLA"
     site: "/projects/causyncvla/"
